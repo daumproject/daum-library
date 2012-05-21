@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/org.kevoree.library.ormH.iml" filepath="$PROJECT_DIR$/org.kevoree.library.ormH.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.daum.library.ormH.iml" filepath="$PROJECT_DIR$/org.daum.library.ormH.iml" />
     </modules>
   </component>
 </project>

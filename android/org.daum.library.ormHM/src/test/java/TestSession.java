@@ -1,9 +1,7 @@
 import model.sitac.Moyen;
 import model.sitac.MoyenType;
-import model.sitac.TestModel;
 import org.junit.Test;
 import org.kevoree.library.ormHM.persistence.PersistenceConfiguration;
-import org.kevoree.library.ormHM.persistence.PersistenceException;
 import org.kevoree.library.ormHM.persistence.PersistenceSession;
 import org.kevoree.library.ormHM.persistence.PersistenceSessionFactory;
 import org.kevoree.library.ormHM.persistence.connection.EhcacheHandler;
@@ -23,7 +21,7 @@ public class TestSession {
 
     test save and replication on two Ehcache
      */
-    /*
+
  @Test
  public void testSave(){
 
@@ -45,7 +43,7 @@ public class TestSession {
      {
          configuration1 = new PersistenceConfiguration();
          configuration1.addPersistentObject(Moyen.class);
-         configuration1.addPersistentObject(Intervention.class);
+
 
 
 
@@ -77,7 +75,7 @@ public class TestSession {
 
          configuration2 = new PersistenceConfiguration();
          configuration2.addPersistentObject(Moyen.class);
-         configuration2.addPersistentObject(Intervention.class);
+
 
 
 
@@ -113,9 +111,9 @@ public class TestSession {
          e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
      }
  }
-    */
 
 
+        /*
     @Test
     public void testConcurrentSave(){
 
@@ -329,12 +327,12 @@ public class TestSession {
                                 s.save(locked);
                                 s.unlock(locked);
 
-                                /*
-                                TestModel model =  (TestModel)  s.get(TestModel.class, test.getId()) ;
+
+                               // TestModel model =  (TestModel)  s.get(TestModel.class, test.getId()) ;
                                 
-                                model.setSum(model.getSum()+1);
-                                s.save(model);
-                                */
+                               // model.setSum(model.getSum()+1);
+                                //s.save(model);
+
                                 i++;
                             }
                             s.close();
@@ -395,5 +393,5 @@ public class TestSession {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
 
-    }
+    } */
 }

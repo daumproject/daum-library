@@ -7,8 +7,7 @@ public class SitacModel
 {
 	private List<Intervention> interventions = new ArrayList<Intervention>();
 	private List<InterventionType> interventionTypes = new ArrayList<InterventionType>();
-	private List<CIS> cis = new ArrayList<CIS>();
-	
+
 	public SitacModel()
 	{
 		
@@ -24,8 +23,5 @@ public class SitacModel
 		return interventionTypes;
 	}
 	
-	public List<CIS> getCIS()
-	{
-		return cis;
-	}
+
 }

@@ -4,57 +4,32 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.kevoree.library.ormH</groupId>
-    <artifactId>org.kevoree.library.ormH</artifactId>
-    <version>1.7.1-SNAPSHOT</version>
+    <groupId>org.daum.library.ormH</groupId>
+    <artifactId>org.daum.library.ormH</artifactId>
+    <version>1.7.1</version>
 
 
     <parent>
         <artifactId>org.kevoree.library.android.root</artifactId>
         <groupId>org.kevoree.library.android</groupId>
-        <version>1.7.0-SNAPSHOT</version>
+        <version>1.7.1</version>
         <relativePath>../org.kevoree.library.android.root/pom.xml</relativePath>
     </parent>
 
+
     <dependencies>
+
         <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>2.5.1</version>
+          <groupId>net.sf.ehcache</groupId>
+          <artifactId>ehcache</artifactId>
+          <version>2.5.1</version>
             <type>pom</type>
         </dependency>
+
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.8.2</version>
-        </dependency>
-
-        <dependency>
-   			<groupId>com.github.sgroschupf</groupId>
-   			<artifactId>zkclient</artifactId>
-   			<version>0.1</version>
-   		</dependency>
-
-   		<dependency>
-   			<groupId>commons-lang</groupId>
-   			<artifactId>commons-lang</artifactId>
-   			<version>2.4</version>
-   		</dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>1.6.4</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.6.4</version>
-        </dependency>
-        <dependency>
-            <groupId>log4j</groupId>
-            <artifactId>log4j</artifactId>
-            <version>1.2.16</version>
         </dependency>
     </dependencies>
 
