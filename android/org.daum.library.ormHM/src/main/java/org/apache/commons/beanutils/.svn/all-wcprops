@@ -1,0 +1,119 @@
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils
+END
+DynaProperty.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/DynaProperty.java
+END
+ConvertUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/ConvertUtils.java
+END
+MethodUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/MethodUtils.java
+END
+ConversionException.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/ConversionException.java
+END
+PropertyUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/PropertyUtils.java
+END
+WeakFastHashMap.java
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/WeakFastHashMap.java
+END
+Converter.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/Converter.java
+END
+MappedPropertyDescriptor.java
+K 25
+svn:wc:ra_dav:version-url
+V 96
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/MappedPropertyDescriptor.java
+END
+BeanAccessLanguageException.java
+K 25
+svn:wc:ra_dav:version-url
+V 99
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/BeanAccessLanguageException.java
+END
+WrapDynaBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/WrapDynaBean.java
+END
+WrapDynaClass.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/WrapDynaClass.java
+END
+BeanUtilsBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 85
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/BeanUtilsBean.java
+END
+ContextClassLoaderLocal.java
+K 25
+svn:wc:ra_dav:version-url
+V 95
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/ContextClassLoaderLocal.java
+END
+DynaClass.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/DynaClass.java
+END
+DynaBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 80
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/DynaBean.java
+END
+BeanUtils.java
+K 25
+svn:wc:ra_dav:version-url
+V 81
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/BeanUtils.java
+END
+ConvertUtilsBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 88
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/ConvertUtilsBean.java
+END
+PropertyUtilsBean.java
+K 25
+svn:wc:ra_dav:version-url
+V 89
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/PropertyUtilsBean.java
+END
+NestedNullException.java
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/176/trunk/src/main/java/org/apache/commons/beanutils/NestedNullException.java
+END
