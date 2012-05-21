@@ -2,48 +2,40 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.kevoree.library.android</groupId>
-    <artifactId>org.kevoree.library.android.root</artifactId>
+    <groupId>org.kevoree.library.javase</groupId>
+    <artifactId>org.kevoree.library.javase.root</artifactId>
     <packaging>pom</packaging>
-    <name>DAUM :: Library :: Android :: Root</name>
-
+    <name>Kevoree :: CoreLibrary :: JavaSE :: Root</name>
     <version>1.7.1</version>
+
 
     <properties>
         <kevoree.version>${project.version}</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
-        <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.kevoree.tools</groupId>
-            <artifactId>org.kevoree.tools.annotation.api</artifactId>
+            <artifactId>org.kevoree.tools.javase.framework</artifactId>
             <version>${daumkevoree.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.google.android</groupId>
-            <artifactId>android</artifactId>
-            <version>4.0.1.2</version>
-        </dependency>
-        <dependency>
             <groupId>org.kevoree.tools</groupId>
-            <artifactId>org.kevoree.tools.android.framework</artifactId>
+            <artifactId>org.kevoree.tools.annotation.api</artifactId>
             <version>${daumkevoree.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.kevoree.tools</groupId>
                 <artifactId>org.kevoree.tools.annotation.mavenplugin</artifactId>
-                <extensions>true</extensions>
                 <version>${daumkevoree.version}</version>
+                <extensions>true</extensions>
                 <configuration>
-                    <nodeTypeNames>AndroidNode</nodeTypeNames>
+                    <nodeTypeNames>JavaSENode</nodeTypeNames>
                 </configuration>
                 <executions>
                     <execution>
@@ -71,6 +63,11 @@
                     <target>1.6</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.kevoree.platform</groupId>
+                <artifactId>org.kevoree.platform.mavenrunner</artifactId>
+                <version>${daumkevoree.version}</version>
             </plugin>
         </plugins>
     </build>
