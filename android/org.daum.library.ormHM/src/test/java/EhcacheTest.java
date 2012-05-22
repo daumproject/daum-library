@@ -36,7 +36,7 @@ public class EhcacheTest {
 
 
         CacheConfiguration cacheConfiguration = new CacheConfiguration();
-        cacheConfiguration.setMaxEntriesLocalHeap(100);
+        cacheConfiguration.setMaxEntriesLocalHeap(1000);
 
 
         CacheConfiguration.CacheEventListenerFactoryConfiguration  cachEvent =  new CacheConfiguration.CacheEventListenerFactoryConfiguration();

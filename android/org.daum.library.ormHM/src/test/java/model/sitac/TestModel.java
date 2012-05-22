@@ -1,6 +1,6 @@
 package model.sitac;
 
-import org.kevoree.library.ormHM.annotations.Id;
+import org.daum.library.ormHM.annotations.Id;
 
 import java.io.Serializable;
 

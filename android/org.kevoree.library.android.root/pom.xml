@@ -16,6 +16,11 @@
         <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
     </properties>
 
+    <modules>
+        <module>../org.daum.library.ormHM</module>
+    </modules>
+
+
     <dependencies>
         <dependency>
             <groupId>org.kevoree.tools</groupId>

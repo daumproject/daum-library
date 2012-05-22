@@ -1,5 +1,7 @@
 package org.daum.library.ormHM.persistence;
 
+import org.daum.library.ormHM.utils.PersistenceException;
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;

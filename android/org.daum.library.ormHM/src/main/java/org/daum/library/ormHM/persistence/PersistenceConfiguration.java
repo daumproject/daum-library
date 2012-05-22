@@ -7,7 +7,9 @@ package org.daum.library.ormHM.persistence;
  * Time: 11:30
  */
 
-import org.daum.library.ormHM.persistence.connection.StandardHandler;
+import org.daum.library.ormHM.api.IPersistenceConfiguration;
+import org.daum.library.ormHM.api.PersistenceSessionStore;
+import org.daum.library.ormHM.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,12 +17,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PersistenceConfiguration {
+public class PersistenceConfiguration implements IPersistenceConfiguration {
 
     private  Logger logger = LoggerFactory.getLogger(this.getClass());
-    private StandardHandler connectionConfiguration=null;
+    private PersistenceSessionStore connectionConfiguration=null;
     private Map<String, PersistentClass> persistentClasses=null;
-
 
     public PersistenceConfiguration() throws PersistenceException
     {
@@ -33,8 +34,9 @@ public class PersistenceConfiguration {
     }
 
 
-    public void addPersistentObject(Class pc) throws PersistenceException {
-        logger.debug("addPersistentObject "+pc.getName());
+    public void addPersistentClass(Class pc) throws PersistenceException
+    {
+        logger.debug("addPersistent "+pc.getName());
         PersistentClass tmp = new PersistentClass(pc.getName());
         persistentClasses.put(tmp.getName(), tmp);
         tmp.parse();
@@ -47,21 +49,20 @@ public class PersistenceConfiguration {
     }
 
 
-    public StandardHandler getConnectionConfiguration()
+    public PersistenceSessionStore getConnectionConfiguration()
     {
         return connectionConfiguration;
     }
 
-    public void setConnectionConfiguration(StandardHandler connectionConfiguration)
+    public void setConnectionConfiguration(PersistenceSessionStore connectionConfiguration)
     {
         this.connectionConfiguration = connectionConfiguration;
     }
 
 
-    public PersistenceSessionFactory getPersistenceSessionFactory(){
-        return new PersistenceSessionFactory(this);
+    public PersistenceSessionFactoryImpl getPersistenceSessionFactory(){
+        return new PersistenceSessionFactoryImpl(this);
     }
-
 
 
     public PersistentClass getPersistentClass(Class clazz)

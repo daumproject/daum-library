@@ -3,6 +3,7 @@ package org.daum.library.ormHM.persistence;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.daum.library.ormHM.annotations.Id;
+import org.daum.library.ormHM.utils.PersistenceException;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -16,7 +17,6 @@ import java.lang.reflect.Method;
 public class PersistentProperty {
 
     private PersistentClass pers;
-
     private String name;
     private Class clazz;
     private String columnName;
@@ -40,9 +40,7 @@ public class PersistentProperty {
         Class rclazz = method.getReturnType();
         String javaType = rclazz.getSimpleName();
         setClazz(rclazz);
-
         setType(javaType);
-
         id = method.getAnnotation(Id.class);
         if (id != null)
         {
@@ -51,7 +49,6 @@ public class PersistentProperty {
             setType(javaType);
             setAttachTO(id.attachTOCache());
         }
-
     }
 
     public String getAttachTO() {
