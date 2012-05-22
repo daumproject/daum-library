@@ -5,7 +5,7 @@
     <groupId>org.kevoree.library.javase</groupId>
     <artifactId>org.kevoree.library.javase.root</artifactId>
     <packaging>pom</packaging>
-    <name>Kevoree :: CoreLibrary :: JavaSE :: Root</name>
+    <name>DAUM :: Library :: JavaSE :: Root</name>
     <version>1.7.1</version>
 
 
@@ -13,6 +13,11 @@
         <kevoree.version>${project.version}</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <modules>
+        <module>../org.daum.library.javase.ehcache</module>
+
+    </modules>
 
     <dependencies>
         <dependency>
