@@ -24,7 +24,7 @@
     <orderEntry type="library" name="Maven: junit:junit:4.8.2" level="project" />
     <orderEntry type="library" name="Maven: org.kevoree.tools:org.kevoree.tools.annotation.api:1.7.1" level="project" />
     <orderEntry type="library" name="Maven: org.scala-lang:scala-library:2.9.2" level="project" />
-    <orderEntry type="library" name="Maven: com.google.android:android:4.0.1.2" level="project" />
+    <orderEntry type="library" name="Maven: com.google.android:android:2.3.3" level="project" />
     <orderEntry type="library" name="Maven: commons-logging:commons-logging:1.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpclient:4.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.httpcomponents:httpcore:4.0.1" level="project" />
