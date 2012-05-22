@@ -22,13 +22,6 @@
     <dependencies>
 
         <dependency>
-            <groupId>org.terracotta</groupId>
-            <artifactId>terracotta-toolkit-1.4-runtime</artifactId>
-            <version>4.0.0</version>
-        </dependency>
-
-
-        <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>
             <version>2.5.1</version>

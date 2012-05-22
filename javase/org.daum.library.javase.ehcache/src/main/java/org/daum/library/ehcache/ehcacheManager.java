@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 })
 public class ehcacheManager extends AbstractComponentType implements Runnable,  IehcacheService{
+
     private Logger logger = LoggerFactory.getLogger(ehcacheManager.class);
     private Thread handler=null;
     private  CacheManager cacheManager=null;
