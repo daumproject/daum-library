@@ -6,15 +6,13 @@
 
     <groupId>org.daum.library.ehcache</groupId>
     <artifactId>org.daum.library.ehcache</artifactId>
-    <version>1.7.1</version>
-
-
-
+    <version>1.7.2</version>
+    <name>DAUM :: ehcache :: JavaSE </name>
 
     <parent>
         <artifactId>org.kevoree.library.javase.root</artifactId>
         <groupId>org.kevoree.library.javase</groupId>
-        <version>1.7.1</version>
+        <version>1.7.2</version>
         <relativePath>../org.kevoree.library.javase.root/pom.xml</relativePath>
     </parent>
 
