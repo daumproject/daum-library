@@ -2,6 +2,8 @@ package org.daum.library.replicatingMap;
 
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created by jed
@@ -12,24 +14,28 @@ import org.kevoree.framework.AbstractComponentType;
 
 @Library(name = "JavaSE", names = {"Android"})
 @ComponentType
-
-
-
 @Requires({
         @RequiredPort(name = "messagetoSend", type = PortType.MESSAGE)
-
 })
 @Provides({
-        @ProvidedPort(name = "messageReceived", type = PortType.MESSAGE) ,
-        @ProvidedPort(name = "ReplicatingService", type = PortType.SERVICE, className = ReplicatingService.class)
-
+        @ProvidedPort(name = "remoteReceived", type = PortType.MESSAGE) ,
+        @ProvidedPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class)
 })
-public class ReplicatingManager extends AbstractComponentType implements  ReplicatingService {
+public class ReplicatingManager extends AbstractComponentType implements ReplicatingService,Runnable {
 
-    ReplicatingMap replicatingMap = new ReplicatingMap(this);
+    private CacheManager cacheManager =null;
+
+    private Thread thread = new Thread(this);
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Start
-    public void start() {
+    public void start()
+    {
+
+        KevoreePortsImpl t = new KevoreePortsImpl(this);
+        cacheManager = new CacheManager(t,getNodeName());
+
+        thread.start();
 
     }
 
@@ -39,27 +45,39 @@ public class ReplicatingManager extends AbstractComponentType implements  Replic
 
     }
 
-
     @Update
     public void update()
     {
 
     }
 
-    @Port(name = "messageReceived")
+
+    @Port(name = "remoteReceived")
     public void messageReceived(Object o)
     {
-        replicatingMap.messageReceived(o);
+        cacheManager.remoteReceived(o);
     }
 
 
-
-    @Port(name = "ReplicatingService", method = "getReplicatingMap")
-    public ReplicatingMap getReplicatingMap() {
-
-        return replicatingMap;
+    @Port(name = "service", method = "getCache")
+    @Override
+    public Cache getCache(String name) {
+        return cacheManager.getCache(name);
     }
 
 
+    @Override
+    public void run()
+    {
+        try
+        {
+
+
+        } catch (Exception e)
+        {
+            logger.warn("makeSnapshot");
+        }
+
+    }
 
 }

@@ -6,16 +6,17 @@
     <artifactId>org.kevoree.library.javase.root</artifactId>
     <packaging>pom</packaging>
     <name>DAUM :: Library :: JavaSE :: Root</name>
-    <version>1.7.1</version>
+    <version>1.0</version>
 
 
     <properties>
-        <kevoree.version>${project.version}</kevoree.version>
+        <kevoree.version>${daumkevoree.version}</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <modules>
         <module>../org.daum.library.javase.ehcache</module>
+        <module>../org.daum.library.javase.replicatingMap</module>
 
     </modules>
 
@@ -23,12 +24,12 @@
         <dependency>
             <groupId>org.kevoree.tools</groupId>
             <artifactId>org.kevoree.tools.javase.framework</artifactId>
-            <version>${daumkevoree.version}</version>
+            <version>${kevoree.version}</version>
         </dependency>
         <dependency>
             <groupId>org.kevoree.tools</groupId>
             <artifactId>org.kevoree.tools.annotation.api</artifactId>
-            <version>${daumkevoree.version}</version>
+            <version>${kevoree.version}</version>
         </dependency>
     </dependencies>
 
@@ -37,7 +38,7 @@
             <plugin>
                 <groupId>org.kevoree.tools</groupId>
                 <artifactId>org.kevoree.tools.annotation.mavenplugin</artifactId>
-                <version>${daumkevoree.version}</version>
+                <version>${kevoree.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <nodeTypeNames>JavaSENode</nodeTypeNames>
@@ -72,7 +73,7 @@
             <plugin>
                 <groupId>org.kevoree.platform</groupId>
                 <artifactId>org.kevoree.platform.mavenrunner</artifactId>
-                <version>${daumkevoree.version}</version>
+                <version>${kevoree.version}</version>
             </plugin>
         </plugins>
     </build>

@@ -13,11 +13,13 @@ public class Event implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public enum Operation {
-		ADD, DELETE,UPDATE
+		ADD, DELETE,UPDATE,SNAPSHOT
 	}
 
+    public int count;
 	public Operation op;
-	public String key;
+	public Object key;
 	public Object value;
-
+    public String cache;
+    public  String source;
 }

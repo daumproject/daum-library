@@ -7,10 +7,10 @@
     <packaging>pom</packaging>
     <name>DAUM :: Library :: Android :: Root</name>
 
-    <version>1.7.1</version>
+    <version>1.0</version>
 
     <properties>
-        <kevoree.version>${project.version}</kevoree.version>
+        <kevoree.version>${daumkevoree.version}</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
         <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.kevoree.tools</groupId>
             <artifactId>org.kevoree.tools.annotation.api</artifactId>
-            <version>${daumkevoree.version}</version>
+            <version>${kevoree.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.android</groupId>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.kevoree.tools</groupId>
             <artifactId>org.kevoree.tools.android.framework</artifactId>
-            <version>${daumkevoree.version}</version>
+            <version>${kevoree.version}</version>
         </dependency>
     </dependencies>
 
@@ -48,7 +48,7 @@
                 <groupId>org.kevoree.tools</groupId>
                 <artifactId>org.kevoree.tools.annotation.mavenplugin</artifactId>
                 <extensions>true</extensions>
-                <version>${daumkevoree.version}</version>
+                <version>${kevoree.version}</version>
                 <configuration>
                     <nodeTypeNames>AndroidNode</nodeTypeNames>
                 </configuration>
