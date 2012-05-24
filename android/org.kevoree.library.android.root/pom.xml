@@ -7,10 +7,10 @@
     <packaging>pom</packaging>
     <name>DAUM :: Library :: Android :: Root</name>
 
-    <version>1.0</version>
+    <version>1.7.2</version>
 
     <properties>
-        <kevoree.version>${daumkevoree.version}</kevoree.version>
+        <kevoree.version>1.7.2</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
         <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>

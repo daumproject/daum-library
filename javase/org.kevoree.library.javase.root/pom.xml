@@ -6,11 +6,11 @@
     <artifactId>org.kevoree.library.javase.root</artifactId>
     <packaging>pom</packaging>
     <name>DAUM :: Library :: JavaSE :: Root</name>
-    <version>1.0</version>
+    <version>1.7.2</version>
 
 
     <properties>
-        <kevoree.version>${daumkevoree.version}</kevoree.version>
+        <kevoree.version>1.7.2</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
