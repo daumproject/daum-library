@@ -47,18 +47,10 @@ public class ReplicatingProducteur  extends AbstractComponentType implements  Ru
         while(alive)
         {
 
-
-
             ReplicatingService c =  this.getPortByName("service", ReplicatingService.class);
-
-
             Cache cache =     c.getCache("test");
-
             cache.put(count,"Hello Word"+count);
-
-
             count++;
-            logger.debug("ReplicatingProducteur ");
 
 
             try {

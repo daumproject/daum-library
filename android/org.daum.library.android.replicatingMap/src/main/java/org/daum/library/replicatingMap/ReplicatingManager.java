@@ -24,7 +24,7 @@ import org.slf4j.LoggerFactory;
 public class ReplicatingManager extends AbstractComponentType implements ReplicatingService,Runnable {
 
     private CacheManager cacheManager =null;
-
+    KChannelImpl kChannel = new KChannelImpl(this);
     private Thread thread = new Thread(this);
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -32,11 +32,8 @@ public class ReplicatingManager extends AbstractComponentType implements Replica
     public void start()
     {
 
-        KevoreePortsImpl t = new KevoreePortsImpl(this);
-        cacheManager = new CacheManager(t,getNodeName());
-
+        cacheManager = new CacheManager(kChannel,getNodeName());
         thread.start();
-
     }
 
     @Stop
@@ -55,6 +52,7 @@ public class ReplicatingManager extends AbstractComponentType implements Replica
     @Port(name = "remoteReceived")
     public void messageReceived(Object o)
     {
+
         cacheManager.remoteReceived(o);
     }
 
@@ -71,7 +69,7 @@ public class ReplicatingManager extends AbstractComponentType implements Replica
     {
         try
         {
-
+            cacheManager.snapshot();
 
         } catch (Exception e)
         {

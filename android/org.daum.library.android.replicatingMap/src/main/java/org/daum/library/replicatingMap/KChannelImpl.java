@@ -9,16 +9,16 @@ import org.kevoree.framework.MessagePort;
  * Date: 23/05/12
  * Time: 18:23
  */
-public class KevoreePortsImpl implements KPort {
+public class KChannelImpl implements Channel {
 
     private  AbstractComponentType abstractComponentType;
-    public KevoreePortsImpl(AbstractComponentType abstractComponentType){
+    public KChannelImpl(AbstractComponentType abstractComponentType){
         this.abstractComponentType = abstractComponentType;
     }
+
     @Override
-    public void process(Event e) {
-
+    public void write(Replicator e) {
         abstractComponentType.getPortByName("messagetoSend", MessagePort.class).process(e);
-
     }
+
 }

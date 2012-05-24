@@ -6,6 +6,7 @@ package org.daum.library.replicatingMap;
  * Date: 23/05/12
  * Time: 18:18
  */
-public interface KPort {
-    public void process(Event e);
+public interface Channel {
+    public void write(Replicator e);
+   // public Replicator read();
 }
