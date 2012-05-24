@@ -2,18 +2,23 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.kevoree.library.android</groupId>
-    <artifactId>org.kevoree.library.android.root</artifactId>
+    <groupId>org.daum.library.android</groupId>
+    <artifactId>org.daum.library.android.root</artifactId>
     <packaging>pom</packaging>
     <name>DAUM :: Library :: Android :: Root</name>
 
-    <version>1.7.2</version>
+    <parent>
+        <groupId>org.daum.library</groupId>
+        <artifactId>org.daum.library</artifactId>
+        <version>1.7.2</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
     <properties>
-        <kevoree.version>1.7.2</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
         <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
+        <kevoree.exclude>com.google.android:*,commons-*:*,org.apache.httpcomponents:*,org.khronos:*,xerces:*,xpp3:*,org.json:*,cglib:*,org.objenesis:*</kevoree.exclude>
     </properties>
 
     <modules>
@@ -43,7 +48,6 @@
 
     <build>
         <plugins>
-
             <plugin>
                 <groupId>org.kevoree.tools</groupId>
                 <artifactId>org.kevoree.tools.annotation.mavenplugin</artifactId>
@@ -60,13 +64,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <!-- Felix BnD plugin : allow Bundle packaging : generate OSGi JAR  -->
-            <plugin>
-                <groupId>org.apache.felix</groupId>
-                <artifactId>maven-bundle-plugin</artifactId>
-                <version>2.3.5</version>
-                <extensions>true</extensions>
             </plugin>
             <!-- Java compiler plugin -->
             <plugin>
@@ -103,7 +100,6 @@
             <url>http://maven.kevoree.org/snapshots</url>
         </pluginRepository>
     </pluginRepositories>
-
 
 
     <distributionManagement>

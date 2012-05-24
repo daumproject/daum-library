@@ -6,13 +6,12 @@
     <artifactId>org.daum.library.android.ehcache</artifactId>
     <packaging>jar</packaging>
     <name>DAUM :: Ehcache :: Android </name>
-    <version>1.7.2</version>
 
     <parent>
-        <artifactId>org.kevoree.library.android.root</artifactId>
-        <groupId>org.kevoree.library.android</groupId>
+        <artifactId>org.daum.library.android.root</artifactId>
+        <groupId>org.daum.library.android</groupId>
         <version>1.7.2</version>
-        <relativePath>../org.kevoree.library.android.root/pom.xml</relativePath>
+        <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
 
 

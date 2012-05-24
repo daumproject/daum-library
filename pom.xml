@@ -6,13 +6,40 @@
     <artifactId>org.daum.library</artifactId>
     <packaging>pom</packaging>
     <name>DAUM :: Library</name>
-    <version>1.7.0</version>
+    <version>1.7.2</version>
 
     <properties>
-        <kevoree.version>${project.version}</kevoree.version>
+        <kevoree.version>1.7.2</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scala.version>2.9.2</scala.version>
     </properties>
+
+    <modules>
+        <module>./android/org.daum.library.android.root</module>
+        <module>./javase/org.daum.library.javase.root</module>
+    </modules>
+
+    <repositories>
+        <repository>
+            <id>kevoree-libs-release-local</id>
+            <url>http://maven.kevoree.org/release</url>
+        </repository>
+        <repository>
+            <id>kevoree-snapshots</id>
+            <url>http://maven.kevoree.org/snapshots</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>plugin.kevoree-github</id>
+            <url>http://maven.kevoree.org/release</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>plugin.kevoree-snapshots</id>
+            <url>http://maven.kevoree.org/snapshots</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 
     <distributionManagement>
@@ -25,5 +52,4 @@
             <url>http://maven.kevoree.org/archiva/repository/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
-
 </project>

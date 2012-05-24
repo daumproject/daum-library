@@ -4,21 +4,20 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.daum.library.ehcache</groupId>
-    <artifactId>org.daum.library.ehcache</artifactId>
+    <groupId>org.daum.library.javase</groupId>
+    <artifactId>org.daum.library.javase.ehcache</artifactId>
     <version>1.7.2</version>
     <name>DAUM :: ehcache :: JavaSE </name>
 
     <parent>
-        <artifactId>org.kevoree.library.javase.root</artifactId>
-        <groupId>org.kevoree.library.javase</groupId>
+        <groupId>org.daum.library.javase</groupId>
+           <artifactId>org.daum.library.javase.root</artifactId>
         <version>1.7.2</version>
-        <relativePath>../org.kevoree.library.javase.root/pom.xml</relativePath>
+        <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
     </parent>
 
 
     <dependencies>
-
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache</artifactId>

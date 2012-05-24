@@ -2,15 +2,19 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.kevoree.library.javase</groupId>
-    <artifactId>org.kevoree.library.javase.root</artifactId>
+    <groupId>org.daum.library.javase</groupId>
+    <artifactId>org.daum.library.javase.root</artifactId>
     <packaging>pom</packaging>
     <name>DAUM :: Library :: JavaSE :: Root</name>
-    <version>1.7.2</version>
+    <parent>
+        <groupId>org.daum.library</groupId>
+        <artifactId>org.daum.library</artifactId>
+        <version>1.7.2</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
 
     <properties>
-        <kevoree.version>1.7.2</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -70,40 +74,5 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>kevoree-libs-release-local</id>
-            <url>http://maven.kevoree.org/release</url>
-        </repository>
-        <repository>
-            <id>kevoree-snapshots</id>
-            <url>http://maven.kevoree.org/snapshots</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>plugin.kevoree-github</id>
-            <url>http://maven.kevoree.org/release</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>plugin.kevoree-snapshots</id>
-            <url>http://maven.kevoree.org/snapshots</url>
-        </pluginRepository>
-    </pluginRepositories>
-
-
-
-    <distributionManagement>
-        <repository>
-            <id>maven2.kevoree.release</id>
-            <url>http://maven.kevoree.org/archiva/repository/release/</url>
-        </repository>
-        <snapshotRepository>
-            <id>maven2.kevoree.snapshots</id>
-            <url>http://maven.kevoree.org/archiva/repository/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
 
 </project>

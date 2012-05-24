@@ -18,7 +18,7 @@ import org.slf4j.LoggerFactory;
         @RequiredPort(name = "messagetoSend", type = PortType.MESSAGE)
 })
 @Provides({
-        @ProvidedPort(name = "remoteReceived", type = PortType.MESSAGE) ,
+        @ProvidedPort(name = "remoteReceived", type = PortType.MESSAGE),
         @ProvidedPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class)
 })
 public class ReplicatingManager extends AbstractComponentType implements ReplicatingService,Runnable {
