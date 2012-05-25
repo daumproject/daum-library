@@ -18,22 +18,21 @@ import org.slf4j.LoggerFactory;
         @RequiredPort(name = "messagetoSend", type = PortType.MESSAGE)
 })
 @Provides({
-        @ProvidedPort(name = "remoteReceived", type = PortType.MESSAGE),
+        @ProvidedPort(name = "remoteReceived", type = PortType.MESSAGE) ,
         @ProvidedPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class)
 })
-public class ReplicatingManager extends AbstractComponentType implements ReplicatingService,Runnable {
+public class ReplicatingManager extends AbstractComponentType implements ReplicatingService {
 
     private CacheManager cacheManager =null;
     KChannelImpl kChannel = new KChannelImpl(this);
-    private Thread thread = new Thread(this);
+  //  private Thread thread = new Thread(this);
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Start
     public void start()
     {
-
         cacheManager = new CacheManager(kChannel,getNodeName());
-        thread.start();
+        cacheManager.snapshot();
     }
 
     @Stop
@@ -52,7 +51,6 @@ public class ReplicatingManager extends AbstractComponentType implements Replica
     @Port(name = "remoteReceived")
     public void messageReceived(Object o)
     {
-
         cacheManager.remoteReceived(o);
     }
 
@@ -63,19 +61,5 @@ public class ReplicatingManager extends AbstractComponentType implements Replica
         return cacheManager.getCache(name);
     }
 
-
-    @Override
-    public void run()
-    {
-        try
-        {
-            cacheManager.snapshot();
-
-        } catch (Exception e)
-        {
-            logger.warn("makeSnapshot");
-        }
-
-    }
 
 }

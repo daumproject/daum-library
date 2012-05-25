@@ -6,6 +6,6 @@ package org.daum.library.replicatingMap;
  * Date: 24/05/12
  * Time: 16:28
  */
-public enum Operation {
-    ADD, DELETE,UPDATE,MAKESNAPSHOT,SNAPSHOT,SNAPSHOT_FINISH,HEARTBEAT
+public enum StoreRequest {
+    ADD, DELETE,UPDATE, REQUEST_SNAPSHOT,SNAPSHOT,HEARTBEAT
 }

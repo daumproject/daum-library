@@ -1,9 +1,16 @@
 package org.daum.library.replicatingMap;
 
+import org.daum.library.replicatingMap.msg.Command;
+import org.daum.library.replicatingMap.msg.Snapshot;
+import org.daum.library.replicatingMap.msg.Update;
+import org.daum.library.replicatingMap.msg.Updates;
+import org.daum.library.replicatingMap.utils.SystemTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -22,11 +29,15 @@ public class CacheManager implements  Runnable{
     private boolean alive = true;
     private  Thread thread = new Thread(this);
     private boolean isSynchronized = false;
+    private SystemTime systemTime = new SystemTime();
+    private  RemoteDisptachManager remoteDisptachManager= null;
+
 
     public CacheManager(Channel channel,String id)
     {
         this.chanel = channel;
         this.id =id;
+        remoteDisptachManager = new RemoteDisptachManager(id,chanel);
         thread.start();
     }
 
@@ -36,12 +47,21 @@ public class CacheManager implements  Runnable{
 
     public  Cache getCache(String name)
     {
-        if(!store.containsKey(name))
+        if(name != null)
         {
-            logger.debug("Creating cache "+name);
-            Cache cache  =  new Cache(name,this) ;
-            store.put(name,cache);
+            logger.debug("getCache "+name);
+            if(!store.containsKey(name))
+            {
+                logger.debug("Creating cache "+name);
+                Cache cache  =  new Cache(name,this) ;
+                store.put(name,cache);
+            }
+        } else
+        {
+            logger.error("The cache can't be null");
+            return null;
         }
+
         return store.get(name);
     }
 
@@ -59,115 +79,120 @@ public class CacheManager implements  Runnable{
         return count;
     }
 
-    public void remoteReceived(Object o){
+    public void remoteReceived(Object o)
+    {
 
-        if(o instanceof Replicator)
+        if(o instanceof Update){
+
+            final Update update = (Update)o;
+
+            if(!update.getSource().equals(id))
+            {
+                getCache(update.cache).localDispatch(update);
+            }
+        }
+        if(o instanceof Updates)
         {
-            final Replicator replicator = (Replicator)o;
+            final Updates updates = (Updates)o;
 
-            if(replicator.op == Operation.MAKESNAPSHOT)
+            if(!updates.getSource().equals(id))
             {
+                logger.debug("Remote receive "+updates.getUpdates().size());
+                for(Update update : updates.getUpdates()){
+                    getCache(update.cache).localDispatch(update);
+                }
 
-                if(!replicator.source.equals(id) && replicator.dest.equals(id))
+            }
+
+        }else  if(o instanceof Snapshot){
+
+            final Snapshot storeSnapshot = (Snapshot)o;
+
+            if(storeSnapshot.dest.equals(id))
+            {
+                logger.debug(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest);
+
+                for(Update msg:  storeSnapshot.snapshot)
                 {
-                    logger.debug(" REQUEST MAKESNAPSHOT "+ replicator.source);
+                    getCache(msg.cache).putIfAbsent(msg.key, msg.value);
+                }
 
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            for(String namecache : store.keySet()){
+                isSynchronized = true;
+            }
 
-                                for( Object key: store.get(namecache).keySet()){
+        } else if(o instanceof Command)
+        {
+            final Command command = (Command)o;
 
-                                    Replicator snapshot = new Replicator();
-                                    snapshot.op = Operation.SNAPSHOT;
-                                    snapshot.dest = replicator.source;
-                                    snapshot.source = id;
-
-                                    snapshot.cache = namecache;
-                                    snapshot.key = key;
-                                    snapshot.value = store.get(namecache).get(key);
-
-                                    chanel.write(snapshot);
-
-                                }
-                                // notify
-                                Replicator snapshot = new Replicator();
-                                snapshot.op = Operation.SNAPSHOT_FINISH;
-                                snapshot.dest = replicator.source;
-                                snapshot.source = id;
-                                chanel.write(snapshot);
+            if(command.getOp().equals(StoreRequest.HEARTBEAT))
+            {
+                if(!command.source.equals(id))
+                {
+                    logger.info(" RECEIVE "+ StoreRequest.HEARTBEAT+" "+nodes);
+                    long start = systemTime.getNanoseconds();
+                    nodes.put(command.source,start);
+                }
+            } else  if(command.getOp().equals(StoreRequest.REQUEST_SNAPSHOT))
+            {
+                if(isSynchronized)
+                {
+                    // todo check if isSynchronized = true
+                    logger.error("The current CacheManager is not Synchronized");
+                }
 
 
-                            }
+                if(!command.source.equals(id) && command.dest.equals(id))
+                {
+                    logger.info("Creating snapshot for "+ command.source);
+
+                    final List<Update> current_snapshot= new ArrayList<Update>();
+
+                    for(String namecache : store.keySet())
+                    {
+                        for( Object key: store.get(namecache).keySet()){
+
+                            Update snapshot = new Update();
+                            snapshot.op = StoreRequest.SNAPSHOT;
+                            snapshot.dest = command.source;
+                            snapshot.source = id;
+                            snapshot.cache = namecache;
+                            snapshot.key = key;
+                            snapshot.value = store.get(namecache).get(key);
+                            current_snapshot.add(snapshot);
                         }
-                    }) .start();
+                    }
 
+                    logger.info("Snapshot is created for "+ command.source);
+
+                    Snapshot storeSnapshot = new Snapshot();
+                    storeSnapshot.snapshot =   current_snapshot;
+                    storeSnapshot.source = id;
+                    storeSnapshot.dest =   command.source;
+                    chanel.write(storeSnapshot);
+
+                    logger.info("Snapshot is sent for "+ command.source);
                 }
-
             }
-            else  if(replicator.op == Operation.SNAPSHOT)
-            {
-                if(replicator.dest.equals(id))
-                {
-                    logger.debug(" Receive snapshot from "+ replicator.source+" to "+ replicator.dest);
-                    getCache(replicator.cache).putIfAbsent(replicator.key, replicator.value);
-                }
-
-            } else if(replicator.op == Operation.HEARTBEAT)
-            {
-                if(!replicator.source.equals(id))
-                {
-                    logger.info(" RECEIVE "+ Operation.HEARTBEAT+" "+nodes);
-                    long start = System.nanoTime();
-                    nodes.put(replicator.source,start);
-                }
-
-            }
-            else  if(replicator.op == Operation.SNAPSHOT_FINISH)
-            {
-                isSynchronized =true;
-                logger.info("Replication is finish");
-
-            } else
-            {
-                logger.debug("Remote Received "+((Replicator) o).op);
-                getCache(replicator.cache).localDispatch(replicator);
-            }
-
         }
     }
 
-    public void remoteDisptach(Replicator e)
+    public void remoteDisptach(Update update)
     {
-        logger.debug("remoteDisptach "+e.key);
-        e.source = id;
-        chanel.write(e);
+        logger.debug("remoteDisptach "+update.key);
+        update.source = id;
+        chanel.write(update);
+        // remoteDisptachManager.addUpdate(update);
     }
-
-    public void sendRequestSnapshot(String node_id){
-
-        Replicator req = new Replicator();
-        req.op= Operation.MAKESNAPSHOT;
-        req.source = id;
-        req.dest = node_id;
-        chanel.write(req);
-
-    }
-
 
     public void snapshot()
     {
         new Thread(new Runnable() {
             @Override
             public void run() {
-
-                Replicator req = new Replicator();
-                req.op= Operation.MAKESNAPSHOT;
+                Command req = new Command();
+                req.op= StoreRequest.REQUEST_SNAPSHOT;
                 req.source = id;
                 while (nodes.keySet().isEmpty() && alive == true){
-
-                    logger.debug("Wait node ");
                     try {
                         Thread.sleep(5000);
                     } catch (InterruptedException e) {
@@ -185,18 +210,15 @@ public class CacheManager implements  Runnable{
                             node = key;
                         }
                     }
-
                 }
-
                 req.dest = node;
 
-                logger.info("Replication is processing with " + req.source);
+                logger.info("Replication is processing with " + req.dest);
 
                 chanel.write(req);
 
             }
         }).start();
-
     }
 
 
@@ -205,16 +227,16 @@ public class CacheManager implements  Runnable{
 
         while (alive)
         {
-            Replicator req = new Replicator();
-            req.op= Operation.HEARTBEAT;
+            Command req = new Command();
+            req.op= StoreRequest.HEARTBEAT;
             req.source = id;
             chanel.write(req);
 
-            logger.debug(""+Operation.HEARTBEAT);
+            logger.debug(""+ StoreRequest.HEARTBEAT);
             logger.warn(" "+getCount());
             try
             {
-                Thread.sleep(5000);
+                Thread.sleep(9000);
             }  catch (Exception e){
                 //ignore
             }

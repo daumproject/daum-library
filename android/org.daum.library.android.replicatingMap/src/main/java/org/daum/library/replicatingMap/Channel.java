@@ -1,5 +1,7 @@
 package org.daum.library.replicatingMap;
 
+import org.daum.library.replicatingMap.msg.Message;
+
 /**
  * Created by jed
  * User: jedartois@gmail.com
@@ -7,6 +9,6 @@ package org.daum.library.replicatingMap;
  * Time: 18:18
  */
 public interface Channel {
-    public void write(Replicator e);
-   // public Replicator read();
+    public void write(Message e);
+   // public Update read();
 }

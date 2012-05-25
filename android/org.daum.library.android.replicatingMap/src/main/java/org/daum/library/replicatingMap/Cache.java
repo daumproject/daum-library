@@ -1,5 +1,6 @@
 package org.daum.library.replicatingMap;
 
+import org.daum.library.replicatingMap.msg.Update;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +24,8 @@ public class Cache extends  DHashMap<Object,Object>{
 
     @Override
     public Object put(Object key, Object value) {
-        Replicator e = new Replicator();
-        e.op = Operation.ADD;
+        Update e = new Update();
+        e.op = StoreRequest.ADD;
         e.key = key;
         e.value = value;
         e.cache = name;
@@ -33,29 +34,27 @@ public class Cache extends  DHashMap<Object,Object>{
     }
 
 
-    public void localDispatch(Replicator replicator)
+    public void localDispatch(Update replica)
     {
         logger.debug("Local dispatch");
-
-        if (replicator.op.equals(Operation.ADD))
+        if (replica.op.equals(StoreRequest.ADD))
         {
-            super.put(replicator.key, replicator.value);
-        } else if (replicator.op.equals(Operation.DELETE))
+            super.put(replica.key, replica.value);
+        } else if (replica.op.equals(StoreRequest.DELETE))
         {
-            super.remove(replicator.key);
+            super.remove(replica.key);
         }
     }
 
 
     @Override
     public Object remove(Object key) {
-
         if(!cacheManger.isSynchronized())
         {
             logger.error("WARNING !! TODO backup remove until synchronize is finish");
         }
-        Replicator e = new Replicator();
-        e.op = Operation.DELETE;
+        Update e = new Update();
+        e.op = StoreRequest.DELETE;
         e.key =  key;
         e.cache = name;
         cacheManger.remoteDisptach(e);
