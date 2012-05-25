@@ -8,10 +8,13 @@
     <artifactId>org.daum.library.android.replicatingMap</artifactId>
     <name>DAUM :: ReplicatingMap :: Android </name>
 
+    <version>1.7</version>
+
+
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
         <groupId>org.daum.library.android</groupId>
-        <version>1.7.2</version>
+        <version>1.7.3</version>
         <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
 
