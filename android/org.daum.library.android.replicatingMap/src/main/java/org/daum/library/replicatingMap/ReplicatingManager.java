@@ -22,15 +22,15 @@ import org.slf4j.LoggerFactory;
         @ProvidedPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class)
 })
 public class ReplicatingManager extends AbstractComponentType implements ReplicatingService {
-
     private CacheManager cacheManager =null;
-    KChannelImpl kChannel = new KChannelImpl(this);
+    KChannelImpl kChannel=null;
   //  private Thread thread = new Thread(this);
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Start
     public void start()
     {
+        kChannel   = new KChannelImpl(this);
         cacheManager = new CacheManager(kChannel,getNodeName());
         cacheManager.snapshot();
     }
@@ -44,7 +44,8 @@ public class ReplicatingManager extends AbstractComponentType implements Replica
     @Update
     public void update()
     {
-
+        kChannel   = new KChannelImpl(this);
+        cacheManager.setChanel(kChannel);
     }
 
 

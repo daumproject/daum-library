@@ -25,12 +25,20 @@
             <url>http://maven.kevoree.org/release</url>
         </repository>
         <repository>
+            <id>kevoree-libs-release-daum</id>
+            <url>http://maven.kevoree.org/daum</url>
+        </repository>
+        <repository>
             <id>kevoree-snapshots</id>
             <url>http://maven.kevoree.org/snapshots</url>
         </repository>
     </repositories>
 
     <pluginRepositories>
+        <pluginRepository>
+            <id>plugin.kevoree-github-daum</id>
+            <url>http://maven.kevoree.org/daum</url>
+        </pluginRepository>
         <pluginRepository>
             <id>plugin.kevoree-github</id>
             <url>http://maven.kevoree.org/release</url>
@@ -44,12 +52,8 @@
 
     <distributionManagement>
         <repository>
-            <id>maven2.kevoree.release</id>
-            <url>http://maven.kevoree.org/archiva/repository/release/</url>
+            <id>maven2.daumdeploy.release</id>
+            <url>http://maven.kevoree.org/archiva/repository/daum/</url>
         </repository>
-        <snapshotRepository>
-            <id>maven2.kevoree.snapshots</id>
-            <url>http://maven.kevoree.org/archiva/repository/snapshots/</url>
-        </snapshotRepository>
     </distributionManagement>
 </project>

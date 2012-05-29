@@ -1,6 +1,7 @@
 package org.daum.library.replicatingMap;
 
 import org.daum.library.replicatingMap.msg.Update;
+import org.daum.library.replicatingMap.utils.SystemTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,28 +16,41 @@ public class Cache extends  DHashMap<Object,Object>{
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private String name = "";
     private CacheManager cacheManger=null;
-
+    private SystemTime systemTime = new SystemTime();
+    private  int MaxEntriesLocalHeap;
 
     public Cache(String cachename,CacheManager cacheManger){
         this.name = cachename;
         this.cacheManger = cacheManger;
     }
 
+    public void setMaxEntriesLocalHeap(int max){
+        this.MaxEntriesLocalHeap = max;
+    }
+
     @Override
     public Object put(Object key, Object value) {
-        Update e = new Update();
-        e.op = StoreRequest.ADD;
-        e.key = key;
-        e.value = value;
-        e.cache = name;
-        cacheManger.remoteDisptach(e);
-        return super.put(key, value);
+        if(this.size() > MaxEntriesLocalHeap)
+        {
+            // todo
+            logger.warn("The Max Entries Local Heap is reached ");
+            return null;
+        }else
+        {
+            Update e = new Update();
+            e.op = StoreRequest.ADD;
+            e.key = key;
+            e.value = value;
+            e.cache = name;
+            cacheManger.remoteDisptach(e);
+            return super.put(key, value);
+        }
     }
 
 
     public void localDispatch(Update replica)
     {
-        logger.debug("Local dispatch");
+        logger.debug("Local dispatch "+replica.getCache());
         if (replica.op.equals(StoreRequest.ADD))
         {
             super.put(replica.key, replica.value);
@@ -49,6 +63,7 @@ public class Cache extends  DHashMap<Object,Object>{
 
     @Override
     public Object remove(Object key) {
+
         if(!cacheManger.isSynchronized())
         {
             logger.error("WARNING !! TODO backup remove until synchronize is finish");

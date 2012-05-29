@@ -1,6 +1,7 @@
 package org.daum.library.replicatingMap.utils;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by jed
@@ -30,5 +31,37 @@ public class SystemTime implements Time {
 
     public void sleep(long ms) throws InterruptedException {
         Thread.sleep(ms);
+    }
+
+    public Date getDatemin(Set<Object> dates)
+    {
+        Date min = new Date();
+        for(Object date : dates )
+        {
+            Date   d = (Date)date;
+            if(d.before(min)){
+                min = d;
+            }
+        }
+        return  min;
+    }
+
+
+    public Date getDatemax(Set<Object> dates)
+    {
+        if(dates.isEmpty()){
+
+            Date min = (Date) dates.toArray()[0];
+
+            for(Object date : dates )
+            {
+                Date   d = (Date)date;
+                if(d.after(min)){
+                    min = d;
+                }
+            }
+            return  min;
+        }
+        return  null;
     }
 }

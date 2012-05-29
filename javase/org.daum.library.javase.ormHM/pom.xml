@@ -3,21 +3,50 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.daum.library.javase</groupId>
-    <artifactId>org.daum.library.javase.replicatingMap</artifactId>
+    <artifactId>org.daum.library.javase.ormHM</artifactId>
     <packaging>jar</packaging>
-    <name>DAUM :: replicatingMap :: JavaSE </name>
-     <version>1.0</version>
-
+    <name>DAUM :: ormHM :: JavaSE </name>
+    <version>1.1</version>
     <parent>
         <artifactId>org.daum.library.javase.root</artifactId>
         <groupId>org.daum.library.javase</groupId>
         <version>1.7.3</version>
         <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
+
     </parent>
+
+    <properties>
+        <kevoree.exclude>org.apache.commons*:*</kevoree.exclude>
+    </properties>
+
+    <dependencies>
+        <!--
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.5.1</version>
+            <type>pom</type>
+        </dependency>
+            -->
+
+        <dependency>
+            <groupId>commons-logging</groupId>
+            <artifactId>commons-logging-api</artifactId>
+            <version>1.1</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
 
     <build>
-        <sourceDirectory>../../android/org.daum.library.android.replicatingMap/src</sourceDirectory>
+        <sourceDirectory>../../android/org.daum.library.android.ormHM/src</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.scala-tools</groupId>

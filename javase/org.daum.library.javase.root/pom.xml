@@ -21,7 +21,7 @@
     <modules>
         <module>../org.daum.library.javase.ehcache</module>
         <module>../org.daum.library.javase.replicatingMap</module>
-
+  <module>../org.daum.library.javase.ormHM</module>
     </modules>
 
     <dependencies>

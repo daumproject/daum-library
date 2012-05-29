@@ -1,8 +1,3 @@
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.config.CacheConfiguration;
-import net.sf.ehcache.config.Configuration;
-import net.sf.ehcache.config.FactoryConfiguration;
-
 /**
  * Created by jed
  * User: jedartois@gmail.com
@@ -10,7 +5,7 @@ import net.sf.ehcache.config.FactoryConfiguration;
  * Time: 15:03
  */
 public class EhcacheTest {
-
+     /*
     int port;
     CacheManager cacheManager = null;
 
@@ -79,4 +74,6 @@ public class EhcacheTest {
 
         return cacheManager;
     }
+      */
+
 }

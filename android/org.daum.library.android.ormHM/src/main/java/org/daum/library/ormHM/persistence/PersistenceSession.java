@@ -35,51 +35,71 @@ public class PersistenceSession implements IPersistenceSession {
 
     public void save(Object bean) throws PersistenceException
     {
-        PersistentClass pc = null;
-        pc=factory.getPersistenceConfiguration().getPersistentClass(bean);
-
-        for (PersistentProperty pp : pc.getPersistentProperties())
+        if(bean != null)
         {
-            if(pp.isId())
+            try
             {
-                Object idclass =  pp.getValue(bean);
-                if(idclass != null)
+                PersistentClass pc = null;
+                pc=factory.getPersistenceConfiguration().getPersistentClass(bean);
+
+                for (PersistentProperty pp : pc.getPersistentProperties())
                 {
-                    OrhmID id = new OrhmID(pp.getAttachTO(),idclass);
-                    store.save(id, bean);
+                    if(pp.isId())
+                    {
+                        Object idclass =  pp.getValue(bean);
+                        if(idclass != null)
+                        {
+                            OrhmID id = new OrhmID(pp.getAttachTO(),idclass,pp.getMaxEntriesLocalHeap());
+                            store.save(id, bean);
+                        }
+                        else
+                        {
+                            logger.error("the id is null the bean cannot be saved");
+                            throw new PersistenceException("the annotation id is not define");
+                        }
+                        break;
+                    }
                 }
-                else
-                {
-                    logger.error("the id is null the bean cannot be saved");
-                    throw new PersistenceException("the annotation id is not define");
-                }
-                break;
+            }   catch (Exception e){
+                logger.error("The persistence class is not added in addPersistentClass");
+
             }
+        }else {
+            logger.error(" Fail to save bean is null");
         }
     }
 
     @Override
     public void delete(Object bean) throws PersistenceException {
-        PersistentClass pc = null;
-        pc=factory.getPersistenceConfiguration().getPersistentClass(bean);
-
-        for (PersistentProperty pp : pc.getPersistentProperties())
+        if(bean != null)
         {
-            if(pp.isId())
-            {
-                Object idclass =  pp.getValue(bean);
-                if(idclass != null)
+            try{
+                PersistentClass pc = null;
+                pc=factory.getPersistenceConfiguration().getPersistentClass(bean);
+
+                for (PersistentProperty pp : pc.getPersistentProperties())
                 {
-                    OrhmID id = new OrhmID(pp.getAttachTO(),idclass);
-                    store.delete(id);
+                    if(pp.isId())
+                    {
+                        Object idclass =  pp.getValue(bean);
+                        if(idclass != null)
+                        {
+                            OrhmID id = new OrhmID(pp.getAttachTO(),idclass,pp.getMaxEntriesLocalHeap());
+                            store.delete(id);
+                        }
+                        else
+                        {
+                            logger.error("the id is null");
+                            throw new PersistenceException("the annotation id is not define");
+                        }
+                        break;
+                    }
                 }
-                else
-                {
-                    logger.error("the id is nulll");
-                    throw new PersistenceException("the annotation id is not define");
-                }
-                break;
+            }catch (Exception e){
+                logger.error("The format of the bean is not correct or The persistence class is not added in addPersistentClassThe persistence class is not added in addPersistentClass");
             }
+        }else {
+            logger.error(" Fail to delete bean is null");
         }
     }
 
@@ -91,7 +111,7 @@ public class PersistenceSession implements IPersistenceSession {
         try
         {
             pc = factory.getPersistenceConfiguration().getPersistentClass(clazz);
-            id = new OrhmID(pc.getId().getAttachTO(),_id);
+            id = new OrhmID(pc.getId().getAttachTO(),_id,pc.getId().getMaxEntriesLocalHeap());
             bean = store.get(id);
             return bean;
         } catch (Exception e)
@@ -110,7 +130,7 @@ public class PersistenceSession implements IPersistenceSession {
         try
         {
             pc = factory.getPersistenceConfiguration().getPersistentClass(clazz);
-            id = new OrhmID(pc.getId().getAttachTO(),null);
+            id = new OrhmID(pc.getId().getAttachTO(),null,pc.getId().getMaxEntriesLocalHeap());
             return store.getAll(id);
 
         } catch (Exception e)
@@ -129,7 +149,7 @@ public class PersistenceSession implements IPersistenceSession {
         try
         {
             pc = factory.getPersistenceConfiguration().getPersistentClass(clazz);
-            OrhmID id = new OrhmID(pc.getId().getAttachTO(),_id);
+            OrhmID id = new OrhmID(pc.getId().getAttachTO(),_id,pc.getId().getMaxEntriesLocalHeap());
             store.lock(id);
             bean = store.get(id);
             return bean;
@@ -153,7 +173,7 @@ public class PersistenceSession implements IPersistenceSession {
                 Object idclass =  pp.getValue(bean);
                 if (idclass != null)
                 {
-                    OrhmID id = new OrhmID(pp.getAttachTO(),idclass);
+                    OrhmID id = new OrhmID(pp.getAttachTO(),idclass,pp.getMaxEntriesLocalHeap());
                     store.unlock(id);
                 }
                 else

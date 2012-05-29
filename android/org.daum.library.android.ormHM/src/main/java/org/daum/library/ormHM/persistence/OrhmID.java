@@ -12,12 +12,14 @@ public class OrhmID implements Serializable {
 
     private  String attachToCache ="";
     private Object id;
+    private  int MaxEntriesLocalHeap;
 
-    public OrhmID(String attachTO, Object id) {
+    public OrhmID(String attachTO, Object id,int MaxEntriesLocalHeap) {
         this.attachToCache = attachTO;
         this.id = id;
-
+        this.MaxEntriesLocalHeap = MaxEntriesLocalHeap;
     }
+
     public Object getId() {
         return id;
     }
@@ -32,5 +34,13 @@ public class OrhmID implements Serializable {
 
     public void setAttachToCache(String attachToCache) {
         this.attachToCache = attachToCache;
+    }
+
+    public int getMaxEntriesLocalHeap() {
+        return MaxEntriesLocalHeap;
+    }
+
+    public void setMaxEntriesLocalHeap(int maxEntriesLocalHeap) {
+        MaxEntriesLocalHeap = maxEntriesLocalHeap;
     }
 }

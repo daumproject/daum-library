@@ -2,38 +2,27 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.daum.library.android</groupId>
-    <artifactId>org.daum.library.android.ehcache</artifactId>
+    <groupId>org.kevoree.common.replicatingService.android</groupId>
+    <artifactId>org.kevoree.common.replicatingService.android.root</artifactId>
     <packaging>jar</packaging>
-    <name>DAUM :: Ehcache :: Android </name>
+    <name>Kevoree :: Common :: Android </name>
+    <version>1.7.0-SNAPSHOT</version>
 
     <parent>
-        <artifactId>org.daum.library.android.root</artifactId>
-        <groupId>org.daum.library.android</groupId>
-        <version>1.7.3</version>
-        <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
+        <artifactId>org.kevoree.common.replicatingService</artifactId>
+        <groupId>org.kevoree.common.replicatingService</groupId>
+        <version>1.7.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
-
 
     <properties>
         <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
         <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
+        <kevoree.include>org.kevoree.common:*</kevoree.include>
     </properties>
 
-
-    <dependencies>
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>2.5.1</version>
-            <type>pom</type>
-        </dependency>
-
-
-    </dependencies>
-
     <build>
-        <sourceDirectory>../../javase/org.daum.library.javase.ehcache/src/main/java</sourceDirectory>
+        <sourceDirectory>../org.kevoree.common.gps.root/src/main/</sourceDirectory>
         <plugins>
 
             <plugin>

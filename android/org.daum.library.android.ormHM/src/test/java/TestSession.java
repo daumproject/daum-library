@@ -1,6 +1,4 @@
-import model.sitac.Moyen;
-import model.sitac.MoyenType;
-import model.sitac.TestModel;
+/*
 import org.daum.library.ormHM.persistence.PersistenceConfiguration;
 import org.daum.library.ormHM.persistence.PersistenceSession;
 import org.daum.library.ormHM.persistence.PersistenceSessionFactoryImpl;
@@ -8,10 +6,7 @@ import org.daum.library.ormHM.store.EhcacheStore;
 import org.daum.library.ormHM.utils.PersistenceException;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Map;
-
-import static junit.framework.Assert.assertEquals;
+*/
 
 /**
  * Created by jed
@@ -20,6 +15,7 @@ import static junit.framework.Assert.assertEquals;
  * Time: 10:45
  */
 public class TestSession {
+   /*
 
     EhcacheTest ehcacheTeste=null;
     EhcacheTest ehcacheTeste2=null;
@@ -194,7 +190,7 @@ public class TestSession {
 
 
     }
-
+      */
 
 
 }

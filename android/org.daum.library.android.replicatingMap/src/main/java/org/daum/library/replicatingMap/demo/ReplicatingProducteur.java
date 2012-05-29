@@ -1,5 +1,7 @@
-package org.daum.library.replicatingMap;
+package org.daum.library.replicatingMap.demo;
 
+import org.daum.library.replicatingMap.Cache;
+import org.daum.library.replicatingMap.ReplicatingService;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.slf4j.Logger;

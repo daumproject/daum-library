@@ -30,26 +30,37 @@ public class CacheManager implements  Runnable{
     private  Thread thread = new Thread(this);
     private boolean isSynchronized = false;
     private SystemTime systemTime = new SystemTime();
-    private  RemoteDisptachManager remoteDisptachManager= null;
-
+   // private  RemoteDisptachManager remoteDisptachManager= null;
 
     public CacheManager(Channel channel,String id)
     {
         this.chanel = channel;
         this.id =id;
-        remoteDisptachManager = new RemoteDisptachManager(id,chanel);
+        alive = true;
+    //    remoteDisptachManager = new RemoteDisptachManager(id,chanel);
         thread.start();
+
     }
+
+    public void shutdown(){
+        alive = false;
+        thread.interrupt();
+    }
+    public void setChanel(Channel chanel) {
+        this.chanel = chanel;
+    }
+
 
     public boolean isSynchronized() {
         return isSynchronized;
     }
 
+
+
     public  Cache getCache(String name)
     {
         if(name != null)
         {
-            logger.debug("getCache "+name);
             if(!store.containsKey(name))
             {
                 logger.debug("Creating cache "+name);
@@ -128,16 +139,16 @@ public class CacheManager implements  Runnable{
             {
                 if(!command.source.equals(id))
                 {
-                    logger.info(" RECEIVE "+ StoreRequest.HEARTBEAT+" "+nodes);
+                    logger.warn(" RECEIVE " + StoreRequest.HEARTBEAT + " " + nodes);
                     long start = systemTime.getNanoseconds();
                     nodes.put(command.source,start);
                 }
             } else  if(command.getOp().equals(StoreRequest.REQUEST_SNAPSHOT))
             {
-                if(isSynchronized)
+                if(!isSynchronized)
                 {
                     // todo check if isSynchronized = true
-                    logger.error("The current CacheManager is not Synchronized");
+                 //   logger.error("The current CacheManager is not Synchronized");
                 }
 
 
@@ -178,8 +189,9 @@ public class CacheManager implements  Runnable{
 
     public void remoteDisptach(Update update)
     {
-        logger.debug("remoteDisptach "+update.key);
+        logger.debug("remoteDisptach "+update.cache);
         update.source = id;
+        // todo group by block
         chanel.write(update);
         // remoteDisptachManager.addUpdate(update);
     }
@@ -225,14 +237,22 @@ public class CacheManager implements  Runnable{
     @Override
     public void run() {
 
-        while (alive)
+        try {
+            Thread.sleep(9500);
+        } catch (InterruptedException e) {
+
+        }
+
+        while (alive && !Thread.currentThread().isInterrupted())
         {
             Command req = new Command();
             req.op= StoreRequest.HEARTBEAT;
             req.source = id;
+            req.setReplicated(isSynchronized());
+
             chanel.write(req);
 
-            logger.debug(""+ StoreRequest.HEARTBEAT);
+            logger.debug("Sending "+ StoreRequest.HEARTBEAT);
             logger.warn(" "+getCount());
             try
             {

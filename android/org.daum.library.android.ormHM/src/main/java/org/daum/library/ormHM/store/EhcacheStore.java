@@ -1,16 +1,21 @@
 package org.daum.library.ormHM.store;
-
+       /*
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
-import net.sf.ehcache.config.CacheConfiguration;
+import net.sf.ehcache.management.CacheConfiguration;
 import org.daum.library.ormHM.api.PersistenceSessionStore;
 import org.daum.library.ormHM.persistence.OrhmID;
 import org.daum.library.ormHM.utils.PersistenceException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
+import java.util.Map;
+     */
+
+import org.daum.library.ormHM.api.PersistenceSessionStore;
+import org.daum.library.ormHM.persistence.OrhmID;
+import org.daum.library.ormHM.utils.PersistenceException;
+
 import java.util.Map;
 
 /**
@@ -21,8 +26,8 @@ import java.util.Map;
  */
 public class EhcacheStore implements PersistenceSessionStore {
 
-    private static Logger logger =  LoggerFactory.getLogger(EhcacheStore.class);
-
+ //   private static Logger logger =  LoggerFactory.getLogger(EhcacheStore.class);
+   /*
     // todo use global cache configuration
     private CacheConfiguration cacheConfiguration=null;
 
@@ -104,7 +109,7 @@ public class EhcacheStore implements PersistenceSessionStore {
 
     @Override
     public Map<Object,Object> getAll(OrhmID id) throws PersistenceException {
-        logger.debug("getAll "+id.getAttachToCache());
+     //   logger.debug("getAll "+id.getAttachToCache());
         Cache cache = cacheManager.getCache(id.getAttachToCache());
 
         HashMap<Object,Object> result = new HashMap<Object, Object>();
@@ -115,5 +120,36 @@ public class EhcacheStore implements PersistenceSessionStore {
         }
         return result;
     }
+  */
 
+
+    @Override
+    public void save(OrhmID id, Object bean) throws PersistenceException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void delete(OrhmID id) throws PersistenceException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Object get(OrhmID id) throws PersistenceException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Map<Object, Object> getAll(OrhmID id) throws PersistenceException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public Object lock(OrhmID id) throws PersistenceException {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    public void unlock(OrhmID id) throws PersistenceException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

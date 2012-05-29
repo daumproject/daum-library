@@ -24,6 +24,7 @@ public class PersistentProperty {
     private boolean id;
     private Method method;
     private String attachTO = "";
+    private  int maxEntriesLocalHeap;
 
     public PersistentProperty(PersistentClass persistentClass, Method method) {
         this.pers = persistentClass;
@@ -48,11 +49,21 @@ public class PersistentProperty {
             pers.setId(this);
             setType(javaType);
             setAttachTO(id.attachTOCache());
+            setMaxEntriesLocalHeap(id.MaxEntriesLocalHeap());
         }
     }
 
     public String getAttachTO() {
         return attachTO;
+    }
+
+
+    public int getMaxEntriesLocalHeap() {
+        return maxEntriesLocalHeap;
+    }
+
+    public void setMaxEntriesLocalHeap(int maxEntriesLocalHeap) {
+        this.maxEntriesLocalHeap = maxEntriesLocalHeap;
     }
 
     public void setAttachTO(String attachTO) {
