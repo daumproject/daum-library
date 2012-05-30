@@ -14,7 +14,7 @@ public class FrameMoyens extends JFrame {
     private static final int FRAME_WIDTH = 300;
     private static final int FRAME_HEIGHT = 600;
     private JTable table;
-
+    private  Map<Object,Object> prevmoyens=null;
 
     // String rowData[][] = { { "BLS", "RENNES", "LIBRE" },   { "FPT", "RENNES", "LIBRE" } };
 
@@ -48,9 +48,21 @@ public class FrameMoyens extends JFrame {
     public void updateMoyens( Map<Object,Object> moyens)
     {
 
-        ModelJtable model =  new ModelJtable(moyens);
-        //binding the jtable to the model
-        table.setModel(model);
+        if(prevmoyens != null){
+
+            if(!prevmoyens.equals(moyens)){
+                ModelJtable model =  new ModelJtable(moyens);
+                //binding the jtable to the model
+                table.setModel(model);
+                prevmoyens = moyens;
+            }
+        }else {
+            ModelJtable model =  new ModelJtable(moyens);
+            //binding the jtable to the model
+            table.setModel(model);
+            prevmoyens = moyens;
+        }
+
     }
 
 

@@ -1,5 +1,7 @@
 package org.daum.library.fakeDemo.views;
 
+import org.daum.library.fakeDemo.pojos.Moyen;
+
 import javax.swing.table.AbstractTableModel;
 import java.util.Map;
 
@@ -34,9 +36,17 @@ public class ModelJtable extends AbstractTableModel{
        }
 
    	public Object getValueAt(int rowIndex, int columnIndex) {
+
+
            switch(columnIndex){
            case 0:
-               return "id";
+               return  ((Moyen) moyens.values().toArray()[rowIndex]).getNumber();
+           case 1 :
+               return  ((Moyen) moyens.values().toArray()[rowIndex]).getName();
+           case 2 :
+               return  ((Moyen) moyens.values().toArray()[rowIndex]).getName();
+           case 3 :
+               return ((Moyen) moyens.values().toArray()[rowIndex]).isAvailable();
 
            default:
                return null; //Ne devrait jamais arriver

@@ -100,13 +100,30 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
         Random random  = new Random();
 
 
-
         Moyen m1 = new Moyen(new MoyenType(1), "FPT", 1);
+        m1.setCaserne("RENNES");
         Moyen m2 = new Moyen(new MoyenType(2), "VSAV", 2);
+        m1.setCaserne("RENNES");
         Moyen m3 = new Moyen(new MoyenType(1), "FPT", 3);
+        m3.setCaserne("BRUZ");
         Moyen m4 = new Moyen(new MoyenType(1), "FPT", 4);
+        m4.setCaserne("PACE");
         Moyen m5 = new Moyen(new MoyenType(2), "VSAV", 5);
+        m5.setCaserne("BETTON");
 
+        try
+        {
+            PersistenceSession s = factory.openSession();
+            s.save(m1);
+            s.save(m2);
+            s.save(m3);
+            s.save(m4);
+            s.save(m5);
+            s.close();
+        }catch (Exception e){
+             logger.error("Fail to initiate moyens ",e);
+
+        }
 
         while(alive)
         {
@@ -116,14 +133,6 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
 
                 try
                 {
-
-                    s.save(m1);
-                    s.save(m2);
-                    s.save(m3);
-                    s.save(m4);
-                    s.save(m5);
-
-
                     // generate Random
                     TemperatureMonitor temperatureMonitor = new TemperatureMonitor();
                     temperatureMonitor.setDate(systemTime.getCurrentDate());
