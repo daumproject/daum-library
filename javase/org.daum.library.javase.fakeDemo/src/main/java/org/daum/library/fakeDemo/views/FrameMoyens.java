@@ -1,5 +1,7 @@
 package org.daum.library.fakeDemo.views;
 
+import org.daum.library.fakeDemo.ReaderDaum;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
@@ -16,16 +18,15 @@ public class FrameMoyens extends JFrame {
     private JTable table;
     private  Map<Object,Object> prevmoyens=null;
 
-    // String rowData[][] = { { "BLS", "RENNES", "LIBRE" },   { "FPT", "RENNES", "LIBRE" } };
+    private String rowData[][] =  { };
+    private Object columnNames[] = { "#ID","Type de Moyen", "Caserne", "Etat" };
 
-    String rowData[][] =  { };
+    private  ReaderDaum readerDaum;
 
-
-    Object columnNames[] = { "#ID","Type de Moyen", "Caserne", "Etat" };
-
-    public FrameMoyens(String nodeName)
+    public FrameMoyens(String nodeName,ReaderDaum readerDaum)
     {
 
+        this.readerDaum = readerDaum;
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         setLayout(new BorderLayout());
         setTitle(nodeName);
@@ -49,15 +50,14 @@ public class FrameMoyens extends JFrame {
     {
 
         if(prevmoyens != null){
-
             if(!prevmoyens.equals(moyens)){
-                ModelJtable model =  new ModelJtable(moyens);
+                ModelJtable model =  new ModelJtable(moyens,readerDaum);
                 //binding the jtable to the model
                 table.setModel(model);
                 prevmoyens = moyens;
             }
         }else {
-            ModelJtable model =  new ModelJtable(moyens);
+            ModelJtable model =  new ModelJtable(moyens,readerDaum);
             //binding the jtable to the model
             table.setModel(model);
             prevmoyens = moyens;

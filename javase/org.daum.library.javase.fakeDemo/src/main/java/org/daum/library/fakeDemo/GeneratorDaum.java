@@ -29,8 +29,8 @@ import java.util.Set;
         @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class, optional = true)
 })
 @DictionaryType({
-        @DictionaryAttribute(name = "period", optional = false,defaultValue = "2000",fragmentDependant = false) ,
-        @DictionaryAttribute(name = "MaxEntries", optional = false,defaultValue = "50",fragmentDependant = false)
+        @DictionaryAttribute(name = "period", optional = false,defaultValue = "200",fragmentDependant = false) ,
+        @DictionaryAttribute(name = "MaxEntries", optional = false,defaultValue = "10",fragmentDependant = false)
 }
 )
 @ComponentType
