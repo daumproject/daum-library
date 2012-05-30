@@ -22,6 +22,11 @@ import org.daum.library.android.agetac.messages.listener.IMessagesListener;
 public class MessagesView extends RelativeLayout {
 
     private static final int ID_SEND_BUTTON = 1;
+    private static final String JE_SUIS = "Je suis";
+    private static final String JE_VOIS = "Je vois";
+    private static final String JE_PROCEDE = "Je procède";
+    private static final String JE_PREVOIS = "Je prévois";
+    private static final String JE_DEMANDE = "Je demande";
 
     private Context ctx;
     private EditText 	et_jeSuis,
@@ -61,11 +66,11 @@ public class MessagesView extends RelativeLayout {
         setFocusable(true);
 
         // EditText
-        et_jeDemande.setHint("Je demande");
-        et_jePrevois.setHint("Je prévois");
-        et_jeProcede.setHint("Je procède");
-        et_jeSuis.setHint("Je suis");
-        et_jeVois.setHint("Je vois");
+        et_jeDemande.setHint(JE_DEMANDE);
+        et_jePrevois.setHint(JE_PREVOIS);
+        et_jeProcede.setHint(JE_PROCEDE);
+        et_jeSuis.setHint(JE_SUIS);
+        et_jeVois.setHint(JE_VOIS);
         LinearLayout.LayoutParams etLayoutParams = new LinearLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         etLayoutParams.weight = 1;
