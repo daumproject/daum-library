@@ -1,4 +1,6 @@
-package org.daum.library.android.agetac.messages;
+package org.daum.library.android.agetac.messages.listener;
+
+import org.daum.library.android.agetac.messages.message.IMessage;
 
 /**
  * Created with IntelliJ IDEA.

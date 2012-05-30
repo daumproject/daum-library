@@ -6,10 +6,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import org.daum.library.android.agetac.messages.AmbianceMessage;
-import org.daum.library.android.agetac.messages.IMessage;
-import org.daum.library.android.agetac.messages.MessagesEvent;
-import org.daum.library.android.agetac.messages.MessagesEvent.MessagesEventType;
+import org.daum.library.android.agetac.messages.message.AmbianceMessage;
+import org.daum.library.android.agetac.messages.listener.MessagesEvent;
+import org.daum.library.android.agetac.messages.listener.MessagesEvent.MessagesEventType;
+import org.daum.library.android.agetac.messages.message.SimpleMessage;
+import org.daum.library.android.agetac.messages.listener.IMessagesListener;
 
 /**
  * Created with IntelliJ IDEA.
@@ -113,7 +114,7 @@ public class MessagesView extends RelativeLayout {
         });
     }
 
-    public void setAmbienceMessage(AmbianceMessage msg) {
+    public void setAmbianceMessage(AmbianceMessage msg) {
         et_jeDemande.setText(msg.jeDemande);
         et_jePrevois.setText(msg.jePrevois);
         et_jeProcede.setText(msg.jeProcede);
@@ -121,7 +122,7 @@ public class MessagesView extends RelativeLayout {
         et_jeVois.setText(msg.jeVois);
     }
 
-    public void setMessage(IMessage msg) {
+    public void setMessage(SimpleMessage msg) {
         // TODO le prendre en charge
     }
 

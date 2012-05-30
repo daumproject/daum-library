@@ -1,12 +1,15 @@
 package org.daum.library.android.agetac.messages;
 
 import android.util.Log;
+import org.daum.library.android.agetac.messages.message.AmbianceMessage;
+import org.daum.library.android.agetac.messages.message.IMessage;
+import org.daum.library.android.agetac.messages.message.SimpleMessage;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
-import org.daum.library.android.agetac.messages.view.IMessagesListener;
+import org.daum.library.android.agetac.messages.listener.IMessagesListener;
 import org.daum.library.android.agetac.messages.view.MessagesView;
 
 
@@ -70,14 +73,14 @@ public class MessagesComponent extends AbstractComponentType implements IMessage
             uiService.getRootActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    messagesView.setAmbienceMessage((AmbianceMessage) inMessage);
+                    messagesView.setAmbianceMessage((AmbianceMessage) inMessage);
                 }
             });
-        } else if (inMessage instanceof IMessage) {
+        } else if (inMessage instanceof SimpleMessage) {
             uiService.getRootActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    messagesView.setMessage((IMessage) inMessage);
+                    messagesView.setMessage((SimpleMessage) inMessage);
                 }
             });
         } else {

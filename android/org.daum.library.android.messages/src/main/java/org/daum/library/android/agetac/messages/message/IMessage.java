@@ -1,4 +1,4 @@
-package org.daum.library.android.agetac.messages;
+package org.daum.library.android.agetac.messages.message;
 
 import java.io.Serializable;
 
