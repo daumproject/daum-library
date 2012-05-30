@@ -6,28 +6,30 @@
 
     <groupId>org.daum.library.javase</groupId>
     <artifactId>org.daum.library.javase.fakeDemo</artifactId>
-    <version>1.7.3</version>
+    <version>1.0</version>
     <name>DAUM :: fakeDemo :: JavaSE </name>
 
     <parent>
         <groupId>org.daum.library.javase</groupId>
         <artifactId>org.daum.library.javase.root</artifactId>
-        <version>1.7.3</version>
+        <version>1.7.5-SNAPSHOT</version>
         <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
     </parent>
 
 
     <dependencies>
-        <dependency>
-            <groupId>org.daum.library.javase</groupId>
-            <artifactId>org.daum.library.javase.replicatingMap</artifactId>
-            <version>1.0</version>
-        </dependency>
 
         <dependency>
             <groupId>org.daum.library.android</groupId>
             <artifactId>org.daum.library.android.ormH</artifactId>
             <version>1.2</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.daum.library.javase</groupId>
+            <artifactId>org.daum.library.javase.replicatingMap</artifactId>
+            <version>1.3</version>
         </dependency>
 
     </dependencies>

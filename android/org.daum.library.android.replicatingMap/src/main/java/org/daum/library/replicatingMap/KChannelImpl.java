@@ -1,5 +1,6 @@
 package org.daum.library.replicatingMap;
 
+import org.daum.library.replicatingMap.msg.Command;
 import org.daum.library.replicatingMap.msg.Message;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
@@ -19,7 +20,14 @@ public class KChannelImpl implements Channel {
 
     @Override
     public void write(Message e) {
+
         abstractComponentType.getPortByName("messagetoSend", MessagePort.class).process(e);
+
+        if(!(e instanceof Command))
+        {
+            abstractComponentType.getPortByName("trigger", MessagePort.class).process("tick");
+        }
+
     }
 
 }

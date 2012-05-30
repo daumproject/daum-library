@@ -2,6 +2,7 @@ package org.daum.library.replicatingMap;
 
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
+import org.kevoree.framework.MessagePort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +16,8 @@ import org.slf4j.LoggerFactory;
 @Library(name = "JavaSE", names = {"Android"})
 @ComponentType
 @Requires({
-        @RequiredPort(name = "messagetoSend", type = PortType.MESSAGE)
+        @RequiredPort(name = "messagetoSend", type = PortType.MESSAGE),
+        @RequiredPort(name = "trigger", type = PortType.MESSAGE,optional = true)
 })
 @Provides({
         @ProvidedPort(name = "remoteReceived", type = PortType.MESSAGE) ,
@@ -52,6 +54,8 @@ public class ReplicatingManager extends AbstractComponentType implements Replica
     @Port(name = "remoteReceived")
     public void messageReceived(Object o)
     {
+        logger.debug("remoteReceived");
+        getPortByName("trigger", MessagePort.class).process("tick");
         cacheManager.remoteReceived(o);
     }
 
