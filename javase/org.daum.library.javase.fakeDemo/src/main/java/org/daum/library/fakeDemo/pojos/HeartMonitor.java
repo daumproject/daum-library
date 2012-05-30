@@ -12,11 +12,11 @@ import java.util.Date;
  * Date: 29/05/12
  * Time: 11:01
  */
-public class TemperatureMonitor implements Serializable{
+public class HeartMonitor implements Serializable{
 
     public Date date;
     public double  value;
-    @Id(MaxEntriesLocalHeap = 5000,attachTOCache = "TemperatureMonitor")
+    @Id(MaxEntriesLocalHeap = 5000,attachTOCache = "HeartMonitor")
     public Date getDate()
     {
         return date;
@@ -32,10 +32,5 @@ public class TemperatureMonitor implements Serializable{
 
     public void setValue(double value) {
         this.value = value;
-    }
-    
-    
-    public String toString(){
-        return ""+date+" ="+value;
     }
 }

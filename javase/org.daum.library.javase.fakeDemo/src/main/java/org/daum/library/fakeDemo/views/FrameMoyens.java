@@ -49,20 +49,25 @@ public class FrameMoyens extends JFrame {
     public void updateMoyens( Map<Object,Object> moyens)
     {
 
-        if(prevmoyens != null){
-            if(!prevmoyens.equals(moyens)){
+        try {
+            if(prevmoyens != null){
+                if(!prevmoyens.equals(moyens)){
+                    ModelJtable model =  new ModelJtable(moyens,readerDaum);
+                    //binding the jtable to the model
+                    table.setModel(model);
+                    prevmoyens = moyens;
+                }
+            }else {
                 ModelJtable model =  new ModelJtable(moyens,readerDaum);
                 //binding the jtable to the model
                 table.setModel(model);
                 prevmoyens = moyens;
             }
-        }else {
-            ModelJtable model =  new ModelJtable(moyens,readerDaum);
-            //binding the jtable to the model
-            table.setModel(model);
-            prevmoyens = moyens;
-        }
 
+        }   catch (Exception e)
+        {
+
+        }
     }
 
 
