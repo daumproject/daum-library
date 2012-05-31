@@ -1,0 +1,22 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.daum.common.util.javase</groupId>
+    <artifactId>org.daum.common.util.javase.root</artifactId>
+    <packaging>jar</packaging>
+    <name>Daum :: Common :: JavaSE </name>
+    <version>1.0</version>
+
+    <parent>
+        <artifactId>org.daum.common.util</artifactId>
+        <groupId>org.daum.common.util</groupId>
+        <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <build>
+        <sourceDirectory>../org.daum.common.util.root/src/main/</sourceDirectory>
+    </build>
+
+</project>
