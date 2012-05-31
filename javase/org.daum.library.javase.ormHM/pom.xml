@@ -14,27 +14,12 @@
         <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
     </parent>
 
-    <properties>
-        <kevoree.exclude>org.apache.commons*:*</kevoree.exclude>
-    </properties>
-
     <dependencies>
-        <!--
         <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache</artifactId>
-            <version>2.5.1</version>
-            <type>pom</type>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.6.4</version>
         </dependency>
-            -->
-
-        <dependency>
-            <groupId>commons-logging</groupId>
-            <artifactId>commons-logging-api</artifactId>
-            <version>1.1</version>
-            <scope>compile</scope>
-        </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
@@ -45,36 +30,7 @@
 
 
     <build>
-        <sourceDirectory>../../android/org.daum.library.android.ormHM/src</sourceDirectory>
-        <plugins>
-            <plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
-                <version>2.15.2</version>
-                <executions>
-                    <execution>
-                        <id>scala-compile-first</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>scala-test-compile</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <jvmArgs>
-                        <jvmArg>-Xmx1024m</jvmArg>
-                    </jvmArgs>
-                </configuration>
-            </plugin>
-        </plugins>
+        <sourceDirectory>../../android/org.daum.library.android.ormHM/src/main/java</sourceDirectory>
     </build>
 
 </project>
