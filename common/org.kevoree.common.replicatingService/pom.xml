@@ -6,13 +6,18 @@
     <artifactId>org.kevoree.common.replicatingService</artifactId>
     <packaging>pom</packaging>
     <name>DAUM :: Common replicatingService Root</name>
-    <version>1.7.0-SNAPSHOT</version>
+    <version>1.7.5</version>
 
     <properties>
-        <kevoree.version>${project.version}</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <scala.version>2.10.0-M2</scala.version>
     </properties>
+
+    <parent>
+        <groupId>org.daum.library</groupId>
+        <artifactId>org.daum.library</artifactId>
+        <version>1.7.5</version>
+        <relativePath>../../pom.xml</relativePath>
+    </parent>
 
     <modules>
         <module>./org.kevoree.common.replicatingService.android</module>
@@ -29,29 +34,5 @@
             <url>http://maven.kevoree.org/archiva/repository/snapshots/</url>
         </snapshotRepository>
     </distributionManagement>
-
-    <profiles>
-        <profile>
-            <id>graph</id>
-            <pluginRepositories>
-                <pluginRepository>
-                    <id>mvnplugins.fusesource.org</id>
-                    <url>http://mvnplugins.fusesource.org/repo/release</url>
-                    <releases>
-                        <enabled>true</enabled>
-                    </releases>
-                </pluginRepository>
-            </pluginRepositories>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.fusesource.mvnplugins</groupId>
-                        <artifactId>maven-graph-plugin</artifactId>
-                        <version>1.23</version>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
 </project>

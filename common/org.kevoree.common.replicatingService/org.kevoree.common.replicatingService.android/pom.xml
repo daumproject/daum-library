@@ -6,12 +6,12 @@
     <artifactId>org.kevoree.common.replicatingService.android.root</artifactId>
     <packaging>jar</packaging>
     <name>Kevoree :: Common :: Android </name>
-    <version>1.7.0-SNAPSHOT</version>
+    <version>1.7.5</version>
 
     <parent>
         <artifactId>org.kevoree.common.replicatingService</artifactId>
         <groupId>org.kevoree.common.replicatingService</groupId>
-        <version>1.7.0-SNAPSHOT</version>
+        <version>1.7.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -22,7 +22,7 @@
     </properties>
 
     <build>
-        <sourceDirectory>../org.kevoree.common.gps.root/src/main/</sourceDirectory>
+        <sourceDirectory>../org.kevoree.common.gps/src/main/java</sourceDirectory>
         <plugins>
 
             <plugin>
