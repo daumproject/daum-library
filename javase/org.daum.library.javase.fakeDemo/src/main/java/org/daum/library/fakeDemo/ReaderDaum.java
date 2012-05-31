@@ -13,6 +13,7 @@ import org.daum.library.replicatingMap.utils.SystemTime;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
+import org.kevoree.library.ui.layout.KevoreeLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -74,7 +75,8 @@ public class ReaderDaum extends AbstractComponentType {
     @Stop
     public void stop() {
         if(frameMoyens != null){
-            frameMoyens.dispose();
+            KevoreeLayout.getInstance().releaseTab(getName());
+            frameMoyens = null;
         }
     }
 
@@ -90,10 +92,11 @@ public class ReaderDaum extends AbstractComponentType {
         if(getDictionary().get("mode").toString().equals("moyens"))
         {
             frameMoyens  = new FrameMoyens(getNodeName(),this);
+            KevoreeLayout.getInstance().displayTab(frameMoyens,getName());
         }  else
         {
             if(frameMoyens != null){
-                frameMoyens.dispose();
+                KevoreeLayout.getInstance().releaseTab(getName());
             }
         }
 
