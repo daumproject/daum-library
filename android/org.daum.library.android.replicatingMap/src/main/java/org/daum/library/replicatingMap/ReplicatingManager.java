@@ -41,7 +41,7 @@ public class ReplicatingManager extends AbstractComponentType implements Replica
     @Stop
     public void stop()
     {
-
+        cacheManager.shutdown();
     }
 
     @Update
