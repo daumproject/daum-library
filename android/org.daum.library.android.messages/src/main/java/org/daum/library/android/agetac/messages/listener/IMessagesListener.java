@@ -1,13 +1,14 @@
 package org.daum.library.android.agetac.messages.listener;
 
-import org.daum.library.android.agetac.messages.message.IMessage;
+import org.daum.common.message.api.IMessage;
 
 /**
  * Created with IntelliJ IDEA.
  * User: max
  * Date: 30/05/12
  * Time: 11:53
- * To change this template use File | Settings | File Templates.
+ * Interface definition for a callback to be invoked when a event happened
+ * on the associated AmbianceMessagesView
  */
 public interface IMessagesListener {
 

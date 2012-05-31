@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/org.daum.common.message.iml" filepath="$PROJECT_DIR$/org.daum.common.message.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.daum.common.message.android/org.daum.common.message.android.root.iml" filepath="$PROJECT_DIR$/org.daum.common.message.android/org.daum.common.message.android.root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.daum.common.message.javase/org.daum.common.message.javase.root.iml" filepath="$PROJECT_DIR$/org.daum.common.message.javase/org.daum.common.message.javase.root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.daum.common.model.iml" filepath="$PROJECT_DIR$/org.daum.common.model.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.daum.common.model.android/org.daum.common.model.android.root.iml" filepath="$PROJECT_DIR$/org.daum.common.model.android/org.daum.common.model.android.root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.daum.common.model.javase/org.daum.common.model.javase.root.iml" filepath="$PROJECT_DIR$/org.daum.common.model.javase/org.daum.common.model.javase.root.iml" />
+    </modules>
+  </component>
+</project>
+

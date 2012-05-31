@@ -1,4 +1,9 @@
-package org.daum.library.android.agetac.messages.message;
+package org.daum.common.message.api;
+
+import org.daum.common.util.api.TimeFormatter;
+
+import java.lang.String;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,13 +15,15 @@ package org.daum.library.android.agetac.messages.message;
 public class SimpleMessage implements IMessage {
 
     public String text;
+    public String groupeHoraire;
 
     public SimpleMessage(String text) {
         this.text = text;
+        this.groupeHoraire = TimeFormatter.getGroupeHoraire(new Date());
     }
 
     @Override
     public String toString() {
-        return text;
+        return "["+groupeHoraire+"]"+text;
     }
 }
