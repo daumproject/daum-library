@@ -1,0 +1,75 @@
+tblock { 
+merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.javaseNode/1.7.5-SNAPSHOT"
+merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.socketChannels/1.7.5-SNAPSHOT"
+merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nioChannels/1.7.5-SNAPSHOT"
+merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/1.7.5-SNAPSHOT"
+merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttpAutoDiscovery/1.7.5-SNAPSHOT"
+merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.grapher/1.7.5-SNAPSHOT"
+merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.defaultChannels/1.7.5-SNAPSHOT"
+
+merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/1.7.5-SNAPSHOT"
+merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultChannels/1.7.5-SNAPSHOT"
+merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/1.7.5-SNAPSHOT"
+merge "mvn:http://maven.kevoree.org/daum/release!org.daum.library.javase/org.daum.library.javase.fakeDemo/1.0"
+
+
+merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.javaseNode/1.7.5-SNAPSHOT"
+merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/1.7.5-SNAPSHOT"
+merge "mvn:org.kevoree.corelibrary.arduino/org.kevoree.library.arduino.nodeType/1.7.5-SNAPSHOT"
+merge "mvn:org.kevoree.corelibrary.arduino/org.kevoree.library.arduino.components/1.7.5-SNAPSHOT"
+merge "mvn:org.kevoree.corelibrary.arduino/org.kevoree.library.arduino.groupType/1.7.5-SNAPSHOT"
+
+
+ addNode node0 : JavaSENode
+ addNode node1 : JavaSENode 
+ 
+ addGroup sync: NanoRestGroup 
+ addToGroup sync *
+ updateDictionary sync { port="8000"}@node0,{ port="8001"}@node1 
+ addComponent r0@node0 : ReplicatingManager { } 
+ addComponent r1@node1 : ReplicatingManager { } 
+ addChannel  mysockChannel : NioChannel {  }
+ bind r0.remoteReceived@node0 => mysockChannel
+ bind r1.remoteReceived@node1 => mysockChannel
+ bind r0.messagetoSend@node0 => mysockChannel
+ bind r1.messagetoSend@node1 => mysockChannel
+ updateDictionary mysockChannel { port="9001"}@node0,{ port="9002"}@node1
+ 
+ 
+ addComponent reader0@node0 : ReaderDaum { } 
+ addComponent reader1@node1 : ReaderDaum { } 
+ 
+  addChannel  defmsg1 : defMSG{  }
+  addChannel  defservice0: defSERVICE{  }
+  
+ bind reader0.notify@node0 =>defmsg1
+ bind r0.trigger@node0 =>defmsg1
+  
+ bind reader0.service@node0 =>defservice0
+ bind r0.service@node0 =>defservice0
+ 
+
+  
+  addChannel  defmsg2 : defMSG{  }
+ addChannel  defservice2: defSERVICE{  }
+  
+ bind reader1.notify@node1 =>defmsg2
+ bind r1.trigger@node1 =>defmsg2
+  
+ bind reader1.service@node1 =>defservice2
+ bind r1.service@node1 =>defservice2
+ 
+  addComponent gen0@node0 : GeneratorDaum { } 
+  
+   bind gen0.service@node0 =>defservice0
+
+
+ addNode node3 : ArduinoNode
+ addGroup sync2: ArduinoSerialDelegation 
+ addToGroup sync2 node3
+ addChannel  s1 : SerialCT {  }
+ addComponent t1@node3 : TempSensorInfrared { } 
+
+ bind t1.temp@node3 =>s1
+
+ }
