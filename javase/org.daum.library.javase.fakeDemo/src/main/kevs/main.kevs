@@ -27,18 +27,16 @@ addNode node1 : JavaSENode
  bind r1.messagetoSend@node1 => mysockChannel
  updateDictionary mysockChannel { port="9001"}@node0,{ port="9002"}@node1
 
+addComponent reader0@node0 : ReaderDaum { }
+addComponent reader1@node1 : ReaderDaum { }
 
- addComponent reader0@node0 : ReaderDaum { }
- addComponent reader1@node1 : ReaderDaum { }
+addChannel  defmsg1 : defMSG{  }
+addChannel  defservice0: defSERVICE{  }
 
-  addChannel  defmsg1 : defMSG{  }
-  addChannel  defservice0: defSERVICE{  }
-
- bind reader0.notify@node0 =>defmsg1
- bind r0.trigger@node0 =>defmsg1
-
- bind reader0.service@node0 =>defservice0
- bind r0.service@node0 =>defservice0
+bind reader0.notify@node0 =>defmsg1
+bind r0.trigger@node0 =>defmsg1
+bind reader0.service@node0 =>defservice0
+bind r0.service@node0 =>defservice0
 
 
 
