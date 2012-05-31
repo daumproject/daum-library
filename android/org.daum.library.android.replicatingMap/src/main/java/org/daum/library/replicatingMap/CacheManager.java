@@ -139,7 +139,7 @@ public class CacheManager implements  Runnable{
             {
                 if(!command.source.equals(id))
                 {
-                    logger.info(" RECEIVE " + StoreRequest.HEARTBEAT + " " + nodes);
+                    logger.info("Replica Cluster "+ nodes);
                     long start = systemTime.getNanoseconds();
                     nodes.put(command.source,start);
                 }

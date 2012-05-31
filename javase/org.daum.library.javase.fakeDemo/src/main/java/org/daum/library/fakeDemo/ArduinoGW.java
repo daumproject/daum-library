@@ -57,6 +57,7 @@ public class ArduinoGW extends AbstractComponentType {
             configuration.addPersistentClass(TemperatureMonitor.class);
             configuration.addPersistentClass(Moyen.class);
             configuration.addPersistentClass(HeartMonitor.class);
+
         } catch (PersistenceException e) {
             logger.error("",e);
         }
@@ -89,9 +90,14 @@ public class ArduinoGW extends AbstractComponentType {
             s  = factory.openSession();
             SystemTime systemTime = new SystemTime();
 
+            
+
             try
             {
+                //c/28
                 String[] values = msg.toString().split(",");
+
+
                 //System.out.println(values.length);;
                 for (int i = 0; i < values.length; i++) {
                     String[] lvl = values[i].split("=");
@@ -103,15 +109,15 @@ public class ArduinoGW extends AbstractComponentType {
                         {
 
                             TemperatureMonitor temperatureMonitor = new TemperatureMonitor();
-                              temperatureMonitor.setDate(systemTime.getCurrentDate());
+                            temperatureMonitor.setDate(systemTime.getCurrentDate());
 
-                              temperatureMonitor.setValue(value);
+                            temperatureMonitor.setValue(value);
 
-                              s.save(temperatureMonitor);
+                            s.save(temperatureMonitor);
 
 
                             Set<Object> dates =  s.getAll(TemperatureMonitor.class).keySet();
-                            if(dates.size() > 5)
+                            if(dates.size() > 3)
                             {
                                 //delete first
                                 Date d =  systemTime.getDatemin(dates);

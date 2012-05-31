@@ -16,7 +16,7 @@ public class TemperatureMonitor implements Serializable{
 
     public Date date;
     public double  value;
-    @Id(MaxEntriesLocalHeap = 5000,attachTOCache = "TemperatureMonitor")
+    @Id
     public Date getDate()
     {
         return date;
