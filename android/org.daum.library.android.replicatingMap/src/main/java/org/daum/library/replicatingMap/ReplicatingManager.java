@@ -1,5 +1,6 @@
 package org.daum.library.replicatingMap;
 
+import org.daum.library.replicatingMap.msg.Command;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
@@ -26,7 +27,7 @@ import org.slf4j.LoggerFactory;
 public class ReplicatingManager extends AbstractComponentType implements ReplicatingService {
     private CacheManager cacheManager =null;
     KChannelImpl kChannel=null;
-  //  private Thread thread = new Thread(this);
+    //  private Thread thread = new Thread(this);
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Start
@@ -54,9 +55,13 @@ public class ReplicatingManager extends AbstractComponentType implements Replica
     @Port(name = "remoteReceived")
     public void messageReceived(Object o)
     {
-        logger.debug("remoteReceived");
-        getPortByName("trigger", MessagePort.class).process("tick");
         cacheManager.remoteReceived(o);
+
+        if(!(o instanceof Command))
+        {
+            getPortByName("trigger", MessagePort.class).process("tick");
+        }
+
     }
 
 

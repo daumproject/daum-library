@@ -66,7 +66,7 @@ public class Cache extends  DHashMap<Object,Object>{
 
         if(!cacheManger.isSynchronized())
         {
-            logger.error("WARNING !! TODO backup remove until synchronize is finish");
+            //logger.warn("WARNING !! TODO backup remove until synchronize is finish");
         }
         Update e = new Update();
         e.op = StoreRequest.DELETE;

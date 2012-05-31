@@ -69,7 +69,7 @@ public class CacheManager implements  Runnable{
             }
         } else
         {
-            logger.error("The cache can't be null");
+            logger.error("The name of cache is null : Do you have set the annotations ?");
             return null;
         }
 
@@ -139,7 +139,7 @@ public class CacheManager implements  Runnable{
             {
                 if(!command.source.equals(id))
                 {
-                    logger.warn(" RECEIVE " + StoreRequest.HEARTBEAT + " " + nodes);
+                    logger.info("Replica Cluster "+ nodes);
                     long start = systemTime.getNanoseconds();
                     nodes.put(command.source,start);
                 }
@@ -211,6 +211,8 @@ public class CacheManager implements  Runnable{
                         //ignore
                     }
                 }
+
+                // todo check if the nodes is already replicated and if the node didn't respond in time request an other snapshot
                 Long min =Long.MAX_VALUE;
                 String node ="";
                 for(String key : nodes.keySet())
@@ -253,7 +255,7 @@ public class CacheManager implements  Runnable{
             chanel.write(req);
 
             logger.debug("Sending "+ StoreRequest.HEARTBEAT);
-            logger.warn(" "+getCount());
+          //  logger.warn(" "+getCount());
             try
             {
                 Thread.sleep(9000);

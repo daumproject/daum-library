@@ -16,7 +16,7 @@ public class TemperatureMonitor implements Serializable{
 
     public Date date;
     public double  value;
-    @Id(MaxEntriesLocalHeap = 5000,attachTOCache = "TemperatureMonitor")
+    @Id
     public Date getDate()
     {
         return date;
@@ -32,5 +32,10 @@ public class TemperatureMonitor implements Serializable{
 
     public void setValue(double value) {
         this.value = value;
+    }
+    
+    
+    public String toString(){
+        return ""+date+" ="+value;
     }
 }

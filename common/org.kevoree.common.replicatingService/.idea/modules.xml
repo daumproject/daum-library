@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/org.kevoree.common.replicatingService.iml" filepath="$PROJECT_DIR$/org.kevoree.common.replicatingService.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.kevoree.common.replicatingService.android/org.kevoree.common.replicatingService.android.root.iml" filepath="$PROJECT_DIR$/org.kevoree.common.replicatingService.android/org.kevoree.common.replicatingService.android.root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.kevoree.common.replicatingService.javase/org.kevoree.common.replicatingService.javase.root.iml" filepath="$PROJECT_DIR$/org.kevoree.common.replicatingService.javase/org.kevoree.common.replicatingService.javase.root.iml" />
+    </modules>
+  </component>
+</project>
+

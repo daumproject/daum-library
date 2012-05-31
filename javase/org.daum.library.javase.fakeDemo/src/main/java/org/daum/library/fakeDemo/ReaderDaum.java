@@ -1,5 +1,6 @@
 package org.daum.library.fakeDemo;
 
+import org.daum.library.fakeDemo.pojos.HeartMonitor;
 import org.daum.library.fakeDemo.pojos.Moyen;
 import org.daum.library.fakeDemo.pojos.TemperatureMonitor;
 import org.daum.library.fakeDemo.views.FrameMoyens;
@@ -26,52 +27,75 @@ import java.util.Set;
  * Time: 17:08
  */
 
-@Library(name = "JavaSE", names = {"Android"})
+@Library(name = "JavaSE")
 @Requires({
         @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class, optional = true)  ,
-        @RequiredPort(name = "temperature", type = PortType.MESSAGE, optional = true)
+        @RequiredPort(name = "value", type = PortType.MESSAGE, optional = true)
 })
 @Provides({
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
 })
-/*
+
 @DictionaryType({
-        @DictionaryAttribute(name = "period", optional = false,defaultValue = "2000",fragmentDependant = false)
+        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature", "moyens","heart"})
 }
-)   */
+)
 @ComponentType
 public class ReaderDaum extends AbstractComponentType {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private SystemTime systemTime = new SystemTime();
 
+    private SystemTime systemTime = new SystemTime();
     public PersistenceConfiguration configuration=null;
     private PersistenceSessionFactoryImpl factory=null;
-    private  FrameMoyens frameMoyens;
+    private  FrameMoyens frameMoyens=null;
     private ReplicatingService replicatingService =  null;
     private  PersistenceSession s=null;
+
+
     @Start
     public void start()
     {
-        try {
+        try
+        {
             configuration = new PersistenceConfiguration();
+
             configuration.addPersistentClass(TemperatureMonitor.class);
             configuration.addPersistentClass(Moyen.class);
-            frameMoyens  = new FrameMoyens(getNodeName(),this);
+            configuration.addPersistentClass(HeartMonitor.class);
+
+            manageMoyens();
         } catch (PersistenceException e) {
             logger.error("",e);
         }
-
     }
 
 
     @Stop
     public void stop() {
-
+        if(frameMoyens != null){
+            frameMoyens.dispose();
+        }
     }
 
     @Update
     public void update() {
+
+        manageMoyens();
+
+    }
+
+    public void manageMoyens(){
+
+        if(getDictionary().get("mode").toString().equals("moyens"))
+        {
+            frameMoyens  = new FrameMoyens(getNodeName(),this);
+        }  else
+        {
+            if(frameMoyens != null){
+                frameMoyens.dispose();
+            }
+        }
 
     }
 
@@ -83,36 +107,54 @@ public class ReaderDaum extends AbstractComponentType {
         {
             replicatingService =   this.getPortByName("service", ReplicatingService.class);
             StoreImpl storeImpl = new StoreImpl(replicatingService);
-
             configuration.setConnectionConfiguration(storeImpl);
             factory = configuration.getPersistenceSessionFactory();
         }
-
-
 
         try
         {
             s  = factory.openSession();
 
 
-            Set<Object> dates =  s.getAll(TemperatureMonitor.class).keySet();
-            if(dates.size() > 0)
+            if(getDictionary().get("mode").toString().equals("temperature"))
             {
-                Date last =  systemTime.getDatemin(dates);
-                TemperatureMonitor temp = (TemperatureMonitor) s.get(TemperatureMonitor.class,last);
-                if(temp != null)
+                Set<Object> dates =  s.getAll(TemperatureMonitor.class).keySet();
+                if(dates.size() > 0)
                 {
-                    String format = "temperature="+temp.getValue();
-                    this.getPortByName("temperature", MessagePort.class).process(format);
+                    Date last =  systemTime.getDatemin(dates);
+                    TemperatureMonitor temp = (TemperatureMonitor) s.get(TemperatureMonitor.class,last);
+                    if(temp != null)
+                    {
+                        String format = "temperature="+temp.getValue();
+                        this.getPortByName("value", MessagePort.class).process(format);
+                    }
                 }
-            }
 
-            Map<Object,Object> moyens = s.getAll(Moyen.class);
-            if(moyens.size() >0)
+            }else if(getDictionary().get("mode").toString().equals("moyens"))
             {
-                frameMoyens.updateMoyens(moyens);
+                Map<Object,Object> moyens = s.getAll(Moyen.class);
+                if(moyens.size() >0)
+                {
+                    frameMoyens.updateMoyens(moyens);
+
+                }
+            }  else if(getDictionary().get("mode").toString().equals("heart"))
+            {
+
+                Set<Object> dates =  s.getAll(HeartMonitor.class).keySet();
+                if(dates.size() > 0)
+                {
+                    Date last =  systemTime.getDatemin(dates);
+                    HeartMonitor temp = (HeartMonitor) s.get(HeartMonitor.class,last);
+                    if(temp != null)
+                    {
+                        String format = "heart="+temp.getValue();
+                        this.getPortByName("value", MessagePort.class).process(format);
+                    }
+                }
 
             }
+
 
             s.close();
         }

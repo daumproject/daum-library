@@ -18,6 +18,7 @@ import java.util.Map;
 public class StoreImpl implements PersistenceSessionStore {
 
     private ReplicatingService replicatingService=null;
+
     public StoreImpl(ReplicatingService cache){
         this.replicatingService = cache;
     }
@@ -47,12 +48,14 @@ public class StoreImpl implements PersistenceSessionStore {
     @Override
     public Map<Object, Object> getAll(OrhmID id) throws PersistenceException {
         Cache cache = replicatingService.getCache(id.getAttachToCache());
-        HashMap<Object,Object> result = new HashMap<Object, Object>();
-        for( Object key : cache.keySet())
-        {
-            result.put(key,cache.get(key));
+        if(cache != null){
+            HashMap<Object,Object> result = new HashMap<Object, Object>();
+            for( Object key : cache.keySet())
+            {
+                result.put(key,cache.get(key));
+            }       return result;
         }
-        return result;
+          return  null;
     }
 
     @Override

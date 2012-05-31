@@ -46,23 +46,35 @@ public class FrameMoyens extends JFrame {
 
 
 
-    public void updateMoyens( Map<Object,Object> moyens)
+    public void updateMoyens( final Map<Object,Object> moyens)
     {
+        //Update Table
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
 
-        if(prevmoyens != null){
-            if(!prevmoyens.equals(moyens)){
-                ModelJtable model =  new ModelJtable(moyens,readerDaum);
-                //binding the jtable to the model
-                table.setModel(model);
-                prevmoyens = moyens;
+                try {
+                    if(prevmoyens != null){
+                        if(!prevmoyens.equals(moyens)){
+                            ModelJtable model =  new ModelJtable(moyens,readerDaum);
+                            //binding the jtable to the model
+                            table.setModel(model);
+                            prevmoyens = moyens;
+                        }
+                    }else {
+                        ModelJtable model =  new ModelJtable(moyens,readerDaum);
+                        //binding the jtable to the model
+                        table.setModel(model);
+                        prevmoyens = moyens;
+                    }
+
+                }   catch (Exception e)
+                {
+
+                }
+
             }
-        }else {
-            ModelJtable model =  new ModelJtable(moyens,readerDaum);
-            //binding the jtable to the model
-            table.setModel(model);
-            prevmoyens = moyens;
-        }
-
+        });
     }
 
 
