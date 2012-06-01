@@ -4,13 +4,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.daum.library.javase</groupId>
     <artifactId>org.daum.library.javase.replicatingMap</artifactId>
-    <name>DAUM :: replicatingMap :: JavaSE </name>
+    <name>DAUM :: Library :: JavaSE :: replicatingMap</name>
      <version>1.3</version>
 
     <parent>
         <artifactId>org.daum.library.javase.root</artifactId>
         <groupId>org.daum.library.javase</groupId>
-        <version>1.7.5-SNAPSHOT</version>
+        <version>1.7.5</version>
         <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
     </parent>
 

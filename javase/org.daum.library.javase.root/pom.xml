@@ -9,10 +9,9 @@
     <parent>
         <groupId>org.daum.library</groupId>
         <artifactId>org.daum.library</artifactId>
-        <version>1.7.5-SNAPSHOT</version>
+        <version>1.7.5</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -22,7 +21,7 @@
         <module>../org.daum.library.javase.ehcache</module>
         <module>../org.daum.library.javase.replicatingMap</module>
         <module>../org.daum.library.javase.ormHM</module>
-        <!-- <module>../org.daum.library.javase.fakeDemo</module>     -->
+        <module>../org.daum.library.javase.fakeDemo</module>
     </modules>
 
     <dependencies>

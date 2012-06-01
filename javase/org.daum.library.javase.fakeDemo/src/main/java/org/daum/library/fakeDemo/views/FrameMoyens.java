@@ -12,7 +12,7 @@ import java.util.Map;
  * Date: 29/05/12
  * Time: 18:20
  */
-public class FrameMoyens extends JFrame {
+public class FrameMoyens extends JPanel {
     private static final int FRAME_WIDTH = 300;
     private static final int FRAME_HEIGHT = 600;
     private JTable table;
@@ -27,18 +27,10 @@ public class FrameMoyens extends JFrame {
     {
 
         this.readerDaum = readerDaum;
-        setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         setLayout(new BorderLayout());
-        setTitle(nodeName);
-        setVisible(true);
-
         table = new JTable(rowData, columnNames);
-
         JScrollPane scrollPane = new JScrollPane(table);
         add(scrollPane, BorderLayout.CENTER);
-
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        pack();
         setVisible(true);
     }
 

@@ -3,33 +3,34 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>org.daum.library.javase</groupId>
     <artifactId>org.daum.library.javase.fakeDemo</artifactId>
-    <version>1.0</version>
-    <name>DAUM :: fakeDemo :: JavaSE </name>
+    <version>1.1</version>
+    <name>DAUM :: Library :: JavaSE :: fakeDemo</name>
 
     <parent>
         <groupId>org.daum.library.javase</groupId>
         <artifactId>org.daum.library.javase.root</artifactId>
-        <version>1.7.5-SNAPSHOT</version>
+        <version>1.7.5</version>
         <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
     </parent>
 
-
     <dependencies>
-
-        <dependency>
-            <groupId>org.daum.library.android</groupId>
-            <artifactId>org.daum.library.android.ormH</artifactId>
-            <version>1.2</version>
-        </dependency>
-
-
         <dependency>
             <groupId>org.daum.library.javase</groupId>
             <artifactId>org.daum.library.javase.replicatingMap</artifactId>
             <version>1.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.daum.library.javase</groupId>
+            <artifactId>org.daum.library.javase.ormHM</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.kevoree.corelibrary.javase</groupId>
+            <artifactId>org.kevoree.library.javase.swingUI</artifactId>
+            <version>${kevoree.version}</version>
         </dependency>
 
     </dependencies>
