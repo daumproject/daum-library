@@ -1,6 +1,6 @@
 package org.daum.library.android.agetac.messages.listener;
 
-import org.daum.common.message.api.IMessage;
+import org.daum.common.message.api.Message;
 
 /**
  * Created with IntelliJ IDEA.
@@ -8,7 +8,7 @@ import org.daum.common.message.api.IMessage;
  * Date: 30/05/12
  * Time: 11:53
  * Interface definition for a callback to be invoked when a event happened
- * on the associated AmbianceMessagesView
+ * on the associated NewMessageView
  */
 public interface IMessagesListener {
 
@@ -16,5 +16,5 @@ public interface IMessagesListener {
      * Called when the send message button is clicked
      * @param msg the message
      */
-    void onSend(IMessage msg);
+    void onSend(Message msg);
 }

@@ -1,6 +1,6 @@
 package org.daum.library.android.agetac.messages.listener;
 
-import org.daum.common.message.api.IMessage;
+import org.daum.common.message.api.Message;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,15 +15,15 @@ public class MessagesEvent {
         SEND
     }
 
-    private IMessage content;
+    private Message content;
     private MessagesEventType type;
 
-    public MessagesEvent(IMessage content, MessagesEventType type) {
+    public MessagesEvent(Message content, MessagesEventType type) {
         this.content = content;
         this.type = type;
     }
 
-    public IMessage getContent() {
+    public Message getContent() {
         return content;
     }
 
