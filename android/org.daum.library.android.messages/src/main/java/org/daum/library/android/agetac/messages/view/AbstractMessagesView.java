@@ -17,29 +17,25 @@ import org.daum.library.android.agetac.messages.listener.MessagesEvent;
  */
 public abstract class AbstractMessagesView extends RelativeLayout {
 
-    // String constants
-    private static final String TEXT_SEND = "Envoyer";
-
     // View ids
-    private static final int ID_SEND_BTN = 1;
+    private static final int ID_RIGHT_LAYOUT = 1;
 
     protected Context ctx;
     protected IMessagesListener listener;
 
-    private Button btn_send;
     private RelativeLayout leftLayout;
+    private LinearLayout rightLayout;
 
     public AbstractMessagesView(Context ctx) {
         super(ctx);
         this.ctx = ctx;
         initUI();
         configUI();
-        defineCallbacks();
     }
 
     private void initUI() {
-        btn_send = new Button(ctx);
         leftLayout = new RelativeLayout(ctx);
+        rightLayout = new LinearLayout(ctx);
     }
 
     private void configUI() {
@@ -50,35 +46,27 @@ public abstract class AbstractMessagesView extends RelativeLayout {
         setFocusableInTouchMode(true);
         setFocusable(true);
 
-        // buttons
-        btn_send.setId(ID_SEND_BTN);
-        btn_send.setText(TEXT_SEND);
-        // layout params for send button
-        RelativeLayout.LayoutParams btnParams = new RelativeLayout.LayoutParams(
+        // configuring right layout
+        rightLayout.setId(ID_RIGHT_LAYOUT);
+        rightLayout.setOrientation(LinearLayout.VERTICAL);
+
+        // layout params for right layout
+        RelativeLayout.LayoutParams rightLayoutParams = new RelativeLayout.LayoutParams(
                 LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        btnParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-        btnParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+        rightLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        rightLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 
         // layout params for left layout
         RelativeLayout.LayoutParams leftLayoutParams = new RelativeLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        leftLayoutParams.addRule(RelativeLayout.LEFT_OF, btn_send.getId());
+        leftLayoutParams.addRule(RelativeLayout.LEFT_OF, rightLayout.getId());
 
 
-        // add ambianceLayout to AmbianceMessagesView layout
+        // add leftLayout to NewMessageView layout
         addView(leftLayout, leftLayoutParams);
 
-        // add btn_send to AmbianceMessagesView layout
-        addView(btn_send, btnParams);
-    }
-
-    private void defineCallbacks() {
-        btn_send.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onSendButtonClicked();
-            }
-        });
+        // add rightLayout to NewMessageView layout
+        addView(rightLayout, rightLayoutParams);
     }
 
     protected void addViewToLeftLayout(View view, LayoutParams params) {
@@ -87,18 +75,8 @@ public abstract class AbstractMessagesView extends RelativeLayout {
     }
 
     protected void addViewToRightLayout(View view, LinearLayout.LayoutParams params) {
-        //rightLayout.addView(view, params);
+        rightLayout.addView(view, params);
         requestLayout();
-    }
-
-    protected void fireEventToListener(MessagesEvent evt) {
-        if (listener != null) {
-            switch (evt.getType()) {
-                case SEND:
-                    listener.onSend(evt.getContent());
-                    break;
-            }
-        }
     }
 
     public void addEventListener(IMessagesListener listener) {
@@ -108,6 +86,4 @@ public abstract class AbstractMessagesView extends RelativeLayout {
     public void removeListener() {
         this.listener = null;
     }
-
-    protected abstract void onSendButtonClicked();
 }

@@ -6,7 +6,7 @@
     <artifactId>org.daum.common.message</artifactId>
     <packaging>pom</packaging>
     <name>DAUM :: Common :: Message :: Root</name>
-    <version>1.2</version>
+    <version>1.5</version>
 
     <properties>
         <kevoree.version>${project.version}</kevoree.version>

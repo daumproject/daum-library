@@ -6,12 +6,12 @@
     <artifactId>org.daum.common.message.android.root</artifactId>
     <packaging>jar</packaging>
     <name>Daum :: Common :: Android </name>
-    <version>1.2</version>
+    <version>1.5</version>
 
     <parent>
         <artifactId>org.daum.common.message</artifactId>
         <groupId>org.daum.common.message</groupId>
-        <version>1.2</version>
+        <version>1.5</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
