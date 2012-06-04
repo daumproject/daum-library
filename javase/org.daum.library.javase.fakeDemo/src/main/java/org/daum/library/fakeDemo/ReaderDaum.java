@@ -82,13 +82,11 @@ public class ReaderDaum extends AbstractComponentType {
 
     @Update
     public void update() {
-
+        stop();
         manageMoyens();
-
     }
 
     public void manageMoyens(){
-
         if(getDictionary().get("mode").toString().equals("moyens"))
         {
             frameMoyens  = new FrameMoyens(getNodeName(),this);
