@@ -1,0 +1,33 @@
+// core
+merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}"
+merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}"
+
+// lib
+merge "mvn:org.kevoree.library.android/org.kevoree.library.android.bluetooth/{kevoree.version}"
+
+// daum
+merge "mvn:http://maven.kevoree.org/daum/snapshot!org.daum.library.android/org.daum.library.android.agetac.messages/1.7.6-SNAPSHOT"
+
+addNode node0: AndroidNode
+addNode node1: AndroidNode
+
+addGroup nanoRestGrp: NanoRestGroup
+
+addChannel bluetooth: BluetoothChannel
+
+addToGroup nanoRestGrp *
+
+addComponent messComp0@node0: MessagesComponent
+addComponent messComp1@node1: MessagesComponent
+
+// bind node0
+bind messComp0.inMessage@node0 => bluetooth
+bind messComp0.outMessage@node0 => bluetooth
+
+// bind node1
+bind messComp1.inMessage@node1 => bluetooth
+bind messComp1.outMessage@node1 => bluetooth
+
+// network addresses
+network node0 { "KEVOREE.remote.node.ip"= "192.168.1.147" }
+network node1 { "KEVOREE.remote.node.ip"= "192.168.1.121" }

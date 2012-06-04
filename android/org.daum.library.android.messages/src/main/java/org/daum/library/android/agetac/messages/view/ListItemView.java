@@ -1,6 +1,7 @@
 package org.daum.library.android.agetac.messages.view;
 
 import android.graphics.Color;
+import android.util.Pair;
 import android.widget.TextView;
 import org.daum.common.message.api.Message;
 import android.content.Context;
@@ -42,16 +43,16 @@ public class ListItemView extends LinearLayout {
     private void configUI() {
         // configuring this view layout
         setOrientation(LinearLayout.VERTICAL);
-        setPadding(10, 0, 0, 0);
+        setPadding(10, 5, 0, 5);
 
         // change UI according to message type
         switch (type) {
             case IN:
-                setBackgroundColor(Color.LTGRAY);
+                setBackgroundColor(Color.WHITE);
                 break;
 
             case OUT:
-                setBackgroundColor(Color.WHITE);
+                setBackgroundColor(Color.LTGRAY);
                 break;
         }
 
@@ -64,5 +65,15 @@ public class ListItemView extends LinearLayout {
 
         addView(tv_header);
         addView(tv_message);
+    }
+
+    public void updateData(Pair<MessageType, Message> pair) {
+        this.type = pair.first;
+        this.msg = pair.second;
+
+        removeAllViews();
+        configUI();
+
+        requestLayout();
     }
 }

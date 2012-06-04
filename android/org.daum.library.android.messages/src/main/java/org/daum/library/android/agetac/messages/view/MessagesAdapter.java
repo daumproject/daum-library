@@ -53,6 +53,10 @@ public class MessagesAdapter extends BaseAdapter {
             ListItemView item = new ListItemView(ctx, messages.get(i).second, messages.get(i).first);
             return item;
         }
+        if (view instanceof ListItemView) {
+            ListItemView liv = (ListItemView) view;
+            liv.updateData(messages.get(i));
+        }
         return view;
     }
 }

@@ -12,8 +12,7 @@ import android.widget.*;
 import org.daum.common.message.api.Message;
 import org.daum.library.android.agetac.messages.view.ListItemView.MessageType;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
