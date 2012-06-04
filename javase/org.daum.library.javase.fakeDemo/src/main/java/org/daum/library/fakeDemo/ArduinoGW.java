@@ -22,7 +22,7 @@ import java.util.Set;
  * User: jedartois@gmail.com
  * Date: 30/05/12
  * Time: 16:47
- *
+ * <p/>
  * Gateway arduino to HashMap
  */
 
@@ -42,16 +42,14 @@ public class ArduinoGW extends AbstractComponentType {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public PersistenceConfiguration configuration=null;
-    private PersistenceSessionFactoryImpl factory=null;
-    private ReplicatingService replicatingService =  null;
-    private PersistenceSession s=null;
+    public PersistenceConfiguration configuration = null;
+    private PersistenceSessionFactoryImpl factory = null;
+    private ReplicatingService replicatingService = null;
+    private PersistenceSession s = null;
 
     @Start
-    public void start()
-    {
-        try
-        {
+    public void start() {
+        try {
             configuration = new PersistenceConfiguration();
 
             configuration.addPersistentClass(TemperatureMonitor.class);
@@ -59,41 +57,36 @@ public class ArduinoGW extends AbstractComponentType {
             configuration.addPersistentClass(HeartMonitor.class);
 
         } catch (PersistenceException e) {
-            logger.error("",e);
+            logger.error("", e);
         }
 
     }
 
     @Stop
-    public void stop(){
-
-
+    public void stop() {
+        configuration = null;
     }
 
     @Update
-    public  void update(){
-
+    public void update() {
+        stop();
+        start();
     }
-    @Port(name = "inputvalue")
-    public void  inputvalue(Object msg){
 
-        if(replicatingService == null)
-        {
-            replicatingService =   this.getPortByName("service", ReplicatingService.class);
+
+    @Port(name = "inputvalue")
+    public void inputvalue(Object msg) {
+        if (replicatingService == null) {
+            replicatingService = this.getPortByName("service", ReplicatingService.class);
             StoreImpl storeImpl = new StoreImpl(replicatingService);
             configuration.setConnectionConfiguration(storeImpl);
             factory = configuration.getPersistenceSessionFactory();
         }
 
-        try
-        {
-            s  = factory.openSession();
+        try {
+            s = factory.openSession();
             SystemTime systemTime = new SystemTime();
-
-            
-
-            try
-            {
+            try {
                 //c/28
                 String[] values = msg.toString().split(",");
 
@@ -105,8 +98,7 @@ public class ArduinoGW extends AbstractComponentType {
                     if (lvl.length >= 2) {
                         Double value = Double.parseDouble(lvl[1]);
 
-                        if(getDictionary().get("mode").toString().equals("temperature"))
-                        {
+                        if (getDictionary().get("mode").toString().equals("temperature")) {
 
                             TemperatureMonitor temperatureMonitor = new TemperatureMonitor();
                             temperatureMonitor.setDate(systemTime.getCurrentDate());
@@ -116,12 +108,11 @@ public class ArduinoGW extends AbstractComponentType {
                             s.save(temperatureMonitor);
 
 
-                            Set<Object> dates =  s.getAll(TemperatureMonitor.class).keySet();
-                            if(dates.size() > 3)
-                            {
+                            Set<Object> dates = s.getAll(TemperatureMonitor.class).keySet();
+                            if (dates.size() > 3) {
                                 //delete first
-                                Date d =  systemTime.getDatemin(dates);
-                                s.delete(s.get(TemperatureMonitor.class,d));
+                                Date d = systemTime.getDatemin(dates);
+                                s.delete(s.get(TemperatureMonitor.class, d));
 
                             }
 
@@ -130,16 +121,14 @@ public class ArduinoGW extends AbstractComponentType {
                     }
                 }
             } catch (Exception e) {
-                logger.warn("ArduinoGW bad message => ",e.getMessage());
+                logger.warn("ArduinoGW bad message => ", e.getMessage());
                 replicatingService = null;
+            } finally {
+                s.close();
             }
 
-
-            s.close();
-
-        }catch (Exception e)
-        {
-            logger.error("could not save message ",e);
+        } catch (Exception e) {
+            logger.error("could not save message ", e);
             replicatingService = null;
         }
 

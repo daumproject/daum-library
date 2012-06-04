@@ -33,8 +33,7 @@ import java.util.Set;
         @DictionaryAttribute(name = "period", optional = false,defaultValue = "2000",fragmentDependant = false) ,
         @DictionaryAttribute(name = "MaxEntries", optional = false,defaultValue = "10",fragmentDependant = false) ,
         @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature", "moyens","heart"})
-}
-)
+})
 @ComponentType
 public class GeneratorDaum extends AbstractComponentType implements Runnable{
 
@@ -46,7 +45,7 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
     private Random random  = new Random();
     private PersistenceConfiguration configuration=null;
     private PersistenceSessionFactoryImpl factory=null;
-
+    private Thread tgen = null;
 
     @Start
     public void start()
@@ -56,7 +55,8 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
             configuration.addPersistentClass(TemperatureMonitor.class);
             configuration.addPersistentClass(Moyen.class);
             configuration.addPersistentClass(HeartMonitor.class);
-            new Thread(this). start ();
+            tgen = new Thread(this);
+            tgen.start();
         } catch (PersistenceException e) {
             logger.error("",e);
         }
@@ -66,6 +66,7 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
 
     @Stop
     public void stop() {
+        tgen.interrupt();
         alive  = false;
     }
 

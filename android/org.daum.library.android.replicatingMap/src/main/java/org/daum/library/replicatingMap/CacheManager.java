@@ -27,13 +27,14 @@ public class CacheManager implements  Runnable{
     private DHashMap<String, Cache> store = new DHashMap<String,Cache>();
     private HashMap<String,Long> nodes = new HashMap<String, Long>();
     private boolean alive = true;
-    private  Thread thread = new Thread(this);
+    private  Thread thread = null;
     private boolean isSynchronized = false;
     private SystemTime systemTime = new SystemTime();
    // private  RemoteDisptachManager remoteDisptachManager= null;
 
     public CacheManager(Channel channel,String id)
     {
+        thread = new Thread(this);
         this.chanel = channel;
         this.id =id;
         alive = true;
@@ -43,8 +44,8 @@ public class CacheManager implements  Runnable{
     }
 
     public void shutdown(){
-        alive = false;
         thread.interrupt();
+        alive = false;
     }
     public void setChanel(Channel chanel) {
         this.chanel = chanel;
