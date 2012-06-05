@@ -26,7 +26,7 @@ import org.daum.library.android.agetac.messages.listener.IMessagesListener;
         @ProvidedPort(name = "inMessage", type = PortType.MESSAGE)
 })
 @Requires({
-        @RequiredPort(name = "outMessage", type = PortType.MESSAGE)
+        @RequiredPort(name = "outMessage", type = PortType.MESSAGE, optional = true)
 })
 @ComponentType
 public class MessagesComponent extends AbstractComponentType implements IMessagesListener {

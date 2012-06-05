@@ -1,6 +1,8 @@
 package org.daum.library.android.agetac.messages.view;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -27,15 +29,19 @@ public class NewMessageView extends AbstractMessagesView {
     private static final int ID_SEND_BTN = 7;
 
     // String constants
-    private static final String TEXT_SEND   = "Envoyer";
-    private static final String TEXT_CLEAR  = "Effacer";
-    private static final String JE_SUIS     = "Je suis";
-    private static final String JE_VOIS     = "Je vois";
-    private static final String JE_FAIS  = "Je fais";
-    private static final String JE_PREVOIS     = "Je prévois";
-    private static final String JE_DEMANDE  = "Je demande";
+    private static final String TEXT_SEND           = "Envoyer";
+    private static final String TEXT_CLEAR          = "Effacer";
+    private static final String TEXT_CONFIRM_TITLE  = "Confirmation";
+    private static final String TEXT_CONFIRM_MSG    = "Tous les champs seront vidés";
+    private static final String TEXT_OK             = "Ok";
+    private static final String TEXT_CANCEL         = "Annuler";
+    private static final String JE_SUIS             = "Je suis";
+    private static final String JE_VOIS             = "Je vois";
+    private static final String JE_FAIS             = "Je fais";
+    private static final String JE_PREVOIS          = "Je prévois";
+    private static final String JE_DEMANDE          = "Je demande";
 
-    private EditText et_jeSuis,
+    private CustomEditText et_jeSuis,
                      et_jeVois,
                      et_jePrevois,
                      et_jeFais,
@@ -53,11 +59,11 @@ public class NewMessageView extends AbstractMessagesView {
 
     private void initUI() {
         // EditText
-        et_jeDemande = new EditText(ctx);
-        et_jePrevois = new EditText(ctx);
-        et_jeFais = new EditText(ctx);
-        et_jeSuis = new EditText(ctx);
-        et_jeVois = new EditText(ctx);
+        et_jeDemande = new CustomEditText(ctx);
+        et_jePrevois = new CustomEditText(ctx);
+        et_jeFais = new CustomEditText(ctx);
+        et_jeSuis = new CustomEditText(ctx);
+        et_jeVois = new CustomEditText(ctx);
 
         // Buttons
         btn_send = new Button(ctx);
@@ -65,28 +71,29 @@ public class NewMessageView extends AbstractMessagesView {
     }
 
     private void configUI() {
+
         // EditText
-        et_jeDemande.setHint(JE_DEMANDE);
+        et_jeDemande.setImmuableHint(JE_DEMANDE);
         et_jeDemande.setId(ID_DEMANDE_ET);
         et_jeDemande.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         et_jeDemande.setNextFocusDownId(et_jePrevois.getId());
 
-        et_jePrevois.setHint(JE_PREVOIS);
+        et_jePrevois.setImmuableHint(JE_PREVOIS);
         et_jePrevois.setId(ID_PREVOIS_ET);
         et_jePrevois.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         et_jePrevois.setNextFocusDownId(et_jeFais.getId());
 
-        et_jeFais.setHint(JE_FAIS);
+        et_jeFais.setImmuableHint(JE_FAIS);
         et_jeFais.setId(ID_FAIS_ET);
         et_jeFais.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         et_jeFais.setNextFocusDownId(et_jeSuis.getId());
 
-        et_jeSuis.setHint(JE_SUIS);
+        et_jeSuis.setImmuableHint(JE_SUIS);
         et_jeSuis.setId(ID_SUIS_ET);
         et_jeSuis.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         et_jeSuis.setNextFocusDownId(et_jeVois.getId());
 
-        et_jeVois.setHint(JE_VOIS);
+        et_jeVois.setImmuableHint(JE_VOIS);
         et_jeVois.setId(ID_VOIS_ET);
         et_jeVois.setImeOptions(EditorInfo.IME_ACTION_SEND);
         et_jeVois.setNextFocusDownId(btn_send.getId());
@@ -136,11 +143,21 @@ public class NewMessageView extends AbstractMessagesView {
         btn_clear.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                et_jeDemande.setText("");
-                et_jeFais.setText("");
-                et_jePrevois.setText("");
-                et_jeSuis.setText("");
-                et_jeVois.setText("");
+                AlertDialog.Builder diagBuilder = new AlertDialog.Builder(ctx);
+                diagBuilder.setTitle(TEXT_CONFIRM_TITLE);
+                diagBuilder.setMessage(TEXT_CONFIRM_MSG);
+                diagBuilder.setPositiveButton(TEXT_OK, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        et_jeDemande.setText("");
+                        et_jeFais.setText("");
+                        et_jePrevois.setText("");
+                        et_jeSuis.setText("");
+                        et_jeVois.setText("");
+                    }
+                });
+                diagBuilder.setNegativeButton(TEXT_CANCEL, null);
+                diagBuilder.create().show();
             }
         });
     }
