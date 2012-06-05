@@ -1,11 +1,15 @@
 package org.daum.library.android.moyens.view;
 
 import android.content.Context;
+import android.util.Pair;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import org.daum.library.android.moyens.model.IResource;
 import org.daum.library.android.moyens.model.ResourcesList;
+import org.daum.library.android.moyens.view.quickactionbar.QuickActionsBar;
+
+import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,6 +30,8 @@ public class MoyensView extends RelativeLayout {
     private ResourcesList resources;
     private ListView listView;
     private ResourcesAdapter adapter;
+    private QuickActionsBar qActionsBar;
+    private ArrayList<Pair<String, ArrayList<String>>> qaBarData;
 
     public MoyensView(Context context) {
         super(context);
@@ -39,11 +45,12 @@ public class MoyensView extends RelativeLayout {
         resources = new ResourcesList();
         listView = new ListView(ctx);
         adapter = new ResourcesAdapter(ctx, resources);
-        btn_resDemand = new Button(ctx);
+        qaBarData = new ArrayList<Pair<String, ArrayList<String>>>();
+        qActionsBar = new QuickActionsBar(ctx, qaBarData);
     }
 
     private void configUI() {
-
+        listView.setAdapter(adapter);
     }
 
     private void defineCallbacks() {

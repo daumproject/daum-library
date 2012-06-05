@@ -27,10 +27,14 @@ public class ResourcesAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
-        if (convertView != null) {
-            return convertView;
+        if (convertView == null) {
+            // create a new view
+            // TODO
+            return new View(ctx);
         } else {
-            return null;
+            // update old view with data
+            // TODO
+            return convertView;
         }
     }
 
