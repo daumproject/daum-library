@@ -63,11 +63,10 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         listView = new ListView(ctx);
         adapter = new DemandsAdapter(ctx, demands);
         qaBarData = new ArrayList<Pair<String, ArrayList<String>>>();
-        // TODO no dummy data
-        for (int i=0; i<6; i++) {
+        for (VehicleType.SECTOR sector : VehicleType.SECTOR.values()) {
             ArrayList<String> actions = new ArrayList<String>();
-            for (VehicleType type : VehicleType.values()) actions.add(type.name());
-            qaBarData.add(new Pair<String, ArrayList<String>>("Dre "+i, actions));
+            for (Enum type : VehicleType.types(sector)) actions.add(type.name());
+            qaBarData.add(new Pair<String, ArrayList<String>>(sector.name(), actions));
         }
         qActionsBar = new QuickActionsBar(ctx, qaBarData);
     }
