@@ -14,4 +14,12 @@
         <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.daum.common.util.android</groupId>
+            <artifactId>org.daum.common.util.android.root</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
+
 </project>

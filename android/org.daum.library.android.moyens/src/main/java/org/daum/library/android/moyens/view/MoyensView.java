@@ -1,15 +1,17 @@
 package org.daum.library.android.moyens.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Pair;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TabHost;
+import android.widget.TextView;
 import org.daum.library.android.moyens.model.Demand;
-import org.daum.library.android.moyens.model.IResource;
-import org.daum.library.android.moyens.model.ResourcesList;
-import org.daum.library.android.moyens.model.Vehicle;
+import org.daum.library.android.moyens.model.VehicleType;
+import org.daum.library.android.moyens.view.listener.IMoyensListener;
 import org.daum.library.android.moyens.view.quickactionbar.QuickActionsBar;
+import org.daum.library.android.moyens.view.quickactionbar.listener.OnActionClickedListener;
 
 import java.util.ArrayList;
 
@@ -20,43 +22,51 @@ import java.util.ArrayList;
  * Time: 17:41
  * To change this template use File | Settings | File Templates.
  */
-public class MoyensView extends RelativeLayout {
+public class MoyensView extends RelativeLayout implements OnActionClickedListener {
 
+    // Debugging
     private static final String TAG = "MoyensView";
     private static final boolean D = true;
 
-    private static final int ID_LIST_VIEW = 1;
-    private static final int ID_QA_BAR = 2;
+    // view ID constants
+    private static final int ID_LIST_HEADER = 1;
+    private static final int ID_LIST_VIEW = 2;
+    private static final int ID_QA_BAR = 3;
+
+    // String constants
+    private static final String TEXT_EMPTY_LIST = "Aucune demande";
+    private static final String TEXT_AGRES = "Agrès";
+    private static final String TEXT_CIS = "CIS";
+    private static final String TEXT_DEMAND = "Demande";
+    private static final String TEXT_CRM = "Arrivé CRM";
+    private static final String TEXT_DEPART = "Départ";
+    private static final String TEXT_ENGAGE = "Engagé";
+    private static final String TEXT_DESENG = "Désengagement";
 
     private Context ctx;
-    private ResourcesList resources;
+    private ArrayList<Demand> demands;
     private ListView listView;
-    private ResourcesAdapter adapter;
+    private DemandsAdapter adapter;
     private QuickActionsBar qActionsBar;
     private ArrayList<Pair<String, ArrayList<String>>> qaBarData;
+    private IMoyensListener listener;
 
     public MoyensView(Context context) {
         super(context);
         this.ctx = context;
         initUI();
         configUI();
-        defineCallbacks();
     }
 
     private void initUI() {
-        resources = new ResourcesList();
-        // TODO no dummy data
-        for (int i=0; i<30; i++) {
-            resources.add(new Vehicle());
-            resources.add(new Demand());
-        }
+        demands = new ArrayList<Demand>();
         listView = new ListView(ctx);
-        adapter = new ResourcesAdapter(ctx, resources);
+        adapter = new DemandsAdapter(ctx, demands);
         qaBarData = new ArrayList<Pair<String, ArrayList<String>>>();
         // TODO no dummy data
         for (int i=0; i<6; i++) {
             ArrayList<String> actions = new ArrayList<String>();
-            for (int j=0; j<15; j++) actions.add("YOUPi "+i+"_"+j);
+            for (VehicleType type : VehicleType.values()) actions.add(type.name());
             qaBarData.add(new Pair<String, ArrayList<String>>("Dre "+i, actions));
         }
         qActionsBar = new QuickActionsBar(ctx, qaBarData);
@@ -65,57 +75,94 @@ public class MoyensView extends RelativeLayout {
     private void configUI() {
         // configuring quickActions bar
         qActionsBar.setId(ID_QA_BAR);
+        qActionsBar.setOnActionClickedListener(this);
         RelativeLayout.LayoutParams barParams = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         barParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 
+        // configuring the textView displayed when there's no data in the listView
+        TextView tv_emptyList = new TextView(ctx);
+        tv_emptyList.setText(TEXT_EMPTY_LIST);
+        tv_emptyList.setTextSize(20);
+        RelativeLayout.LayoutParams emptyTvParams = new LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        emptyTvParams.addRule(RelativeLayout.CENTER_IN_PARENT);
+
+        // configuring the list header view
+        Demand headerDemand = new Demand(
+                TEXT_AGRES, TEXT_CIS, TEXT_DEMAND, TEXT_DEPART, TEXT_CRM, TEXT_ENGAGE, TEXT_DESENG);
+        ListItemView listHeaderView = new ListItemView(ctx, headerDemand);
+        listHeaderView.setId(ID_LIST_HEADER);
+        listHeaderView.setBackgroundColor(Color.BLACK);
+        listHeaderView.setTextColor(Color.WHITE);
+        RelativeLayout.LayoutParams headerParams = new LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        headerParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+
         // configuring list view
         listView.setId(ID_LIST_VIEW);
         listView.setAdapter(adapter);
+        listView.setEmptyView(tv_emptyList);
         RelativeLayout.LayoutParams listParams = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        listParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
         listParams.addRule(RelativeLayout.ABOVE, qActionsBar.getId());
+        listParams.addRule(RelativeLayout.BELOW, listHeaderView.getId());
 
+        addView(listHeaderView, headerParams);
         addView(listView, listParams);
+        addView(tv_emptyList, emptyTvParams);
         addView(qActionsBar, barParams);
     }
 
-    private void defineCallbacks() {
-
-    }
-
     /**
-     * Change the actual content of the resourcesList to the one given
+     * Change the actual content of the demandList to the one given
      * in parameter
-     * @param res the new resourcesList of the view
+     * @param dlist the new demandList of the view
      */
-    public void setResources(ResourcesList res) {
-        this.resources = res;
+    public void setDemands(ArrayList<Demand> dlist) {
+        this.demands = dlist;
+        adapter.notifyDataSetChanged();
     }
 
     /**
-     * Adds a resource to the resourcesList
-     * @param res the resource to add
+     * Adds a resource to the demandList
+     * @param d the resource to add
      */
-    public void addResource(IResource res) {
-        this.resources.add(res);
+    public void addDemand(Demand d) {
+        this.demands.add(d);
+        adapter.notifyDataSetChanged();
     }
 
     /**
-     * Adds a list of resources to the actual resourcesList
-     * @param res the resourcesList to add
+     * Adds a list of demands to the actual demandList
+     * @param dlist the demandList to add
      */
-    public void addResources(ResourcesList res) {
-        this.resources.addAll(res);
+    public void addDemands(ArrayList<Demand> dlist) {
+        this.demands.addAll(dlist);
+        adapter.notifyDataSetChanged();
     }
 
     /**
-     * Removes a resource from the resourcesList
-     * @param res the resource to remove
-     * @return true if the resource has been removed; false otherwise
+     * Removes a demand from the demandList
+     * @param d the demand to remove
+     * @return true if the demand has been removed; false otherwise
      */
-    public boolean removeResource(IResource res) {
-        return this.resources.remove(res);
+    public boolean removeDemand(Demand d) {
+        boolean ret = this.demands.remove(d);
+        adapter.notifyDataSetChanged();
+        return ret;
+
+    }
+
+    @Override
+    public void onActionClicked(String tab, String action) {
+        if (listener != null) {
+            Demand newDemand = new Demand(VehicleType.valueOf(action));
+            listener.onDemandAsked(newDemand);
+        }
+    }
+
+    public void addEventListener(IMoyensListener listener) {
+        this.listener = listener;
     }
 }

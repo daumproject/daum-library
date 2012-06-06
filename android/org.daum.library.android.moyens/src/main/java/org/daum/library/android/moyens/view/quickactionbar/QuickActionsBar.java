@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
+import org.daum.library.android.moyens.view.quickactionbar.listener.OnActionClickedListener;
 
 public class QuickActionsBar extends TabHost implements OnItemClickListener {
 	
@@ -30,6 +31,7 @@ public class QuickActionsBar extends TabHost implements OnItemClickListener {
 	
 	private Context ctx;
 	private ArrayList<Pair<String, ArrayList<String>>> actions;
+    private OnActionClickedListener listener;
 	
 	public QuickActionsBar(Context context, ArrayList<Pair<String, ArrayList<String>>> actions) {
 		super(context, null);
@@ -125,6 +127,14 @@ public class QuickActionsBar extends TabHost implements OnItemClickListener {
 
 	@Override
 	public void onItemClick(AdapterView<?> listView, View v, int i, long l) {
-		Log.d(TAG, "item clicked: "+v.toString());
+		if (listener != null) {
+            String tab = actions.get(getCurrentTab()).first;
+            String action = actions.get(getCurrentTab()).second.get(i);
+            listener.onActionClicked(tab, action);
+        }
 	}
+
+    public void setOnActionClickedListener(OnActionClickedListener listener) {
+        this.listener = listener;
+    }
 }

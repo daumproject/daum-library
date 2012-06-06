@@ -4,9 +4,9 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
-import android.widget.TextView;
-import org.daum.library.android.moyens.model.ResourcesList;
+import org.daum.library.android.moyens.model.Demand;
+
+import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,31 +15,27 @@ import org.daum.library.android.moyens.model.ResourcesList;
  * Time: 17:44
  * To change this template use File | Settings | File Templates.
  */
-public class ResourcesAdapter extends BaseAdapter {
+public class DemandsAdapter extends BaseAdapter {
 
     private Context ctx;
-    private ResourcesList resources;
+    private ArrayList<Demand> demands;
 
-    public ResourcesAdapter(Context ctx, ResourcesList resources) {
+    public DemandsAdapter(Context ctx, ArrayList<Demand> demands) {
         super();
         this.ctx = ctx;
-        this.resources = resources;
+        this.demands = demands;
     }
 
     @Override
     public View getView(int i, View convertView, ViewGroup parent) {
         if (convertView == null) {
             // create a new view
-            // TODO
-            TextView tv = new TextView(ctx);
-            tv.setText(resources.get(i).toString());
-            tv.setTextSize(20);
-            convertView = tv;
+            ListItemView item = new ListItemView(ctx, demands.get(i));
+            convertView = item;
         } else {
             // update old view with data if possible
-            // TODO
-            if (convertView instanceof TextView) {
-                ((TextView) convertView).setText(resources.get(i).toString());
+            if (convertView instanceof ListItemView) {
+                ((ListItemView) convertView).setDemand(demands.get(i));
             }
 
         }
@@ -48,7 +44,7 @@ public class ResourcesAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        return resources.get(i);
+        return demands.get(i);
     }
 
     @Override
@@ -58,6 +54,6 @@ public class ResourcesAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return resources.size();
+        return demands.size();
     }
 }
