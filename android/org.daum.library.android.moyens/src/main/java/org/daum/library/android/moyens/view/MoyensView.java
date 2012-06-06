@@ -5,8 +5,10 @@ import android.util.Pair;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import org.daum.library.android.moyens.model.Demand;
 import org.daum.library.android.moyens.model.IResource;
 import org.daum.library.android.moyens.model.ResourcesList;
+import org.daum.library.android.moyens.model.Vehicle;
 import org.daum.library.android.moyens.view.quickactionbar.QuickActionsBar;
 
 import java.util.ArrayList;
@@ -23,10 +25,10 @@ public class MoyensView extends RelativeLayout {
     private static final String TAG = "MoyensView";
     private static final boolean D = true;
 
-    private static final String TEXT_RES_DEMAND = "Je demande";
+    private static final int ID_LIST_VIEW = 1;
+    private static final int ID_QA_BAR = 2;
 
     private Context ctx;
-    private Button btn_resDemand;
     private ResourcesList resources;
     private ListView listView;
     private ResourcesAdapter adapter;
@@ -43,14 +45,40 @@ public class MoyensView extends RelativeLayout {
 
     private void initUI() {
         resources = new ResourcesList();
+        // TODO no dummy data
+        for (int i=0; i<30; i++) {
+            resources.add(new Vehicle());
+            resources.add(new Demand());
+        }
         listView = new ListView(ctx);
         adapter = new ResourcesAdapter(ctx, resources);
         qaBarData = new ArrayList<Pair<String, ArrayList<String>>>();
+        // TODO no dummy data
+        for (int i=0; i<6; i++) {
+            ArrayList<String> actions = new ArrayList<String>();
+            for (int j=0; j<15; j++) actions.add("YOUPi "+i+"_"+j);
+            qaBarData.add(new Pair<String, ArrayList<String>>("Dre "+i, actions));
+        }
         qActionsBar = new QuickActionsBar(ctx, qaBarData);
     }
 
     private void configUI() {
+        // configuring quickActions bar
+        qActionsBar.setId(ID_QA_BAR);
+        RelativeLayout.LayoutParams barParams = new LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        barParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+
+        // configuring list view
+        listView.setId(ID_LIST_VIEW);
         listView.setAdapter(adapter);
+        RelativeLayout.LayoutParams listParams = new LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        listParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+        listParams.addRule(RelativeLayout.ABOVE, qActionsBar.getId());
+
+        addView(listView, listParams);
+        addView(qActionsBar, barParams);
     }
 
     private void defineCallbacks() {

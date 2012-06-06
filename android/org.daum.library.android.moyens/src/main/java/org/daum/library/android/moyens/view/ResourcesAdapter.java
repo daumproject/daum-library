@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
+import android.widget.TextView;
 import org.daum.library.android.moyens.model.ResourcesList;
 
 /**
@@ -30,12 +31,19 @@ public class ResourcesAdapter extends BaseAdapter {
         if (convertView == null) {
             // create a new view
             // TODO
-            return new View(ctx);
+            TextView tv = new TextView(ctx);
+            tv.setText(resources.get(i).toString());
+            tv.setTextSize(20);
+            convertView = tv;
         } else {
-            // update old view with data
+            // update old view with data if possible
             // TODO
-            return convertView;
+            if (convertView instanceof TextView) {
+                ((TextView) convertView).setText(resources.get(i).toString());
+            }
+
         }
+        return convertView;
     }
 
     @Override
