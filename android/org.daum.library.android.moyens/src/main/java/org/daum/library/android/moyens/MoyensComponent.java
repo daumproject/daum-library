@@ -78,7 +78,12 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
     public void demandIncoming(final Object inResource) {
         if (D) Log.i(TAG, "BEGIN demandIncoming");
         if (inResource instanceof Demand) {
-            moyensView.addDemand((Demand) inResource);
+            uiService.getRootActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    moyensView.addDemand((Demand) inResource);
+                }
+            });
 
         } else {
             Log.w(TAG, "Cannot handle received object on port \"inDemand\". Received object: "+inResource.getClass().getSimpleName());

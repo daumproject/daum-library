@@ -30,7 +30,6 @@ public class ActionsAdapter extends BaseAdapter {
 
 	@Override
 	public long getItemId(int i) {
-		// FIXME this is not really the expected result
 		return i;
 	}
 
@@ -42,7 +41,7 @@ public class ActionsAdapter extends BaseAdapter {
 			b.setText(actions.get(i));
 			convertView = b;
 			
-		} else if (convertView instanceof Button) {
+		} else {
 			// update the old view UI
 			((Button) convertView).setText(actions.get(i));
 		}

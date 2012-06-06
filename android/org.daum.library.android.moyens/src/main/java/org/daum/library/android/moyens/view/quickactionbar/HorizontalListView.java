@@ -94,14 +94,14 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 				mDataChanged = true;
 			}
 			invalidate();
-			requestLayout();
+			postInvalidate();
 		}
 
 		@Override
 		public void onInvalidated() {
 			reset();
 			invalidate();
-			requestLayout();
+			postInvalidate();
 		}
 		
 	};
@@ -130,7 +130,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 	private synchronized void reset(){
 		initView();
 		removeAllViewsInLayout();
-        requestLayout();
+        postInvalidate();
 	}
 
 	@Override
@@ -191,7 +191,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 			post(new Runnable(){
 				@Override
 				public void run() {
-					requestLayout();
+					postInvalidate();
 				}
 			});
 			
@@ -286,7 +286,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 	
 	public synchronized void scrollTo(int x) {
 		mScroller.startScroll(mNextX, 0, x - mNextX, 0);
-		requestLayout();
+		postInvalidate();
 	}
 	
 	@Override
@@ -300,7 +300,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 		synchronized(HorizontalListView.this){
 			mScroller.fling(mNextX, 0, (int)-velocityX, 0, 0, mMaxX, 0, 0);
 		}
-		requestLayout();
+		postInvalidate();
 		
 		return true;
 	}
@@ -330,7 +330,7 @@ public class HorizontalListView extends AdapterView<ListAdapter> {
 			synchronized(HorizontalListView.this){
 				mNextX += (int)distanceX;
 			}
-			requestLayout();
+			postInvalidate();
 			
 			return true;
 		}

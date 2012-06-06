@@ -1,6 +1,7 @@
 package org.daum.library.android.moyens.view;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -16,6 +17,8 @@ import java.util.ArrayList;
  * To change this template use File | Settings | File Templates.
  */
 public class DemandsAdapter extends BaseAdapter {
+
+    private static final String TAG = "DemandsAdapter";
 
     private Context ctx;
     private ArrayList<Demand> demands;
@@ -34,9 +37,7 @@ public class DemandsAdapter extends BaseAdapter {
             convertView = item;
         } else {
             // update old view with data if possible
-            if (convertView instanceof ListItemView) {
-                ((ListItemView) convertView).setDemand(demands.get(i));
-            }
+            ((ListItemView) convertView).setDemand(demands.get(i));
 
         }
         return convertView;

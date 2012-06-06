@@ -2,6 +2,7 @@ package org.daum.library.android.moyens.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -128,8 +129,9 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
      * @param d the resource to add
      */
     public void addDemand(Demand d) {
-        this.demands.add(d);
+        demands.add(d);
         adapter.notifyDataSetChanged();
+        listView.setSelection(demands.size()-1);
     }
 
     /**
@@ -137,8 +139,9 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
      * @param dlist the demandList to add
      */
     public void addDemands(ArrayList<Demand> dlist) {
-        this.demands.addAll(dlist);
+        demands.addAll(dlist);
         adapter.notifyDataSetChanged();
+        listView.setSelection(demands.size()-1);
     }
 
     /**

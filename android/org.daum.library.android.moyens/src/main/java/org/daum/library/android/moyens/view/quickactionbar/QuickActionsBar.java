@@ -87,7 +87,7 @@ public class QuickActionsBar extends TabHost implements OnItemClickListener {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         updateTabsUI();
-        super.onLayout(changed, left, top, right, bottom);
+        super.onLayout(true, left, top, right, bottom);
     }
 
     private void changeTabUIToSelected(final ViewGroup parent) {
