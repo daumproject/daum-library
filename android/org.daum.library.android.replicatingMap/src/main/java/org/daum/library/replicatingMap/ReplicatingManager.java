@@ -1,6 +1,7 @@
 package org.daum.library.replicatingMap;
 
 import org.daum.library.replicatingMap.msg.Command;
+import org.daum.library.replicatingMap.msg.Message;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
@@ -25,38 +26,42 @@ import org.slf4j.LoggerFactory;
         @ProvidedPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class)
 })
 public class ReplicatingManager extends AbstractComponentType implements ReplicatingService {
-    private CacheManager cacheManager =null;
-    KChannelImpl kChannel=null;
-    //  private Thread thread = new Thread(this);
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    KChannelImpl kChannel=null;
+
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private  ICluster cluster;
     @Start
     public void start()
     {
         kChannel   = new KChannelImpl(this);
-        cacheManager = new CacheManager(kChannel,getNodeName());
-        cacheManager.snapshot();
+        Node node = new Node(getNodeName());
+        cluster = new ClusterImpl(node,kChannel);
+
+        // request synchronize
+        cluster.synchronize();
     }
 
     @Stop
     public void stop()
     {
-        cacheManager.shutdown();
+        cluster.shutdown();
     }
 
     @Update
     public void update()
     {
         kChannel   = new KChannelImpl(this);
-        cacheManager.setChanel(kChannel);
+        cluster.setChanel(kChannel);
     }
-
 
     @Port(name = "remoteReceived")
     public void messageReceived(Object o)
     {
-        cacheManager.remoteReceived(o);
-
+        if(o instanceof Message)
+        {
+            cluster.remoteReceived((Message)o);
+        }
         if(!(o instanceof Command))
         {
             getPortByName("trigger", MessagePort.class).process("tick");
@@ -64,11 +69,10 @@ public class ReplicatingManager extends AbstractComponentType implements Replica
 
     }
 
-
     @Port(name = "service", method = "getCache")
     @Override
     public Cache getCache(String name) {
-        return cacheManager.getCache(name);
+        return cluster.getCacheManager().getCache(name);
     }
 
 

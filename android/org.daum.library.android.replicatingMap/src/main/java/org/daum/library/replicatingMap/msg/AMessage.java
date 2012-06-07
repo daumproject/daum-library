@@ -1,5 +1,6 @@
 package org.daum.library.replicatingMap.msg;
 
+import org.daum.library.replicatingMap.Node;
 import org.daum.library.replicatingMap.StoreRequest;
 
 import java.io.Serializable;
@@ -13,8 +14,8 @@ import java.io.Serializable;
 public abstract class AMessage implements Message,Serializable{
 
     public StoreRequest op;
-    public  String source;
-    public  String dest;
+    public  Node source;
+    public  Node dest;
 
     public StoreRequest getOp() {
         return op;
@@ -24,19 +25,19 @@ public abstract class AMessage implements Message,Serializable{
         this.op = op;
     }
 
-    public String getSource() {
+    public Node getSourceNode() {
         return source;
     }
 
-    public void setSource(String source) {
+    public void setSourceNode(Node source) {
         this.source = source;
     }
 
-    public String getDest() {
+    public Node getDestNode() {
         return dest;
     }
 
-    public void setDest(String dest) {
+    public void setDestNode(Node dest) {
         this.dest = dest;
     }
 }

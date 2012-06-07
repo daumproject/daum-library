@@ -1,15 +1,10 @@
 package org.daum.library.replicatingMap;
 
-import org.daum.library.replicatingMap.msg.Command;
-import org.daum.library.replicatingMap.msg.Snapshot;
-import org.daum.library.replicatingMap.msg.Update;
-import org.daum.library.replicatingMap.msg.Updates;
-import org.daum.library.replicatingMap.utils.SystemTime;
+import org.daum.library.replicatingMap.msg.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -19,44 +14,16 @@ import java.util.Set;
  * Date: 23/05/12
  * Time: 14:52
  */
-public class CacheManager implements  Runnable{
-
+public class CacheManager implements  ICacheManger
+{
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private Channel chanel;
-    private String id;
     private DHashMap<String, Cache> store = new DHashMap<String,Cache>();
-    private HashMap<String,Long> nodes = new HashMap<String, Long>();
-    private boolean alive = true;
-    private  Thread thread = null;
-    private boolean isSynchronized = false;
-    private SystemTime systemTime = new SystemTime();
-   // private  RemoteDisptachManager remoteDisptachManager= null;
+    private  ICluster cluster;
 
-    public CacheManager(Channel channel,String id)
+    public CacheManager(ICluster cluster)
     {
-        thread = new Thread(this);
-        this.chanel = channel;
-        this.id =id;
-        alive = true;
-    //    remoteDisptachManager = new RemoteDisptachManager(id,chanel);
-        thread.start();
-
+        this.cluster = cluster;
     }
-
-    public void shutdown(){
-        thread.interrupt();
-        alive = false;
-    }
-    public void setChanel(Channel chanel) {
-        this.chanel = chanel;
-    }
-
-
-    public boolean isSynchronized() {
-        return isSynchronized;
-    }
-
-
 
     public  Cache getCache(String name)
     {
@@ -73,15 +40,17 @@ public class CacheManager implements  Runnable{
             logger.error("The name of cache is null : Do you have set the annotations ?");
             return null;
         }
-
         return store.get(name);
     }
+
+
 
     public Set<String> getAllCache(){
         return  store.keySet();
     }
 
-    public   int getCount(){
+    public  int getNumberOfCache()
+    {
         int count=0;
         for( Object key : store.keySet())
         {
@@ -91,14 +60,15 @@ public class CacheManager implements  Runnable{
         return count;
     }
 
-    public void remoteReceived(Object o)
-    {
 
+    public void processingMSG(Message o)
+    {
+      try {
         if(o instanceof Update){
 
             final Update update = (Update)o;
 
-            if(!update.getSource().equals(id))
+            if(!update.getSourceNode().equals(cluster.getCurrentNode()))
             {
                 getCache(update.cache).localDispatch(update);
             }
@@ -107,9 +77,10 @@ public class CacheManager implements  Runnable{
         {
             final Updates updates = (Updates)o;
 
-            if(!updates.getSource().equals(id))
+            if(!updates.getSourceNode().equals(cluster.getCurrentNode()))
             {
                 logger.debug("Remote receive "+updates.getUpdates().size());
+
                 for(Update update : updates.getUpdates()){
                     getCache(update.cache).localDispatch(update);
                 }
@@ -120,16 +91,17 @@ public class CacheManager implements  Runnable{
 
             final Snapshot storeSnapshot = (Snapshot)o;
 
-            if(storeSnapshot.dest.equals(id))
+            if(storeSnapshot.dest.equals(cluster.getCurrentNode()))
             {
                 logger.debug(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest);
 
                 for(Update msg:  storeSnapshot.snapshot)
                 {
-                    getCache(msg.cache).putIfAbsent(msg.key, msg.value);
+                    getCache(msg.cache).putIfAbsent(msg.key, msg.getVersionedValue());
                 }
 
-                isSynchronized = true;
+                cluster.getCurrentNode().setSynchronized();
+
             }
 
         } else if(o instanceof Command)
@@ -138,22 +110,21 @@ public class CacheManager implements  Runnable{
 
             if(command.getOp().equals(StoreRequest.HEARTBEAT))
             {
-                if(!command.source.equals(id))
+                if(!command.source.equals(cluster.getCurrentNode()))
                 {
-                    logger.info("Replica Cluster "+ nodes);
-                    long start = systemTime.getNanoseconds();
-                    nodes.put(command.source,start);
+                    logger.info("Cluster "+ cluster.getNodesOfCluster());
+                    cluster.addNode(command.getSourceNode());
                 }
             } else  if(command.getOp().equals(StoreRequest.REQUEST_SNAPSHOT))
             {
-                if(!isSynchronized)
+                if(!cluster.getCurrentNode().isSynchronized())
                 {
                     // todo check if isSynchronized = true
-                 //   logger.error("The current CacheManager is not Synchronized");
+                    //   logger.error("The current CacheManager is not Synchronized");
                 }
 
-
-                if(!command.source.equals(id) && command.dest.equals(id))
+                  logger.debug(" "+cluster.getCurrentNode()+" "+command);
+                if(!command.source.equals(cluster.getCurrentNode()) && command.dest.equals(cluster.getCurrentNode()))
                 {
                     logger.info("Creating snapshot for "+ command.source);
 
@@ -166,10 +137,10 @@ public class CacheManager implements  Runnable{
                             Update snapshot = new Update();
                             snapshot.op = StoreRequest.SNAPSHOT;
                             snapshot.dest = command.source;
-                            snapshot.source = id;
+                            snapshot.source = cluster.getCurrentNode();
                             snapshot.cache = namecache;
                             snapshot.key = key;
-                            snapshot.value = store.get(namecache).get(key);
+                            snapshot.setVersionedValue(store.get(namecache).get(key));
                             current_snapshot.add(snapshot);
                         }
                     }
@@ -178,93 +149,34 @@ public class CacheManager implements  Runnable{
 
                     Snapshot storeSnapshot = new Snapshot();
                     storeSnapshot.snapshot =   current_snapshot;
-                    storeSnapshot.source = id;
+                    storeSnapshot.source = cluster.getCurrentNode();
                     storeSnapshot.dest =   command.source;
-                    chanel.write(storeSnapshot);
+                    cluster.getChannel().write(storeSnapshot);
 
                     logger.info("Snapshot is sent for "+ command.source);
                 }
             }
         }
+      }catch (Exception e){
+          logger.error("processing MSG fail : ",e);
+      }
     }
+
+
 
     public void remoteDisptach(Update update)
     {
         logger.debug("remoteDisptach "+update.cache);
-        update.source = id;
+
+        update.source = cluster.getCurrentNode();
         // todo group by block
-        chanel.write(update);
+
+        cluster.getChannel().write(update);
         // remoteDisptachManager.addUpdate(update);
     }
 
-    public void snapshot()
-    {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Command req = new Command();
-                req.op= StoreRequest.REQUEST_SNAPSHOT;
-                req.source = id;
-                while (nodes.keySet().isEmpty() && alive == true){
-                    try {
-                        Thread.sleep(5000);
-                    } catch (InterruptedException e) {
-                        //ignore
-                    }
-                }
-
-                // todo check if the nodes is already replicated and if the node didn't respond in time request an other snapshot
-                Long min =Long.MAX_VALUE;
-                String node ="";
-                for(String key : nodes.keySet())
-                {
-                    if(!key.equals(id)){
-                        if(nodes.get(key) < min)
-                        {
-                            min =  nodes.get(key);
-                            node = key;
-                        }
-                    }
-                }
-                req.dest = node;
-
-                logger.info("Replication is processing with " + req.dest);
-
-                chanel.write(req);
-
-            }
-        }).start();
-    }
 
 
-    @Override
-    public void run() {
 
-        try {
-            Thread.sleep(9500);
-        } catch (InterruptedException e) {
 
-        }
-
-        while (alive && !Thread.currentThread().isInterrupted())
-        {
-            Command req = new Command();
-            req.op= StoreRequest.HEARTBEAT;
-            req.source = id;
-            req.setReplicated(isSynchronized());
-
-            chanel.write(req);
-
-            logger.debug("Sending "+ StoreRequest.HEARTBEAT);
-          //  logger.warn(" "+getCount());
-            try
-            {
-                Thread.sleep(9000);
-            }  catch (Exception e){
-                //ignore
-            }
-
-        }
-
-    }
 }
