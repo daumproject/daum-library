@@ -62,6 +62,7 @@ public class MessagesView extends TabHost implements IMessagesListener, TabHost.
         LinearLayout linLayout = new LinearLayout(ctx);
         linLayout.setOrientation(LinearLayout.VERTICAL);
         linLayout.setPadding(0, 5, 0, 0);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
         TabWidget tabWidget = new TabWidget(ctx);
         tabWidget.setId(R.id.tabs);
@@ -70,17 +71,16 @@ public class MessagesView extends TabHost implements IMessagesListener, TabHost.
         frameLayout.setId(R.id.tabcontent);
         frameLayout.setPadding(0, 5, 0, 0);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        LinearLayout.LayoutParams tabParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        LinearLayout.LayoutParams frameParams = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 
-        linLayout.addView(tabWidget, params);
-        linLayout.addView(frameLayout, params);
+        linLayout.addView(tabWidget, tabParams);
+        linLayout.addView(frameLayout, frameParams);
 
-        addView(linLayout, params);
+        addView(linLayout, layoutParams);
     }
 
     private void initTabs() {
-
-
         LocalActivityManager lam = new LocalActivityManager((Activity) ctx, false);
         setup(lam);
         TabHost.TabSpec spec;
@@ -161,15 +161,16 @@ public class MessagesView extends TabHost implements IMessagesListener, TabHost.
     }
 
     private void changeTabUIToSelected(final LinearLayout layout) {
-        layout.setBackgroundColor(Color.GRAY);
-        TextView tv = (TextView) layout.findViewById(R.id.title);
-        tv.setTextColor(Color.WHITE);
-    }
-
-    private void changeTabUIToUnselected(final LinearLayout layout) {
         layout.setBackgroundColor(Color.WHITE);
         TextView tv = (TextView) layout.findViewById(R.id.title);
         tv.setTextColor(Color.BLACK);
+
+    }
+
+    private void changeTabUIToUnselected(final LinearLayout layout) {
+        layout.setBackgroundColor(Color.GRAY);
+        TextView tv = (TextView) layout.findViewById(R.id.title);
+        tv.setTextColor(Color.WHITE);
     }
 
     private void updateTabsUI() {
