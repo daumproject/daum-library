@@ -2,17 +2,15 @@ package org.daum.library.android.moyens.view.quickactionbar;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
-import android.app.LocalActivityManager;
+import org.daum.library.android.moyens.view.quickactionbar.listener.OnActionClickedListener;
+
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabWidget;
 import android.widget.TextView;
-import org.daum.library.android.moyens.view.quickactionbar.listener.OnActionClickedListener;
 
 public class QuickActionsBar extends TabHost implements OnItemClickListener {
 	

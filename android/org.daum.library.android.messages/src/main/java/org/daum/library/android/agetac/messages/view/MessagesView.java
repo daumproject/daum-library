@@ -120,6 +120,17 @@ public class MessagesView extends TabHost implements IMessagesListener, TabHost.
     }
 
     /**
+     * You should call onTabChanged(String) on your MessagesView instance
+     * if you define another listener otherwise tabs won't update their UI
+     * when changed
+     * @param l
+     */
+    @Override
+    public void setOnTabChangedListener(OnTabChangeListener l) {
+        super.setOnTabChangedListener(l);
+    }
+
+    /**
      * Adds a message to the MessagesListView tab
      * @param msg the message to add
      * @param type either MessageType.IN (received) or MessageType.OUT (emitted)

@@ -3,6 +3,7 @@ package org.daum.library.android.agetac.messages;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TabHost;
 import org.daum.common.message.api.Message;
 import org.daum.library.android.agetac.messages.view.MessagesView;
 import org.daum.library.android.agetac.messages.view.ListItemView.MessageType;
@@ -55,6 +56,7 @@ public class MessagesComponent extends AbstractComponentType implements IMessage
                 public void run() {
                     Window window = uiService.getRootActivity().getWindow();
                     window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                    Log.i(TAG, "window: "+window.toString());
                 }
             });
 

@@ -1,5 +1,6 @@
 package org.daum.library.android.moyens.model;
 
+
 /**
  * Created with IntelliJ IDEA.
  * User: max
@@ -7,113 +8,52 @@ package org.daum.library.android.moyens.model;
  * Time: 13:11
  * To change this template use File | Settings | File Templates.
  */
-public class VehicleType {
+public enum VehicleType {
+	
+	// SAP
+	SAC_PS, VLSV, VLOS, VLS, VSAV, VSM, VSR, FATS, HDZAHFE,F,FZEFZEFEZ,FZE,FZEFZEFZE,ZE,GGH,HRT,R,HTR,HE,RE,GERG,ERG,EQG,RG,ZERG,REZGRZG,GRZG,SDF,GD,
+	
+	// INC
+	BEA, CAEM, CCFM, CCGCLC, EPS, FMOGP, FPT, VPRO, VAR,
+	
+	// ALIM
+	CCGC, DA, MPR,
+	
+	// COM
+	VL, VLHR, VPL, VPHV, VTP, VTU, VCYNO,
+	
+	// RTN
+	VRCB, VICB, VNRBC, VRAD,
+	
+	// CHEM
+	PCM, VLCC, VLCGD, VLCS, VLCG;
+	
+	public static VehicleSector[] getSectors() {
+		return VehicleSector.values();
+	}
 
-    public enum SECTOR {
-        SAP, INC, ALIM, COM, RTN, CHEM
-    }
-
-    public enum SAP {
-        SAC_PS, VLSV, VLOS, VLS, VSAV, VSM, VSR
-    }
-
-    public enum INC {
-       BEA, CAEM, CCFM, CCGCLC, EPS, FMOGP, FPT, VPRO, VAR
-    }
-
-    public enum ALIM {
-        CCGC, DA, MPR
-    }
-
-    public enum COM {
-        VL, VLHR, VPL, VPHV, VTP, VTU, VCYNO
-    }
-
-    public enum RTN {
-        VRCB, VICB, VNRBC, VRAD
-    }
-
-    public enum CHEM {
-        PCM, VLCC, VLCGD, VLCS, VLCG
-    }
-
-    private static String TYPE = null;
-    private static VehicleType INSTANCE = new VehicleType();
-
-    public static String name() {
-        return VehicleType.TYPE;
-    }
-
-    public static VehicleType valueOf(String type) {
-        Exception e;
-
-        try {
-            SAP s = SAP.valueOf(type);
-            VehicleType.TYPE = s.name();
-            return VehicleType.INSTANCE;
-
-        } catch (Exception tmp) { e = tmp; }
-
-        try {
-            INC s = INC.valueOf(type);
-            VehicleType.TYPE = s.name();
-            return VehicleType.INSTANCE;
-
-        } catch (Exception tmp) { e = tmp; }
-
-        try {
-            ALIM s = ALIM.valueOf(type);
-            VehicleType.TYPE = s.name();
-            return VehicleType.INSTANCE;
-
-        } catch (Exception tmp) { e = tmp; }
-
-        try {
-            COM s = COM.valueOf(type);
-            VehicleType.TYPE = s.name();
-            return VehicleType.INSTANCE;
-
-        } catch (Exception tmp) { e = tmp; }
-
-        try {
-            RTN s = RTN.valueOf(type);
-            VehicleType.TYPE = s.name();
-            return VehicleType.INSTANCE;
-
-        } catch (Exception tmp) { e = tmp; }
-
-        try {
-            CHEM s = CHEM.valueOf(type);
-            VehicleType.TYPE = s.name();
-            return VehicleType.INSTANCE;
-
-        } catch (Exception tmp) { e = tmp; }
-
-        throw new IllegalArgumentException(e);
-    }
-
-    public static Enum<?>[] types(SECTOR sector) {
-        switch (sector) {
-            case ALIM:
-                return ALIM.values();
-
-            case CHEM:
-                return CHEM.values();
-
-            case COM:
-                return COM.values();
-
-            case INC:
-                return INC.values();
-
-            case RTN:
-                return RTN.values();
-
-            case SAP:
-                return SAP.values();
-
-            default:
-                return new Enum<?>[0];
-        }
-    }
+	public static VehicleType[] getValues(VehicleSector sector) {
+		switch (sector) {
+			case ALIM:
+				return new VehicleType[] {CCGC, DA, MPR};
+				
+			case INC:
+				return new VehicleType[] {BEA, CAEM, CCFM, CCGCLC, EPS, FMOGP, FPT, VPRO, VAR};
+				
+			case COM:
+				return new VehicleType[] {VL, VLHR, VPL, VPHV, VTP, VTU, VCYNO};
+				
+			case SAP:
+				return new VehicleType[] {SAC_PS, VLSV, VLOS, VLS, VSAV, VSM, VSR, FATS, HDZAHFE,F,FZEFZEFEZ,FZE,FZEFZEFZE,ZE,GGH,HRT,R,HTR,HE,RE,GERG,ERG,EQG,RG,ZERG,REZGRZG,GRZG,SDF,GD};
+				
+			case RTN:
+				return new VehicleType[] {VRCB, VICB, VNRBC, VRAD};
+				
+			case CHEM:
+				return new VehicleType[] {PCM, VLCC, VLCGD, VLCS, VLCG};
+			
+			default:
+				return null;
+		}
+	}
 }
