@@ -11,7 +11,7 @@ package org.daum.library.android.moyens.model;
 public enum VehicleType {
 	
 	// SAP
-	SAC_PS, VLSV, VLOS, VLS, VSAV, VSM, VSR, FATS, HDZAHFE,F,FZEFZEFEZ,FZE,FZEFZEFZE,ZE,GGH,HRT,R,HTR,HE,RE,GERG,ERG,EQG,RG,ZERG,REZGRZG,GRZG,SDF,GD,
+	SAC_PS, VLSV, VLOS, VLS, VSAV, VSM, VSR,
 	
 	// INC
 	BEA, CAEM, CCFM, CCGCLC, EPS, FMOGP, FPT, VPRO, VAR,
@@ -44,7 +44,7 @@ public enum VehicleType {
 				return new VehicleType[] {VL, VLHR, VPL, VPHV, VTP, VTU, VCYNO};
 				
 			case SAP:
-				return new VehicleType[] {SAC_PS, VLSV, VLOS, VLS, VSAV, VSM, VSR, FATS, HDZAHFE,F,FZEFZEFEZ,FZE,FZEFZEFZE,ZE,GGH,HRT,R,HTR,HE,RE,GERG,ERG,EQG,RG,ZERG,REZGRZG,GRZG,SDF,GD};
+				return new VehicleType[] {SAC_PS, VLSV, VLOS, VLS, VSAV, VSM, VSR};
 				
 			case RTN:
 				return new VehicleType[] {VRCB, VICB, VNRBC, VRAD};
