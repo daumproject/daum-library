@@ -1,6 +1,6 @@
 package org.daum.library.android.moyens.view.listener;
 
-import org.daum.library.android.moyens.model.Demand;
+import org.daum.common.model.api.Demand;
 
 /**
  * Created with IntelliJ IDEA.

@@ -6,7 +6,7 @@ import android.view.Gravity;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import org.daum.library.android.moyens.model.Demand;
+import org.daum.common.model.api.Demand;
 
 /**
  * Created with IntelliJ IDEA.

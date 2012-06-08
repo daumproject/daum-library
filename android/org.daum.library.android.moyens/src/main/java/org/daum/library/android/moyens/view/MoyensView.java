@@ -2,15 +2,11 @@ package org.daum.library.android.moyens.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.util.Pair;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
-import org.daum.library.android.moyens.model.Demand;
-import org.daum.library.android.moyens.model.VehicleSector;
-import org.daum.library.android.moyens.model.VehicleType;
+import org.daum.common.model.api.*;
 import org.daum.library.android.moyens.view.listener.IMoyensListener;
 import org.daum.library.android.moyens.view.quickactionbar.QuickActionsBar;
 import org.daum.library.android.moyens.view.quickactionbar.listener.OnActionClickedListener;

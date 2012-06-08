@@ -1,7 +1,7 @@
 package org.daum.library.android.moyens;
 
 import android.util.Log;
-import org.daum.library.android.moyens.model.Demand;
+import org.daum.common.model.api.Demand;
 import org.daum.library.android.moyens.view.MoyensView;
 import org.daum.library.android.moyens.view.listener.IMoyensListener;
 import org.kevoree.android.framework.helper.UIServiceHandler;

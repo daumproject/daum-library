@@ -1,4 +1,4 @@
-package org.daum.library.android.moyens.model;
+package org.daum.common.model.api;
 
 
 /**

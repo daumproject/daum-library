@@ -5,7 +5,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import org.daum.library.android.moyens.model.Demand;
+import org.daum.common.model.api.Demand;
 
 import java.util.ArrayList;
 
