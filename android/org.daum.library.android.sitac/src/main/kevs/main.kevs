@@ -1,20 +1,20 @@
 // core
 merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}"
+merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultChannels/{kevoree.version}"
+merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.fakeDomo/{kevoree.version}"
+merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}"
 merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}"
+merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}"
 
-// lib
 merge "mvn:org.kevoree.library.android/org.kevoree.library.android.bluetooth/{kevoree.version}"
 
-// daum
 merge "mvn:http://maven.kevoree.org/daum/snapshot!org.daum.library.android/org.daum.library.android.agetac.sitac/1.7.6-SNAPSHOT"
 
 addNode node0: AndroidNode
 
-addGroup nanoRestGrp: NanoRestGroup
+addGroup sync: NanoRestGroup
 
-addChannel bluetooth: BluetoothChannel
-
-addToGroup nanoRestGrp *
+addToGroup sync *
 
 addComponent sitacComp0@node0: SITACComponent
 
