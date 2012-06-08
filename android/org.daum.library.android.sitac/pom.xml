@@ -24,45 +24,16 @@
 
     <build>
         <plugins>
-            <!-- android dex phase -->
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.1.1</version>
-                <executions>
-                    <execution>
-                        <id>generate-dex</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${android.tools.dx}</executable>
-                            <arguments>
-                                <argument>--dex</argument>
-                                <argument>--core-library</argument>
-                                <argument>--output=${project.build.directory}/classes.dex</argument>
-                                <argument>${project.build.directory}/${project.build.finalName}.jar</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>prepare-dexed-jar</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>${android.tools.aapt}</executable>
-                            <workingDirectory>${project.build.directory}</workingDirectory>
-                            <arguments>
-                                <argument>add</argument>
-                                <argument>${project.build.directory}/${project.build.finalName}.jar</argument>
-                                <argument>classes.dex</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>org.kevoree.platform</groupId>
+                <artifactId>org.kevoree.platform.mavenrunner</artifactId>
+                <version>${kevoree.version}</version>
+                <configuration>
+                    <model>${project.basedir}/src/main/kevs/main.kevs</model><!-- this is the default value so it is not needed -->
+                    <targetNode>node0</targetNode><!-- this is the default value so it is not needed -->
+                    <!-- the following properties are only used by kev:push -->
+                    <viaGroup>sync</viaGroup><!-- this is the default value so it is not needed -->
+                </configuration>
             </plugin>
         </plugins>
     </build>
