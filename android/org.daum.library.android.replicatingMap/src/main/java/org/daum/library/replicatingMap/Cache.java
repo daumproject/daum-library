@@ -11,25 +11,27 @@ import org.slf4j.LoggerFactory;
  * Date: 23/05/12
  * Time: 15:43
  */
-public class Cache extends  DHashMap<Object,Object>{
-
+public class Cache extends  DHashMap<Object,VersionedValue>{
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private String name = "";
     private CacheManager cacheManger=null;
     private SystemTime systemTime = new SystemTime();
     private  int MaxEntriesLocalHeap;
 
-    public Cache(String cachename,CacheManager cacheManger){
+
+    public Cache(String cachename,CacheManager cacheManger)
+    {
         this.name = cachename;
         this.cacheManger = cacheManger;
     }
 
-    public void setMaxEntriesLocalHeap(int max){
+    public void setMaxEntriesLocalHeap(int max)
+    {
         this.MaxEntriesLocalHeap = max;
     }
 
-    @Override
-    public Object put(Object key, Object value) {
+    public VersionedValue put(Object key, Object value) {
+
         if(this.size() > MaxEntriesLocalHeap)
         {
             // todo
@@ -37,23 +39,52 @@ public class Cache extends  DHashMap<Object,Object>{
             return null;
         }else
         {
+
             Update e = new Update();
+            VersionedValue version = new VersionedValue(value);
+
             e.op = StoreRequest.ADD;
             e.key = key;
-            e.value = value;
+            e.setVersionedValue(version);
             e.cache = name;
+            // remote
             cacheManger.remoteDisptach(e);
-            return super.put(key, value);
+            // local
+            return super.put(key, version);
         }
+    }
+
+
+    @Override
+    public VersionedValue get(Object key) {
+        VersionedValue versionedValue = (VersionedValue) super.get(key);
+        return versionedValue;
     }
 
 
     public void localDispatch(Update replica)
     {
         logger.debug("Local dispatch "+replica.getCache());
+
         if (replica.op.equals(StoreRequest.ADD))
         {
-            super.put(replica.key, replica.value);
+            VersionedValue old = (VersionedValue) super.get(replica.key);
+            if(old == null)
+            {
+                super.put(replica.key, replica.getVersionedValue());
+            }
+            else
+            {
+                // compare version
+                if(old.before(replica.getVersionedValue()))
+                {
+                    super.put(replica.key, replica.getVersionedValue());
+                } else
+                {
+                    logger.debug("receive old version ");
+                }
+            }
+
         } else if (replica.op.equals(StoreRequest.DELETE))
         {
             super.remove(replica.key);
@@ -62,12 +93,8 @@ public class Cache extends  DHashMap<Object,Object>{
 
 
     @Override
-    public Object remove(Object key) {
-
-        if(!cacheManger.isSynchronized())
-        {
-            //logger.warn("WARNING !! TODO backup remove until synchronize is finish");
-        }
+    public VersionedValue remove(Object key) {
+        //logger.warn("WARNING !! TODO backup remove until synchronize is finish");
         Update e = new Update();
         e.op = StoreRequest.DELETE;
         e.key =  key;

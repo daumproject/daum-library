@@ -23,7 +23,6 @@ public class StoreImpl implements PersistenceSessionStore {
         this.replicatingService = cache;
     }
 
-
     @Override
     public void save(OrhmID id, Object bean) throws PersistenceException {
         Cache cache = replicatingService.getCache(id.getAttachToCache());
@@ -34,25 +33,24 @@ public class StoreImpl implements PersistenceSessionStore {
     @Override
     public void delete(OrhmID id) throws PersistenceException {
         Cache cache = replicatingService.getCache(id.getAttachToCache());
-        cache.setMaxEntriesLocalHeap(id.getMaxEntriesLocalHeap());
         cache.remove(id.getId());
     }
 
     @Override
     public Object get(OrhmID id) throws PersistenceException {
         Cache cache = replicatingService.getCache(id.getAttachToCache());
-        cache.setMaxEntriesLocalHeap(id.getMaxEntriesLocalHeap());
-        return cache.get(id.getId());
+        return cache.get(id.getId()).getValue();
     }
 
     @Override
-    public Map<Object, Object> getAll(OrhmID id) throws PersistenceException {
+    public Map<Object, Object> getAll(OrhmID id) throws PersistenceException
+    {
         Cache cache = replicatingService.getCache(id.getAttachToCache());
         if(cache != null){
             HashMap<Object,Object> result = new HashMap<Object, Object>();
             for( Object key : cache.keySet())
             {
-                result.put(key,cache.get(key));
+                result.put(key,cache.get(key).getValue());
             }       return result;
         }
           return  null;
@@ -60,6 +58,7 @@ public class StoreImpl implements PersistenceSessionStore {
 
     @Override
     public Object lock(OrhmID id) throws PersistenceException {
+
         return null;
     }
 

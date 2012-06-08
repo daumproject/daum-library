@@ -1,5 +1,7 @@
 package org.daum.library.replicatingMap.msg;
 
+import org.daum.library.replicatingMap.VersionedValue;
+
 /**
  * Created by jed
  * User: jedartois@gmail.com
@@ -10,7 +12,7 @@ package org.daum.library.replicatingMap.msg;
 public class Update extends AMessage {
 
     public Object key;
-    public Object value;
+    public VersionedValue versionedValue;
     public String cache;
 
     public Object getKey() {
@@ -21,12 +23,12 @@ public class Update extends AMessage {
         this.key = key;
     }
 
-    public Object getValue() {
-        return value;
+    public VersionedValue getVersionedValue() {
+        return versionedValue;
     }
 
-    public void setValue(Object value) {
-        this.value = value;
+    public void setVersionedValue(VersionedValue versionedValue) {
+        this.versionedValue = versionedValue;
     }
 
     public String getCache() {

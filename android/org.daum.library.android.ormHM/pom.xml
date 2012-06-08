@@ -7,7 +7,7 @@
     <groupId>org.daum.library.android</groupId>
     <artifactId>org.daum.library.android.ormH</artifactId>
     <name>DAUM :: ormH :: Android </name>
-    <version>1.2</version>
+    <version>1.3</version>
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
