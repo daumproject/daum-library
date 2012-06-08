@@ -5,7 +5,7 @@
     <groupId>org.daum.library.javase</groupId>
     <artifactId>org.daum.library.javase.replicatingMap</artifactId>
     <name>DAUM :: Library :: JavaSE :: replicatingMap</name>
-     <version>1.3</version>
+     <version>1.4</version>
 
     <parent>
         <artifactId>org.daum.library.javase.root</artifactId>
