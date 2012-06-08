@@ -1,0 +1,22 @@
+// core
+merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}"
+merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}"
+
+// lib
+merge "mvn:org.kevoree.library.android/org.kevoree.library.android.bluetooth/{kevoree.version}"
+
+// daum
+merge "mvn:http://maven.kevoree.org/daum/snapshot!org.daum.library.android/org.daum.library.android.agetac.sitac/1.7.6-SNAPSHOT"
+
+addNode node0: AndroidNode
+
+addGroup nanoRestGrp: NanoRestGroup
+
+addChannel bluetooth: BluetoothChannel
+
+addToGroup nanoRestGrp *
+
+addComponent sitacComp0@node0: SITACComponent
+
+// network addresses
+network node0 { "KEVOREE.remote.node.ip"= "192.168.1.147" }
