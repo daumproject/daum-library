@@ -3,6 +3,7 @@ package org.daum.library.android.agetac.messages;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.TabHost;
 import org.daum.common.message.api.Message;
 import org.daum.library.android.agetac.messages.view.MessagesView;
 import org.daum.library.android.agetac.messages.view.ListItemView.MessageType;

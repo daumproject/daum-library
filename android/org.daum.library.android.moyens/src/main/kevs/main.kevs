@@ -20,15 +20,13 @@ addToGroup nanoRestGrp *
 addComponent moyComp0@node0: MoyensComponent
 addComponent moyComp1@node1: MoyensComponent
 
-// TODO
-
 // bind node0
-//bind moyComp0.inResources@node0 => bluetooth
-//bind moyComp0.outResourceDemands@node0 => bluetooth
+//bind moyComp0.inDemand@node0 => bluetooth
+//bind moyComp0.outDemand@node0 => bluetooth
 
 // bind node1
-//bind moyComp1.inResources@node1 => bluetooth
-//bind moyComp1.outResourceDemands@node1 => bluetooth
+//bind moyComp1.inDemand@node1 => bluetooth
+//bind moyComp1.outDemand@node1 => bluetooth
 
 // network addresses
 network node0 { "KEVOREE.remote.node.ip"= "192.168.1.147" }

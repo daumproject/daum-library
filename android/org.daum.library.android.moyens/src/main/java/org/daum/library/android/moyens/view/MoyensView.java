@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 import org.daum.library.android.moyens.model.Demand;
+import org.daum.library.android.moyens.model.VehicleSector;
 import org.daum.library.android.moyens.model.VehicleType;
 import org.daum.library.android.moyens.view.listener.IMoyensListener;
 import org.daum.library.android.moyens.view.quickactionbar.QuickActionsBar;
@@ -64,9 +65,9 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         listView = new ListView(ctx);
         adapter = new DemandsAdapter(ctx, demands);
         qaBarData = new ArrayList<Pair<String, ArrayList<String>>>();
-        for (VehicleType.SECTOR sector : VehicleType.SECTOR.values()) {
+        for (VehicleSector sector : VehicleSector.values()) {
             ArrayList<String> actions = new ArrayList<String>();
-            for (Enum type : VehicleType.types(sector)) actions.add(type.name());
+            for (VehicleType type : VehicleType.getValues(sector)) actions.add(type.name());
             qaBarData.add(new Pair<String, ArrayList<String>>(sector.name(), actions));
         }
         qActionsBar = new QuickActionsBar(ctx, qaBarData);
