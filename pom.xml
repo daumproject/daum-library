@@ -65,7 +65,7 @@
         </repository>
         <snapshotRepository>
             <id>maven2.daumdeploy.snapshots</id>
-            <url>http://maven.kevoree.org/archiva/repository/daum/snapshots/</url>
+            <url>http://maven.kevoree.org/archiva/repository/daum/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

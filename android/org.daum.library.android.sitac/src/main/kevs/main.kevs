@@ -4,13 +4,13 @@ merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultCh
 merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.fakeDomo/{kevoree.version}"
 merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}"
 merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}"
-merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}"
+//merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}"
 
-merge "mvn:org.kevoree.library.android/org.kevoree.library.android.bluetooth/{kevoree.version}"
+//merge "mvn:org.kevoree.library.android/org.kevoree.library.android.bluetooth/{kevoree.version}"
 
-merge "mvn:http://maven.kevoree.org/daum/snapshot!org.daum.library.android/org.daum.library.android.agetac.sitac/1.7.6-SNAPSHOT"
+merge "mvn:http://maven.kevoree.org/daum/snapshots!org.daum.library.android/org.daum.library.android.agetac.sitac/1.7.6-SNAPSHOT"
 
-addNode node0: AndroidNode
+addNode node0: AndroidNode {logLevel = "DEBUG", coreLogLevel = "DEBUG"}
 
 addGroup sync: NanoRestGroup
 
@@ -19,4 +19,4 @@ addToGroup sync *
 addComponent sitacComp0@node0: SITACComponent
 
 // network addresses
-network node0 { "KEVOREE.remote.node.ip"= "192.168.1.147" }
+network node0 { "KEVOREE.remote.node.ip"= "192.168.0.14" }
