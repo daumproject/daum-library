@@ -56,4 +56,52 @@ public enum VehicleType {
 				return null;
 		}
 	}
+	
+	public static VehicleSector getSector(VehicleType type) {
+		switch (type) {
+			case SAC_PS:
+			case VLSV:
+			case VLOS:
+			case VLS:
+			case VSAV:
+			case VSM:
+			case VSR:
+				return VehicleSector.SAP;
+			case BEA:
+			case CAEM:
+			case CCFM:
+			case CCGCLC:
+			case EPS:
+			case FMOGP:
+			case FPT:
+			case VPRO:
+			case VAR:
+				return VehicleSector.INC;
+			case CCGC:
+			case DA:
+			case MPR:
+				return VehicleSector.ALIM;
+			case VL:
+			case VLHR:
+			case VPL:
+			case VPHV:
+			case VTP:
+			case VTU:
+			case VCYNO:
+				return VehicleSector.COM;
+			case VRCB:
+			case VICB:
+			case VNRBC:
+			case VRAD:
+				return VehicleSector.RTN;
+			case PCM:
+			case VLCC:
+			case VLCGD:
+			case VLCS:
+			case VLCG:
+				return VehicleSector.CHEM;
+			default:
+				return null;
+		}
+	}
 }

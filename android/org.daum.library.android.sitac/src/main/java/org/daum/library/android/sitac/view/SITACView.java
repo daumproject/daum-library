@@ -1,39 +1,56 @@
 package org.daum.library.android.sitac.view;
 
+import org.daum.library.android.sitac.controller.SITACController;
+
 import android.content.Context;
-import android.graphics.Canvas;
-import android.util.Log;
-import android.view.View;
-import org.osmdroid.views.MapView;
+import android.widget.RelativeLayout;
 
-/**
- * Created with IntelliJ IDEA.
- * User: max
- * Date: 08/06/12
- * Time: 10:35
- * To change this template use File | Settings | File Templates.
- */
-public class SITACView extends View {
+public class SITACView extends RelativeLayout {
+	
+	private Context ctx;
+	private SITACController sitacCtrl;
+	private SITACMapView mapView;
+	private SITACMenuView menuView;
+	private SITACSelectedEntityView currentEntityView;
 
-    private static final String TAG = "SITACView";
-
-    private Context ctx;
-    private MapView mapView;
-
-    public SITACView(Context context) {
-        super(context);
-        this.ctx = context;
-        initUI();
-    }
-
-    private void initUI() {
-        mapView = new MapView(ctx, null);
-        Log.i(TAG, "END initUI()");
-    }
-
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        mapView.draw(canvas);
-    }
+	public SITACView(Context context) {
+		super(context);
+		this.ctx = context;
+		this.sitacCtrl = SITACController.getInstance(ctx);
+		initUI();
+		configUI();
+		defineCallbacks();
+	}
+	
+	private void initUI() {
+		mapView = new SITACMapView(ctx, sitacCtrl);
+		sitacCtrl.registerMapView(mapView);
+		menuView = new SITACMenuView(ctx);
+		sitacCtrl.registerMenuView(menuView);
+		currentEntityView = new SITACSelectedEntityView(ctx);
+		sitacCtrl.registerSelectedEntityView(currentEntityView);
+	}
+	
+	private void configUI() {
+		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		
+		addView(mapView);
+		addView(menuView);
+		
+		RelativeLayout.LayoutParams entityParams = new RelativeLayout.LayoutParams(
+				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		entityParams.addRule(ALIGN_PARENT_TOP);
+		entityParams.addRule(ALIGN_PARENT_RIGHT);
+		addView(currentEntityView, entityParams);
+	}
+	
+	private void defineCallbacks() {
+		mapView.setOnOverlayEventListener(sitacCtrl);
+		menuView.setOnMenuViewEventListener(sitacCtrl);
+		currentEntityView.setOnSelectedEntityEventListener(sitacCtrl);
+	}
+	
+	public SITACController getController() {
+		return sitacCtrl;
+	}
 }

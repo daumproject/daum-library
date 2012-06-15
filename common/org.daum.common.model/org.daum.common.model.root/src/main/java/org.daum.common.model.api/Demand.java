@@ -1,9 +1,9 @@
 package org.daum.common.model.api;
 
-import org.daum.common.util.api.TimeFormatter;
-
 import java.io.Serializable;
 import java.util.Date;
+
+import org.daum.common.gps.api.IGpsPoint;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,37 +14,89 @@ import java.util.Date;
  */
 public class Demand implements Serializable {
 
-    public String agres;
-    public String cis;
-    public String gh_demande;
-    public String gh_depart;
-    public String gh_crm;
-    public String gh_engage;
-    public String gh_desengagement;
+	private static final long serialVersionUID = 7728877078263492496L;
+	
+	private long id = -1;
+	private VehicleType type;
+	private String number;
+    private String cis;
+    private Date gh_demande;
+    private Date gh_depart;
+    private Date gh_crm;
+    private Date gh_engage;
+    private Date gh_desengagement;
+    private IGpsPoint location;
 
-    public Demand(String agres, String cis, String gh_demande, String gh_depart, String gh_crm,
-                  String gh_engage, String gh_desengagement) {
-        this.agres = agres;
+    public Demand(VehicleType type, String number, String cis, Date gh_demande, Date gh_depart, Date gh_crm,
+    		Date gh_engage, Date gh_desengagement, IGpsPoint location) {
+        this.type = type;
+        this.number = number;
         this.cis = cis;
         this.gh_demande = gh_demande;
         this.gh_depart = gh_depart;
         this.gh_crm = gh_crm;
         this.gh_engage = gh_engage;
         this.gh_desengagement = gh_desengagement;
+        this.location = location;
     }
 
-    public Demand(VehicleType type) {
-        this.agres = type.name();
-        this.cis = "";
-        this.gh_demande = TimeFormatter.getGroupeHoraire(new Date());
-        this.gh_depart = "";
-        this.gh_crm = "";
-        this.gh_engage = "";
-        this.gh_desengagement = "";
+	public Demand(VehicleType type) {
+    	this.type = type;
+        this.gh_demande = new Date();
     }
+	
+	public long getId() {
+		return id;
+	}
+	
+	public void setId(long id) {
+		this.id = id;
+	}
+	
+    public IGpsPoint getLocation() {
+		return location;
+	}
 
-    @Override
-    public String toString() {
-        return agres+"_"+cis+"_"+gh_crm+"_"+gh_demande+"_"+gh_depart+"_"+gh_engage+"_"+gh_desengagement;
-    }
+	public void setLocation(IGpsPoint location) {
+		this.location = location;
+	}
+    
+	public VehicleType getType() {
+		return type;
+	}
+
+	public String getNumber() {
+		return number;
+	}
+
+	public String getCis() {
+		return cis;
+	}
+
+	public Date getGh_demande() {
+		return gh_demande;
+	}
+
+	public Date getGh_depart() {
+		return gh_depart;
+	}
+
+	public Date getGh_crm() {
+		return gh_crm;
+	}
+
+	public Date getGh_engage() {
+		return gh_engage;
+	}
+
+	public Date getGh_desengagement() {
+		return gh_desengagement;
+	}
+
+	@Override
+	public String toString() {
+		return type.name() + "_" + number + "_" + cis + "_" + gh_crm
+				+ "_" + gh_demande + "_" + gh_depart + "_"
+				+ gh_engage + "_" + gh_desengagement;
+	}
 }

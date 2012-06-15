@@ -1,49 +1,33 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.daum.library.android.sitac</artifactId>
-    <name>Daum :: Library :: Android :: SITAC</name>
-    <version>1.7.6-SNAPSHOT</version>
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.daum.common.gps.android</groupId>
+    <artifactId>org.daum.common.gps.android.root</artifactId>
+    <packaging>jar</packaging>
+    <name>Daum :: Common :: GPS :: Android </name>
+    <version>1.0</version>
 
     <parent>
-        <artifactId>org.daum.library.android.root</artifactId>
-        <groupId>org.daum.library.android</groupId>
-        <version>1.7.5</version>
-        <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
+        <artifactId>org.daum.common.gps</artifactId>
+        <groupId>org.daum.common.gps</groupId>
+        <version>1.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.daum.common.model.android</groupId>
-            <artifactId>org.daum.common.model.android.root</artifactId>
-            <version>1.1</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.daum.extra.android</groupId>
-            <artifactId>org.daum.extra.android.osmdroid</artifactId>
-            <version>1.0</version>
-        </dependency>
-    </dependencies>
+    <properties>
+        <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
+        <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
+    </properties>
 
     <build>
+        <sourceDirectory>../org.daum.common.gps.root/src/main/</sourceDirectory>
         <plugins>
-            <!-- kevS -->
-            <plugin>
-                <groupId>org.kevoree.platform</groupId>
-                <artifactId>org.kevoree.platform.mavenrunner</artifactId>
-                <version>${kevoree.version}</version>
-                <configuration>
-                    <targetNode>node0</targetNode>
-                    <viaGroup>sync</viaGroup>
-                </configuration>
-            </plugin>
             <!-- android dex phase -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>1.2.1</version>
+                <version>1.1</version>
                 <executions>
                     <execution>
                         <id>generate-dex</id>
@@ -79,6 +63,7 @@
                     </execution>
                 </executions>
             </plugin>
+
         </plugins>
     </build>
 

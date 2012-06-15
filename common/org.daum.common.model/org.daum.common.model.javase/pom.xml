@@ -6,17 +6,25 @@
     <artifactId>org.daum.common.model.javase.root</artifactId>
     <packaging>jar</packaging>
     <name>Daum :: Common :: JavaSE </name>
-    <version>1.0</version>
+    <version>1.1</version>
 
     <parent>
         <artifactId>org.daum.common.model</artifactId>
         <groupId>org.daum.common.model</groupId>
-        <version>1.0</version>
+        <version>1.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <build>
         <sourceDirectory>../org.daum.common.model.root/src/main/</sourceDirectory>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.daum.common.gps.javase</groupId>
+            <artifactId>org.daum.common.gps.javase.root</artifactId>
+            <version>1.0</version>
+        </dependency>
+    </dependencies>
 
 </project>

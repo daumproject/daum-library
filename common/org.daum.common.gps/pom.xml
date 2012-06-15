@@ -2,11 +2,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.daum.common.message</groupId>
-    <artifactId>org.daum.common.message</artifactId>
+    <groupId>org.daum.common.gps</groupId>
+    <artifactId>org.daum.common.gps</artifactId>
     <packaging>pom</packaging>
-    <name>DAUM :: Common :: Message :: Root</name>
-    <version>1.5</version>
+    <name>DAUM :: Common :: GPS :: Root</name>
+    <version>1.0</version>
 
     <properties>
         <kevoree.version>${project.version}</kevoree.version>
@@ -14,8 +14,8 @@
     </properties>
 
     <modules>
-        <module>./org.daum.common.message.android</module>
-        <module>./org.daum.common.message.javase</module>
+        <module>./org.daum.common.gps.android</module>
+        <module>./org.daum.common.gps.javase</module>
     </modules>
 
     <parent>
@@ -24,12 +24,4 @@
         <version>1.7.5</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.daum.common.util.android</groupId>
-            <artifactId>org.daum.common.util.android.root</artifactId>
-            <version>1.0</version>
-        </dependency>
-    </dependencies>
 </project>
