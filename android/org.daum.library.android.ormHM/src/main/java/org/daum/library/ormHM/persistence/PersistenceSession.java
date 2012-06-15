@@ -1,12 +1,16 @@
 package org.daum.library.ormHM.persistence;
 
+import org.apache.commons.beanutils.ConvertUtils;
+import org.apache.commons.beanutils.PropertyUtils;
 import org.daum.library.ormHM.api.IPersistenceSession;
 import org.daum.library.ormHM.api.PersistenceSessionStore;
 import org.daum.library.ormHM.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Created by jed
@@ -46,11 +50,28 @@ public class PersistenceSession implements IPersistenceSession {
                 {
                     if(pp.isId())
                     {
-                        Object idclass =  pp.getValue(bean);
-                        if(idclass != null)
+                        Object id =  pp.getValue(bean);
+                        if(id != null)
                         {
-                            OrhmID id = new OrhmID(pp.getAttachTO(),idclass,pp.getMaxEntriesLocalHeap());
-                            store.save(id, bean);
+                            Orhm ormh = new Orhm(pp.getCacheName(),pp.getGenerationType(),pp.getName(),id);
+
+                            if(ormh.getGenerationType() == GenerationType.UUID)
+                            {
+                                ormh.setId(UUID.randomUUID().toString());
+
+                                Object valueConverted = ConvertUtils.convert(ormh.getId(), String.class);
+                                try {
+                                    PropertyUtils.setSimpleProperty(bean, ormh.getIdName(), valueConverted);
+                                } catch (IllegalAccessException e) {
+                                    e.printStackTrace();
+                                } catch (InvocationTargetException e) {
+                                    e.printStackTrace();
+                                } catch (NoSuchMethodException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+
+                            store.save(ormh, bean);
                         }
                         else
                         {
@@ -81,11 +102,11 @@ public class PersistenceSession implements IPersistenceSession {
                 {
                     if(pp.isId())
                     {
-                        Object idclass =  pp.getValue(bean);
-                        if(idclass != null)
+                        Object id =  pp.getValue(bean);
+                        if(id != null)
                         {
-                            OrhmID id = new OrhmID(pp.getAttachTO(),idclass,pp.getMaxEntriesLocalHeap());
-                            store.delete(id);
+                            Orhm ormh = new Orhm(pp.getCacheName(),pp.getGenerationType(),pp.getName(),id);
+                            store.delete(ormh);
                         }
                         else
                         {
@@ -107,16 +128,16 @@ public class PersistenceSession implements IPersistenceSession {
     {
         Object bean = null;
         PersistentClass pc= null;
-        OrhmID id=null;
+        Orhm ormh=null;
         try
         {
             pc = factory.getPersistenceConfiguration().getPersistentClass(clazz);
-            id = new OrhmID(pc.getId().getAttachTO(),_id,pc.getId().getMaxEntriesLocalHeap());
-            bean = store.get(id);
+            ormh = new Orhm(pc.getId().getCacheName(),null,null,_id);
+            bean = store.get(ormh);
             return bean;
         } catch (Exception e)
         {
-            logger.error("Persistence Session get "+id+" "+id.getAttachToCache(),e);
+            logger.error("Persistence Session get "+ormh.getCacheName()+" ",e);
         }
         return  null;
     }
@@ -126,16 +147,17 @@ public class PersistenceSession implements IPersistenceSession {
     public Map<Object,Object> getAll(Class clazz) throws PersistenceException
     {
         PersistentClass pc= null;
-        OrhmID id=null;
+        Orhm id=null;
         try
         {
             pc = factory.getPersistenceConfiguration().getPersistentClass(clazz);
-            id = new OrhmID(pc.getId().getAttachTO(),null,pc.getId().getMaxEntriesLocalHeap());
+            //String cacheName,GenerationType generationType, Object id
+            id = new Orhm(pc.getId().getCacheName(),null,null,null);
             return store.getAll(id);
 
         } catch (Exception e)
         {
-            logger.error("Persistence Session getAll "+id.getAttachToCache(),e);
+            logger.error("Persistence Session getAll "+id.getCacheName(),e);
         }
         return  null;
     }
@@ -149,9 +171,9 @@ public class PersistenceSession implements IPersistenceSession {
         try
         {
             pc = factory.getPersistenceConfiguration().getPersistentClass(clazz);
-            OrhmID id = new OrhmID(pc.getId().getAttachTO(),_id,pc.getId().getMaxEntriesLocalHeap());
-            store.lock(id);
-            bean = store.get(id);
+            Orhm  ormH = new Orhm(pc.getId().getCacheName(),null,null,_id);
+            store.lock(ormH);
+            bean = store.get(ormH);
             return bean;
 
         } catch (Exception e)
@@ -173,8 +195,8 @@ public class PersistenceSession implements IPersistenceSession {
                 Object idclass =  pp.getValue(bean);
                 if (idclass != null)
                 {
-                    OrhmID id = new OrhmID(pp.getAttachTO(),idclass,pp.getMaxEntriesLocalHeap());
-                    store.unlock(id);
+                    Orhm  ormH = new Orhm(pc.getId().getCacheName(),null,null,idclass);
+                    store.unlock(ormH);
                 }
                 else
                 {

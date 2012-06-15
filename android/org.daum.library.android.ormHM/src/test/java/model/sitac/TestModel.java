@@ -1,6 +1,8 @@
 package model.sitac;
 
+import org.daum.library.ormHM.annotations.GeneratedValue;
 import org.daum.library.ormHM.annotations.Id;
+import org.daum.library.ormHM.persistence.GenerationType;
 
 import java.io.Serializable;
 
@@ -11,11 +13,17 @@ import java.io.Serializable;
  * Time: 13:11
  */
 public class TestModel implements Serializable {
-    
-    int id;
+
+    @Id()
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private  String id ="";
     int sum = 0;
 
-    public  TestModel(int id){
+    public  TestModel(){
+
+    }
+
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -26,9 +34,7 @@ public class TestModel implements Serializable {
     public void setSum(int sum) {
         this.sum = sum;
     }
-
-    @Id(attachTOCache = "TestModel")
-    public int getId() {
+    public String getId() {
         return id;
     }
 }

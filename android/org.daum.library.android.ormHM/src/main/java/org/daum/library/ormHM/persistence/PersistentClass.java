@@ -2,6 +2,7 @@ package org.daum.library.ormHM.persistence;
 
 import org.daum.library.ormHM.utils.PersistenceException;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
@@ -92,6 +93,17 @@ public class PersistentClass
 
         setTablename(clazz.getSimpleName().toLowerCase());
         Method[] methods = clazz.getMethods();
+        Field[]       fields =       clazz.getDeclaredFields();
+
+        for(int i=0;i<fields.length;i++)
+        {
+            Field field = fields[i];
+            property = new PersistentProperty(this, field);
+            persistantProperties.add(property);
+        //   System.out.println(field.getName());
+        }
+
+         /*
         for(int i=0;i < methods.length;i++)
         {
             Method method = methods[i];
@@ -106,7 +118,7 @@ public class PersistentClass
                     persistantProperties.add(property);
                 }
             }
-        }
+        }     */
     }
 
     public Object createInstance() throws PersistenceException, InstantiationException, IllegalAccessException

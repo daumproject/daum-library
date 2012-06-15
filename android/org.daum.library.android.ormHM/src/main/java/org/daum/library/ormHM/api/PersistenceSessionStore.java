@@ -1,6 +1,6 @@
 package org.daum.library.ormHM.api;
 
-import org.daum.library.ormHM.persistence.OrhmID;
+import org.daum.library.ormHM.persistence.Orhm;
 import org.daum.library.ormHM.utils.PersistenceException;
 
 import java.util.Map;
@@ -13,11 +13,11 @@ import java.util.Map;
  */
 public interface PersistenceSessionStore
 {
-    public void save(OrhmID id,Object bean) throws PersistenceException;
-    public void delete(OrhmID id) throws PersistenceException;
-    public Object get(OrhmID id) throws PersistenceException;
-    public Map<Object,Object> getAll(OrhmID id) throws PersistenceException;
-    public Object lock(OrhmID id)throws PersistenceException;
-    public void unlock(OrhmID id)throws PersistenceException;
+    public void save(Orhm id,Object bean) throws PersistenceException;
+    public void delete(Orhm id) throws PersistenceException;
+    public Object get(Orhm id) throws PersistenceException;
+    public Map<Object,Object> getAll(Orhm id) throws PersistenceException;
+    public Object lock(Orhm id)throws PersistenceException;
+    public void unlock(Orhm id)throws PersistenceException;
 
 }

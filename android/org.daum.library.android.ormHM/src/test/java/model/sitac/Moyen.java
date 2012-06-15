@@ -1,18 +1,22 @@
 package model.sitac;
 
+import org.daum.library.ormHM.annotations.GeneratedValue;
 import org.daum.library.ormHM.annotations.Id;
+import org.daum.library.ormHM.persistence.GenerationType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Moyen extends Detachement implements Serializable {
+public class Moyen  implements Serializable {
 
-    private int number;
+    @Id()
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id ="";
+
 	private MoyenType type;
 	private String name;
-	private PositionGPS posTarget;
-	private PositionGPS posRef;
+
 	private List<Moyen> children = new ArrayList<Moyen>();
 	
 	public Moyen(MoyenType type)
@@ -26,31 +30,12 @@ public class Moyen extends Detachement implements Serializable {
 		this.name = name;
 	}
 	
-	public Moyen(MoyenType type, String name, int number)
+	public Moyen(MoyenType type, String name, String id)
 	{
 		this(type, name);
-		this.number = number;
+		this.id = id;
 	}
-	
-	public void setTargetPos(double lat, double lon)
-	{
-		posTarget = new PositionGPS(lat, lon);
-	}
-	
-	public void setRefPos(double lat, double lon)
-	{
-		posRef = new PositionGPS(lat, lon);
-	}
-	
-	public PositionGPS getTargetPos()
-	{
-		return posTarget;
-	}
-	
-	public PositionGPS getRefPos()
-	{
-		return posRef;
-	}
+
 	
 	public MoyenType getType()
 	{
@@ -72,14 +57,14 @@ public class Moyen extends Detachement implements Serializable {
 		name=newName;
 	}
 	
-	public void setNumber(int number)
+	public void setId(String id)
 	{
-		this.number = number;
+		this.id = id;
 	}
-	@Id(attachTOCache = "Moyens")
-	public int getNumber()
+
+	public String getId()
 	{
-		return number;
+		return id;
 	}
 	
 	public List<Moyen> getChildren()

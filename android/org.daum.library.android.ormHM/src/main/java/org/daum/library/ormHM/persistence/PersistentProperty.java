@@ -2,11 +2,12 @@ package org.daum.library.ormHM.persistence;
 
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.daum.library.ormHM.annotations.GeneratedValue;
 import org.daum.library.ormHM.annotations.Id;
 import org.daum.library.ormHM.utils.PersistenceException;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * Created by jed
@@ -19,55 +20,52 @@ public class PersistentProperty {
     private PersistentClass pers;
     private String name;
     private Class clazz;
-    private String columnName;
-    private String javaType;
-    private boolean id;
-    private Method method;
-    private String attachTO = "";
-    private  int maxEntriesLocalHeap;
+    private boolean id=false;
+    private  GenerationType generationType= GenerationType.MANUEL;
+    private Field att;
+    private String cacheName = "";
 
-    public PersistentProperty(PersistentClass persistentClass, Method method) {
+
+    public PersistentProperty(PersistentClass persistentClass, Field att) {
         this.pers = persistentClass;
-        this.method = method;
+        this.att = att;
         parse();
     }
 
     public void parse()
     {
         Id id = null;
-        String methodName = method.getName();
-        String propertyName = methodName.substring(3, 4).toLowerCase() + methodName.substring(4);
-        setName(propertyName);
-        Class rclazz = method.getReturnType();
-        String javaType = rclazz.getSimpleName();
-        setClazz(rclazz);
-        setType(javaType);
-        id = method.getAnnotation(Id.class);
+        GeneratedValue generatedValue = null;
+        id = att.getAnnotation(Id.class);
         if (id != null)
         {
             setId(true);
             pers.setId(this);
-            setType(javaType);
-            setAttachTO(id.attachTOCache());
-            setMaxEntriesLocalHeap(id.MaxEntriesLocalHeap());
+            setCacheName(pers.getClazz().getName());
+            setName(att.getName());
+            generatedValue = att.getAnnotation(GeneratedValue.class);
+            if(generatedValue != null)
+            {
+                generationType  = generatedValue.strategy();
+            }
         }
     }
 
-    public String getAttachTO() {
-        return attachTO;
+
+    public GenerationType getGenerationType() {
+        return generationType;
     }
 
-
-    public int getMaxEntriesLocalHeap() {
-        return maxEntriesLocalHeap;
+    public void setGenerationType(GenerationType generationType) {
+        this.generationType = generationType;
     }
 
-    public void setMaxEntriesLocalHeap(int maxEntriesLocalHeap) {
-        this.maxEntriesLocalHeap = maxEntriesLocalHeap;
+    public String getCacheName() {
+        return cacheName;
     }
 
-    public void setAttachTO(String attachTO) {
-        this.attachTO = attachTO;
+    public void setCacheName(String cacheName) {
+        this.cacheName = cacheName;
     }
 
     public PersistentClass getPers() {
@@ -88,18 +86,8 @@ public class PersistentProperty {
     public void setClazz(Class clazz) {
         this.clazz = clazz;
     }
-    public String getColumnName() {
-        return columnName;
-    }
-    public void setColumnName(String columnName) {
-        this.columnName = columnName;
-    }
-    public String getType() {
-        return javaType;
-    }
-    public void setType(String sqlType) {
-        this.javaType = sqlType;
-    }
+
+
     public boolean isId() {
         return id;
     }
@@ -120,7 +108,8 @@ public class PersistentProperty {
         return null;
     }
 
-    public void setValue(Object bean, Object value) throws PersistenceException {
+    public void setValue(Object bean, Object value) throws PersistenceException
+    {
         Object valueConverted = ConvertUtils.convert(value, getClazz());
         try {
             PropertyUtils.setSimpleProperty(bean, getName(), valueConverted);
