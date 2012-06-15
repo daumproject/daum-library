@@ -11,7 +11,6 @@ import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACMenuView;
 import org.daum.library.android.sitac.view.SITACSelectedEntityView;
 import org.daum.library.android.sitac.view.entity.EntityFactory;
-import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.entity.IEntityFactory;
 import org.osmdroid.util.GeoPoint;
 

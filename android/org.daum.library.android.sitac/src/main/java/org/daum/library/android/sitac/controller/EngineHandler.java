@@ -65,6 +65,7 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	public void onDemandUpdated(Demand d) {
 		if (D) Log.i(TAG, "onDemandUpdated(): "+d);
 		DemandEntity e = factory.buildEntity(d);
+		mapView.addEntity(e);
 		e.setState(IEntity.STATE_EDITED);
 	}
 

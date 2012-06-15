@@ -1,6 +1,6 @@
 package org.daum.library.android.sitac.model;
 
-import java.util.ArrayList;
+import java.util.Hashtable;
 
 import org.daum.common.model.api.Danger;
 import org.daum.common.model.api.Demand;
@@ -9,39 +9,40 @@ import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 
 public class SITACEngine implements ISITACEngine {
 
-	private ArrayList<Demand> demands;
-	private ArrayList<Danger> dangers;
-	private ArrayList<Target> targets;
+	private Hashtable<Long, Demand> demands;
+	private Hashtable<Long, Danger> dangers;
+	private Hashtable<Long, Target> targets;
 	private OnEngineStateChangeListener listener;
 	
 	public SITACEngine(OnEngineStateChangeListener engineHandler) {
-		this.demands = new ArrayList<Demand>();
-		this.dangers = new ArrayList<Danger>();
-		this.targets = new ArrayList<Target>();
+		this.demands = new Hashtable<Long, Demand>();
+		this.dangers = new Hashtable<Long, Danger>();
+		this.targets = new Hashtable<Long, Target>();
 		listener = engineHandler;
 	}
 
     @Override
 	public void addDemand(Demand d) {
-		demands.add(d);
+		demands.put(42L, d);
 		if (listener != null) listener.onDemandAdded(d);
 	}
 
     @Override
 	public void addDanger(Danger d) {
-		dangers.add(d);
+		dangers.put(42L, d);
 		if (listener != null) listener.onDangerAdded(d);
 	}
 
     @Override
 	public void addTarget(Target t) {
-		targets.add(t);
+		targets.put(42L, t);
 		if (listener != null) listener.onTargetAdded(t);
 	}
 
     @Override
 	public void updateDemand(Demand d) {
-    	
+    	demands.put(42L, d);
+    	System.out.println("WESH HEU BATARD");
 		if (listener != null) listener.onDemandUpdated(d);
 	}
 }

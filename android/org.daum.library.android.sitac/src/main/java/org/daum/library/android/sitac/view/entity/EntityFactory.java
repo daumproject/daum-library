@@ -1,7 +1,5 @@
 package org.daum.library.android.sitac.view.entity;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Date;
 
 import org.daum.common.gps.api.IGpsPoint;
@@ -16,7 +14,6 @@ import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 
@@ -40,7 +37,6 @@ public class EntityFactory implements IEntityFactory {
 			IGeoPoint geoP = new GeoPoint(location.getLat(), location.getLong_());
 			e.setGeoPoint(geoP);
 		}
-		if (d.getId() != -1) e.setId(d.getId());
 		return e;
 	}
 	
@@ -104,8 +100,8 @@ public class EntityFactory implements IEntityFactory {
 		VehicleType type = VehicleType.valueOf(ent.getMessage());
 		IGeoPoint geoP = ent.getGeoPoint();
 		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
+		System.out.println("buildDemand >> "+location);
 		Demand d = new Demand(type, "", "", new Date(), null, null, null, null, location);
-		if (ent.getId() != -1) d.setId(ent.getId());
 		return d;
 	}
 	

@@ -97,6 +97,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 				
 			// if the state is EDITED, then update the corresponding data in the engine
 			} else if (selectedEntity.getState() == IEntity.STATE_EDITED) {
+				mapView.deleteEntity(selectedEntity);
 				if (selectedEntity instanceof DemandEntity) {
 					Demand d = factory.buildDemand((DemandEntity) selectedEntity);
 					CmdManager.getInstance(engine).execute(UpdateDemandCommand.class, d);

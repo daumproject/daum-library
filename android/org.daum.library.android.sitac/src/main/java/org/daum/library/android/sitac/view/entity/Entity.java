@@ -40,7 +40,7 @@ public abstract class Entity implements IEntity {
 	}
 	
 	@Override
-	public void draw(Canvas canvas, MapView mapView) { 
+	public void draw(Canvas canvas, MapView mapView) {
 		Point p = mapView.getProjection().toMapPixels(geoPoint, null);
 		Bitmap bmp = null;
 		if (icon != null) bmp = ((BitmapDrawable) icon).getBitmap();
