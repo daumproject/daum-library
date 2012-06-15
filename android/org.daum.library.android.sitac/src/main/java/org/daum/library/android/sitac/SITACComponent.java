@@ -1,5 +1,9 @@
 package org.daum.library.android.sitac;
 
+import org.daum.library.android.sitac.controller.ISITACController;
+import org.daum.library.android.sitac.controller.SITACController;
+import org.daum.library.android.sitac.model.ISITACEngine;
+import org.daum.library.android.sitac.model.SITACEngine;
 import org.daum.library.android.sitac.view.SITACView;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
@@ -19,6 +23,7 @@ import org.kevoree.framework.AbstractComponentType;
 public class SITACComponent extends AbstractComponentType {
 
     private KevoreeAndroidService uiService;
+    private ISITACController sitacCtrl;
 
     @Start
     public void start() {
@@ -27,6 +32,8 @@ public class SITACComponent extends AbstractComponentType {
             @Override
             public void run() {
                 SITACView sitacView = new SITACView(uiService.getRootActivity());
+                sitacCtrl = sitacView.getController();
+                sitacCtrl.addDemand();
                 uiService.addToGroup("SITAC", sitacView);
             }
         });

@@ -24,6 +24,8 @@ import org.daum.library.android.sitac.view.menu.PopupSideMenu;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -42,7 +44,8 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	private static final int MENU_WIDTH = 265;
 	
 	// view ids
-	private static final int ID_HIDE_SHOW_BTN = 42;
+	private static final int ID_HIDE_SHOW_BTN		= 42;
+	private static final int ID_NO_LOCATION_MENU	= 1664;
 	
 	// string UI constants
 	private static final String TEXT_HIDE_BTN = "X";
@@ -62,16 +65,19 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	private static final String ACTION_ZONE = "Zone";
 
 	private Context ctx;
-	private ExpandableListView listView;
-	private ExpandableMenuAdapter adapter;
+	private ExpandableListView menu;
+	private ExpandableListView noLocationMenu;
+	private ExpandableMenuAdapter adapter, noLocationAdapter;
 	private ExpandableMenuList menuList;
+	private ExpandableMenuList noLocationMenuList;
 	private OnMenuViewEventListener listener;
 	private Button resizeButton;
 	private Button hideShowButton;
 	private RelativeLayout.LayoutParams params;
 	private int old_dx = -1;
 	private int menuWidth = MIN_MENU_WIDTH;
-	private Hashtable<DemandEntity, IExpandableMenuItem> noLocationDemands = new Hashtable<DemandEntity, IExpandableMenuItem>();
+	private Hashtable<DemandEntity, IExpandableMenuItem> noLocationDemands;
+	private List<IExpandableMenuItem> noLocationItems;
 	
 	public SITACMenuView(Context context) {
 		super(context);
@@ -82,33 +88,34 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	}
 	
 	private void initUI() {
-		listView = new ExpandableListView(ctx);
+		menu = new ExpandableListView(ctx);
+		noLocationMenu = new ExpandableListView(ctx);
 		
         List<IExpandableMenuItem> dangers = new ArrayList<IExpandableMenuItem>();
-        dangers.add(new ExpandableMenuItem(ctx, "images/picto_blue_up.png", "Eau"));
-		dangers.add(new ExpandableMenuItem(ctx, "images/picto_red_up.png", "Incendie"));
-        dangers.add(new ExpandableMenuItem(ctx, "images/picto_orange_up.png", "Risques particuliers"));
+        dangers.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_UP, "Eau"));
+		dangers.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_RED_UP, "Incendie"));
+        dangers.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_UP, "Risques particuliers"));
         
         List<IExpandableMenuItem> cibles = new ArrayList<IExpandableMenuItem>();
-        cibles.add(new ExpandableMenuItem(ctx, "/images/picto_blue_down.png", "Eau"));
-        cibles.add(new ExpandableMenuItem(ctx, "/images/picto_red_down.png", "Incendie"));
-        cibles.add(new ExpandableMenuItem(ctx, "/images/picto_green_down.png", "Personne"));
-        cibles.add(new ExpandableMenuItem(ctx, "/images/picto_orange_down.png", "Risque particulier"));
+        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_DOWN, "Eau"));
+        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_RED_DOWN, "Incendie"));
+        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_GREEN_DOWN, "Personne"));
+        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_DOWN, "Risque particulier"));
         
         List<IExpandableMenuItem> moyens = new ArrayList<IExpandableMenuItem>();
-        moyens.add(new ExpandableMenuItem(ctx, "/images/picto_blue_dotted_agres.png", VehicleSector.ALIM.name()));
-        moyens.add(new ExpandableMenuItem(ctx, "/images/picto_red_dotted_agres.png", VehicleSector.INC.name()));
-        moyens.add(new ExpandableMenuItem(ctx, "/images/picto_violet_dotted_agres.png", VehicleSector.COM.name()));
-        moyens.add(new ExpandableMenuItem(ctx, "/images/picto_black_dotted_agres.png", VehicleSector.RTN.name()));
-        moyens.add(new ExpandableMenuItem(ctx, "/images/picto_green_dotted_agres.png", VehicleSector.SAP.name()));
-        moyens.add(new ExpandableMenuItem(ctx, "/images/picto_orange_dotted_agres.png", VehicleSector.CHEM.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_DOTTED_AGRES, VehicleSector.ALIM.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_RED_DOTTED_AGRES, VehicleSector.INC.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_VIOLET_DOTTED_AGRES, VehicleSector.COM.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLACK_DOTTED_AGRES, VehicleSector.RTN.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_GREEN_DOTTED_AGRES, VehicleSector.SAP.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_DOTTED_AGRES, VehicleSector.CHEM.name()));
         
         List<IExpandableMenuItem> actions = new ArrayList<IExpandableMenuItem>();
-        actions.add(new ExpandableMenuItem(ctx, "/images/picto_line_blue.png", ACTION_EAU));
-        actions.add(new ExpandableMenuItem(ctx, "/images/picto_line_red.png", ACTION_EXTINCTION));
-        actions.add(new ExpandableMenuItem(ctx, "/images/picto_line_green.png", ACTION_SAP));
-        actions.add(new ExpandableMenuItem(ctx, "/images/picto_line_orange.png", ACTION_CHEM));
-        actions.add(new ExpandableMenuItem(ctx, "/images/picto_zone.png", ACTION_ZONE));
+        actions.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_LINE_BLUE, ACTION_EAU));
+        actions.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_LINE_RED, ACTION_EXTINCTION));
+        actions.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_LINE_GREEN, ACTION_SAP));
+        actions.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_LINE_ORANGE, ACTION_CHEM));
+        actions.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ZONE, ACTION_ZONE));
         
         menuList = new ExpandableMenuList();
         menuList.addGroup(new ExpandableMenuItem(GRP_DANGERS), dangers);
@@ -116,8 +123,16 @@ public class SITACMenuView extends RelativeLayout implements Observer {
         menuList.addGroup(new ExpandableMenuItem(GRP_MOYENS), moyens);
         menuList.addGroup(new ExpandableMenuItem(GRP_ACTIONS), actions);
         
+        noLocationItems = new ArrayList<IExpandableMenuItem>();
+        noLocationDemands = new Hashtable<DemandEntity, IExpandableMenuItem>();
+        
+        noLocationMenuList = new ExpandableMenuList();
+        noLocationMenuList.addGroup(new ExpandableMenuItem(GRP_NO_LOCATION), noLocationItems);
+        noLocationAdapter = new ExpandableMenuAdapter(ctx, noLocationMenuList);
+        noLocationMenu.setAdapter(noLocationAdapter);
+        
         adapter = new ExpandableMenuAdapter(ctx, menuList);
-        listView.setAdapter(adapter);
+        menu.setAdapter(adapter);
         
         resizeButton = new Button(ctx);
         hideShowButton = new Button(ctx);
@@ -127,12 +142,27 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 		setBackgroundColor(Color.argb(180, 0, 0, 0));
 		params = new RelativeLayout.LayoutParams(MENU_WIDTH, LayoutParams.WRAP_CONTENT);
 		setLayoutParams(params);
-		
-		RelativeLayout.LayoutParams listParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		addView(listView, listParams);
+
+        noLocationMenu.setId(ID_NO_LOCATION_MENU);
+        noLocationMenu.setChildDivider(new GradientDrawable(Orientation.LEFT_RIGHT, new int[] {0xB4D3D3D3, 0}));
+        noLocationMenu.setDividerHeight(1);
+        
+		RelativeLayout.LayoutParams noLocMenuParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		noLocMenuParams.addRule(ALIGN_PARENT_TOP);
+		addView(noLocationMenu, noLocMenuParams);
+		noLocationMenu.setVisibility(View.GONE); // do not display this menu by default
+
+        menu.setDivider(new GradientDrawable(Orientation.LEFT_RIGHT, new int[] {0xB4FFFFFF, 0}));
+        menu.setChildDivider(new GradientDrawable(Orientation.LEFT_RIGHT, new int[] {0xB4D3D3D3, 0}));
+        menu.setDividerHeight(1);
+        
+		RelativeLayout.LayoutParams menuParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		menuParams.addRule(BELOW, noLocationMenu.getId());
+		addView(menu, menuParams);
 		
 		hideShowButton.setId(ID_HIDE_SHOW_BTN);
 		hideShowButton.setText(TEXT_HIDE_BTN);
+        hideShowButton.setTextColor(Color.WHITE);
 		RelativeLayout.LayoutParams hideBtnParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		hideBtnParams.setMargins(2, 0, 2, 0);
 		hideBtnParams.addRule(ALIGN_PARENT_RIGHT);
@@ -158,7 +188,7 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 					menuWidth = params.width;
 					params.width = hideShowButton.getWidth();
 					params.height = hideShowButton.getHeight();
-					listView.setVisibility(View.GONE);
+					menu.setVisibility(View.GONE);
 					resizeButton.setVisibility(View.GONE);
 					setLayoutParams(params);
 					b.setText(TEXT_SHOW_BTN);
@@ -166,7 +196,7 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 					// show the menu
 					params.width = menuWidth;
 					params.height = LayoutParams.WRAP_CONTENT;
-					listView.setVisibility(View.VISIBLE);
+					menu.setVisibility(View.VISIBLE);
 					resizeButton.setVisibility(View.VISIBLE);
 					setLayoutParams(params);
 					b.setText(TEXT_HIDE_BTN);
@@ -205,7 +235,27 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 //			}
 //		});
 		
-		listView.setOnChildClickListener(new OnChildClickListener() {
+		noLocationMenu.setOnChildClickListener(new OnChildClickListener() {
+			
+			@Override
+			public boolean onChildClick(ExpandableListView list, View itemView, int grpPos, int childPos, long id) {
+				final IExpandableMenuItem grp = noLocationAdapter.getGroup(grpPos);
+				final IExpandableMenuItem item = noLocationAdapter.getChild(grpPos, childPos);
+				if (listener != null) {
+					DemandEntity de = new DemandEntity(item.getIcon(), item.getText());
+					Enumeration<DemandEntity> demands = noLocationDemands.keys();
+					while (demands.hasMoreElements()) {
+						DemandEntity d = demands.nextElement();
+						if (noLocationDemands.get(d).equals(item)) de = d;
+					}
+					listener.onMenuItemSelected(de);
+					return true;
+				}
+				return false;
+			}
+		});
+		
+		menu.setOnChildClickListener(new OnChildClickListener() {
 
 			@Override
 			public boolean onChildClick(ExpandableListView list, View itemView, int grpPos, int childPos, long id) {
@@ -252,16 +302,6 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 				} else  if (grp.getText().equals(GRP_CIBLES)){
 					if (listener != null) listener.onMenuItemSelected(new TargetEntity(item.getIcon(), item.getText()));
 				
-				} else if (grp.getText().equals(GRP_NO_LOCATION)) {
-					if (listener != null) {
-						DemandEntity de = new DemandEntity(item.getIcon(), item.getText());
-						Enumeration<DemandEntity> demands = noLocationDemands.keys();
-						while (demands.hasMoreElements()) {
-							DemandEntity d = demands.nextElement();
-							if (noLocationDemands.get(d).equals(item)) de = d;
-						}
-						listener.onMenuItemSelected(de);
-					}
 				}
 				return false;
 			}
@@ -271,22 +311,11 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	
 	public void addEntityWithNoLocation(DemandEntity e) {
 		IExpandableMenuItem item = new ExpandableMenuItem(e.getIcon(), e.getMessage());
-		
-		if (adapter.getGroup(0).getText().equals(GRP_NO_LOCATION)) {
-			// the menuGroup NO_LOCATION already exists, just fill it with the new entity
-			menuList.getItems(0).add(item);
-			
-		} else {
-			// create the menuGroup NO_LOCATION
-			IExpandableMenuItem grpItem = new ExpandableMenuItem(GRP_NO_LOCATION);
-			ArrayList<IExpandableMenuItem> items = new ArrayList<IExpandableMenuItem>();
-			items.add(item);
-			menuList.addGroup(0, grpItem, items);
-		}
-		
+		noLocationMenuList.getItems(0).add(item);
+		if (noLocationMenu.getVisibility() == View.GONE) noLocationMenu.setVisibility(View.VISIBLE);
 		e.addObserver(this);
 		noLocationDemands.put(e, item);
-		adapter.notifyDataSetChanged();
+		noLocationAdapter.notifyDataSetChanged();
 	}
 	
 	private String[] getVehicleTypeValues(String menuItemText) {
@@ -330,11 +359,11 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 		if (entity.getGeoPoint() != null) {
 			IExpandableMenuItem item = noLocationDemands.get(entity);
 			noLocationDemands.remove(entity);
-			menuList.removeItem(0, item);
-			if (menuList.getItems(0).size() == 0) {
-				menuList.removeGroup(0);
+			noLocationMenuList.removeItem(0, item);
+			noLocationAdapter.notifyDataSetChanged();
+			if (noLocationMenuList.getItems(0).size() == 0) {
+				noLocationMenu.setVisibility(View.GONE);
 			}
-			adapter.notifyDataSetChanged();
 		}
 	}
 }

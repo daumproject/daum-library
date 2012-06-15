@@ -9,8 +9,8 @@ import android.graphics.drawable.Drawable;
 
 public interface IEntity extends IObservable {
 	
-	public static final int STATE_NEW			= 0;
-	public static final int STATE_EDITED		= 1;
+	public static final int STATE_NEW	= 0;
+	public static final int STATE_EDITED	= 1;
 	
 	public long getId();
 	

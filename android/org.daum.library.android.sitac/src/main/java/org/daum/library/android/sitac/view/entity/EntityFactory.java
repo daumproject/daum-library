@@ -1,7 +1,5 @@
 package org.daum.library.android.sitac.view.entity;
 
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Date;
 
 import org.daum.common.gps.api.IGpsPoint;
@@ -11,11 +9,11 @@ import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.Target;
 import org.daum.common.model.api.VehicleSector;
 import org.daum.common.model.api.VehicleType;
+import org.daum.library.android.sitac.view.DrawableFactory;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 
@@ -32,14 +30,13 @@ public class EntityFactory implements IEntityFactory {
 		VehicleType type = d.getType();
 		VehicleSector sector = VehicleType.getSector(type);
 		String iconPath = getIconPath(sector);
-		Drawable icon = getDrawable(iconPath);
+		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
 		DemandEntity e = new DemandEntity(icon, type.name());
 		IGpsPoint location = d.getLocation();
 		if (location != null) {
 			IGeoPoint geoP = new GeoPoint(location.getLat(), location.getLong_());
 			e.setGeoPoint(geoP);
 		}
-		if (d.getId() != -1) e.setId(d.getId());
 		return e;
 	}
 	
@@ -47,7 +44,7 @@ public class EntityFactory implements IEntityFactory {
 	public DangerEntity buildEntity(Danger d) {
 		Danger.Type type = d.getType();
 		String iconPath = getIconPath(type);
-		Drawable icon = getDrawable(iconPath);
+		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
 		String name;
 		switch (type) {
 			case WATER:
@@ -73,7 +70,7 @@ public class EntityFactory implements IEntityFactory {
 	public TargetEntity buildEntity(Target t) {
 		Target.Type type = t.getType();
 		String iconPath = getIconPath(type);
-		Drawable icon = getDrawable(iconPath);
+		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
 		String name;
 		switch (type) {
 			case WATER:
@@ -103,8 +100,8 @@ public class EntityFactory implements IEntityFactory {
 		VehicleType type = VehicleType.valueOf(ent.getMessage());
 		IGeoPoint geoP = ent.getGeoPoint();
 		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
+		System.out.println("buildDemand >> "+location);
 		Demand d = new Demand(type, "", "", new Date(), null, null, null, null, location);
-		if (ent.getId() != -1) d.setId(ent.getId());
 		return d;
 	}
 	
@@ -197,16 +194,4 @@ public class EntityFactory implements IEntityFactory {
 		}
 		return iconPath;
 	}
-
-    private Drawable getDrawable(String iconPath) {
-        try {
-            //URL url = getClass().getResource(iconPath);
-            InputStream is = getClass().getClassLoader().getResourceAsStream(iconPath);
-
-            return new BitmapDrawable(ctx.getResources(), is);
-        } catch (Exception e) {
-            // don't care just display text if null
-            return null;
-        }
-    }
 }

@@ -41,7 +41,5 @@ public class ZoneEntity extends ArrowEntity {
 			
 			canvas.drawPath(path, paint);
 		}
-		
-		
 	}
 }
