@@ -42,17 +42,20 @@ public abstract class Entity implements IEntity {
 	@Override
 	public void draw(Canvas canvas, MapView mapView) { 
 		Point p = mapView.getProjection().toMapPixels(geoPoint, null);
-		Bitmap bmp = ((BitmapDrawable) icon).getBitmap();
+		Bitmap bmp = null;
+		if (icon != null) bmp = ((BitmapDrawable) icon).getBitmap();
 		
-		int bmp_x = p.x-(bmp.getWidth()/2);
-		int bmp_y = p.y-(bmp.getHeight()/2);
+		int bmpWidth = (bmp == null) ? 0 : bmp.getWidth(); 
+		int bmpHeight = (bmp == null) ? 0 : bmp.getHeight();
+		int bmp_x = p.x-(bmpWidth/2);
+		int bmp_y = p.y-(bmpHeight/2);
 		
-		canvas.drawBitmap(bmp, bmp_x, bmp_y, null);
+		if (bmp != null) canvas.drawBitmap(bmp, bmp_x, bmp_y, null);
 		
 		paint.setTextSize(12);
 		float txtWidth = paint.measureText(message);
 		int txt_x	= p.x-((int)txtWidth/2);
-		int txt_y	= p.y+(bmp.getHeight()/2)+15;
+		int txt_y	= p.y+(bmpHeight/2)+15;
 		
 		int txtBgLeft	= txt_x - 2;
 		int txtBgTop	= txt_y - 12;
@@ -67,7 +70,7 @@ public abstract class Entity implements IEntity {
 		
 		bounds.left		= (bmp_x >= txtBgLeft) ? bmp_x : txtBgLeft;
 		bounds.top		= bmp_y;
-		bounds.right	= (bmp_x+bmp.getWidth() >= txtBgRight) ? bmp_x+bmp.getWidth() : txtBgRight;
+		bounds.right	= (bmp_x+bmpWidth >= txtBgRight) ? bmp_x+bmpWidth : txtBgRight;
 		bounds.bottom	= txtBgBottom;
 	}
 

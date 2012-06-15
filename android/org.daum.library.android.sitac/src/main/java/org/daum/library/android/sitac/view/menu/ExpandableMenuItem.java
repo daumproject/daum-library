@@ -1,11 +1,8 @@
 package org.daum.library.android.sitac.view.menu;
 
-import java.io.InputStream;
-
 import org.daum.library.android.sitac.view.DrawableFactory;
 
 import android.content.Context;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 
@@ -24,7 +21,7 @@ public class ExpandableMenuItem implements IExpandableMenuItem {
 	}
 	
 	public ExpandableMenuItem(Context context, String iconPath, String text) {
-		this.icon = DrawableFactory.buildDrawable(context, iconPath);
+		if (iconPath != null) this.icon = DrawableFactory.buildDrawable(context, iconPath);
 		this.text = text;
 	}
 

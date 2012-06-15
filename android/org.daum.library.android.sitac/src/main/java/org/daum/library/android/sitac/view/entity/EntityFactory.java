@@ -11,6 +11,7 @@ import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.Target;
 import org.daum.common.model.api.VehicleSector;
 import org.daum.common.model.api.VehicleType;
+import org.daum.library.android.sitac.view.DrawableFactory;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 
@@ -32,7 +33,7 @@ public class EntityFactory implements IEntityFactory {
 		VehicleType type = d.getType();
 		VehicleSector sector = VehicleType.getSector(type);
 		String iconPath = getIconPath(sector);
-		Drawable icon = getDrawable(iconPath);
+		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
 		DemandEntity e = new DemandEntity(icon, type.name());
 		IGpsPoint location = d.getLocation();
 		if (location != null) {
@@ -47,7 +48,7 @@ public class EntityFactory implements IEntityFactory {
 	public DangerEntity buildEntity(Danger d) {
 		Danger.Type type = d.getType();
 		String iconPath = getIconPath(type);
-		Drawable icon = getDrawable(iconPath);
+		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
 		String name;
 		switch (type) {
 			case WATER:
@@ -73,7 +74,7 @@ public class EntityFactory implements IEntityFactory {
 	public TargetEntity buildEntity(Target t) {
 		Target.Type type = t.getType();
 		String iconPath = getIconPath(type);
-		Drawable icon = getDrawable(iconPath);
+		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
 		String name;
 		switch (type) {
 			case WATER:
@@ -197,16 +198,4 @@ public class EntityFactory implements IEntityFactory {
 		}
 		return iconPath;
 	}
-
-    private Drawable getDrawable(String iconPath) {
-        try {
-            //URL url = getClass().getResource(iconPath);
-            InputStream is = getClass().getClassLoader().getResourceAsStream(iconPath);
-
-            return new BitmapDrawable(ctx.getResources(), is);
-        } catch (Exception e) {
-            // don't care just display text if null
-            return null;
-        }
-    }
 }

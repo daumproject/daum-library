@@ -1,5 +1,6 @@
 package org.daum.library.android.sitac.view;
 
+import org.daum.library.android.sitac.controller.ISITACController;
 import org.daum.library.android.sitac.controller.SITACController;
 
 import android.content.Context;
@@ -45,12 +46,12 @@ public class SITACView extends RelativeLayout {
 	}
 	
 	private void defineCallbacks() {
-		mapView.setOnOverlayEventListener(sitacCtrl);
-		menuView.setOnMenuViewEventListener(sitacCtrl);
-		currentEntityView.setOnSelectedEntityEventListener(sitacCtrl);
+		mapView.setOnOverlayEventListener(sitacCtrl.getUIHandler());
+		menuView.setOnMenuViewEventListener(sitacCtrl.getUIHandler());
+		currentEntityView.setOnSelectedEntityEventListener(sitacCtrl.getUIHandler());
 	}
 	
-	public SITACController getController() {
+	public ISITACController getController() {
 		return sitacCtrl;
 	}
 }

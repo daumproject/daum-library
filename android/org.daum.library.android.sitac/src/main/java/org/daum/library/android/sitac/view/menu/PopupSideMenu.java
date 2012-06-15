@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,7 +26,7 @@ public class PopupSideMenu {
 	private PopupWindow window;
 	private ListView listView;
 	private ArrayList<String> data;
-	private ArrayAdapter<String> adapter;
+	private SimpleListAdapter adapter;
 	
 	public PopupSideMenu(Context context, View anchor) {
 		this.ctx = context;
@@ -37,14 +38,17 @@ public class PopupSideMenu {
 	private void initUI() {
 		listView = new ListView(ctx);
 		data = new ArrayList<String>();
-		adapter = new ArrayAdapter<String>(ctx, android.R.layout.simple_list_item_1, android.R.id.text1, data);
+		adapter = new SimpleListAdapter(ctx, data);
 		listView.setAdapter(adapter);
 	}
 	
 	private void configUI() {
 		listView.setBackgroundColor(Color.argb(180, 0, 0, 0));
 		listView.setCacheColorHint(Color.argb(180, 0, 0, 0));
-
+        int[] colors = {0xB4D3D3D3, 0};
+        GradientDrawable dividerDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, colors);
+        listView.setDivider(dividerDrawable);
+        listView.setDividerHeight(1);
 	}
 	
 	public void show() {

@@ -24,6 +24,8 @@ import org.daum.library.android.sitac.view.menu.PopupSideMenu;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.GradientDrawable.Orientation;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -127,12 +129,17 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 		setBackgroundColor(Color.argb(180, 0, 0, 0));
 		params = new RelativeLayout.LayoutParams(MENU_WIDTH, LayoutParams.WRAP_CONTENT);
 		setLayoutParams(params);
+
+        listView.setDivider(new GradientDrawable(Orientation.LEFT_RIGHT, new int[] {0xB4FFFFFF, 0}));
+        listView.setChildDivider(new GradientDrawable(Orientation.LEFT_RIGHT, new int[] {0xB4D3D3D3, 0}));
+        listView.setDividerHeight(1);
 		
 		RelativeLayout.LayoutParams listParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		addView(listView, listParams);
 		
 		hideShowButton.setId(ID_HIDE_SHOW_BTN);
 		hideShowButton.setText(TEXT_HIDE_BTN);
+        hideShowButton.setTextColor(Color.WHITE);
 		RelativeLayout.LayoutParams hideBtnParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		hideBtnParams.setMargins(2, 0, 2, 0);
 		hideBtnParams.addRule(ALIGN_PARENT_RIGHT);

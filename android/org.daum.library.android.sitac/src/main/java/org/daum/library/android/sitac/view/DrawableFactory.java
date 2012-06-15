@@ -13,7 +13,7 @@ public class DrawableFactory {
 
 	public static final String PICTO_RED_UP = "/images/picto_red_up.png";
 	public static final String PICTO_BLUE_UP = "/images/picto_blue_up.png";
-	public static final String PICTO_ORANGE_UP = "/images/picto_blue_up.png";
+	public static final String PICTO_ORANGE_UP = "/images/picto_orange_up.png";
 	
 	public static final String PICTO_RED_DOWN = "/images/picto_red_down.png";
 	public static final String PICTO_BLUE_DOWN = "/images/picto_blue_down.png";
@@ -46,7 +46,7 @@ public class DrawableFactory {
 			InputStream is = ctx.getClass().getResourceAsStream(imgPath);
 			return new BitmapDrawable(ctx.getResources(), is);
 		} catch (Exception e) {
-			Log.e(TAG, "Error while creating drawable for image "+imgPath, e);
+			Log.w(TAG, "Error while creating drawable for image \""+imgPath+"\"");
 			return null;
 		}
 	}

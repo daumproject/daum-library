@@ -20,7 +20,7 @@ public interface OnEngineStateChangeListener {
 
 	/**
 	 * Called when a new Target is added to the engine
-	 * @param d the new target
+	 * @param t the new target
 	 */
 	void onTargetAdded(Target t);
 	

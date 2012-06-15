@@ -65,6 +65,7 @@ public class SITACSelectedEntityView extends LinearLayout {
 		setPadding(8, 8, 8, 8);
 		
 		titleView.setText(TEXT_TITLE);
+        titleView.setTextColor(Color.LTGRAY);
 		addView(titleView);
 		
 		subLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -99,6 +100,7 @@ public class SITACSelectedEntityView extends LinearLayout {
 			
 			LayoutParams btnParams = new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+            actionBtn.setTextColor(Color.WHITE);
 			addView(actionBtn, btnParams);
 		}
 		
