@@ -1,19 +1,15 @@
 package org.daum.library.android.sitac.view.menu;
 
 import java.io.InputStream;
-import java.net.URL;
+
+import org.daum.library.android.sitac.view.DrawableFactory;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 
 
 public class ExpandableMenuItem implements IExpandableMenuItem {
-
-    private static final String TAG = "ExpandableMenuItem";
 	
 	private Drawable icon;
 	private String text;
@@ -28,15 +24,7 @@ public class ExpandableMenuItem implements IExpandableMenuItem {
 	}
 	
 	public ExpandableMenuItem(Context context, String iconPath, String text) {
-		try {
-			//URL url = getClass().getResource(iconPath).openStream();
-            InputStream is = getClass().getResourceAsStream("/images/picto.png");
-            Log.i(TAG, "input stream = "+is);
-            Bitmap bmp = BitmapFactory.decodeStream(is);
-			this.icon = new BitmapDrawable(bmp);
-		} catch (Exception e) {
-			// don't care just display text if null
-		}
+		this.icon = DrawableFactory.buildDrawable(context, iconPath);
 		this.text = text;
 	}
 

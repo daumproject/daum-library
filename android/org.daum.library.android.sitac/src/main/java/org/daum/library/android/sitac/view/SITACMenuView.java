@@ -85,30 +85,30 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 		listView = new ExpandableListView(ctx);
 		
         List<IExpandableMenuItem> dangers = new ArrayList<IExpandableMenuItem>();
-        dangers.add(new ExpandableMenuItem(ctx, "images/picto_blue_up.png", "Eau"));
-		dangers.add(new ExpandableMenuItem(ctx, "images/picto_red_up.png", "Incendie"));
-        dangers.add(new ExpandableMenuItem(ctx, "images/picto_orange_up.png", "Risques particuliers"));
+        dangers.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_UP, "Eau"));
+		dangers.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_RED_UP, "Incendie"));
+        dangers.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_UP, "Risques particuliers"));
         
         List<IExpandableMenuItem> cibles = new ArrayList<IExpandableMenuItem>();
-        cibles.add(new ExpandableMenuItem(ctx, "/images/picto_blue_down.png", "Eau"));
-        cibles.add(new ExpandableMenuItem(ctx, "/images/picto_red_down.png", "Incendie"));
-        cibles.add(new ExpandableMenuItem(ctx, "/images/picto_green_down.png", "Personne"));
-        cibles.add(new ExpandableMenuItem(ctx, "/images/picto_orange_down.png", "Risque particulier"));
+        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_DOWN, "Eau"));
+        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_RED_DOWN, "Incendie"));
+        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_GREEN_DOWN, "Personne"));
+        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_DOWN, "Risque particulier"));
         
         List<IExpandableMenuItem> moyens = new ArrayList<IExpandableMenuItem>();
-        moyens.add(new ExpandableMenuItem(ctx, "/images/picto_blue_dotted_agres.png", VehicleSector.ALIM.name()));
-        moyens.add(new ExpandableMenuItem(ctx, "/images/picto_red_dotted_agres.png", VehicleSector.INC.name()));
-        moyens.add(new ExpandableMenuItem(ctx, "/images/picto_violet_dotted_agres.png", VehicleSector.COM.name()));
-        moyens.add(new ExpandableMenuItem(ctx, "/images/picto_black_dotted_agres.png", VehicleSector.RTN.name()));
-        moyens.add(new ExpandableMenuItem(ctx, "/images/picto_green_dotted_agres.png", VehicleSector.SAP.name()));
-        moyens.add(new ExpandableMenuItem(ctx, "/images/picto_orange_dotted_agres.png", VehicleSector.CHEM.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_DOTTED_AGRES, VehicleSector.ALIM.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_RED_DOTTED_AGRES, VehicleSector.INC.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_VIOLET_DOTTED_AGRES, VehicleSector.COM.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLACK_DOTTED_AGRES, VehicleSector.RTN.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_GREEN_DOTTED_AGRES, VehicleSector.SAP.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_DOTTED_AGRES, VehicleSector.CHEM.name()));
         
         List<IExpandableMenuItem> actions = new ArrayList<IExpandableMenuItem>();
-        actions.add(new ExpandableMenuItem(ctx, "/images/picto_line_blue.png", ACTION_EAU));
-        actions.add(new ExpandableMenuItem(ctx, "/images/picto_line_red.png", ACTION_EXTINCTION));
-        actions.add(new ExpandableMenuItem(ctx, "/images/picto_line_green.png", ACTION_SAP));
-        actions.add(new ExpandableMenuItem(ctx, "/images/picto_line_orange.png", ACTION_CHEM));
-        actions.add(new ExpandableMenuItem(ctx, "/images/picto_zone.png", ACTION_ZONE));
+        actions.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_LINE_BLUE, ACTION_EAU));
+        actions.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_LINE_RED, ACTION_EXTINCTION));
+        actions.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_LINE_GREEN, ACTION_SAP));
+        actions.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_LINE_ORANGE, ACTION_CHEM));
+        actions.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ZONE, ACTION_ZONE));
         
         menuList = new ExpandableMenuList();
         menuList.addGroup(new ExpandableMenuItem(GRP_DANGERS), dangers);
