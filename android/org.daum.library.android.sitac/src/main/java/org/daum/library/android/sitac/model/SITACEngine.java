@@ -8,10 +8,14 @@ import org.daum.common.model.api.IModel;
 import org.daum.common.model.api.Target;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 
+import android.util.Log;
+
 /**
  * Here you should save/update/delete data from the Replica
  */
 public class SITACEngine {
+	
+	private static final String TAG = "SITACEngine";
 
 	private ArrayList<Demand> demands;
 	private ArrayList<Danger> dangers;
@@ -29,41 +33,45 @@ public class SITACEngine {
 		if (m instanceof Demand) addDemand((Demand) m);
 		else if (m instanceof Danger) addDanger((Danger) m);
 		else if (m instanceof Target) addTarget((Target) m);
+		else {
+			Log.w(TAG, "add("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
+			return;
+		}
+		if (listener != null) listener.onAdd(m);
 	}
 	
 	public void update(IModel m) {
 		if (m instanceof Demand) updateDemand((Demand) m);
 		else if (m instanceof Danger) updateDanger((Danger) m);
 		else if (m instanceof Target) updateTarget((Target) m);
+		else {
+			Log.w(TAG, "update("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
+			return;
+		}
+		if (listener != null) listener.onUpdate(m);
 	}
 
 	private void addDemand(Demand d) {
 		demands.add(d);
-		if (listener != null) listener.onAdd(d);
 	}
 
 	private void addDanger(Danger d) {
 		dangers.add(d);
-		if (listener != null) listener.onAdd(d);
 	}
 
 	private void addTarget(Target t) {
 		targets.add(t);
-		if (listener != null) listener.onAdd(t);
 	}
 
 	private void updateDemand(Demand d) {
     	// TODO
-		if (listener != null) listener.onUpdate(d);
 	}
 
 	private void updateDanger(Danger d) {
         // TODO
-        if (listener != null) listener.onUpdate(d);
     }
 
 	private void updateTarget(Target t) {
         // TODO
-        if (listener != null) listener.onUpdate(t);
     }
 }

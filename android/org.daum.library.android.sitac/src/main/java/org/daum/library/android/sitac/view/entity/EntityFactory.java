@@ -16,9 +16,12 @@ import org.osmdroid.util.GeoPoint;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 
 public class EntityFactory implements IEntityFactory {
+	
+	private static final String TAG = "EntityFactory";
 	
 	private Context ctx;
 	
@@ -31,7 +34,7 @@ public class EntityFactory implements IEntityFactory {
 		if (m instanceof Demand) return build((Demand) m);
 		else if (m instanceof Target) return build((Target) m);
 		else if (m instanceof Danger) return build((Danger) m);
-		
+		else Log.w(TAG, "build("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
 		return null;
 	}
 	
@@ -40,7 +43,7 @@ public class EntityFactory implements IEntityFactory {
 		if (e instanceof DemandEntity) return build((DemandEntity) e);
 		else if (e instanceof TargetEntity) return build((TargetEntity) e);
 		else if (e instanceof DangerEntity) return build((DangerEntity) e);
-		
+		else Log.w(TAG, "build("+e.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
 		return null;
 	}
 
