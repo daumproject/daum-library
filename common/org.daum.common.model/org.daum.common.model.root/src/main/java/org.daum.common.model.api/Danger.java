@@ -1,10 +1,8 @@
 package org.daum.common.model.api;
 
-import java.io.Serializable;
-
 import org.daum.common.gps.api.IGpsPoint;
 
-public class Danger implements Serializable {
+public class Danger implements IModel {
 
 	private static final long serialVersionUID = -4836868718903570353L;
 

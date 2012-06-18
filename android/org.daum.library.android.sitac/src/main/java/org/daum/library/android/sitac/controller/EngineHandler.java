@@ -1,12 +1,12 @@
 package org.daum.library.android.sitac.controller;
 
-import org.daum.common.model.api.Danger;
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.Target;
+import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACMenuView;
-import org.daum.library.android.sitac.view.entity.*;
+import org.daum.library.android.sitac.view.entity.DemandEntity;
+import org.daum.library.android.sitac.view.entity.IEntity;
+import org.daum.library.android.sitac.view.entity.IEntityFactory;
 
 import android.util.Log;
 
@@ -30,66 +30,42 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	}
 	
 	@Override
-	public void onDemandAdded(Demand d) {
-		if (D) Log.i(TAG, "onDemandAdded(): "+d);
-		DemandEntity e = factory.buildEntity(d);
+	public void onAdd(IModel m) {
+		if (D) Log.i(TAG, "onAdd(): "+m);
+		IEntity e = factory.build(m);
 		e.setState(IEntity.STATE_EDITED);
-		if (e.getGeoPoint() == null) {
-			// the entity has no location, add it to the menu
-			menuView.addEntityWithNoLocation(e);
-		} else {
-			// the entity has a location, add it to the map
-			mapView.addEntity(e);
+		
+		if (e instanceof DemandEntity) {
+			if (e.getGeoPoint() == null) {
+				// the entity has no location, add it to the menu
+				menuView.addEntityWithNoLocation((DemandEntity) e);
+				return;
+			}
 		}
-	}
-
-	@Override
-	public void onDangerAdded(Danger d) {
-		if (D) Log.i(TAG, "onDangerAdded()"+d);
-		IEntity e = factory.buildEntity(d);
+		
+		// the entity has a location, add it to the map
 		mapView.addEntity(e);
-		e.setState(IEntity.STATE_EDITED);
 	}
-
+	
 	@Override
-	public void onTargetAdded(Target t) {
-		if (D) Log.i(TAG, "onTargetAdded()"+t);
-		IEntity e = factory.buildEntity(t);
-		mapView.addEntity(e);
+	public void onUpdate(IModel m) {
+		if (D) Log.i(TAG, "onUpdate(): "+m);
+		IEntity e = factory.build(m);
 		e.setState(IEntity.STATE_EDITED);
+		mapView.addEntity(e);
 	}
-
+	
 	@Override
-	public void onDemandUpdated(Demand d) {
-		if (D) Log.i(TAG, "onDemandUpdated(): "+d);
-		DemandEntity e = factory.buildEntity(d);
-		mapView.addEntity(e);
-		e.setState(IEntity.STATE_EDITED);
+	public void onDelete(IModel m) {
+		// TODO
+		if (D) Log.i(TAG, "onDelete(): "+m);
 	}
-
-    @Override
-    public void onTargetUpdated(Target t) {
-        if (D) Log.i(TAG, "onTargetUpdated(): "+t);
-        TargetEntity e = factory.buildEntity(t);
-        mapView.addEntity(e);
-        e.setState(IEntity.STATE_EDITED);
-    }
-
-    @Override
-    public void onDangerUpdated(Danger d) {
-        if (D) Log.i(TAG, "onDangerUpdated(): "+d);
-        DangerEntity e = factory.buildEntity(d);
-        mapView.addEntity(e);
-        e.setState(IEntity.STATE_EDITED);
-    }
 
     public void registerMenuView(SITACMenuView menuView) {
 		this.menuView = menuView;
-		
 	}
 
 	public void registerMapView(SITACMapView mapView) {
 		this.mapView = mapView;
-		
 	}
 }

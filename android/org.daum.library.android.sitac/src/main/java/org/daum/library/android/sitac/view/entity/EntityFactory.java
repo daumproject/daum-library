@@ -6,6 +6,7 @@ import org.daum.common.gps.api.IGpsPoint;
 import org.daum.common.gps.impl.GpsPoint;
 import org.daum.common.model.api.Danger;
 import org.daum.common.model.api.Demand;
+import org.daum.common.model.api.IModel;
 import org.daum.common.model.api.Target;
 import org.daum.common.model.api.VehicleSector;
 import org.daum.common.model.api.VehicleType;
@@ -24,9 +25,26 @@ public class EntityFactory implements IEntityFactory {
 	public EntityFactory(Context ctx) {
 		this.ctx = ctx;
 	}
-
+	
 	@Override
-	public DemandEntity buildEntity(Demand d) {
+	public IEntity build(IModel m) {
+		if (m instanceof Demand) return build((Demand) m);
+		else if (m instanceof Target) return build((Target) m);
+		else if (m instanceof Danger) return build((Danger) m);
+		
+		return null;
+	}
+	
+	@Override
+	public IModel build(IEntity e) {
+		if (e instanceof DemandEntity) return build((DemandEntity) e);
+		else if (e instanceof TargetEntity) return build((TargetEntity) e);
+		else if (e instanceof DangerEntity) return build((DangerEntity) e);
+		
+		return null;
+	}
+
+	private DemandEntity build(Demand d) {
 		VehicleType type = d.getType();
 		VehicleSector sector = VehicleType.getSector(type);
 		String iconPath = getIconPath(sector);
@@ -40,8 +58,7 @@ public class EntityFactory implements IEntityFactory {
 		return e;
 	}
 	
-	@Override
-	public DangerEntity buildEntity(Danger d) {
+	private DangerEntity build(Danger d) {
 		Danger.Type type = d.getType();
 		String iconPath = getIconPath(type);
 		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
@@ -66,8 +83,7 @@ public class EntityFactory implements IEntityFactory {
 		return e;
 	}
 	
-	@Override
-	public TargetEntity buildEntity(Target t) {
+	private TargetEntity build(Target t) {
 		Target.Type type = t.getType();
 		String iconPath = getIconPath(type);
 		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
@@ -95,18 +111,15 @@ public class EntityFactory implements IEntityFactory {
 		return e;
 	}
 	
-	@Override
-	public Demand buildDemand(DemandEntity ent) {
+	private Demand build(DemandEntity ent) {
 		VehicleType type = VehicleType.valueOf(ent.getMessage());
 		IGeoPoint geoP = ent.getGeoPoint();
 		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
-		System.out.println("buildDemand >> "+location);
 		Demand d = new Demand(type, "", "", new Date(), null, null, null, null, location);
 		return d;
 	}
 	
-	@Override
-	public Danger buildDanger(DangerEntity ent) {
+	private Danger build(DangerEntity ent) {
 		IGeoPoint geoP = ent.getGeoPoint();
 		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
 		Danger.Type type = Danger.Type.WATER;
@@ -119,8 +132,7 @@ public class EntityFactory implements IEntityFactory {
 		return d;
 	}
 
-	@Override
-	public Target buildTarget(TargetEntity ent) {
+	private Target build(TargetEntity ent) {
 		IGeoPoint geoP = ent.getGeoPoint();
 		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
 		Target.Type type = Target.Type.WATER;

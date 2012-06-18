@@ -6,5 +6,6 @@ public class DangerEntity extends Entity {
 
 	public DangerEntity(Drawable icon, String msg) {
 		super(icon, msg);
+		setTagTextEnabled(false);
 	}
 }

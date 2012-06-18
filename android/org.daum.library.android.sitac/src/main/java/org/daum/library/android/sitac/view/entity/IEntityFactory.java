@@ -1,20 +1,10 @@
 package org.daum.library.android.sitac.view.entity;
 
-import org.daum.common.model.api.Danger;
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.Target;
+import org.daum.common.model.api.IModel;
 
 public interface IEntityFactory {
-
-	public DemandEntity buildEntity(Demand d);
 	
-	public DangerEntity buildEntity(Danger d);
-
-	public TargetEntity buildEntity(Target t);
+	public IModel build(IEntity e);
 	
-	public Demand buildDemand(DemandEntity d);
-	
-	public Danger buildDanger(DangerEntity d);
-	
-	public Target buildTarget(TargetEntity t);
+	public IEntity build(IModel m);
 }

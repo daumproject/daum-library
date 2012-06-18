@@ -2,11 +2,9 @@ package org.daum.library.android.sitac.controller;
 
 import java.util.Hashtable;
 
-import org.daum.library.android.sitac.command.AddDangerCommand;
-import org.daum.library.android.sitac.command.AddDemandCommand;
-import org.daum.library.android.sitac.command.AddTargetCommand;
+import org.daum.library.android.sitac.command.AddModelCommand;
 import org.daum.library.android.sitac.command.ICommand;
-import org.daum.library.android.sitac.command.UpdateDemandCommand;
+import org.daum.library.android.sitac.command.UpdateModelCommand;
 import org.daum.library.android.sitac.model.SITACEngine;
 
 import android.util.Log;
@@ -23,10 +21,8 @@ public class CmdManager {
 		commands = new Hashtable<Class<? extends ICommand>, ICommand>();
 		
 
-		commands.put(AddDemandCommand.class, new AddDemandCommand(engine));
-		commands.put(AddDangerCommand.class, new AddDangerCommand(engine));
-		commands.put(AddTargetCommand.class, new AddTargetCommand(engine));
-		commands.put(UpdateDemandCommand.class, new UpdateDemandCommand(engine));
+		commands.put(AddModelCommand.class, new AddModelCommand(engine));
+		commands.put(UpdateModelCommand.class, new UpdateModelCommand(engine));
 	}
 
 	public static CmdManager getInstance(SITACEngine engine) {

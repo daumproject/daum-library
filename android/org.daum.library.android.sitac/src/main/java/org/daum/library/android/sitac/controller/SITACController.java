@@ -1,11 +1,7 @@
 package org.daum.library.android.sitac.controller;
 
-import org.daum.common.model.api.Danger;
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.Target;
-import org.daum.library.android.sitac.command.AddDangerCommand;
-import org.daum.library.android.sitac.command.AddDemandCommand;
-import org.daum.library.android.sitac.command.AddTargetCommand;
+import org.daum.common.model.api.IModel;
+import org.daum.library.android.sitac.command.AddModelCommand;
 import org.daum.library.android.sitac.model.SITACEngine;
 import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACMenuView;
@@ -50,25 +46,13 @@ public class SITACController implements ISITACController {
 	}
 	
 	public static SITACController getInstance(Context ctx) {
-		if (instance == null) {
-			instance = new SITACController(ctx);
-		}
+		if (instance == null) instance = new SITACController(ctx);
 		return instance;
 	}
 
     @Override
-    public void addDemand(Demand d) {
-        CmdManager.getInstance(engine).execute(AddDemandCommand.class, d);
-    }
-
-    @Override
-    public void addDanger(Danger d) {
-    	CmdManager.getInstance(engine).execute(AddDangerCommand.class, d);
-    }
-
-    @Override
-    public void addTarget(Target t) {
-    	CmdManager.getInstance(engine).execute(AddTargetCommand.class, t);
+    public void addModel(IModel m) {
+        CmdManager.getInstance(engine).execute(AddModelCommand.class, m);
     }
 
     @Override

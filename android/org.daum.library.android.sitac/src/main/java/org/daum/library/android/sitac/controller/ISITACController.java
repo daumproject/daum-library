@@ -1,8 +1,6 @@
 package org.daum.library.android.sitac.controller;
 
-import org.daum.common.model.api.Danger;
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.Target;
+import org.daum.common.model.api.IModel;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,20 +31,9 @@ public interface ISITACController {
     public void removeLocationUpdates();
 
     /**
-     * Add a new Demand to the engine associated with the controller
-     * @param d
+     * Add a new model object to the engine associated with the controller
+     * @param m
      */
-    public void addDemand(Demand d);
+    public void addModel(IModel m);
 
-    /**
-     * * Add a new Danger to the engine associated with the controller
-     * @param d
-     */
-    public void addDanger(Danger d);
-
-    /**
-     * Add a new Target to the engine associated with the controller
-     * @param t
-     */
-    public void addTarget(Target t);
 }

@@ -9,7 +9,7 @@ import android.graphics.drawable.Drawable;
 
 public interface IEntity extends IObservable {
 	
-	public static final int STATE_NEW	= 0;
+	public static final int STATE_NEW		= 0;
 	public static final int STATE_EDITED	= 1;
 	
 	public long getId();
@@ -24,11 +24,9 @@ public interface IEntity extends IObservable {
 	public void draw(Canvas canvas, MapView mapView);
 	
 	/**
-	 * Supposed to return true when the GeoPoint geoP is a part of your entity
-	 * which means that the object calling this method wants to know if this
-	 * entity is "selected" when a touch at the GeoP Coordinates is made
+	 * Return true when the GeoPoint geoP location is "on" the entity
 	 * @param geoP some geoP location
-	 * @param mapView the mapView that handle the touch event
+	 * @param mapView the mapView that handles the touch event
 	 * @return true if the geoP is a part of this entity boundaries
 	 */
 	public boolean containsPoint(IGeoPoint geoP, MapView mapView);
@@ -48,4 +46,6 @@ public interface IEntity extends IObservable {
 	public int getState();
 	
 	public void setState(int state);
+	
+	public void setTagTextEnabled(boolean enabled);
 }

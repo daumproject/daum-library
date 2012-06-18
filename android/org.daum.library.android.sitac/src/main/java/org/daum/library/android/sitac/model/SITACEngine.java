@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import org.daum.common.model.api.Danger;
 import org.daum.common.model.api.Demand;
+import org.daum.common.model.api.IModel;
 import org.daum.common.model.api.Target;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 
@@ -23,34 +24,46 @@ public class SITACEngine {
 		this.targets = new ArrayList<Target>();
 		listener = engineHandler;
 	}
+	
+	public void add(IModel m) {
+		if (m instanceof Demand) addDemand((Demand) m);
+		else if (m instanceof Danger) addDanger((Danger) m);
+		else if (m instanceof Target) addTarget((Target) m);
+	}
+	
+	public void update(IModel m) {
+		if (m instanceof Demand) updateDemand((Demand) m);
+		else if (m instanceof Danger) updateDanger((Danger) m);
+		else if (m instanceof Target) updateTarget((Target) m);
+	}
 
-	public void addDemand(Demand d) {
+	private void addDemand(Demand d) {
 		demands.add(d);
-		if (listener != null) listener.onDemandAdded(d);
+		if (listener != null) listener.onAdd(d);
 	}
 
-	public void addDanger(Danger d) {
+	private void addDanger(Danger d) {
 		dangers.add(d);
-		if (listener != null) listener.onDangerAdded(d);
+		if (listener != null) listener.onAdd(d);
 	}
 
-	public void addTarget(Target t) {
+	private void addTarget(Target t) {
 		targets.add(t);
-		if (listener != null) listener.onTargetAdded(t);
+		if (listener != null) listener.onAdd(t);
 	}
 
-	public void updateDemand(Demand d) {
+	private void updateDemand(Demand d) {
     	// TODO
-		if (listener != null) listener.onDemandUpdated(d);
+		if (listener != null) listener.onUpdate(d);
 	}
 
-    public void updateDanger(Danger d) {
+	private void updateDanger(Danger d) {
         // TODO
-        if (listener != null) listener.onDangerUpdated(d);
+        if (listener != null) listener.onUpdate(d);
     }
 
-    public void updateTarget(Target t) {
+	private void updateTarget(Target t) {
         // TODO
-        if (listener != null) listener.onTargetUpdated(t);
+        if (listener != null) listener.onUpdate(t);
     }
 }
