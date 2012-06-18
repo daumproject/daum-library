@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.daum.library.javase</groupId>
         <artifactId>org.daum.library.javase.root</artifactId>
-        <version>1.7.5</version>
+        <version>1.7.8</version>
         <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
     </parent>
 
