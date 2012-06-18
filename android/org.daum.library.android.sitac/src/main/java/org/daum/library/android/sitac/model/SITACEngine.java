@@ -8,7 +8,7 @@ import org.daum.common.model.api.Target;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 
 /**
- * Here you must save/update/delete data from the Replica
+ * Here you should save/update/delete data from the Replica
  */
 public class SITACEngine {
 
