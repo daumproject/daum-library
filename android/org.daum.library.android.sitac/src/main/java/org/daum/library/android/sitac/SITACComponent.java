@@ -1,9 +1,9 @@
 package org.daum.library.android.sitac;
 
+import android.util.Log;
+import org.daum.common.model.api.Demand;
+import org.daum.common.model.api.VehicleType;
 import org.daum.library.android.sitac.controller.ISITACController;
-import org.daum.library.android.sitac.controller.SITACController;
-import org.daum.library.android.sitac.model.ISITACEngine;
-import org.daum.library.android.sitac.model.SITACEngine;
 import org.daum.library.android.sitac.view.SITACView;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
@@ -19,8 +19,16 @@ import org.kevoree.framework.AbstractComponentType;
  */
 
 @Library(name = "Android")
+@Provides({
+        @ProvidedPort(name = "inDemand", type = PortType.MESSAGE)
+})
+@Requires({
+        @RequiredPort(name = "outDemand", type = PortType.MESSAGE)
+})
 @ComponentType
 public class SITACComponent extends AbstractComponentType {
+
+    private static final String TAG = "STIACComponent";
 
     private KevoreeAndroidService uiService;
     private ISITACController sitacCtrl;
@@ -33,7 +41,6 @@ public class SITACComponent extends AbstractComponentType {
             public void run() {
                 SITACView sitacView = new SITACView(uiService.getRootActivity());
                 sitacCtrl = sitacView.getController();
-                sitacCtrl.addDemand();
                 uiService.addToGroup("SITAC", sitacView);
             }
         });
@@ -48,5 +55,19 @@ public class SITACComponent extends AbstractComponentType {
     public void update() {
         stop();
         start();
+    }
+
+    @Port(name = "inDemand")
+    public void demandReceived(final Object newDemand) {
+        if (newDemand instanceof Demand) {
+            uiService.getRootActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    sitacCtrl.addDemand((Demand) newDemand);
+                }
+            });
+        } else {
+            Log.w(TAG, "Object type can't be handled (inDemand supposed to be a Demand object)");
+        }
     }
 }

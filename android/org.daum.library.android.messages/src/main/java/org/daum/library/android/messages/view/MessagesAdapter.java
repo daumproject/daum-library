@@ -1,4 +1,4 @@
-package org.daum.library.android.agetac.messages.view;
+package org.daum.library.android.messages.view;
 
 import android.content.Context;
 import android.util.Pair;
@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import org.daum.common.message.api.Message;
-import org.daum.library.android.agetac.messages.view.ListItemView.MessageType;
+import org.daum.library.android.messages.view.ListItemView.MessageType;
 
 import java.util.ArrayList;
 import java.util.HashMap;

@@ -1,4 +1,4 @@
-package org.daum.library.android.agetac.messages.listener;
+package org.daum.library.android.messages.listener;
 
 import org.daum.common.message.api.Message;
 

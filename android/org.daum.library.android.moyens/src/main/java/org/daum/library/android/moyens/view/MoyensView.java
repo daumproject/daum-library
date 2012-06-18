@@ -3,6 +3,7 @@ package org.daum.library.android.moyens.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Pair;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -86,12 +87,11 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         emptyTvParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 
         // configuring the list header view
-        Demand headerDemand = new Demand(
-                TEXT_AGRES, TEXT_CIS, TEXT_DEMAND, TEXT_DEPART, TEXT_CRM, TEXT_ENGAGE, TEXT_DESENG);
-        ListItemView listHeaderView = new ListItemView(ctx, headerDemand);
-        listHeaderView.setId(ID_LIST_HEADER);
-        listHeaderView.setBackgroundColor(Color.BLACK);
-        listHeaderView.setTextColor(Color.WHITE);
+        String[] headerData = {TEXT_AGRES, TEXT_CIS, TEXT_DEMAND, TEXT_DEPART, TEXT_CRM, TEXT_ENGAGE, TEXT_DESENG};
+        ListItemView headerView = new ListItemView(ctx, headerData);
+        headerView.setTextColor(Color.WHITE);
+        headerView.setId(ID_LIST_HEADER);
+        headerView.setBackgroundColor(Color.BLACK);
         RelativeLayout.LayoutParams headerParams = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         headerParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
@@ -103,9 +103,9 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         RelativeLayout.LayoutParams listParams = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         listParams.addRule(RelativeLayout.ABOVE, qActionsBar.getId());
-        listParams.addRule(RelativeLayout.BELOW, listHeaderView.getId());
+        listParams.addRule(RelativeLayout.BELOW, headerView.getId());
 
-        addView(listHeaderView, headerParams);
+        addView(headerView, headerParams);
         addView(listView, listParams);
         addView(tv_emptyList, emptyTvParams);
         addView(qActionsBar, barParams);
