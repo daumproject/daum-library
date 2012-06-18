@@ -1,13 +1,15 @@
 package org.daum.library.android.sitac.model;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 import org.daum.common.model.api.Danger;
 import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.Target;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 
+/**
+ * Here you must save/update/delete data from the Replica
+ */
 public class SITACEngine {
 
 	private ArrayList<Demand> demands;
@@ -38,7 +40,17 @@ public class SITACEngine {
 	}
 
 	public void updateDemand(Demand d) {
-    	demands.add(d);
+    	// TODO
 		if (listener != null) listener.onDemandUpdated(d);
 	}
+
+    public void updateDanger(Danger d) {
+        // TODO
+        if (listener != null) listener.onDangerUpdated(d);
+    }
+
+    public void updateTarget(Target t) {
+        // TODO
+        if (listener != null) listener.onTargetUpdated(t);
+    }
 }

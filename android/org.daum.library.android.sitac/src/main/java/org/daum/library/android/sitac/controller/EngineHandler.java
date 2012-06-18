@@ -6,9 +6,7 @@ import org.daum.common.model.api.Target;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACMenuView;
-import org.daum.library.android.sitac.view.entity.DemandEntity;
-import org.daum.library.android.sitac.view.entity.IEntity;
-import org.daum.library.android.sitac.view.entity.IEntityFactory;
+import org.daum.library.android.sitac.view.entity.*;
 
 import android.util.Log;
 
@@ -69,7 +67,23 @@ public class EngineHandler implements OnEngineStateChangeListener {
 		e.setState(IEntity.STATE_EDITED);
 	}
 
-	public void registerMenuView(SITACMenuView menuView) {
+    @Override
+    public void onTargetUpdated(Target t) {
+        if (D) Log.i(TAG, "onTargetUpdated(): "+t);
+        TargetEntity e = factory.buildEntity(t);
+        mapView.addEntity(e);
+        e.setState(IEntity.STATE_EDITED);
+    }
+
+    @Override
+    public void onDangerUpdated(Danger d) {
+        if (D) Log.i(TAG, "onDangerUpdated(): "+d);
+        DangerEntity e = factory.buildEntity(d);
+        mapView.addEntity(e);
+        e.setState(IEntity.STATE_EDITED);
+    }
+
+    public void registerMenuView(SITACMenuView menuView) {
 		this.menuView = menuView;
 		
 	}
@@ -78,5 +92,4 @@ public class EngineHandler implements OnEngineStateChangeListener {
 		this.mapView = mapView;
 		
 	}
-
 }

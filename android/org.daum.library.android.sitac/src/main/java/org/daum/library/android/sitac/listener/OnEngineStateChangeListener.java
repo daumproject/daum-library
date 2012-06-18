@@ -25,8 +25,20 @@ public interface OnEngineStateChangeListener {
 	void onTargetAdded(Target t);
 	
 	/**
-	 * Called when a demand is update in the engine
+	 * Called when a demand is updated in the engine
 	 * @param d the updated demand
 	 */
 	void onDemandUpdated(Demand d);
+
+    /**
+     * Called when a target is updated in the engine
+     * @param t the updated target
+     */
+    void onTargetUpdated(Target t);
+
+    /**
+     * Called when a danger is updated in the engine
+     * @param d the updated danger
+     */
+    void onDangerUpdated(Danger d);
 }
