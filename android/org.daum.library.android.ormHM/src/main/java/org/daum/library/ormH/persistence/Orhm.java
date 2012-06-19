@@ -1,4 +1,4 @@
-package org.daum.library.ormHM.persistence;
+package org.daum.library.ormH.persistence;
 
 import java.io.Serializable;
 

@@ -1,8 +1,8 @@
-package org.daum.library.ormHM.api;
+package org.daum.library.ormH.api;
 
-import org.daum.library.ormHM.persistence.PersistenceConfiguration;
-import org.daum.library.ormHM.persistence.PersistenceSession;
-import org.daum.library.ormHM.utils.PersistenceException;
+import org.daum.library.ormH.persistence.PersistenceConfiguration;
+import org.daum.library.ormH.persistence.PersistenceSession;
+import org.daum.library.ormH.utils.PersistenceException;
 
 /**
  * Created by jed

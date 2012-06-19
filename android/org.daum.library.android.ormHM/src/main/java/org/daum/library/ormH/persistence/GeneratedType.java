@@ -1,4 +1,4 @@
-package org.daum.library.ormHM.persistence;
+package org.daum.library.ormH.persistence;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,7 +9,7 @@ package org.daum.library.ormHM.persistence;
  */
 
 // public enum GeneratedType { bug in Kevoree can't use enum
-// (Lorg/daum/library/ormHM/GeneratedType; had used a different Lorg/daum/library/ormHM/GeneratedType;; during pre-verification)
+// (Lorg/daum/library/ormH/GeneratedType; had used a different Lorg/daum/library/ormH/GeneratedType;; during pre-verification)
 public class GeneratedType {
     public  final static  int NONE = -1;
     public  final static  int MANUEL = 0;

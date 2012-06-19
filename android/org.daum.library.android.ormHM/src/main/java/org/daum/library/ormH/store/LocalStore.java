@@ -1,8 +1,8 @@
-package org.daum.library.ormHM.store;
+package org.daum.library.ormH.store;
 
-import org.daum.library.ormHM.api.PersistenceSessionStore;
-import org.daum.library.ormHM.persistence.Orhm;
-import org.daum.library.ormHM.utils.PersistenceException;
+import org.daum.library.ormH.api.PersistenceSessionStore;
+import org.daum.library.ormH.persistence.Orhm;
+import org.daum.library.ormH.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

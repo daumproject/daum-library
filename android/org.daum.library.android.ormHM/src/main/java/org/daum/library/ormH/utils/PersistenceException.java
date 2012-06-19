@@ -1,4 +1,4 @@
-package org.daum.library.ormHM.utils;
+package org.daum.library.ormH.utils;
 
 /**
  * Created by jed

@@ -1,4 +1,4 @@
-package org.daum.library.ormHM.persistence;
+package org.daum.library.ormH.persistence;
 
 /**
  * Created by jed
@@ -7,8 +7,8 @@ package org.daum.library.ormHM.persistence;
  * Time: 11:32
  */
 
-import org.daum.library.ormHM.api.IPersistenceSessionFactory;
-import org.daum.library.ormHM.utils.PersistenceException;
+import org.daum.library.ormH.api.IPersistenceSessionFactory;
+import org.daum.library.ormH.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

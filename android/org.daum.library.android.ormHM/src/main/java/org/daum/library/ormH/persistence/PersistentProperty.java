@@ -1,7 +1,7 @@
-package org.daum.library.ormHM.persistence;
-import org.daum.library.ormHM.annotations.Generated;
-import org.daum.library.ormHM.annotations.Id;
-import org.daum.library.ormHM.utils.PersistenceException;
+package org.daum.library.ormH.persistence;
+import org.daum.library.ormH.annotations.Generated;
+import org.daum.library.ormH.annotations.Id;
+import org.daum.library.ormH.utils.PersistenceException;
 
 import java.lang.reflect.Field;
 

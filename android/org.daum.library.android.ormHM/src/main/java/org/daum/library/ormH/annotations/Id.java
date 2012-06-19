@@ -1,4 +1,4 @@
-package org.daum.library.ormHM.annotations;
+package org.daum.library.ormH.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

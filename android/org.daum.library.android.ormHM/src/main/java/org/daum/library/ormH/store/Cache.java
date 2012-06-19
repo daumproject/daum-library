@@ -1,4 +1,4 @@
-package org.daum.library.ormHM.store;
+package org.daum.library.ormH.store;
 
 import java.util.HashMap;
 

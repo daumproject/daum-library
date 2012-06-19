@@ -1,6 +1,6 @@
-package org.daum.library.ormHM.persistence;
+package org.daum.library.ormH.persistence;
 
-import org.daum.library.ormHM.utils.PersistenceException;
+import org.daum.library.ormH.utils.PersistenceException;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;

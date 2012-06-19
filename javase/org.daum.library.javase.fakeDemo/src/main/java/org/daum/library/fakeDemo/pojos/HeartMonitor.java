@@ -1,7 +1,7 @@
 package org.daum.library.fakeDemo.pojos;
 
 
-import org.daum.library.ormHM.annotations.Id;
+import org.daum.library.ormH.annotations.Id;
 
 import java.io.Serializable;
 import java.util.Date;

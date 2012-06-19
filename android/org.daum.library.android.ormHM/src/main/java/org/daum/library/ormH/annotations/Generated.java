@@ -1,6 +1,6 @@
-package org.daum.library.ormHM.annotations;
+package org.daum.library.ormH.annotations;
 
-import org.daum.library.ormHM.persistence.GeneratedType;
+import org.daum.library.ormH.persistence.GeneratedType;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

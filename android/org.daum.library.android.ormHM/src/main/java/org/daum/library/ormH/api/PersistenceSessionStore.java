@@ -1,7 +1,7 @@
-package org.daum.library.ormHM.api;
+package org.daum.library.ormH.api;
 
-import org.daum.library.ormHM.persistence.Orhm;
-import org.daum.library.ormHM.utils.PersistenceException;
+import org.daum.library.ormH.persistence.Orhm;
+import org.daum.library.ormH.utils.PersistenceException;
 
 import java.util.Map;
 
