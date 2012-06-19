@@ -1,4 +1,4 @@
-package org.daum.library.android.agetac.messages.view;
+package org.daum.library.android.messages.view;
 
 import android.content.Context;
 import android.graphics.Color;

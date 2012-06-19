@@ -7,6 +7,7 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.daum.common.model.api.Demand;
+import org.daum.common.util.api.TimeFormatter;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,7 +22,7 @@ public class ListItemView extends LinearLayout {
     private static boolean D = true;
 
     private Context ctx;
-    private Demand demand;
+    private String[] data = new String[7];
     private TextView tv_agres,
                      tv_cis,
                      tv_ghDemande,
@@ -30,10 +31,18 @@ public class ListItemView extends LinearLayout {
                      tv_ghEngage,
                      tv_ghDesengagement;
 
+    public ListItemView(Context context, String[] data) {
+        super(context);
+        this.ctx = context;
+        processData(data);
+        initUI();
+        configUI();
+    }
+
     public ListItemView(Context context, Demand demand) {
         super(context);
         this.ctx = context;
-        this.demand = demand;
+        processDemandData(demand);
         initUI();
         configUI();
     }
@@ -48,6 +57,33 @@ public class ListItemView extends LinearLayout {
         tv_ghEngage = new TextView(ctx);
     }
 
+    private void processData(String[] data) {
+        // default values
+        for (String s : this.data) s = "";
+
+        for (int i=0; i<data.length; i++) {
+            if (i>=this.data.length) return;
+            this.data[i] = data[i];
+        }
+    }
+
+    private void processDemandData(Demand demand) {
+        // filling data[] with the values from Demand
+        data[0] = demand.getType().name()+((demand.getNumber() == null) ? "": demand.getNumber());
+        data[1] = (demand.getCis() == null)
+                ? "" : demand.getCis();
+        data[2] = (demand.getGh_demande() == null)
+                ? "" : TimeFormatter.getGroupeHoraire(demand.getGh_demande());
+        data[3] = (demand.getGh_depart() == null)
+                ? "" : TimeFormatter.getGroupeHoraire(demand.getGh_depart());
+        data[4] = (demand.getGh_crm() == null)
+                ? "" : TimeFormatter.getGroupeHoraire(demand.getGh_crm());
+        data[5] = (demand.getGh_engage() == null)
+                ? "" : TimeFormatter.getGroupeHoraire(demand.getGh_engage());
+        data[6] = (demand.getGh_desengagement() == null)
+                ? "" : TimeFormatter.getGroupeHoraire(demand.getGh_desengagement());
+    }
+
     private void configUI() {
         setOrientation(LinearLayout.HORIZONTAL);
         setLayoutParams(new AbsListView.LayoutParams(
@@ -55,13 +91,13 @@ public class ListItemView extends LinearLayout {
         setPadding(5, 5, 5, 5);
 
         // configuring textViews
-        tv_agres.setText(demand.agres);
-        tv_cis.setText(demand.cis);
-        tv_ghDemande.setText(demand.gh_demande);
-        tv_ghDepart.setText(demand.gh_depart);
-        tv_ghCrm.setText(demand.gh_crm);
-        tv_ghEngage.setText(demand.gh_engage);
-        tv_ghDesengagement.setText(demand.gh_desengagement);
+        tv_agres.setText(data[0]);
+        tv_cis.setText(data[1]);
+        tv_ghDemande.setText(data[2]);
+        tv_ghDepart.setText(data[3]);
+        tv_ghCrm.setText(data[4]);
+        tv_ghEngage.setText(data[5]);
+        tv_ghDesengagement.setText(data[6]);
 
         tv_agres.setGravity(Gravity.CENTER);
         tv_cis.setGravity(Gravity.CENTER);
@@ -93,15 +129,17 @@ public class ListItemView extends LinearLayout {
     }
 
     public void setDemand(Demand demand) {
-        tv_agres.setText(demand.agres);
-        tv_cis.setText(demand.cis);
-        tv_ghDemande.setText(demand.gh_demande);
-        tv_ghDepart.setText(demand.gh_depart);
-        tv_ghCrm.setText(demand.gh_crm);
-        tv_ghEngage.setText(demand.gh_engage);
-        tv_ghDesengagement.setText(demand.gh_desengagement);
-        // update UI
-        postInvalidate();
+        removeAllViews();
+        processDemandData(demand);
+        configUI();
+        requestLayout();
+    }
+
+    public void setData(String[] data) {
+        removeAllViews();
+        processData(data);
+        configUI();
+        requestLayout();
     }
 
     public void setTextColor(int color) {
@@ -112,7 +150,5 @@ public class ListItemView extends LinearLayout {
         tv_ghCrm.setTextColor(color);
         tv_ghEngage.setTextColor(color);
         tv_ghDesengagement.setTextColor(color);
-        // update UI
-        postInvalidate();
     }
 }

@@ -19,18 +19,37 @@ import android.graphics.drawable.Drawable;
 public abstract class Entity implements IEntity {
 	
 	private long id = -1;
+	private String type;
 	private String message;
 	private Drawable icon;
+	private Bitmap bmp;
 	private IGeoPoint geoPoint;
 	private int state;
+	private boolean tagTextEnabled = true;
+	
+	private int bmpWidth	= 0;
+	private int bmpHeight	= 0;
+	private int bmp_x		= 0;
+	private int bmp_y		= 0;
+	private int txt_x 		= 0;
+	private int txt_y 		= 0;
+	private int txtBgLeft	= 0;
+	private int txtBgTop	= 0;
+	private int txtBgRight	= 0;
+	private int txtBgBottom	= 0;
 	
 	protected MyObservable observable;
 	protected Rect bounds;
 	protected Paint paint;
 	
-	public Entity(Drawable icon, String msg) {
+	public Entity(Drawable icon, String type) {
+		this(icon, type, "");
+	}
+	
+	public Entity(Drawable icon, String type, String message) {
 		this.icon = icon;
-		this.message = msg;
+		this.type = type;
+		this.message = message;
 		this.paint = new Paint();
 		this.paint.setAntiAlias(true);
 		this.bounds = new Rect();
@@ -42,36 +61,48 @@ public abstract class Entity implements IEntity {
 	@Override
 	public void draw(Canvas canvas, MapView mapView) {
 		Point p = mapView.getProjection().toMapPixels(geoPoint, null);
-		Bitmap bmp = null;
-		if (icon != null) bmp = ((BitmapDrawable) icon).getBitmap();
 		
-		int bmpWidth = (bmp == null) ? 0 : bmp.getWidth(); 
-		int bmpHeight = (bmp == null) ? 0 : bmp.getHeight();
-		int bmp_x = p.x-(bmpWidth/2);
-		int bmp_y = p.y-(bmpHeight/2);
+		if (icon != null) {
+			bmp = ((BitmapDrawable) icon).getBitmap();
+			bmpWidth = bmp.getWidth(); 
+			bmpHeight = bmp.getHeight();
+			bmp_x = p.x-(bmpWidth/2);
+			bmp_y = p.y-(bmpHeight/2);
+			canvas.drawBitmap(bmp, bmp_x, bmp_y, null);
+		}
 		
-		if (bmp != null) canvas.drawBitmap(bmp, bmp_x, bmp_y, null);
+		if (tagTextEnabled) {
+			paint.setTextSize(13);
+			float txtWidth = paint.measureText(type+message);
+			txt_x	= p.x-((int)txtWidth/2);
+			txt_y	= p.y+(bmpHeight/2)+ (int)(-paint.getFontMetrics().top)+3;
+			
+			txtBgLeft	= txt_x - 2;
+			txtBgTop	= txt_y + (int) paint.getFontMetrics().top;
+			txtBgRight	= txt_x + (int) txtWidth + 2;
+			txtBgBottom	= txt_y + (int) paint.getFontMetrics().bottom;
+			Rect r = new Rect(txtBgLeft, txtBgTop, txtBgRight, txtBgBottom);
+			paint.setColor(Color.argb(180, 0, 0, 0));
+			paint.setStyle(Style.FILL);
+			canvas.drawRect(r, paint);
+			paint.setColor(Color.WHITE);
+			canvas.drawText(type+message, txt_x, txt_y, paint);
+		} else {
+			txtBgRight = bmp_x+bmp.getWidth();
+			txtBgBottom = bmp_y+bmpHeight;
+		}
 		
-		paint.setTextSize(12);
-		float txtWidth = paint.measureText(message);
-		int txt_x	= p.x-((int)txtWidth/2);
-		int txt_y	= p.y+(bmpHeight/2)+15;
-		
-		int txtBgLeft	= txt_x - 2;
-		int txtBgTop	= txt_y - 12;
-		int txtBgRight	= txt_x + (int) txtWidth + 2;
-		int txtBgBottom	= txt_y + 3;
-		Rect r = new Rect(txtBgLeft, txtBgTop, txtBgRight, txtBgBottom);
-		paint.setColor(Color.argb(180, 0, 0, 0));
-		paint.setStyle(Style.FILL);
-		canvas.drawRect(r, paint);
-		paint.setColor(Color.WHITE);
-		canvas.drawText(message, txt_x, txt_y, paint);
-		
-		bounds.left		= (bmp_x >= txtBgLeft) ? bmp_x : txtBgLeft;
+		bounds.left		= (bmp_x <= txtBgLeft) ? bmp_x : txtBgLeft;
 		bounds.top		= bmp_y;
 		bounds.right	= (bmp_x+bmpWidth >= txtBgRight) ? bmp_x+bmpWidth : txtBgRight;
 		bounds.bottom	= txtBgBottom;
+		
+		// DEBUG purposes: see the entity boundaries
+//		Paint pa = new Paint();
+//		pa.setColor(Color.MAGENTA);
+//		pa.setStyle(Paint.Style.STROKE);
+//		pa.setStrokeWidth(1);
+//		canvas.drawRect(bounds, pa);
 	}
 
 	@Override
@@ -88,6 +119,16 @@ public abstract class Entity implements IEntity {
 	public boolean containsPoint(IGeoPoint geoP, MapView mapView) {
 		Point p = mapView.getProjection().toMapPixels(geoP, null);
 		return bounds.contains(p.x, p.y);
+	}
+	
+	@Override
+	public String getType() {
+		return type;
+	}
+	
+	@Override
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Override
@@ -131,6 +172,12 @@ public abstract class Entity implements IEntity {
 	@Override
 	public void setState(int state) {
 		this.state = state;
+	}
+	
+	@Override
+	public void setTagTextEnabled(boolean enabled) {
+		this.tagTextEnabled = enabled;
+		notifyObservers();
 	}
 
 	@Override

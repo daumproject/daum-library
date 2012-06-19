@@ -1,4 +1,4 @@
-package org.daum.library.android.agetac.messages.view;
+package org.daum.library.android.messages.view;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -8,8 +8,8 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import org.daum.common.message.api.Message;
-import org.daum.library.android.agetac.messages.listener.MessagesEvent;
-import org.daum.library.android.agetac.messages.listener.MessagesEvent.MessagesEventType;
+import org.daum.library.android.messages.listener.MessagesEvent;
+import org.daum.library.android.messages.listener.MessagesEvent.MessagesEventType;
 
 /**
  * Created with IntelliJ IDEA.

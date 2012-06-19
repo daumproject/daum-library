@@ -1,11 +1,9 @@
 package org.daum.library.android.sitac.view.entity;
 
-import java.util.Date;
-
 import org.daum.common.gps.api.IGpsPoint;
-import org.daum.common.gps.impl.GpsPoint;
 import org.daum.common.model.api.Danger;
 import org.daum.common.model.api.Demand;
+import org.daum.common.model.api.IModel;
 import org.daum.common.model.api.Target;
 import org.daum.common.model.api.VehicleSector;
 import org.daum.common.model.api.VehicleType;
@@ -15,23 +13,37 @@ import org.osmdroid.util.GeoPoint;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 
 
 public class EntityFactory implements IEntityFactory {
+	
+	private static final String TAG = "EntityFactory";
 	
 	private Context ctx;
 	
 	public EntityFactory(Context ctx) {
 		this.ctx = ctx;
 	}
-
+	
 	@Override
-	public DemandEntity buildEntity(Demand d) {
+	public IEntity build(IModel m) {
+		if (m instanceof Demand) return build((Demand) m);
+		else if (m instanceof Target) return build((Target) m);
+		else if (m instanceof Danger) return build((Danger) m);
+		else Log.w(TAG, "build("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
+		return null;
+	}
+
+	private DemandEntity build(Demand d) {
 		VehicleType type = d.getType();
 		VehicleSector sector = VehicleType.getSector(type);
-		String iconPath = getIconPath(sector);
+		// if the gh_engage is not set, then it's a dotted picto
+		boolean dotted = (d.getGh_engage() == null) ? true : false;
+		String iconPath = getIconPath(sector, dotted);
 		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
-		DemandEntity e = new DemandEntity(icon, type.name());
+		String number = (d.getNumber() == null) ? "" : d.getNumber();
+		DemandEntity e = new DemandEntity(icon, type.name(), number);
 		IGpsPoint location = d.getLocation();
 		if (location != null) {
 			IGeoPoint geoP = new GeoPoint(location.getLat(), location.getLong_());
@@ -40,8 +52,7 @@ public class EntityFactory implements IEntityFactory {
 		return e;
 	}
 	
-	@Override
-	public DangerEntity buildEntity(Danger d) {
+	private DangerEntity build(Danger d) {
 		Danger.Type type = d.getType();
 		String iconPath = getIconPath(type);
 		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
@@ -66,8 +77,7 @@ public class EntityFactory implements IEntityFactory {
 		return e;
 	}
 	
-	@Override
-	public TargetEntity buildEntity(Target t) {
+	private TargetEntity build(Target t) {
 		Target.Type type = t.getType();
 		String iconPath = getIconPath(type);
 		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
@@ -95,66 +105,28 @@ public class EntityFactory implements IEntityFactory {
 		return e;
 	}
 	
-	@Override
-	public Demand buildDemand(DemandEntity ent) {
-		VehicleType type = VehicleType.valueOf(ent.getMessage());
-		IGeoPoint geoP = ent.getGeoPoint();
-		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
-		System.out.println("buildDemand >> "+location);
-		Demand d = new Demand(type, "", "", new Date(), null, null, null, null, location);
-		return d;
-	}
-	
-	@Override
-	public Danger buildDanger(DangerEntity ent) {
-		IGeoPoint geoP = ent.getGeoPoint();
-		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
-		Danger.Type type = Danger.Type.WATER;
-		if (ent.getMessage().equals("Incendie")) {
-			type = Danger.Type.FIRE;
-		} else if (ent.getMessage().equals("Risques particuliers")) {
-			type = Danger.Type.CHEM;
-		}
-		Danger d = new Danger(type, location);
-		return d;
-	}
-
-	@Override
-	public Target buildTarget(TargetEntity ent) {
-		IGeoPoint geoP = ent.getGeoPoint();
-		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
-		Target.Type type = Target.Type.WATER;
-		if (ent.getMessage().equals("Incendie")) {
-			type = Target.Type.FIRE;
-		} else if (ent.getMessage().equals("Risque particulier")) {
-			type = Target.Type.CHEM;
-		} else if (ent.getMessage().equals("Personne")) {
-			type = Target.Type.VICTIM;
-		}
-		Target t = new Target(type, location);
-		return t;
-	}
-	
-	private String getIconPath(VehicleSector sector) {
+	private String getIconPath(VehicleSector sector, boolean isDotted) {
 		String iconPath = "";
+		String dotted = (isDotted) ? "dotted_" : "";
+		
 		switch (sector) {
 			case SAP:
-				iconPath = "/images/picto_green_dotted_agres.png";
+				iconPath = "/images/picto_green_"+dotted+"agres.png";
 				break;
 			case ALIM:
-				iconPath = "/images/picto_blue_dotted_agres.png";
+				iconPath = "/images/picto_blue_"+dotted+"agres.png";
 				break;
 			case INC:
-				iconPath = "/images/picto_red_dotted_agres.png";
+				iconPath = "/images/picto_red_"+dotted+"agres.png";
 				break;
 			case CHEM:
-				iconPath = "/images/picto_orange_dotted_agres.png";
+				iconPath = "/images/picto_orange_"+dotted+"agres.png";
 				break;
 			case COM:
-				iconPath = "/images/picto_violet_dotted_agres.png";
+				iconPath = "/images/picto_violet_"+dotted+"agres.png";
 				break;
 			case RTN:
-				iconPath = "/images/picto_black_dotted_agres.png";
+				iconPath = "/images/picto_black_"+dotted+"agres.png";
 				break;
 		}
 		return iconPath;

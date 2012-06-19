@@ -1,4 +1,4 @@
-package org.daum.library.android.agetac.messages.view;
+package org.daum.library.android.messages.view;
 
 import android.R;
 import android.app.Activity;
@@ -9,8 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import org.daum.common.message.api.Message;
-import org.daum.library.android.agetac.messages.listener.IMessagesListener;
-import org.daum.library.android.agetac.messages.view.ListItemView.MessageType;
+import org.daum.library.android.messages.listener.IMessagesListener;
+import org.daum.library.android.messages.view.ListItemView.MessageType;
 
 /**
  * Created with IntelliJ IDEA.

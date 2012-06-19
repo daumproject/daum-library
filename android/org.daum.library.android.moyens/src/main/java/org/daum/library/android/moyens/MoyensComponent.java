@@ -86,7 +86,7 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
             });
 
         } else {
-            Log.w(TAG, "Cannot handle received object on port \"inDemand\". Received object: "+inResource.getClass().getSimpleName());
+            Log.w(TAG, "Cannot handle received object on port \"inDemand\". (received: "+inResource.getClass().getSimpleName()+", expected: "+Demand.class.getSimpleName()+")");
         }
         if (D) Log.i(TAG, "END demandIncoming");
     }

@@ -13,9 +13,13 @@ import android.graphics.drawable.Drawable;
 public class ArrowEntity extends Entity {
 	
 	protected ArrayList<IGeoPoint> points;
+	
+	public ArrowEntity(Drawable icon, String type, int arrowColor) {
+		this(icon, type, "", arrowColor);
+	}
 
-	public ArrowEntity(Drawable icon, String msg, int arrowColor) {
-		super(icon, msg);
+	public ArrowEntity(Drawable icon, String type, String message, int arrowColor) {
+		super(icon, type, message);
 		points = new ArrayList<IGeoPoint>();
 		paint.setColor(arrowColor);
 	}
@@ -42,6 +46,18 @@ public class ArrowEntity extends Entity {
 		}
 	}
 	
+	@Override
+	public boolean containsPoint(IGeoPoint geoP, MapView mapView) {
+		Projection prj = mapView.getProjection();
+		for (int i=0; i<points.size()-1; i++) {
+			Point a = prj.toMapPixels(points.get(i), null);
+			Point b = prj.toMapPixels(points.get(i+1), null);
+			Point pt = prj.toMapPixels(geoP, null);
+			if (isPointOnLine(a, b, pt)) return true;
+		}
+		return false;
+	}
+	
 	public void addPoint(IGeoPoint geoP) {
 		points.add(geoP);
 		notifyObservers();
@@ -54,5 +70,18 @@ public class ArrowEntity extends Entity {
 	 */
 	public boolean hasOneLine() {
 		return (points.size() > 1);
+	}
+	
+	public boolean isPointOnLine(Point a, Point b, Point pt) {
+		float A = -(b.y-a.y) / (b.x-a.x);
+		float B = a.y - (A * a.x); // y = Ax + B
+		int pt_y = Math.abs((int) (pt.x*A + B));
+		pt.y = Math.abs(pt.y);
+		
+		System.out.println("pt_y= "+pt_y);
+		System.out.println("pt.y= "+pt.y);
+		System.out.println("===========");
+		
+		return Math.abs(pt_y - pt.y) < 10;
 	}
 }

@@ -1,8 +1,8 @@
 package org.daum.library.android.sitac.controller;
 
-import org.daum.common.model.api.Danger;
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.Target;
+import java.util.Hashtable;
+
+import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACMenuView;
@@ -26,57 +26,52 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	private SITACMapView mapView;
 	private SITACMenuView menuView;
 	private IEntityFactory factory;
+	private Hashtable<IModel, IEntity> map;
 	
 	public EngineHandler(IEntityFactory factory) {
 		this.factory = factory;
+		this.map = new Hashtable<IModel, IEntity>();
 	}
 	
 	@Override
-	public void onDemandAdded(Demand d) {
-		if (D) Log.i(TAG, "onDemandAdded(): "+d);
-		DemandEntity e = factory.buildEntity(d);
+	public void onAdd(IModel m) {
+		if (D) Log.i(TAG, "onAdd(): "+m);
+		IEntity e = factory.build(m);
 		e.setState(IEntity.STATE_EDITED);
-		if (e.getGeoPoint() == null) {
-			// the entity has no location, add it to the menu
-			menuView.addEntityWithNoLocation(e);
-		} else {
-			// the entity has a location, add it to the map
-			mapView.addEntity(e);
-		}
-	}
-
-	@Override
-	public void onDangerAdded(Danger d) {
-		if (D) Log.i(TAG, "onDangerAdded()"+d);
-		IEntity e = factory.buildEntity(d);
-		mapView.addEntity(e);
-		e.setState(IEntity.STATE_EDITED);
-	}
-
-	@Override
-	public void onTargetAdded(Target t) {
-		if (D) Log.i(TAG, "onTargetAdded()"+t);
-		IEntity e = factory.buildEntity(t);
-		mapView.addEntity(e);
-		e.setState(IEntity.STATE_EDITED);
-	}
-
-	@Override
-	public void onDemandUpdated(Demand d) {
-		if (D) Log.i(TAG, "onDemandUpdated(): "+d);
-		DemandEntity e = factory.buildEntity(d);
-		mapView.addEntity(e);
-		e.setState(IEntity.STATE_EDITED);
-	}
-
-	public void registerMenuView(SITACMenuView menuView) {
-		this.menuView = menuView;
 		
+		map.put(m, e);
+		
+		if (e instanceof DemandEntity) {
+			if (e.getGeoPoint() == null) {
+				// the entity has no location, add it to the menu
+				menuView.addEntityWithNoLocation((DemandEntity) e);
+				return;
+			}
+		}
+		
+		// the entity has a location, add it to the map
+		mapView.addEntity(e);
+	}
+	
+	@Override
+	public void onUpdate(IModel m) {
+		if (D) Log.i(TAG, "onUpdate(): "+m);
+		IEntity e = factory.build(m);
+		e.setState(IEntity.STATE_EDITED);
+		mapView.addEntity(e);
+	}
+	
+	@Override
+	public void onDelete(IModel m) {
+		// TODO
+		if (D) Log.i(TAG, "onDelete(): "+m);
+	}
+
+    public void registerMenuView(SITACMenuView menuView) {
+		this.menuView = menuView;
 	}
 
 	public void registerMapView(SITACMapView mapView) {
 		this.mapView = mapView;
-		
 	}
-
 }

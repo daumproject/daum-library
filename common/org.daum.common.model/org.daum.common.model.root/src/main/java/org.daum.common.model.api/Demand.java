@@ -1,6 +1,5 @@
 package org.daum.common.model.api;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import org.daum.common.gps.api.IGpsPoint;
@@ -12,7 +11,7 @@ import org.daum.common.gps.api.IGpsPoint;
  * Time: 17:38
  * To change this template use File | Settings | File Templates.
  */
-public class Demand implements Serializable {
+public class Demand implements IModel {
 
 	private static final long serialVersionUID = 7728877078263492496L;
 	
@@ -97,6 +96,6 @@ public class Demand implements Serializable {
 	public String toString() {
 		return type.name() + "_" + number + "_" + cis + "_" + gh_crm
 				+ "_" + gh_demande + "_" + gh_depart + "_"
-				+ gh_engage + "_" + gh_desengagement;
+				+ gh_engage + "_" + gh_desengagement+ "_" +location;
 	}
 }

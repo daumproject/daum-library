@@ -1,32 +1,27 @@
 package org.daum.library.android.sitac.listener;
 
-import org.daum.common.model.api.Danger;
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.Target;
+import org.daum.common.model.api.IModel;
 
 public interface OnEngineStateChangeListener {
 
 	/**
-	 * Called when a new Demand is added to the engine
-	 * @param d the new demand
+	 * Called when a new model object is added to the engine
+	 * 
+	 * @param m the new model added
 	 */
-	void onDemandAdded(Demand d);
+	void onAdd(IModel m);
 	
 	/**
-	 * Called when a new Danger is added to the engine
-	 * @param d the new danger
+	 * Called when a new model object is updated in the engine
+	 * 
+	 * @param m the updated model
 	 */
-	void onDangerAdded(Danger d);
+	void onUpdate(IModel m);
 
 	/**
-	 * Called when a new Target is added to the engine
-	 * @param t the new target
+	 * Called when a model object has been deleted from the engine
+	 * 
+	 * @param m the deleted model object
 	 */
-	void onTargetAdded(Target t);
-	
-	/**
-	 * Called when a demand is update in the engine
-	 * @param d the updated demand
-	 */
-	void onDemandUpdated(Demand d);
+	void onDelete(IModel m);
 }

@@ -1,18 +1,18 @@
-package org.daum.library.android.agetac.messages;
+package org.daum.library.android.messages;
 
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TabHost;
 import org.daum.common.message.api.Message;
-import org.daum.library.android.agetac.messages.view.MessagesView;
-import org.daum.library.android.agetac.messages.view.ListItemView.MessageType;
+import org.daum.library.android.messages.view.MessagesView;
+import org.daum.library.android.messages.view.ListItemView.MessageType;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
-import org.daum.library.android.agetac.messages.listener.IMessagesListener;
+import org.daum.library.android.messages.listener.IMessagesListener;
 
 
 /**

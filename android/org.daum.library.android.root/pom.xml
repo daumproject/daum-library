@@ -26,6 +26,8 @@
         <module>../org.daum.library.android.ehcache</module>
         <module>../org.daum.library.android.replicatingMap</module>
         <module>../org.daum.library.android.sitac</module>
+        <module>../org.daum.library.android.moyens</module>
+        <module>../org.daum.library.android.messages</module>
     </modules>
 
     <dependencies>

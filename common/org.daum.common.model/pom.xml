@@ -6,12 +6,12 @@
     <artifactId>org.daum.common.model</artifactId>
     <packaging>pom</packaging>
     <name>DAUM :: Common :: Model :: Root</name>
-    <version>1.1</version>
+    <version>1.2</version>
 
     <parent>
         <groupId>org.daum.library</groupId>
         <artifactId>org.daum.library</artifactId>
-        <version>1.7.5</version>
+        <version>1.7.8</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 

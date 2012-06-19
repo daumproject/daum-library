@@ -1,48 +1,77 @@
 package org.daum.library.android.sitac.model;
 
-import java.util.Hashtable;
+import java.util.ArrayList;
 
 import org.daum.common.model.api.Danger;
 import org.daum.common.model.api.Demand;
+import org.daum.common.model.api.IModel;
 import org.daum.common.model.api.Target;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 
-public class SITACEngine implements ISITACEngine {
+import android.util.Log;
 
-	private Hashtable<Long, Demand> demands;
-	private Hashtable<Long, Danger> dangers;
-	private Hashtable<Long, Target> targets;
+/**
+ * Here you should save/update/delete data from the Replica
+ */
+public class SITACEngine {
+	
+	private static final String TAG = "SITACEngine";
+
+	private ArrayList<Demand> demands;
+	private ArrayList<Danger> dangers;
+	private ArrayList<Target> targets;
 	private OnEngineStateChangeListener listener;
 	
 	public SITACEngine(OnEngineStateChangeListener engineHandler) {
-		this.demands = new Hashtable<Long, Demand>();
-		this.dangers = new Hashtable<Long, Danger>();
-		this.targets = new Hashtable<Long, Target>();
+		this.demands = new ArrayList<Demand>();
+		this.dangers = new ArrayList<Danger>();
+		this.targets = new ArrayList<Target>();
 		listener = engineHandler;
 	}
-
-    @Override
-	public void addDemand(Demand d) {
-		demands.put(42L, d);
-		if (listener != null) listener.onDemandAdded(d);
+	
+	public void add(IModel m) {
+		if (m instanceof Demand) addDemand((Demand) m);
+		else if (m instanceof Danger) addDanger((Danger) m);
+		else if (m instanceof Target) addTarget((Target) m);
+		else {
+			Log.w(TAG, "add("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
+			return;
+		}
+		if (listener != null) listener.onAdd(m);
+	}
+	
+	public void update(IModel m) {
+		if (m instanceof Demand) updateDemand((Demand) m);
+		else if (m instanceof Danger) updateDanger((Danger) m);
+		else if (m instanceof Target) updateTarget((Target) m);
+		else {
+			Log.w(TAG, "update("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
+			return;
+		}
+		if (listener != null) listener.onUpdate(m);
 	}
 
-    @Override
-	public void addDanger(Danger d) {
-		dangers.put(42L, d);
-		if (listener != null) listener.onDangerAdded(d);
+	private void addDemand(Demand d) {
+		demands.add(d);
 	}
 
-    @Override
-	public void addTarget(Target t) {
-		targets.put(42L, t);
-		if (listener != null) listener.onTargetAdded(t);
+	private void addDanger(Danger d) {
+		dangers.add(d);
 	}
 
-    @Override
-	public void updateDemand(Demand d) {
-    	demands.put(42L, d);
-    	System.out.println("WESH HEU BATARD");
-		if (listener != null) listener.onDemandUpdated(d);
+	private void addTarget(Target t) {
+		targets.add(t);
 	}
+
+	private void updateDemand(Demand d) {
+    	// TODO
+	}
+
+	private void updateDanger(Danger d) {
+        // TODO
+    }
+
+	private void updateTarget(Target t) {
+        // TODO
+    }
 }

@@ -31,6 +31,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 public class SITACMenuView extends RelativeLayout implements Observer {
@@ -39,18 +40,16 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	private static final String TAG = "SITACMenuView";
 	
 	// menu UI constants
-	private static final int MIN_MENU_WIDTH = 210;
-	private static final int MAX_MENU_WIDTH = 350;
 	private static final int MENU_WIDTH = 265;
 	
 	// view ids
 	private static final int ID_HIDE_SHOW_BTN		= 42;
 	private static final int ID_NO_LOCATION_MENU	= 1664;
+	private static final int ID_MENU_SEPARATOR		= 1337;
 	
 	// string UI constants
 	private static final String TEXT_HIDE_BTN = "X";
 	private static final String TEXT_SHOW_BTN = "[ ]";
-	private static final String TEXT_RESIZE_BTN = "<>";
 	
 	// menu data constants
 	private static final String GRP_DANGERS = "Dangers";
@@ -74,8 +73,6 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	private Button resizeButton;
 	private Button hideShowButton;
 	private RelativeLayout.LayoutParams params;
-	private int old_dx = -1;
-	private int menuWidth = MIN_MENU_WIDTH;
 	private Hashtable<DemandEntity, IExpandableMenuItem> noLocationDemands;
 	private List<IExpandableMenuItem> noLocationItems;
 	
@@ -151,13 +148,23 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 		noLocMenuParams.addRule(ALIGN_PARENT_TOP);
 		addView(noLocationMenu, noLocMenuParams);
 		noLocationMenu.setVisibility(View.GONE); // do not display this menu by default
+		
+		GradientDrawable menuSeparationDrawable = new GradientDrawable(Orientation.LEFT_RIGHT, new int[] {0xB4000000, 0xB4FFFFFF, 0xB4000000});
+		menuSeparationDrawable.setSize(MENU_WIDTH, 3);
+		ImageView menuSeparation = new ImageView(ctx);
+		menuSeparation.setId(ID_MENU_SEPARATOR);
+		menuSeparation.setImageDrawable(menuSeparationDrawable);
+		RelativeLayout.LayoutParams sepParams = new RelativeLayout.LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		sepParams.addRule(BELOW, noLocationMenu.getId());
+		addView(menuSeparation, sepParams);
 
         menu.setDivider(new GradientDrawable(Orientation.LEFT_RIGHT, new int[] {0xB4FFFFFF, 0}));
         menu.setChildDivider(new GradientDrawable(Orientation.LEFT_RIGHT, new int[] {0xB4D3D3D3, 0}));
         menu.setDividerHeight(1);
         
 		RelativeLayout.LayoutParams menuParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-		menuParams.addRule(BELOW, noLocationMenu.getId());
+		menuParams.addRule(BELOW, menuSeparation.getId());
 		addView(menu, menuParams);
 		
 		hideShowButton.setId(ID_HIDE_SHOW_BTN);
@@ -168,13 +175,6 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 		hideBtnParams.addRule(ALIGN_PARENT_RIGHT);
 		hideBtnParams.addRule(ALIGN_PARENT_TOP);
 		addView(hideShowButton, hideBtnParams);
-				
-//		resizeButton.setText(TEXT_RESIZE_BTN);
-//		RelativeLayout.LayoutParams resizeBtnParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-//		resizeBtnParams.setMargins(5, 0, 5, 0);
-//		resizeBtnParams.addRule(ALIGN_PARENT_RIGHT);
-//		resizeBtnParams.addRule(BELOW, hideShowButton.getId());
-//		addView(resizeButton, resizeBtnParams);
 	}
 	
 	private void defineCallbacks() {
@@ -185,18 +185,19 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 				Button b = (Button) v;
 				if (b.getText().equals(TEXT_HIDE_BTN)) {
 					// hide the menu
-					menuWidth = params.width;
 					params.width = hideShowButton.getWidth();
 					params.height = hideShowButton.getHeight();
 					menu.setVisibility(View.GONE);
+					noLocationMenu.setVisibility(View.GONE);
 					resizeButton.setVisibility(View.GONE);
 					setLayoutParams(params);
 					b.setText(TEXT_SHOW_BTN);
 				} else {
 					// show the menu
-					params.width = menuWidth;
+					params.width = MENU_WIDTH;
 					params.height = LayoutParams.WRAP_CONTENT;
 					menu.setVisibility(View.VISIBLE);
+					if (!noLocationItems.isEmpty()) noLocationMenu.setVisibility(View.VISIBLE);
 					resizeButton.setVisibility(View.VISIBLE);
 					setLayoutParams(params);
 					b.setText(TEXT_HIDE_BTN);
@@ -204,42 +205,10 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 			}
 		});
 		
-//		resizeButton.setOnTouchListener(new OnTouchListener() {
-//			@Override
-//			public boolean onTouch(View v, MotionEvent event) {					
-//					switch (event.getAction()) {
-//					case MotionEvent.ACTION_UP:
-//						old_dx = -1;
-//						break;
-//						
-//					case MotionEvent.ACTION_MOVE:
-//						int currentX = resizeButton.getLeft() + (int) event.getX();
-//						int dx = currentX - old_dx;
-//						params.width = getWidth() + dx;
-//						if (old_dx != -1 ) {
-//							if (dx > 0) {
-//								// enlarging
-//								if (getWidth()+dx > MAX_MENU_WIDTH) params.width = MAX_MENU_WIDTH; 
-//								setLayoutParams(params);
-//								
-//							} else if (dx < 0) {
-//								// reducing
-//								if (getWidth()+dx < MIN_MENU_WIDTH) params.width = MIN_MENU_WIDTH;
-//								setLayoutParams(params);
-//							}
-//						}
-//						old_dx = currentX;
-//						break;
-//					}
-//				return false;
-//			}
-//		});
-		
 		noLocationMenu.setOnChildClickListener(new OnChildClickListener() {
 			
 			@Override
 			public boolean onChildClick(ExpandableListView list, View itemView, int grpPos, int childPos, long id) {
-				final IExpandableMenuItem grp = noLocationAdapter.getGroup(grpPos);
 				final IExpandableMenuItem item = noLocationAdapter.getChild(grpPos, childPos);
 				if (listener != null) {
 					DemandEntity de = new DemandEntity(item.getIcon(), item.getText());
@@ -309,13 +278,38 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 		});
 	}
 	
+	/**
+	 * Adds an entity to the noLocationMenu
+	 * If the menu is not currently displayed, it will be added to the view
+	 * 
+	 * @param e a demand entity with no location set
+	 */
 	public void addEntityWithNoLocation(DemandEntity e) {
-		IExpandableMenuItem item = new ExpandableMenuItem(e.getIcon(), e.getMessage());
+		IExpandableMenuItem item = new ExpandableMenuItem(e.getIcon(), e.getType()+e.getMessage());
 		noLocationMenuList.getItems(0).add(item);
-		if (noLocationMenu.getVisibility() == View.GONE) noLocationMenu.setVisibility(View.VISIBLE);
+		if (hideShowButton.getText().equals(TEXT_HIDE_BTN) && noLocationMenu.getVisibility() == View.GONE) {
+			noLocationMenu.setVisibility(View.VISIBLE);
+		}
+		
 		e.addObserver(this);
 		noLocationDemands.put(e, item);
 		noLocationAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void update(Observable observable, Object data) {
+		// an entity of the NO_LOCATION group has its state changed
+		// if the entity gets a location, remove it from the menuGrp
+		IEntity entity = (IEntity) data;
+		if (entity.getGeoPoint() != null) {
+			IExpandableMenuItem item = noLocationDemands.get(entity);
+			noLocationDemands.remove(entity);
+			noLocationMenuList.removeItem(0, item);
+			noLocationAdapter.notifyDataSetChanged();
+			if (noLocationMenuList.getItems(0).size() == 0) {
+				noLocationMenu.setVisibility(View.GONE);
+			}
+		}
 	}
 	
 	private String[] getVehicleTypeValues(String menuItemText) {
@@ -349,21 +343,5 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	
 	public void setOnMenuViewEventListener(OnMenuViewEventListener listener) {
 		this.listener = listener;
-	}
-
-	@Override
-	public void update(Observable observable, Object data) {
-		// an entity of the NO_LOCATION group has its state changed
-		// if the entity gets a location, remove it from the menuGrp
-		IEntity entity = (IEntity) data;
-		if (entity.getGeoPoint() != null) {
-			IExpandableMenuItem item = noLocationDemands.get(entity);
-			noLocationDemands.remove(entity);
-			noLocationMenuList.removeItem(0, item);
-			noLocationAdapter.notifyDataSetChanged();
-			if (noLocationMenuList.getItems(0).size() == 0) {
-				noLocationMenu.setVisibility(View.GONE);
-			}
-		}
 	}
 }

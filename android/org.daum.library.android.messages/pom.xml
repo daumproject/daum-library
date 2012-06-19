@@ -1,16 +1,16 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>org.daum.library.android.agetac.messages</artifactId>
-    <name>Daum :: Library :: Android :: Agetac :: Messages</name>
-    <version>1.7.6-SNAPSHOT</version>
+    <artifactId>org.daum.library.android.messages</artifactId>
+    <name>Daum :: Library :: Android :: Messages</name>
+    <version>1.7.9-SNAPSHOT</version>
     <packaging>jar</packaging>
 
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
         <groupId>org.daum.library.android</groupId>
-        <version>1.7.5</version>
+        <version>1.7.8</version>
         <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
 
