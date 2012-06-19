@@ -37,6 +37,7 @@ public abstract class Entity implements IEntity {
 	private int txtBgTop	= 0;
 	private int txtBgRight	= 0;
 	private int txtBgBottom	= 0;
+	private int bmpPaddingBottom = 0;
 	
 	protected MyObservable observable;
 	protected Rect bounds;
@@ -52,6 +53,7 @@ public abstract class Entity implements IEntity {
 		this.message = message;
 		this.paint = new Paint();
 		this.paint.setAntiAlias(true);
+		this.paint.setTextSize(13);
 		this.bounds = new Rect();
 		this.state = STATE_NEW;
 		
@@ -64,18 +66,21 @@ public abstract class Entity implements IEntity {
 		
 		if (icon != null) {
 			bmp = ((BitmapDrawable) icon).getBitmap();
-			bmpWidth = bmp.getWidth(); 
-			bmpHeight = bmp.getHeight();
-			bmp_x = p.x-(bmpWidth/2);
-			bmp_y = p.y-(bmpHeight/2);
-			canvas.drawBitmap(bmp, bmp_x, bmp_y, null);
+            if (bmp != null) {
+                bmpWidth = bmp.getWidth();
+                bmpHeight = bmp.getHeight();
+                bmpPaddingBottom = 3;
+            }
 		}
 		
-		if (tagTextEnabled) {
-			paint.setTextSize(13);
+        bmp_x = p.x-(bmpWidth/2);
+        bmp_y = p.y-(bmpHeight/2);
+        if (bmp != null ) canvas.drawBitmap(bmp, bmp_x, bmp_y, null);
+		
+		if (tagTextEnabled || bmp == null) { // automatically display tagText if bmp is null
 			float txtWidth = paint.measureText(type+message);
 			txt_x	= p.x-((int)txtWidth/2);
-			txt_y	= p.y+(bmpHeight/2)+ (int)(-paint.getFontMetrics().top)+3;
+			txt_y	= p.y+(bmpHeight/2)+ (int)(-(paint.getFontMetrics().top)+bmpPaddingBottom);
 			
 			txtBgLeft	= txt_x - 2;
 			txtBgTop	= txt_y + (int) paint.getFontMetrics().top;
@@ -93,7 +98,7 @@ public abstract class Entity implements IEntity {
 		}
 		
 		bounds.left		= (bmp_x <= txtBgLeft) ? bmp_x : txtBgLeft;
-		bounds.top		= bmp_y;
+		bounds.top		= (bmp_y <= txtBgTop) ? bmp_y : txtBgTop;
 		bounds.right	= (bmp_x+bmpWidth >= txtBgRight) ? bmp_x+bmpWidth : txtBgRight;
 		bounds.bottom	= txtBgBottom;
 		

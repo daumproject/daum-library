@@ -40,8 +40,7 @@ public class EntityFactory implements IEntityFactory {
 		VehicleSector sector = VehicleType.getSector(type);
 		// if the gh_engage is not set, then it's a dotted picto
 		boolean dotted = (d.getGh_engage() == null) ? true : false;
-		String iconPath = getIconPath(sector, dotted);
-		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
+		Drawable icon = getIcon(sector, dotted);
 		String number = (d.getNumber() == null) ? "" : d.getNumber();
 		DemandEntity e = new DemandEntity(icon, type.name(), number);
 		IGpsPoint location = d.getLocation();
@@ -54,8 +53,7 @@ public class EntityFactory implements IEntityFactory {
 	
 	private DangerEntity build(Danger d) {
 		Danger.Type type = d.getType();
-		String iconPath = getIconPath(type);
-		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
+		Drawable icon = getIcon(type);
 		String name;
 		switch (type) {
 			case WATER:
@@ -79,8 +77,7 @@ public class EntityFactory implements IEntityFactory {
 	
 	private TargetEntity build(Target t) {
 		Target.Type type = t.getType();
-		String iconPath = getIconPath(type);
-		Drawable icon = DrawableFactory.buildDrawable(ctx, iconPath);
+		Drawable icon = getIcon(type);
 		String name;
 		switch (type) {
 			case WATER:
@@ -105,65 +102,69 @@ public class EntityFactory implements IEntityFactory {
 		return e;
 	}
 	
-	private String getIconPath(VehicleSector sector, boolean isDotted) {
-		String iconPath = "";
-		String dotted = (isDotted) ? "dotted_" : "";
-		
+	private Drawable getIcon(VehicleSector sector, boolean isDotted) {
 		switch (sector) {
 			case SAP:
-				iconPath = "/images/picto_green_"+dotted+"agres.png";
-				break;
+				if (isDotted) return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_GREEN_DOTTED_AGRES); 
+				else return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_GREEN_AGRES);
+				
 			case ALIM:
-				iconPath = "/images/picto_blue_"+dotted+"agres.png";
-				break;
+				if (isDotted) return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_BLUE_DOTTED_AGRES); 
+				else return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_BLUE_AGRES);
+				
 			case INC:
-				iconPath = "/images/picto_red_"+dotted+"agres.png";
-				break;
+				if (isDotted) return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_RED_DOTTED_AGRES); 
+				else return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_RED_AGRES);
+				
 			case CHEM:
-				iconPath = "/images/picto_orange_"+dotted+"agres.png";
-				break;
+				if (isDotted) return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_ORANGE_DOTTED_AGRES); 
+				else return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_ORANGE_AGRES);
+				
 			case COM:
-				iconPath = "/images/picto_violet_"+dotted+"agres.png";
-				break;
+				if (isDotted) return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_VIOLET_DOTTED_AGRES); 
+				else return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_VIOLET_AGRES);
+				
 			case RTN:
-				iconPath = "/images/picto_black_"+dotted+"agres.png";
-				break;
+				if (isDotted) return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_BLACK_DOTTED_AGRES); 
+				else return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_BLACK_AGRES);
+				
+			default:
+				return null;
 		}
-		return iconPath;
 	}
 	
-	private String getIconPath(Danger.Type dangerType) {
-		String iconPath = "";
+	private Drawable getIcon(Danger.Type dangerType) {
 		switch (dangerType) {
 			case WATER:
-				iconPath = "/images/picto_blue_up.png";
-				break;
+				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_BLUE_UP);
+				
 			case FIRE:
-				iconPath = "/images/picto_red_up.png";
-				break;
+				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_RED_UP);
+				
 			case CHEM:
-				iconPath = "/images/picto_orange_up.png";
-				break;
+				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_ORANGE_UP);
+				
+			default:
+				return null;
 		}
-		return iconPath;
 	}
 	
-	private String getIconPath(Target.Type targetType) {
-		String iconPath = "";
+	private Drawable getIcon(Target.Type targetType) {
 		switch (targetType) {
 			case WATER:
-				iconPath = "/images/picto_blue_down.png";
-				break;
+				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_BLUE_DOWN);
+				
 			case FIRE:
-				iconPath = "/images/picto_red_down.png";
-				break;
+				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_RED_DOWN);
+				
 			case CHEM:
-				iconPath = "/images/picto_orange_down.png";
-				break;
+				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_ORANGE_DOWN);
+				
 			case VICTIM:
-				iconPath = "/images/picto_green_down.png";
-				break;
+				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_GREEN_DOWN);
+				
+			default:
+				return null;
 		}
-		return iconPath;
 	}
 }
