@@ -2,10 +2,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.daum.library.javase</groupId>
-    <artifactId>org.daum.library.javase.root</artifactId>
+    <groupId>org.daum.library.android</groupId>
+    <artifactId>org.daum.library.android.root</artifactId>
     <packaging>pom</packaging>
-    <name>DAUM :: Library :: JavaSE :: Root</name>
+    <name>DAUM :: Library :: Android :: Root</name>
+
     <parent>
         <groupId>org.daum.library</groupId>
         <artifactId>org.daum.library</artifactId>
@@ -15,24 +16,34 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
+        <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
     </properties>
 
     <modules>
-        <module>../org.daum.library.javase.ehcache</module>
-        <module>../org.daum.library.javase.replica</module>
-        <module>../org.daum.library.javase.ormHM</module>
-        <module>../org.daum.library.javase.fakeDemo</module>
+        <module>../org.daum.library.android.demos</module>
+        <module>../org.daum.library.android.ormHM</module>
+        <module>../org.daum.library.android.ehcache</module>
+        <module>../org.daum.library.android.replicatingMap</module>
+        <module>../org.daum.library.android.sitac</module>
+        <module>../org.daum.library.android.moyens</module>
+        <module>../org.daum.library.android.messages</module>
     </modules>
 
     <dependencies>
         <dependency>
             <groupId>org.kevoree.tools</groupId>
-            <artifactId>org.kevoree.tools.javase.framework</artifactId>
+            <artifactId>org.kevoree.tools.annotation.api</artifactId>
             <version>${kevoree.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.google.android</groupId>
+            <artifactId>android</artifactId>
+            <version>2.3.3</version>
+        </dependency>
+        <dependency>
             <groupId>org.kevoree.tools</groupId>
-            <artifactId>org.kevoree.tools.annotation.api</artifactId>
+            <artifactId>org.kevoree.tools.android.framework</artifactId>
             <version>${kevoree.version}</version>
         </dependency>
     </dependencies>
@@ -42,10 +53,10 @@
             <plugin>
                 <groupId>org.kevoree.tools</groupId>
                 <artifactId>org.kevoree.tools.annotation.mavenplugin</artifactId>
-                <version>${kevoree.version}</version>
                 <extensions>true</extensions>
+                <version>${kevoree.version}</version>
                 <configuration>
-                    <nodeTypeNames>JavaSENode</nodeTypeNames>
+                    <nodeTypeNames>AndroidNode</nodeTypeNames>
                 </configuration>
                 <executions>
                     <execution>
@@ -67,12 +78,8 @@
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.kevoree.platform</groupId>
-                <artifactId>org.kevoree.platform.mavenrunner</artifactId>
-                <version>${kevoree.version}</version>
-            </plugin>
         </plugins>
     </build>
+
 
 </project>

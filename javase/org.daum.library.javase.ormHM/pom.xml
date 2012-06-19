@@ -3,9 +3,9 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.daum.library.javase</groupId>
-    <artifactId>org.daum.library.javase.ormHM</artifactId>
+    <artifactId>org.daum.library.javase.ormH</artifactId>
     <packaging>jar</packaging>
-    <name>DAUM :: Library :: JavaSE :: ormHM</name>
+    <name>DAUM :: Library :: JavaSE :: ormH</name>
     <version>1.7</version>
 
     <parent>

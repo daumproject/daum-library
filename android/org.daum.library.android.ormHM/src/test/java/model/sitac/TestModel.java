@@ -1,8 +1,8 @@
 package model.sitac;
 
-import org.daum.library.ormHM.annotations.Generated;
-import org.daum.library.ormHM.annotations.Id;
-import org.daum.library.ormHM.persistence.GeneratedType;
+import org.daum.library.ormH.annotations.Generated;
+import org.daum.library.ormH.annotations.Id;
+import org.daum.library.ormH.persistence.GeneratedType;
 
 import java.io.Serializable;
 
