@@ -1,7 +1,7 @@
 package org.daum.library.fakeDemo;
 
 import org.daum.library.ormHM.api.PersistenceSessionStore;
-import org.daum.library.ormHM.persistence.OrhmID;
+import org.daum.library.ormHM.persistence.Orhm;
 import org.daum.library.ormHM.utils.PersistenceException;
 import org.daum.library.replicatingMap.Cache;
 import org.daum.library.replicatingMap.ReplicatingService;
@@ -24,28 +24,33 @@ public class StoreImpl implements PersistenceSessionStore {
     }
 
     @Override
-    public void save(OrhmID id, Object bean) throws PersistenceException {
-        Cache cache = replicatingService.getCache(id.getAttachToCache());
-        cache.setMaxEntriesLocalHeap(id.getMaxEntriesLocalHeap());
+    public void save(Orhm id, Object bean) throws PersistenceException {
+        Cache cache = replicatingService.getCache(id.getCacheName());
         cache.put(id.getId(),bean);
     }
 
     @Override
-    public void delete(OrhmID id) throws PersistenceException {
-        Cache cache = replicatingService.getCache(id.getAttachToCache());
+    public void update(Orhm orhm, Object bean) throws PersistenceException {
+        Cache cache = replicatingService.getCache(orhm.getCacheName());
+        cache.put(orhm.getId(),bean);
+    }
+
+    @Override
+    public void delete(Orhm id) throws PersistenceException {
+        Cache cache = replicatingService.getCache(id.getCacheName());
         cache.remove(id.getId());
     }
 
     @Override
-    public Object get(OrhmID id) throws PersistenceException {
-        Cache cache = replicatingService.getCache(id.getAttachToCache());
+    public Object get(Orhm id) throws PersistenceException {
+        Cache cache = replicatingService.getCache(id.getCacheName());
         return cache.get(id.getId()).getValue();
     }
 
     @Override
-    public Map<Object, Object> getAll(OrhmID id) throws PersistenceException
+    public Map<Object, Object> getAll(Orhm id) throws PersistenceException
     {
-        Cache cache = replicatingService.getCache(id.getAttachToCache());
+        Cache cache = replicatingService.getCache(id.getCacheName());
         if(cache != null){
             HashMap<Object,Object> result = new HashMap<Object, Object>();
             for( Object key : cache.keySet())
@@ -57,13 +62,13 @@ public class StoreImpl implements PersistenceSessionStore {
     }
 
     @Override
-    public Object lock(OrhmID id) throws PersistenceException {
+    public Object lock(Orhm id) throws PersistenceException {
 
         return null;
     }
 
     @Override
-    public void unlock(OrhmID id) throws PersistenceException {
+    public void unlock(Orhm id) throws PersistenceException {
 
     }
 

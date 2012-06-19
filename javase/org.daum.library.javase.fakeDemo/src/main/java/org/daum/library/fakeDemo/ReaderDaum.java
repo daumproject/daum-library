@@ -59,7 +59,7 @@ public class ReaderDaum extends AbstractComponentType {
     {
         try
         {
-            configuration = new PersistenceConfiguration();
+            configuration = new PersistenceConfiguration(getNodeName());
 
             configuration.addPersistentClass(TemperatureMonitor.class);
             configuration.addPersistentClass(Moyen.class);
@@ -108,7 +108,7 @@ public class ReaderDaum extends AbstractComponentType {
         {
             replicatingService =   this.getPortByName("service", ReplicatingService.class);
             StoreImpl storeImpl = new StoreImpl(replicatingService);
-            configuration.setConnectionConfiguration(storeImpl);
+            configuration.setStore(storeImpl);
             factory = configuration.getPersistenceSessionFactory();
         }
 

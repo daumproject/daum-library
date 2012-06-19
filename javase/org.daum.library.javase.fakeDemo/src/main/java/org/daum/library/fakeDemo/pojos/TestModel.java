@@ -11,7 +11,8 @@ import java.io.Serializable;
  * Time: 13:11
  */
 public class TestModel implements Serializable {
-    
+
+    @Id()
     int id;
     int sum = 0;
 
@@ -27,7 +28,7 @@ public class TestModel implements Serializable {
         this.sum = sum;
     }
 
-    @Id(attachTOCache = "TestModel")
+
     public int getId() {
         return id;
     }

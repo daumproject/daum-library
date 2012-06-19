@@ -26,7 +26,7 @@ import java.util.Set;
  * Gateway arduino to HashMap
  */
 
-@Library(name = "JavaSE", names = {"Android"})
+@Library(name = "JavaSE")
 @Requires({
         @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class, optional = true)
 })
@@ -50,7 +50,7 @@ public class ArduinoGW extends AbstractComponentType {
     @Start
     public void start() {
         try {
-            configuration = new PersistenceConfiguration();
+            configuration = new PersistenceConfiguration(getNodeName());
 
             configuration.addPersistentClass(TemperatureMonitor.class);
             configuration.addPersistentClass(Moyen.class);
@@ -79,7 +79,7 @@ public class ArduinoGW extends AbstractComponentType {
         if (replicatingService == null) {
             replicatingService = this.getPortByName("service", ReplicatingService.class);
             StoreImpl storeImpl = new StoreImpl(replicatingService);
-            configuration.setConnectionConfiguration(storeImpl);
+            configuration.setStore(storeImpl);
             factory = configuration.getPersistenceSessionFactory();
         }
 

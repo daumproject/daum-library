@@ -8,6 +8,7 @@ import java.util.List;
 
 public class Moyen extends Detachement implements Serializable {
 
+    @Id()
     private int number=0;
     private MoyenType type;
     private String name;
@@ -17,8 +18,6 @@ public class Moyen extends Detachement implements Serializable {
     private PositionGPS posRef;
     private List<Moyen> children = new ArrayList<Moyen>();
 
-
-    @Id(attachTOCache = "Moyens",MaxEntriesLocalHeap = 500)
     public int getNumber()
     {
         return number;
