@@ -12,9 +12,13 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 
 public class ZoneEntity extends ArrowEntity {
+	
+	public ZoneEntity(Drawable icon, String type, int color) {
+		this(icon, type, "", color);
+	}
 
-	public ZoneEntity(Drawable icon, String msg, int color) {
-		super(icon, msg, color);
+	public ZoneEntity(Drawable icon, String type, String message, int color) {
+		super(icon, type, message, color);
 		paint.setColor(Color.argb(220, Color.red(color), Color.green(color), Color.blue(color)));
 		paint.setStyle(Paint.Style.FILL);
 	}

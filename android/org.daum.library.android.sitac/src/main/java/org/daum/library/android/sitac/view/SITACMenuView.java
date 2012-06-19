@@ -285,7 +285,7 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	 * @param e a demand entity with no location set
 	 */
 	public void addEntityWithNoLocation(DemandEntity e) {
-		IExpandableMenuItem item = new ExpandableMenuItem(e.getIcon(), e.getMessage());
+		IExpandableMenuItem item = new ExpandableMenuItem(e.getIcon(), e.getType()+e.getMessage());
 		noLocationMenuList.getItems(0).add(item);
 		if (hideShowButton.getText().equals(TEXT_HIDE_BTN) && noLocationMenu.getVisibility() == View.GONE) {
 			noLocationMenu.setVisibility(View.VISIBLE);

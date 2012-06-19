@@ -1,5 +1,7 @@
 package org.daum.library.android.sitac.controller;
 
+import java.util.Hashtable;
+
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.android.sitac.view.SITACMapView;
@@ -24,9 +26,11 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	private SITACMapView mapView;
 	private SITACMenuView menuView;
 	private IEntityFactory factory;
+	private Hashtable<IModel, IEntity> map;
 	
 	public EngineHandler(IEntityFactory factory) {
 		this.factory = factory;
+		this.map = new Hashtable<IModel, IEntity>();
 	}
 	
 	@Override
@@ -34,6 +38,8 @@ public class EngineHandler implements OnEngineStateChangeListener {
 		if (D) Log.i(TAG, "onAdd(): "+m);
 		IEntity e = factory.build(m);
 		e.setState(IEntity.STATE_EDITED);
+		
+		map.put(m, e);
 		
 		if (e instanceof DemandEntity) {
 			if (e.getGeoPoint() == null) {

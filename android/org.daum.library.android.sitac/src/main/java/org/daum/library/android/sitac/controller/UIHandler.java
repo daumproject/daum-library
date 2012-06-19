@@ -12,7 +12,7 @@ import org.daum.library.android.sitac.view.SITACMenuView;
 import org.daum.library.android.sitac.view.SITACSelectedEntityView;
 import org.daum.library.android.sitac.view.entity.ArrowEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
-import org.daum.library.android.sitac.view.entity.IEntityFactory;
+import org.daum.library.android.sitac.view.entity.IModelFactory;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -25,10 +25,10 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	private SITACMapView mapView;
 	private SITACSelectedEntityView selectedEntityView;
 	private IEntity selectedEntity;
-	private IEntityFactory factory;
+	private IModelFactory factory;
 	private SITACEngine engine;
 	
-	public UIHandler(IEntityFactory factory, SITACEngine engine) {
+	public UIHandler(IModelFactory factory, SITACEngine engine) {
 		this.factory = factory;
 		this.engine = engine;
 	}
@@ -38,7 +38,8 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 		if (selectedEntityView != null) {
 			// updating the selectedEntityView
 			selectedEntity = entity;
-			selectedEntityView.updateView(entity.getIcon(), selectedEntity.getMessage());
+			String txt = selectedEntity.getType()+selectedEntity.getMessage();
+			selectedEntityView.updateView(entity.getIcon(), txt);
 			selectedEntityView.setState(SITACSelectedEntityView.STATE_SELECTION);
 			selectedEntityView.show();
 		}
@@ -107,7 +108,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 		if (mapView != null && selectedEntityView != null) {
 			// updating the selectedEntityView
 			selectedEntity = e;
-			selectedEntityView.updateView(selectedEntity.getIcon(), selectedEntity.getMessage());
+			selectedEntityView.updateView(selectedEntity.getIcon(), selectedEntity.getType()+selectedEntity.getMessage());
 			selectedEntityView.setState(SITACSelectedEntityView.STATE_DELETION);
 			selectedEntityView.show();
 		}

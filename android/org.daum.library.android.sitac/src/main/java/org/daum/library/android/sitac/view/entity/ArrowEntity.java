@@ -7,19 +7,19 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.MapView.Projection;
 
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Matrix;
-import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
 public class ArrowEntity extends Entity {
 	
 	protected ArrayList<IGeoPoint> points;
+	
+	public ArrowEntity(Drawable icon, String type, int arrowColor) {
+		this(icon, type, "", arrowColor);
+	}
 
-	public ArrowEntity(Drawable icon, String msg, int arrowColor) {
-		super(icon, msg);
+	public ArrowEntity(Drawable icon, String type, String message, int arrowColor) {
+		super(icon, type, message);
 		points = new ArrayList<IGeoPoint>();
 		paint.setColor(arrowColor);
 	}

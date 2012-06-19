@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.daum.library.android.messages</artifactId>
     <name>Daum :: Library :: Android :: Messages</name>
-    <version>1.7.6-SNAPSHOT</version>
+    <version>1.7.9-SNAPSHOT</version>
     <packaging>jar</packaging>
 
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
         <groupId>org.daum.library.android</groupId>
-        <version>1.7.5</version>
+        <version>1.7.8</version>
         <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
 

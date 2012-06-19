@@ -19,6 +19,7 @@ import android.graphics.drawable.Drawable;
 public abstract class Entity implements IEntity {
 	
 	private long id = -1;
+	private String type;
 	private String message;
 	private Drawable icon;
 	private Bitmap bmp;
@@ -41,9 +42,14 @@ public abstract class Entity implements IEntity {
 	protected Rect bounds;
 	protected Paint paint;
 	
-	public Entity(Drawable icon, String msg) {
+	public Entity(Drawable icon, String type) {
+		this(icon, type, "");
+	}
+	
+	public Entity(Drawable icon, String type, String message) {
 		this.icon = icon;
-		this.message = msg;
+		this.type = type;
+		this.message = message;
 		this.paint = new Paint();
 		this.paint.setAntiAlias(true);
 		this.bounds = new Rect();
@@ -67,7 +73,7 @@ public abstract class Entity implements IEntity {
 		
 		if (tagTextEnabled) {
 			paint.setTextSize(13);
-			float txtWidth = paint.measureText(message);
+			float txtWidth = paint.measureText(type+message);
 			txt_x	= p.x-((int)txtWidth/2);
 			txt_y	= p.y+(bmpHeight/2)+ (int)(-paint.getFontMetrics().top)+3;
 			
@@ -80,7 +86,7 @@ public abstract class Entity implements IEntity {
 			paint.setStyle(Style.FILL);
 			canvas.drawRect(r, paint);
 			paint.setColor(Color.WHITE);
-			canvas.drawText(message, txt_x, txt_y, paint);
+			canvas.drawText(type+message, txt_x, txt_y, paint);
 		} else {
 			txtBgRight = bmp_x+bmp.getWidth();
 			txtBgBottom = bmp_y+bmpHeight;
@@ -91,11 +97,12 @@ public abstract class Entity implements IEntity {
 		bounds.right	= (bmp_x+bmpWidth >= txtBgRight) ? bmp_x+bmpWidth : txtBgRight;
 		bounds.bottom	= txtBgBottom;
 		
-		Paint pa = new Paint();
-		pa.setColor(Color.MAGENTA);
-		pa.setStyle(Paint.Style.STROKE);
-		pa.setStrokeWidth(1);
-		canvas.drawRect(bounds, pa);
+		// DEBUG purposes: see the entity boundaries
+//		Paint pa = new Paint();
+//		pa.setColor(Color.MAGENTA);
+//		pa.setStyle(Paint.Style.STROKE);
+//		pa.setStrokeWidth(1);
+//		canvas.drawRect(bounds, pa);
 	}
 
 	@Override
@@ -112,6 +119,16 @@ public abstract class Entity implements IEntity {
 	public boolean containsPoint(IGeoPoint geoP, MapView mapView) {
 		Point p = mapView.getProjection().toMapPixels(geoP, null);
 		return bounds.contains(p.x, p.y);
+	}
+	
+	@Override
+	public String getType() {
+		return type;
+	}
+	
+	@Override
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	@Override

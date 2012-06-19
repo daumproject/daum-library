@@ -3,9 +3,13 @@ package org.daum.library.android.sitac.view.entity;
 import android.graphics.drawable.Drawable;
 
 public class DangerEntity extends Entity {
+	
+	public DangerEntity(Drawable icon, String type) {
+		super(icon, type);
+	}
 
-	public DangerEntity(Drawable icon, String msg) {
-		super(icon, msg);
+	public DangerEntity(Drawable icon, String type, String message) {
+		super(icon, type, message);
 		setTagTextEnabled(false);
 	}
 }
