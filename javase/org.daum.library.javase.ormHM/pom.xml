@@ -6,7 +6,8 @@
     <artifactId>org.daum.library.javase.ormHM</artifactId>
     <packaging>jar</packaging>
     <name>DAUM :: Library :: JavaSE :: ormHM</name>
-    <version>1.3</version>
+    <version>1.7</version>
+
     <parent>
         <artifactId>org.daum.library.javase.root</artifactId>
         <groupId>org.daum.library.javase</groupId>
