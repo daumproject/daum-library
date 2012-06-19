@@ -2,11 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
 
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.daum.library.android</groupId>
     <artifactId>org.daum.library.android.replica</artifactId>
-    <name>DAUM :: Replica :: Android</name>
-      <version>1.6</version>
+    <name>DAUM :: Library :: Android  :: Replica</name>
+    <version>1.6</version>
+
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
         <groupId>org.daum.library.android</groupId>

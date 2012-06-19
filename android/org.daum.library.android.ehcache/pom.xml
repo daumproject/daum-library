@@ -3,8 +3,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.daum.library.android.ehcache</artifactId>
-    <packaging>jar</packaging>
-    <name>DAUM :: Ehcache :: Android </name>
+    <name>DAUM :: Library :: Android :: Ehcache</name>
+
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>

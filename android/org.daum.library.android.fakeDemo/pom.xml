@@ -4,7 +4,6 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.daum.library.android</groupId>
     <artifactId>org.daum.library.android.fakeDemo</artifactId>
-    <packaging>jar</packaging>
     <name>DAUM :: Library :: Android :: FakeDemo</name>
     <version>1.2</version>
 
