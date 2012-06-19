@@ -3,17 +3,16 @@ package org.daum.library.fakeDemo;
 import org.daum.library.fakeDemo.pojos.HeartMonitor;
 import org.daum.library.fakeDemo.pojos.Moyen;
 import org.daum.library.fakeDemo.pojos.TemperatureMonitor;
-import org.daum.library.fakeDemo.views.FrameMoyens;
-import org.daum.library.ormHM.persistence.PersistenceConfiguration;
-import org.daum.library.ormHM.persistence.PersistenceSession;
-import org.daum.library.ormHM.persistence.PersistenceSessionFactoryImpl;
-import org.daum.library.ormHM.utils.PersistenceException;
-import org.daum.library.replicatingMap.ReplicatingService;
-import org.daum.library.replicatingMap.utils.SystemTime;
+import org.daum.library.ormH.persistence.PersistenceConfiguration;
+import org.daum.library.ormH.persistence.PersistenceSession;
+import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
+import org.daum.library.ormH.utils.PersistenceException;
+import org.daum.library.replica.ReplicatingService;
+import org.daum.library.replica.utils.SystemTime;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
-import org.kevoree.library.ui.layout.KevoreeLayout;
+//import org.kevoree.library.ui.layout.KevoreeLayout;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +27,7 @@ import java.util.Set;
  * Time: 17:08
  */
 
-@Library(name = "JavaSE")
+@Library(name = "JavaSE", names = {"Android"})
 @Requires({
         @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class, optional = true)  ,
         @RequiredPort(name = "value", type = PortType.MESSAGE, optional = true)
@@ -49,7 +48,7 @@ public class ReaderDaum extends AbstractComponentType {
     private SystemTime systemTime = new SystemTime();
     public PersistenceConfiguration configuration=null;
     private PersistenceSessionFactoryImpl factory=null;
-    private  FrameMoyens frameMoyens=null;
+  //  private  FrameMoyens frameMoyens=null;
     private ReplicatingService replicatingService =  null;
     private  PersistenceSession s=null;
 
@@ -74,10 +73,11 @@ public class ReaderDaum extends AbstractComponentType {
 
     @Stop
     public void stop() {
+        /*
         if(frameMoyens != null){
             KevoreeLayout.getInstance().releaseTab(getName());
             frameMoyens = null;
-        }
+        } */
     }
 
     @Update
@@ -89,13 +89,14 @@ public class ReaderDaum extends AbstractComponentType {
     public void manageMoyens(){
         if(getDictionary().get("mode").toString().equals("moyens"))
         {
-            frameMoyens  = new FrameMoyens(getNodeName(),this);
-            KevoreeLayout.getInstance().displayTab(frameMoyens,getName());
+         //   frameMoyens  = new FrameMoyens(getNodeName(),this);
+         //   KevoreeLayout.getInstance().displayTab(frameMoyens,getName());
         }  else
         {
+            /*
             if(frameMoyens != null){
                 KevoreeLayout.getInstance().releaseTab(getName());
-            }
+            } */
         }
 
     }
@@ -136,7 +137,7 @@ public class ReaderDaum extends AbstractComponentType {
                 Map<Object,Object> moyens = s.getAll(Moyen.class);
                 if(moyens.size() >0)
                 {
-                    frameMoyens.updateMoyens(moyens);
+                 //   frameMoyens.updateMoyens(moyens);
 
                 }
             }  else if(getDictionary().get("mode").toString().equals("heart"))

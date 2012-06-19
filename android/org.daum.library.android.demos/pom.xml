@@ -5,7 +5,7 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.daum.library.android.demos</artifactId>
-    <name>DAUM :: Demos :: Android</name>
+    <name>DAUM :: Library :: Android :: Demos</name>
     <version>1.5-SNAPSHOT</version>
 
 

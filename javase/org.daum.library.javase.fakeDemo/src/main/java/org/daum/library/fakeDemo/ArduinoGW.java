@@ -3,12 +3,12 @@ package org.daum.library.fakeDemo;
 import org.daum.library.fakeDemo.pojos.HeartMonitor;
 import org.daum.library.fakeDemo.pojos.Moyen;
 import org.daum.library.fakeDemo.pojos.TemperatureMonitor;
-import org.daum.library.ormHM.persistence.PersistenceConfiguration;
-import org.daum.library.ormHM.persistence.PersistenceSession;
-import org.daum.library.ormHM.persistence.PersistenceSessionFactoryImpl;
-import org.daum.library.ormHM.utils.PersistenceException;
-import org.daum.library.replicatingMap.ReplicatingService;
-import org.daum.library.replicatingMap.utils.SystemTime;
+import org.daum.library.ormH.persistence.PersistenceConfiguration;
+import org.daum.library.ormH.persistence.PersistenceSession;
+import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
+import org.daum.library.ormH.utils.PersistenceException;
+import org.daum.library.replica.ReplicatingService;
+import org.daum.library.replica.utils.SystemTime;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.slf4j.Logger;
@@ -26,7 +26,7 @@ import java.util.Set;
  * Gateway arduino to HashMap
  */
 
-@Library(name = "JavaSE")
+@Library(name = "JavaSE", names = {"Android"})
 @Requires({
         @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class, optional = true)
 })

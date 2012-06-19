@@ -2,10 +2,10 @@ package org.daum.library.fakeDemo.views;
 
 import org.daum.library.fakeDemo.ReaderDaum;
 import org.daum.library.fakeDemo.pojos.Moyen;
-import org.daum.library.ormHM.persistence.PersistenceConfiguration;
-import org.daum.library.ormHM.persistence.PersistenceSession;
-import org.daum.library.ormHM.persistence.PersistenceSessionFactoryImpl;
-import org.daum.library.ormHM.utils.PersistenceException;
+import org.daum.library.ormH.persistence.PersistenceConfiguration;
+import org.daum.library.ormH.persistence.PersistenceSession;
+import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
+import org.daum.library.ormH.utils.PersistenceException;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.Map;

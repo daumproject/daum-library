@@ -11,12 +11,12 @@ import org.junit.Test;
 import model.sitac.Moyen;
 import model.sitac.MoyenType;
 import model.sitac.TestModel;
-import org.daum.library.ormHM.api.IPersistenceConfiguration;
-import org.daum.library.ormHM.api.IPersistenceSessionFactory;
-import org.daum.library.ormHM.persistence.PersistenceConfiguration;
-import org.daum.library.ormHM.persistence.PersistenceSession;
-import org.daum.library.ormHM.store.LocalStore;
-import org.daum.library.ormHM.utils.PersistenceException;
+import org.daum.library.ormH.api.IPersistenceConfiguration;
+import org.daum.library.ormH.api.IPersistenceSessionFactory;
+import org.daum.library.ormH.persistence.PersistenceConfiguration;
+import org.daum.library.ormH.persistence.PersistenceSession;
+import org.daum.library.ormH.store.LocalStore;
+import org.daum.library.ormH.utils.PersistenceException;
 import org.junit.Before;
 import org.junit.Test;
 

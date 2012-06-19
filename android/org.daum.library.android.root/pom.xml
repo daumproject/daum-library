@@ -22,9 +22,10 @@
 
     <modules>
         <module>../org.daum.library.android.demos</module>
+        <module>../org.daum.library.android.fakeDemo</module>
         <module>../org.daum.library.android.ormHM</module>
         <module>../org.daum.library.android.ehcache</module>
-        <module>../org.daum.library.android.replicatingMap</module>
+        <module>../org.daum.library.android.replica</module>
         <module>../org.daum.library.android.sitac</module>
         <module>../org.daum.library.android.moyens</module>
         <module>../org.daum.library.android.messages</module>

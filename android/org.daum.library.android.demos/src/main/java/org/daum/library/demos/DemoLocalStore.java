@@ -4,6 +4,7 @@ import org.daum.library.ormH.store.LocalStore;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
+
 import org.daum.library.ormH.utils.PersistenceException;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;

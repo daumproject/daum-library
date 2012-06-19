@@ -1,10 +1,10 @@
 package org.daum.library.fakeDemo;
 
-import org.daum.library.ormHM.api.PersistenceSessionStore;
-import org.daum.library.ormHM.persistence.Orhm;
-import org.daum.library.ormHM.utils.PersistenceException;
-import org.daum.library.replicatingMap.Cache;
-import org.daum.library.replicatingMap.ReplicatingService;
+import org.daum.library.ormH.api.PersistenceSessionStore;
+import org.daum.library.ormH.persistence.Orhm;
+import org.daum.library.ormH.utils.PersistenceException;
+import org.daum.library.replica.Cache;
+import org.daum.library.replica.ReplicatingService;
 
 import java.util.HashMap;
 import java.util.Map;
