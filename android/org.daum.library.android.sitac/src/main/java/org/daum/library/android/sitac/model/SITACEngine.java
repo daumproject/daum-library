@@ -33,7 +33,10 @@ public class SITACEngine {
 		if (m instanceof Demand) addDemand((Demand) m);
 		else if (m instanceof Danger) addDanger((Danger) m);
 		else if (m instanceof Target) addTarget((Target) m);
-		else {
+		else if (m == null) {
+			Log.w(TAG, "add(null) >> I'm sorry but I cannot add null thing :/");
+			return;
+		} else {
 			Log.w(TAG, "add("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
 			return;
 		}
@@ -44,7 +47,10 @@ public class SITACEngine {
 		if (m instanceof Demand) updateDemand((Demand) m);
 		else if (m instanceof Danger) updateDanger((Danger) m);
 		else if (m instanceof Target) updateTarget((Target) m);
-		else {
+		else if (m == null) {
+			Log.w(TAG, "update(null) >> I'm sorry but I cannot add null thing :/");
+			return;
+		} else {
 			Log.w(TAG, "update("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
 			return;
 		}
