@@ -1,6 +1,6 @@
 package org.daum.library.ormHM.annotations;
 
-import org.daum.library.ormHM.persistence.GenerationType;
+import org.daum.library.ormHM.persistence.GeneratedType;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -13,6 +13,6 @@ import java.lang.annotation.RetentionPolicy;
  * To change this template use File | Settings | File Templates.
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface GeneratedValue {
-    GenerationType strategy() default GenerationType.UUID;
+public @interface Generated {
+    int strategy() default GeneratedType.UUID;
 }

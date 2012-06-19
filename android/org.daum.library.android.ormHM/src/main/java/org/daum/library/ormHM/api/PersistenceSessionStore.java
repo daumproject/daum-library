@@ -14,6 +14,7 @@ import java.util.Map;
 public interface PersistenceSessionStore
 {
     public void save(Orhm id,Object bean) throws PersistenceException;
+    public void update(Orhm id,Object bean)throws PersistenceException;
     public void delete(Orhm id) throws PersistenceException;
     public Object get(Orhm id) throws PersistenceException;
     public Map<Object,Object> getAll(Orhm id) throws PersistenceException;

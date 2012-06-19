@@ -1,8 +1,8 @@
 package model.sitac;
 
-import org.daum.library.ormHM.annotations.GeneratedValue;
+import org.daum.library.ormHM.annotations.Generated;
 import org.daum.library.ormHM.annotations.Id;
-import org.daum.library.ormHM.persistence.GenerationType;
+import org.daum.library.ormHM.persistence.GeneratedType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -11,8 +11,8 @@ import java.util.List;
 public class Moyen  implements Serializable {
 
     @Id()
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private String id ="";
+    @Generated(strategy = GeneratedType.UUID)
+    private String id = new String();
 
 	private MoyenType type;
 	private String name;

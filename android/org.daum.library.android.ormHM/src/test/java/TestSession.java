@@ -11,9 +11,10 @@ import org.junit.Test;
 import model.sitac.Moyen;
 import model.sitac.MoyenType;
 import model.sitac.TestModel;
+import org.daum.library.ormHM.api.IPersistenceConfiguration;
+import org.daum.library.ormHM.api.IPersistenceSessionFactory;
 import org.daum.library.ormHM.persistence.PersistenceConfiguration;
 import org.daum.library.ormHM.persistence.PersistenceSession;
-import org.daum.library.ormHM.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormHM.store.LocalStore;
 import org.daum.library.ormHM.utils.PersistenceException;
 import org.junit.Before;
@@ -31,21 +32,18 @@ import static org.junit.Assert.assertEquals;
  */
 public class TestSession {
 
-   private LocalStore localStore = new LocalStore();
+    private LocalStore localStore = new LocalStore();
+    IPersistenceConfiguration configuration=null;
 
-
-    PersistenceConfiguration configuration=null;
-    PersistenceSessionFactoryImpl factory=null;
 
     @Before
-    public void init() throws PersistenceException {
+    public void configuration() throws PersistenceException {
 
-        // running EhcacheServer
+        configuration = new PersistenceConfiguration("node0");
+        configuration.setStore(localStore);
 
-        configuration = new PersistenceConfiguration();
         configuration.addPersistentClass(Moyen.class);
         configuration.addPersistentClass(TestModel.class);
-
     }
 
 
@@ -53,7 +51,7 @@ public class TestSession {
     @Test
     public void test_save() throws PersistenceException {
 
-        configuration.setConnectionConfiguration(localStore);
+        IPersistenceSessionFactory factory=null;
 
         factory = configuration.getPersistenceSessionFactory();
 
@@ -86,18 +84,24 @@ public class TestSession {
         assertEquals(m2.getType(),_m2.getType());
         assertEquals(m2.getName(),_m2.getName());
 
+        // test update
+
+        m1.setName("FPT2");
+
+        s.update(m1);
+
+        Moyen _m3 = (Moyen)  s.get(Moyen.class, m1.getId());
+
+        assertEquals(m1.getName(),_m3.getName());
         s.close();
 
     }
 
 
 
-
     @Test
     public void test_getall() throws PersistenceException {
-        configuration.setConnectionConfiguration(localStore);
-
-
+        IPersistenceSessionFactory factory=null;
         factory = configuration.getPersistenceSessionFactory();
         PersistenceSession s = factory.openSession();
         Map<Object,Object> result = s.getAll(Moyen.class);
@@ -105,88 +109,83 @@ public class TestSession {
         s.close();
     }
 
-   @Test
-   public  void test_delete()throws PersistenceException {
-       configuration.setConnectionConfiguration(localStore);
-       factory = configuration.getPersistenceSessionFactory();
-       PersistenceSession s = factory.openSession();
-       Map<Object,Object> re = s.getAll(Moyen.class);
-       Moyen m1=null;
-       for( Object key : re.keySet())
-       {
-           m1 = (Moyen)re.get(key);
-           break;
-       }
+    @Test
+    public  void test_delete()throws PersistenceException {
+        IPersistenceSessionFactory factory=null;
+        factory = configuration.getPersistenceSessionFactory();
+        PersistenceSession s = factory.openSession();
+        Map<Object,Object> re = s.getAll(Moyen.class);
+        Moyen m1=null;
+        for( Object key : re.keySet())
+        {
+            m1 = (Moyen)re.get(key);
+            break;
+        }
 
-       s.delete(m1);
+        s.delete(m1);
 
-       Map<Object,Object> result = s.getAll(Moyen.class);
-       assertEquals(result.size(),4);
-       s.close();
-   }
-
-
+        Map<Object,Object> result = s.getAll(Moyen.class);
+        assertEquals(result.size(),4);
+        s.close();
+    }
 
 
 
 
-   @Test
-   public void test_process() throws PersistenceException, InterruptedException {
-      final int iteration = 1000;
-       // INSTANCE 1
-       Thread t1=  new Thread(new Runnable() {
-           @Override
-           public void run() {
-               PersistenceSession s=null;
-
-               configuration.setConnectionConfiguration(localStore);
-               factory = configuration.getPersistenceSessionFactory();
-               try {
-                   s = factory.openSession();
 
 
-                   int i=0;
+    @Test
+    public void test_process() throws PersistenceException, InterruptedException {
 
-                   while (i < iteration){
-
-                       TestModel t = new TestModel();
-                       s.save(t);
-
-                       i++;
-                   }
-
-
-                   s.close();
-               } catch (PersistenceException e) {
-                   e.printStackTrace();
-               }
+        final int iteration = 5000;
+        // INSTANCE 1
+        Thread t1=  new Thread(new Runnable() {
+            @Override
+            public void run() {
+                IPersistenceSessionFactory factory=null;
+                factory = configuration.getPersistenceSessionFactory();
+                PersistenceSession s=null;
+                try {
+                    s = factory.openSession();
 
 
-           }
-       });
+                    int i=0;
+
+                    while (i < iteration){
+
+                        TestModel t = new TestModel();
+                        s.save(t);
+
+                        i++;
+                    }
 
 
+                    s.close();
+                } catch (PersistenceException e) {
+                    e.printStackTrace();
+                }
 
-       t1.start();
 
-       t1.join();
+            }
+        });
 
 
 
+        t1.start();
 
-       configuration.setConnectionConfiguration(localStore);
-       factory = configuration.getPersistenceSessionFactory();
-       PersistenceSession s = factory.openSession();
-
-       Map<Object,Object>  result=  s.getAll(TestModel.class);
-
-       assertEquals(result.size(),iteration);
-       s.close();
+        t1.join();
 
 
 
+        IPersistenceSessionFactory factory=null;
+        factory = configuration.getPersistenceSessionFactory();
+        PersistenceSession s = factory.openSession();
+        Map<Object,Object>  result=  s.getAll(TestModel.class);
 
-   }
+        assertEquals(result.size(),iteration);
+        s.close();
+
+    }
 
 
 }
