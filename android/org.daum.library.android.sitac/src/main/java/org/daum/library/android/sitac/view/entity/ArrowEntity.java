@@ -78,10 +78,10 @@ public class ArrowEntity extends Entity {
 		int pt_y = Math.abs((int) (pt.x*A + B));
 		pt.y = Math.abs(pt.y);
 		
-		System.out.println("pt_y= "+pt_y);
-		System.out.println("pt.y= "+pt.y);
-		System.out.println("===========");
-		
 		return Math.abs(pt_y - pt.y) < 10;
+	}
+
+	public ArrayList<IGeoPoint> getPoints() {
+		return points;
 	}
 }

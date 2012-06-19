@@ -1,6 +1,8 @@
 package org.daum.library.android.sitac.view.entity;
 
 import org.daum.common.gps.api.IGpsPoint;
+import org.daum.common.gps.impl.GpsPoint;
+import org.daum.common.model.api.ArrowAction;
 import org.daum.common.model.api.Danger;
 import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.IModel;
@@ -12,6 +14,7 @@ import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
@@ -31,6 +34,7 @@ public class EntityFactory implements IEntityFactory {
 		if (m instanceof Demand) return build((Demand) m);
 		else if (m instanceof Target) return build((Target) m);
 		else if (m instanceof Danger) return build((Danger) m);
+		else if (m instanceof ArrowAction) return build((ArrowAction) m);
 		else Log.w(TAG, "build("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
 		return null;
 	}
@@ -102,6 +106,63 @@ public class EntityFactory implements IEntityFactory {
 		return e;
 	}
 	
+	private ArrowEntity build(ArrowAction a) {
+		ArrowAction.Type type = a.getType();
+		Drawable icon = getIcon(type);
+		String name;
+		int arrowColor;
+		switch (type) {
+			case CHEM:
+				name = "Risques particulier";
+				arrowColor = Color.rgb(255, 156, 0); // orange
+				break;
+				
+			case FIRE:
+				name = "Extinction";
+				arrowColor = Color.RED;
+				break;
+				
+			case SAP:
+				name = "Secours à personnes";
+				arrowColor = Color.GREEN;
+				break;
+				
+			case WATER:
+				name = "Eau";
+				arrowColor = Color.BLUE;
+				break;
+				
+			default:
+				name = type.name();
+				arrowColor = Color.BLUE;
+		}
+		ArrowEntity e = new ArrowEntity(icon, name, arrowColor);
+		e.setGeoPoint(new GeoPoint(a.getLocation().getLat(), a.getLocation().getLong_()));
+		for (GpsPoint gpsPt : a.getPoints()) {
+			e.addPoint(new GeoPoint(gpsPt.getLat(), gpsPt.getLong_()));
+		}
+		return e;
+	}
+	
+	private Drawable getIcon(ArrowAction.Type type) {
+		switch (type) {
+			case WATER:
+				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_LINE_BLUE);
+				
+			case FIRE:
+				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_LINE_RED);
+				
+			case CHEM:
+				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_LINE_ORANGE);
+				
+			case SAP:
+				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_LINE_GREEN);
+				
+			default:
+				return null;
+		}
+	}
+
 	private Drawable getIcon(VehicleSector sector, boolean isDotted) {
 		switch (sector) {
 			case SAP:

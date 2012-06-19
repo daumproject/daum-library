@@ -1,7 +1,10 @@
 package org.daum.library.android.sitac.controller;
 
+import java.util.Hashtable;
+
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.command.AddModelCommand;
+import org.daum.library.android.sitac.command.DeleteModelCommand;
 import org.daum.library.android.sitac.command.UpdateModelCommand;
 import org.daum.library.android.sitac.listener.OnMenuViewEventListener;
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
@@ -27,10 +30,12 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	private IEntity selectedEntity;
 	private IModelFactory factory;
 	private SITACEngine engine;
+	private Hashtable<IEntity, IModel> map;
 	
 	public UIHandler(IModelFactory factory, SITACEngine engine) {
 		this.factory = factory;
 		this.engine = engine;
+		this.map = new Hashtable<IEntity, IModel>();
 	}
 	
 	@Override
@@ -49,8 +54,8 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	public void onSelectedEntityButtonClicked() {
 		if (mapView != null && selectedEntityView != null) {
 			if (selectedEntityView.getState() == SITACSelectedEntityView.STATE_DELETION) {
-				// TODO FIXME deletion in the engine, not just graphically...
-				mapView.deleteEntity(selectedEntity);
+				IModel m = factory.build(selectedEntity);
+				CmdManager.getInstance(engine).execute(DeleteModelCommand.class, m, selectedEntity);
 				
 			} else if (selectedEntityView.getState() == SITACSelectedEntityView.STATE_SELECTION_CONFIRM) {
 				// TODO save entity in the engine
@@ -74,30 +79,38 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 			// if it's a new entity, add it to the engine
 			if (selectedEntity.getState() == IEntity.STATE_NEW) {
 				IModel m = factory.build(selectedEntity);
-				CmdManager.getInstance(engine).execute(AddModelCommand.class, m);
+				map.put(selectedEntity, m);
+				CmdManager.getInstance(engine).execute(AddModelCommand.class, m, selectedEntity);
 				
 			// if the state is EDITED, then update the corresponding data in the engine
 			} else if (selectedEntity.getState() == IEntity.STATE_EDITED) {
-				mapView.deleteEntity(selectedEntity);
-				IModel m = factory.build(selectedEntity);
-				CmdManager.getInstance(engine).execute(UpdateModelCommand.class, m);
+				IModel m;
+				if (!map.contains(selectedEntity)) {
+					m = factory.build(selectedEntity);
+					map.put(selectedEntity, m);
+				} else {
+					m = map.get(selectedEntity);
+				}
+				CmdManager.getInstance(engine).execute(UpdateModelCommand.class, m, selectedEntity);
 			}
 			
-			// if it's an arrowEntity that has more than one point drawn
+			// if it's an arrowEntity
 			if (selectedEntity instanceof ArrowEntity) {
+				// add the singleTap point to the entity
 				((ArrowEntity) selectedEntity).addPoint(geoP);
+				
+				// if the arrowEntity has at least one line, ask for drawing ending
 				if (((ArrowEntity) selectedEntity).hasOneLine()) {
 					// display the "terminate action" button
 					selectedEntityView.setState(SITACSelectedEntityView.STATE_SELECTION_CONFIRM);
 					selectedEntityView.show();
 				}
-				// consume the event
-				return true;
+				
+			} else {
+				// the entity has been moved, we can hide the selectedEntityView
+				selectedEntityView.hide();
+				selectedEntity = null;	
 			}
-			
-			// the entity has been moved, we can hide the selectedEntityView
-			selectedEntityView.hide();
-			selectedEntity = null;
 			return true;
 		}
 		return false;
