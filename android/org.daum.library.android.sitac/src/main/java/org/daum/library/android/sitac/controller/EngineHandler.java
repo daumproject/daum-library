@@ -1,7 +1,5 @@
 package org.daum.library.android.sitac.controller;
 
-import java.util.Hashtable;
-
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.android.sitac.view.SITACMapView;
@@ -26,45 +24,35 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	private SITACMapView mapView;
 	private SITACMenuView menuView;
 	private IEntityFactory factory;
-	private Hashtable<IModel, IEntity> map;
 	
 	public EngineHandler(IEntityFactory factory) {
 		this.factory = factory;
-		this.map = new Hashtable<IModel, IEntity>();
 	}
 	
 	@Override
-	public void onAdd(IModel m) {
+	public void onAdd(IModel m, IEntity e) {
 		if (D) Log.i(TAG, "onAdd(): "+m);
-		IEntity e = factory.build(m);
+		if (e == null) e = factory.build(m);
 		e.setState(IEntity.STATE_EDITED);
 		
-		map.put(m, e);
-		
-		if (e instanceof DemandEntity) {
-			if (e.getGeoPoint() == null) {
-				// the entity has no location, add it to the menu
-				menuView.addEntityWithNoLocation((DemandEntity) e);
-				return;
-			}
+		if (e.getGeoPoint() == null) {
+			// the entity has no location, add it to the noLocationMenu
+			menuView.addEntityWithNoLocation((DemandEntity) e);
 		}
 		
-		// the entity has a location, add it to the map
+		//add it to the map
 		mapView.addEntity(e);
 	}
 	
 	@Override
-	public void onUpdate(IModel m) {
+	public void onUpdate(IModel m, IEntity e) {
 		if (D) Log.i(TAG, "onUpdate(): "+m);
-		IEntity e = factory.build(m);
 		e.setState(IEntity.STATE_EDITED);
-		mapView.addEntity(e);
 	}
 	
 	@Override
-	public void onDelete(IModel m) {
-		// TODO
-		if (D) Log.i(TAG, "onDelete(): "+m);
+	public void onDelete(IEntity e) {
+		mapView.deleteEntity(e);
 	}
 
     public void registerMenuView(SITACMenuView menuView) {

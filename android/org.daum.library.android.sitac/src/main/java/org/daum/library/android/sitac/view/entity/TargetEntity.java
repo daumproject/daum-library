@@ -5,7 +5,7 @@ import android.graphics.drawable.Drawable;
 public class TargetEntity extends Entity {
 	
 	public TargetEntity(Drawable icon, String type) {
-		super(icon, type);
+		this(icon, type, "");
 	}
 
 	public TargetEntity(Drawable icon, String type, String message) {

@@ -3,6 +3,7 @@ package org.daum.library.android.sitac.controller;
 import java.util.Hashtable;
 
 import org.daum.library.android.sitac.command.AddModelCommand;
+import org.daum.library.android.sitac.command.DeleteModelCommand;
 import org.daum.library.android.sitac.command.ICommand;
 import org.daum.library.android.sitac.command.UpdateModelCommand;
 import org.daum.library.android.sitac.model.SITACEngine;
@@ -23,6 +24,7 @@ public class CmdManager {
 
 		commands.put(AddModelCommand.class, new AddModelCommand(engine));
 		commands.put(UpdateModelCommand.class, new UpdateModelCommand(engine));
+		commands.put(DeleteModelCommand.class, new DeleteModelCommand(engine));
 	}
 
 	public static CmdManager getInstance(SITACEngine engine) {
@@ -32,10 +34,10 @@ public class CmdManager {
 		return CmdManager.instance;
 	}
 
-	public <T> void execute(Class<? extends ICommand> cmdClass, T arg) {
+	public <T> void execute(Class<? extends ICommand> cmdClass, T... args) {
 		ICommand cmd = commands.get(cmdClass);
 		if (cmd != null) {
-			cmd.execute(arg);
+			cmd.execute(args);
 		} else {
 			Log.w(TAG, "Command "+cmdClass.getSimpleName()+" not found in the CmdHandler, did you add it ?");
 		}

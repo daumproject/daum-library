@@ -1,8 +1,10 @@
 package org.daum.library.android.sitac.view.entity;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.daum.common.gps.impl.GpsPoint;
+import org.daum.common.model.api.ArrowAction;
 import org.daum.common.model.api.Danger;
 import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.IModel;
@@ -21,6 +23,7 @@ public class ModelFactory implements IModelFactory {
 		if (e instanceof DemandEntity) return build((DemandEntity) e);
 		else if (e instanceof TargetEntity) return build((TargetEntity) e);
 		else if (e instanceof DangerEntity) return build((DangerEntity) e);
+		else if (e instanceof ArrowEntity) return build((ArrowEntity) e);
 		else Log.w(TAG, "build("+e.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
 		return null;
 	}
@@ -44,6 +47,27 @@ public class ModelFactory implements IModelFactory {
 		}
 		Danger d = new Danger(type, location);
 		return d;
+	}
+	
+	private ArrowAction build(ArrowEntity ent) {
+		IGeoPoint geoP = ent.getGeoPoint();
+		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
+		ArrayList<IGeoPoint> geoPts = ent.getPoints();
+		ArrayList<GpsPoint> points = new ArrayList<GpsPoint>();
+		for (IGeoPoint gp : geoPts) {
+			points.add(new GpsPoint(gp.getLatitudeE6(), gp.getLongitudeE6()));
+		}
+		
+		ArrowAction.Type type = ArrowAction.Type.WATER;
+		if (ent.getType().equals("Extinction")) {
+			type = ArrowAction.Type.FIRE;
+		} else if (ent.getType().equals("Secours à personnes")) {
+			type = ArrowAction.Type.SAP;
+		} else if (ent.getType().equals("Risques particuliers")) {
+			type = ArrowAction.Type.CHEM;
+		}
+		ArrowAction a = new ArrowAction(type, location, points);
+		return a;
 	}
 
 	private Target build(TargetEntity ent) {

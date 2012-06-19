@@ -56,7 +56,7 @@ public class MapOverlay extends Overlay {
 	protected void draw(Canvas canvas, MapView mapV, boolean shadow) {
 		if (!shadow) {
 			for (IEntity ent : entities) {
-				ent.draw(canvas, mapV);
+				if (ent.getGeoPoint() != null) ent.draw(canvas, mapV);
 			}
 		}
 	}
