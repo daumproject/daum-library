@@ -4,4 +4,7 @@ import java.io.Serializable;
 
 public interface IModel extends Serializable {
 
+    public String getId();
+
+    public void setId(String id);
 }

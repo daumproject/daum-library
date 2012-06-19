@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import android.util.Log;
+import android.view.MotionEvent;
 import org.daum.common.model.api.VehicleSector;
 import org.daum.common.model.api.VehicleType;
 import org.daum.library.android.sitac.listener.OnMenuViewEventListener;
@@ -89,15 +91,15 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 		noLocationMenu = new ExpandableListView(ctx);
 		
         List<IExpandableMenuItem> dangers = new ArrayList<IExpandableMenuItem>();
-        dangers.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_UP, "Eau"));
-		dangers.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_RED_UP, "Incendie"));
-        dangers.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_UP, "Risques particuliers"));
+        dangers.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_UP, DangerEntity.WATER));
+		dangers.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_RED_UP, DangerEntity.FIRE));
+        dangers.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_UP, DangerEntity.CHEM));
         
         List<IExpandableMenuItem> cibles = new ArrayList<IExpandableMenuItem>();
-        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_DOWN, "Eau"));
-        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_RED_DOWN, "Incendie"));
-        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_GREEN_DOWN, "Personne"));
-        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_DOWN, "Risque particulier"));
+        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_DOWN, TargetEntity.WATER));
+        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_RED_DOWN, TargetEntity.FIRE));
+        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_GREEN_DOWN, TargetEntity.VICTIM));
+        cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_DOWN, TargetEntity.CHEM));
         
         List<IExpandableMenuItem> moyens = new ArrayList<IExpandableMenuItem>();
         moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_DOTTED_AGRES, VehicleSector.ALIM.name()));
@@ -223,11 +225,20 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 				return false;
 			}
 		});
+
+        menu.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                Log.w(TAG, "onTouch menu listener");
+                return false;
+            }
+        });
 		
 		menu.setOnChildClickListener(new OnChildClickListener() {
 
 			@Override
 			public boolean onChildClick(ExpandableListView list, View itemView, int grpPos, int childPos, long id) {
+                Log.e(TAG, "onChildClick familia !");
 				final IExpandableMenuItem grp = adapter.getGroup(grpPos);
 				final IExpandableMenuItem item = adapter.getChild(grpPos, childPos);
 				

@@ -11,6 +11,11 @@ import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.android.sitac.view.entity.IEntity;
 
 import android.util.Log;
+import org.daum.library.ormH.persistence.PersistenceConfiguration;
+import org.daum.library.ormH.persistence.PersistenceSession;
+import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
+import org.daum.library.ormH.store.LocalStore;
+import org.daum.library.ormH.utils.PersistenceException;
 
 /**
  * Here you should save/update/delete data from the Replica
@@ -19,110 +24,66 @@ public class SITACEngine {
 	
 	private static final String TAG = "SITACEngine";
 
-	private ArrayList<Demand> demands;
-	private ArrayList<Danger> dangers;
-	private ArrayList<Target> targets;
-	private ArrayList<ArrowAction> arrowActions;
+    private PersistenceSessionFactoryImpl factory;
 	private OnEngineStateChangeListener listener;
 	
 	public SITACEngine(OnEngineStateChangeListener engineHandler) {
-		this.demands = new ArrayList<Demand>();
-		this.dangers = new ArrayList<Danger>();
-		this.targets = new ArrayList<Target>();
-		this.arrowActions = new ArrayList<ArrowAction>();
+        try {
+            PersistenceConfiguration configuration = new PersistenceConfiguration("FIXME");
+            configuration.setStore(new LocalStore());
+            configuration.addPersistentClass(Demand.class);
+            configuration.addPersistentClass(Danger.class);
+            configuration.addPersistentClass(Target.class);
+            configuration.addPersistentClass(ArrowAction.class);
+
+            this.factory = configuration.getPersistenceSessionFactory();
+
+        } catch (PersistenceException e)
+        {
+            e.printStackTrace();
+        }
+
 		listener = engineHandler;
 	}
 	
 	public void add(IModel m, IEntity e) {
-		if (m instanceof Demand) addDemand((Demand) m);
-		else if (m instanceof Danger) addDanger((Danger) m);
-		else if (m instanceof Target) addTarget((Target) m);
-		else if (m instanceof ArrowAction) addArrowAction((ArrowAction) m);
-		else if (m == null) {
-			Log.w(TAG, "add(null) >> I'm sorry but I cannot add null thing :/");
-			return;
-		} else {
-			Log.w(TAG, "add("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
-			return;
-		}
+        PersistenceSession session = null;
+        try {
+            session = factory.openSession();
+            session.save(m);
+        } catch (PersistenceException ex) {
+            Log.e(TAG, "Error while persisting object", ex);
+        } finally {
+            if (session != null) session.close();
+        }
+
 		if (listener != null) listener.onAdd(m, e);
 	}
 
 	public void update(IModel m, IEntity e) {
-		if (m instanceof Demand) updateDemand((Demand) m);
-		else if (m instanceof Danger) updateDanger((Danger) m);
-		else if (m instanceof Target) updateTarget((Target) m);
-		else if (m instanceof ArrowAction) updateArrowAction((ArrowAction) m);
-		else if (m == null) {
-			Log.w(TAG, "update(null) >> I'm sorry but I cannot update null thing :/");
-			return;
-		} else {
-			Log.w(TAG, "update("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
-			return;
-		}
+        PersistenceSession session = null;
+        try {
+            session = factory.openSession();
+            session.update(m);
+        } catch (PersistenceException ex) {
+            Log.e(TAG, "Error while persisting object", ex);
+        } finally {
+            if (session != null) session.close();
+        }
+
 		if (listener != null) listener.onUpdate(m, e);
 	}
 	
 	public void delete(IModel m, IEntity e) {
-		if (m instanceof Demand) deleteDemand((Demand) m);
-		else if (m instanceof Danger) deleteDanger((Danger) m);
-		else if (m instanceof Target) deleteTarget((Target) m);
-		else if (m instanceof ArrowAction) deleteArrowAction((ArrowAction) m);
-		else if (m == null) {
-			Log.w(TAG, "delete(null) >> I'm sorry but I cannot delete null thing :/");
-			return;
-		} else {
-			Log.w(TAG, "delete("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
-			return;
-		}
+        PersistenceSession session = null;
+        try {
+            session = factory.openSession();
+            session.delete(m);
+        } catch (PersistenceException ex) {
+            Log.e(TAG, "Error while persisting object", ex);
+        } finally {
+            if (session != null) session.close();
+        }
 		if (listener != null) listener.onDelete(e);
-	}
-	
-	private void addDemand(Demand d) {
-		demands.add(d);
-	}
-
-	private void addDanger(Danger d) {
-		dangers.add(d);
-	}
-
-	private void addTarget(Target t) {
-		targets.add(t);
-	}
-
-	private void updateDemand(Demand d) {
-    	// TODO
-	}
-
-	private void updateDanger(Danger d) {
-        // TODO
-    }
-
-	private void updateTarget(Target t) {
-        // TODO
-    }
-	
-	private void deleteTarget(Target t) {
-		targets.remove(t);
-	}
-
-	private void deleteDanger(Danger d) {
-		dangers.remove(d);
-	}
-
-	private void deleteDemand(Demand d) {
-		demands.remove(d);
-	}
-	
-	private void addArrowAction(ArrowAction m) {
-		arrowActions.add(m);
-	}
-	
-	private void updateArrowAction(ArrowAction m) {
-		// TODO
-	}
-
-	private void deleteArrowAction(ArrowAction m) {
-		arrowActions.remove(m);
 	}
 }

@@ -11,6 +11,11 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 
 public class ArrowEntity extends Entity {
+
+    public static final String SAP = "Secours à personnes";
+    public static final String CHEM = "Risques particuliers";
+    public static final String FIRE = "Extinction";
+    public static final String WATER = "Eau";
 	
 	protected ArrayList<IGeoPoint> points;
 	

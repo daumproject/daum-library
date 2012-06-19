@@ -61,13 +61,13 @@ public class EntityFactory implements IEntityFactory {
 		String name;
 		switch (type) {
 			case WATER:
-				name = "Eau";
+				name = DangerEntity.WATER;
 				break;
 			case CHEM:
-				name = "Risques particuliers";
+				name = DangerEntity.CHEM;
 				break;
 			case FIRE:
-				name = "Incendie";
+				name = DangerEntity.FIRE;
 				break;
 			default:
 				name = type.name();
@@ -85,16 +85,16 @@ public class EntityFactory implements IEntityFactory {
 		String name;
 		switch (type) {
 			case WATER:
-				name = "Eau";
+				name = TargetEntity.WATER;
 				break;
 			case CHEM:
-				name = "Risque particulier";
+				name = TargetEntity.CHEM;
 				break;
 			case FIRE:
-				name = "Incendie";
+				name = TargetEntity.FIRE;
 				break;
 			case VICTIM:
-				name = "Personne";
+				name = TargetEntity.VICTIM;
 				break;
 			default:
 				name = type.name();
@@ -113,22 +113,22 @@ public class EntityFactory implements IEntityFactory {
 		int arrowColor;
 		switch (type) {
 			case CHEM:
-				name = "Risques particulier";
+				name = ArrowEntity.CHEM;
 				arrowColor = Color.rgb(255, 156, 0); // orange
 				break;
 				
 			case FIRE:
-				name = "Extinction";
+				name = ArrowEntity.FIRE;
 				arrowColor = Color.RED;
 				break;
 				
 			case SAP:
-				name = "Secours à personnes";
+				name = ArrowEntity.SAP;
 				arrowColor = Color.GREEN;
 				break;
 				
 			case WATER:
-				name = "Eau";
+				name = ArrowEntity.WATER;
 				arrowColor = Color.BLUE;
 				break;
 				

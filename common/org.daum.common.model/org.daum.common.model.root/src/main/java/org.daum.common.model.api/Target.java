@@ -1,6 +1,11 @@
 package org.daum.common.model.api;
 
+
 import org.daum.common.gps.api.IGpsPoint;
+
+import org.daum.library.ormH.annotations.Generated;
+import org.daum.library.ormH.annotations.Id;
+import org.daum.library.ormH.persistence.GeneratedType;
 
 public class Target implements IModel {
 
@@ -12,7 +17,10 @@ public class Target implements IModel {
 		VICTIM,
 		CHEM
 	}
-	
+
+    @Id
+    @Generated(strategy = GeneratedType.UUID)
+    private String id = "";
 	private IGpsPoint location;
 	private Target.Type type;
 	
@@ -20,6 +28,16 @@ public class Target implements IModel {
 		this.type = type;
 		this.location = location;
 	}
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public void setId(String id) {
+        this.id = id;
+    }
 
 	public IGpsPoint getLocation() {
 		return location;

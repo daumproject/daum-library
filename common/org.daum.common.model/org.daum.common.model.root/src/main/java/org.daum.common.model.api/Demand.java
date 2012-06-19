@@ -4,6 +4,10 @@ import java.util.Date;
 
 import org.daum.common.gps.api.IGpsPoint;
 
+import org.daum.library.ormH.annotations.Generated;
+import org.daum.library.ormH.annotations.Id;
+import org.daum.library.ormH.persistence.GeneratedType;
+
 /**
  * Created with IntelliJ IDEA.
  * User: max
@@ -14,8 +18,10 @@ import org.daum.common.gps.api.IGpsPoint;
 public class Demand implements IModel {
 
 	private static final long serialVersionUID = 7728877078263492496L;
-	
-	private long id = -1;
+
+    @Id
+    @Generated(strategy = GeneratedType.UUID)
+	private String id = "";
 	private VehicleType type;
 	private String number;
     private String cis;
@@ -43,12 +49,14 @@ public class Demand implements IModel {
     	this.type = type;
         this.gh_demande = new Date();
     }
-	
-	public long getId() {
+
+    @Override
+	public String getId() {
 		return id;
 	}
-	
-	public void setId(long id) {
+
+    @Override
+	public void setId(String id) {
 		this.id = id;
 	}
 	

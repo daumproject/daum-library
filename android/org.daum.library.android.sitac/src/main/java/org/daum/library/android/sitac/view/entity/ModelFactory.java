@@ -40,9 +40,9 @@ public class ModelFactory implements IModelFactory {
 		IGeoPoint geoP = ent.getGeoPoint();
 		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
 		Danger.Type type = Danger.Type.WATER;
-		if (ent.getType().equals("Incendie")) {
+		if (ent.getType().equals(DangerEntity.FIRE)) {
 			type = Danger.Type.FIRE;
-		} else if (ent.getType().equals("Risques particuliers")) {
+		} else if (ent.getType().equals(DangerEntity.CHEM)) {
 			type = Danger.Type.CHEM;
 		}
 		Danger d = new Danger(type, location);
@@ -61,9 +61,9 @@ public class ModelFactory implements IModelFactory {
 		ArrowAction.Type type = ArrowAction.Type.WATER;
 		if (ent.getType().equals("Extinction")) {
 			type = ArrowAction.Type.FIRE;
-		} else if (ent.getType().equals("Secours à personnes")) {
+		} else if (ent.getType().equals(ArrowEntity.SAP)) {
 			type = ArrowAction.Type.SAP;
-		} else if (ent.getType().equals("Risques particuliers")) {
+		} else if (ent.getType().equals(ArrowEntity.CHEM)) {
 			type = ArrowAction.Type.CHEM;
 		}
 		ArrowAction a = new ArrowAction(type, location, points);
@@ -74,11 +74,11 @@ public class ModelFactory implements IModelFactory {
 		IGeoPoint geoP = ent.getGeoPoint();
 		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
 		Target.Type type = Target.Type.WATER;
-		if (ent.getType().equals("Incendie")) {
+		if (ent.getType().equals(TargetEntity.FIRE)) {
 			type = Target.Type.FIRE;
-		} else if (ent.getType().equals("Risque particulier")) {
+		} else if (ent.getType().equals(TargetEntity.CHEM)) {
 			type = Target.Type.CHEM;
-		} else if (ent.getType().equals("Personne")) {
+		} else if (ent.getType().equals(TargetEntity.VICTIM)) {
 			type = Target.Type.VICTIM;
 		}
 		Target t = new Target(type, location);
