@@ -8,7 +8,9 @@ import java.util.List;
 
 public class Intervention implements Serializable {
 
+    @Id()
     private int number;
+
     private String precision;
     private InterventionType type;
     private List<Detachement> detachements = new ArrayList<Detachement>();
@@ -19,7 +21,7 @@ public class Intervention implements Serializable {
         this.precision = precision;
         this.type = type;
     }
-    @Id(attachTOCache = "InterventionCache")
+
     public int getNumber()
     {
         return number;

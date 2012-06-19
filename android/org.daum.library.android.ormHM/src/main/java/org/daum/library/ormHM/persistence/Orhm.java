@@ -11,24 +11,14 @@ import java.io.Serializable;
 public class Orhm implements Serializable {
 
     private  String cacheName ="";
-    private  String idName = "";
     private Object id;
-    private GenerationType generationType;
+    private int generatedType;
 
-    public Orhm(String cacheName,GenerationType generationType, String idname,Object id)
+    public Orhm(String cacheName,int generatedType,Object id)
     {
         this.cacheName = cacheName;
-        this.generationType = generationType;
+        this.generatedType = generatedType;
         this.id = id;
-        this.idName = idname;
-    }
-
-    public String getIdName() {
-        return idName;
-    }
-
-    public void setIdName(String idName) {
-        this.idName = idName;
     }
 
     public Object getId() {
@@ -48,11 +38,11 @@ public class Orhm implements Serializable {
     }
 
 
-    public GenerationType getGenerationType() {
-        return generationType;
+    public int getGeneratedType() {
+        return generatedType;
     }
 
-    public void setGenerationType(GenerationType generationType) {
-        this.generationType = generationType;
+    public void setGeneratedType(int generatedType) {
+        this.generatedType = generatedType;
     }
 }

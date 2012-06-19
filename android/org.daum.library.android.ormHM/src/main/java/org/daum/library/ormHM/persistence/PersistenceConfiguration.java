@@ -19,20 +19,34 @@ import java.util.Map;
 
 public class PersistenceConfiguration implements IPersistenceConfiguration {
 
+    private String nodeID;
     private  Logger logger = LoggerFactory.getLogger(this.getClass());
     private PersistenceSessionStore connectionConfiguration=null;
     private Map<String, PersistentClass> persistentClasses=null;
 
-    public PersistenceConfiguration() throws PersistenceException
+
+    /**
+     * @param nodeID  the unique id of the node
+     * @throws PersistenceException
+     */
+    public PersistenceConfiguration(String nodeID) throws PersistenceException
     {
+       this.nodeID = nodeID;
         persistentClasses =  new HashMap<String, PersistentClass>();
         for(PersistentClass pc : getPersistentClasses())
         {
-            System.out.println(pc);
             pc.parse();
         }
     }
 
+
+    public String getNodeID() {
+        return nodeID;
+    }
+
+    public void setNodeID(String nodeID) {
+        this.nodeID = nodeID;
+    }
 
     public void addPersistentClass(Class pc) throws PersistenceException
     {
@@ -48,13 +62,12 @@ public class PersistenceConfiguration implements IPersistenceConfiguration {
         persistentClasses.put(pc.getName(), pc);
     }
 
-
     public PersistenceSessionStore getConnectionConfiguration()
     {
         return connectionConfiguration;
     }
 
-    public void setConnectionConfiguration(PersistenceSessionStore connectionConfiguration)
+    public void setStore(PersistenceSessionStore connectionConfiguration)
     {
         this.connectionConfiguration = connectionConfiguration;
     }

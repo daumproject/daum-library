@@ -14,9 +14,10 @@ import java.util.Date;
  */
 public class HeartMonitor implements Serializable{
 
+    @Id()
     public Date date;
+
     public double  value;
-    @Id(MaxEntriesLocalHeap = 5000,attachTOCache = "HeartMonitor")
     public Date getDate()
     {
         return date;

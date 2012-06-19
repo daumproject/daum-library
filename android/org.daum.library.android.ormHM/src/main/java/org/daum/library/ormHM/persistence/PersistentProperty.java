@@ -1,13 +1,9 @@
 package org.daum.library.ormHM.persistence;
-
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.PropertyUtils;
-import org.daum.library.ormHM.annotations.GeneratedValue;
+import org.daum.library.ormHM.annotations.Generated;
 import org.daum.library.ormHM.annotations.Id;
 import org.daum.library.ormHM.utils.PersistenceException;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by jed
@@ -21,43 +17,47 @@ public class PersistentProperty {
     private String name;
     private Class clazz;
     private boolean id=false;
-    private  GenerationType generationType= GenerationType.MANUEL;
-    private Field att;
+    private int generatedType = GeneratedType.MANUEL;
+    private Field fieldID;
     private String cacheName = "";
 
-
-    public PersistentProperty(PersistentClass persistentClass, Field att) {
+    public PersistentProperty(PersistentClass persistentClass, Field fieldID) {
         this.pers = persistentClass;
-        this.att = att;
+        this.fieldID = fieldID;
         parse();
     }
 
     public void parse()
     {
         Id id = null;
-        GeneratedValue generatedValue = null;
-        id = att.getAnnotation(Id.class);
+        Generated generatedValue = null;
+        id = fieldID.getAnnotation(Id.class);
         if (id != null)
         {
             setId(true);
-            pers.setId(this);
+            fieldID.setAccessible(true);
+            pers.setPersistentPropertyID(this);
             setCacheName(pers.getClazz().getName());
-            setName(att.getName());
-            generatedValue = att.getAnnotation(GeneratedValue.class);
+            setName(fieldID.getName());
+            generatedValue = fieldID.getAnnotation(Generated.class);
             if(generatedValue != null)
             {
-                generationType  = generatedValue.strategy();
+                generatedType = generatedValue.strategy();
             }
         }
+
+
+
+        // todo parse
     }
 
 
-    public GenerationType getGenerationType() {
-        return generationType;
+    public int getGeneratedType() {
+        return generatedType;
     }
 
-    public void setGenerationType(GenerationType generationType) {
-        this.generationType = generationType;
+    public void setGeneratedType(int generatedType) {
+        this.generatedType = generatedType;
     }
 
     public String getCacheName() {
@@ -87,6 +87,9 @@ public class PersistentProperty {
         this.clazz = clazz;
     }
 
+    public Field getFieldID() {
+        return fieldID;
+    }
 
     public boolean isId() {
         return id;
@@ -96,29 +99,21 @@ public class PersistentProperty {
     }
 
     public Object getValue(Object bean) throws PersistenceException {
-        try {
-            return PropertyUtils.getSimpleProperty(bean, getName());
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+        try
+        {
+            return  getFieldID().get(bean);
+        } catch (Exception e) {
+            throw new PersistenceException("getValue "+ getFieldID().getName()+" "+e.getCause());
         }
-        return null;
     }
 
     public void setValue(Object bean, Object value) throws PersistenceException
     {
-        Object valueConverted = ConvertUtils.convert(value, getClazz());
-        try {
-            PropertyUtils.setSimpleProperty(bean, getName(), valueConverted);
+        try
+        {
+            getFieldID().set(bean,value);
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
+            throw new PersistenceException("setValue "+ getFieldID().getName()+" "+e.getCause());
         }
     }
 }

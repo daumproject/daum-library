@@ -1,14 +1,12 @@
 package org.daum.library.ormHM.persistence;
 
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.PropertyUtils;
+
 import org.daum.library.ormHM.api.IPersistenceSession;
 import org.daum.library.ormHM.api.PersistenceSessionStore;
 import org.daum.library.ormHM.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.UUID;
 
@@ -45,42 +43,70 @@ public class PersistenceSession implements IPersistenceSession {
             {
                 PersistentClass pc = null;
                 pc=factory.getPersistenceConfiguration().getPersistentClass(bean);
-
-                for (PersistentProperty pp : pc.getPersistentProperties())
+                PersistentProperty pp = pc.getPersistentPropertyID();
+                Object id =  pp.getValue(bean);
+                if(id != null)
                 {
-                    if(pp.isId())
+                    Orhm ormh = new Orhm(pp.getCacheName(),pp.getGeneratedType(),id);
+
+                    if(ormh.getGeneratedType() == GeneratedType.UUID)
                     {
-                        Object id =  pp.getValue(bean);
-                        if(id != null)
+                        if(ormh.getId().getClass() !=  String.class && ormh.getId() != null)
                         {
-                            Orhm ormh = new Orhm(pp.getCacheName(),pp.getGenerationType(),pp.getName(),id);
-
-                            if(ormh.getGenerationType() == GenerationType.UUID)
-                            {
-                                ormh.setId(UUID.randomUUID().toString());
-
-                                Object valueConverted = ConvertUtils.convert(ormh.getId(), String.class);
-                                try {
-                                    PropertyUtils.setSimpleProperty(bean, ormh.getIdName(), valueConverted);
-                                } catch (IllegalAccessException e) {
-                                    e.printStackTrace();
-                                } catch (InvocationTargetException e) {
-                                    e.printStackTrace();
-                                } catch (NoSuchMethodException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-
-                            store.save(ormh, bean);
-                        }
-                        else
+                            throw new PersistenceException("GeneratedType : "+ GeneratedType.UUID+" need to be  : String id = new String()");
+                        }else
                         {
-                            logger.error("the id is null the bean cannot be saved");
-                            throw new PersistenceException("the annotation id is not define");
+                            ormh.setId(conf.getNodeID()+"+"+UUID.randomUUID().toString());
+
+                           pp.getFieldID().set(bean, ormh.getId());
+                           // Object valueConverted = ConvertUtils.convert(ormh.getId(), ormh.getId().getClass());
+                            // update id in bean
+                            //PropertyUtils.setProperty(bean, ormh.getIdName(), valueConverted);
                         }
-                        break;
                     }
+                    store.save(ormh, bean);
                 }
+                else
+                {
+                    logger.error("the id is null the bean cannot be saved");
+                    throw new PersistenceException("the annotation id is not define");
+                }
+
+
+
+            }   catch (Exception e){
+                logger.error("The persistence class is not added in addPersistentClass");
+
+            }
+        }else {
+            logger.error(" Fail to save bean is null");
+        }
+    }
+
+    @Override
+    public void update(Object bean) throws PersistenceException {
+        if(bean != null)
+        {
+            try
+            {
+                PersistentClass pc = null;
+                pc=factory.getPersistenceConfiguration().getPersistentClass(bean);
+
+                PersistentProperty pp =  pc.getPersistentPropertyID();
+
+                Object id =  pp.getValue(bean);
+                if(id != null)
+                {
+                    Orhm ormh = new Orhm(pp.getCacheName(),pp.getGeneratedType(),id);
+                    store.update(ormh, bean);
+                }
+                else
+                {
+                    logger.error("the id is null the bean cannot be saved");
+                    throw new PersistenceException("the annotation id is not define");
+                }
+
+
             }   catch (Exception e){
                 logger.error("The persistence class is not added in addPersistentClass");
 
@@ -98,23 +124,17 @@ public class PersistenceSession implements IPersistenceSession {
                 PersistentClass pc = null;
                 pc=factory.getPersistenceConfiguration().getPersistentClass(bean);
 
-                for (PersistentProperty pp : pc.getPersistentProperties())
+                PersistentProperty pp =   pc.getPersistentPropertyID();
+                Object id =  pc.getPersistentPropertyID().getValue(bean);
+                if(id != null)
                 {
-                    if(pp.isId())
-                    {
-                        Object id =  pp.getValue(bean);
-                        if(id != null)
-                        {
-                            Orhm ormh = new Orhm(pp.getCacheName(),pp.getGenerationType(),pp.getName(),id);
-                            store.delete(ormh);
-                        }
-                        else
-                        {
-                            logger.error("the id is null");
-                            throw new PersistenceException("the annotation id is not define");
-                        }
-                        break;
-                    }
+                    Orhm ormh = new Orhm(pp.getCacheName(),pp.getGeneratedType(),id);
+                    store.delete(ormh);
+                }
+                else
+                {
+                    logger.error("the id is null");
+                    throw new PersistenceException("the annotation id is not define");
                 }
             }catch (Exception e){
                 logger.error("The format of the bean is not correct or The persistence class is not added in addPersistentClassThe persistence class is not added in addPersistentClass");
@@ -132,7 +152,7 @@ public class PersistenceSession implements IPersistenceSession {
         try
         {
             pc = factory.getPersistenceConfiguration().getPersistentClass(clazz);
-            ormh = new Orhm(pc.getId().getCacheName(),null,null,_id);
+            ormh = new Orhm(pc.getPersistentPropertyID().getCacheName(),GeneratedType.NONE,_id);
             bean = store.get(ormh);
             return bean;
         } catch (Exception e)
@@ -151,8 +171,8 @@ public class PersistenceSession implements IPersistenceSession {
         try
         {
             pc = factory.getPersistenceConfiguration().getPersistentClass(clazz);
-            //String cacheName,GenerationType generationType, Object id
-            id = new Orhm(pc.getId().getCacheName(),null,null,null);
+            //String cacheName,GeneratedType generationType, Object id
+            id = new Orhm(pc.getPersistentPropertyID().getCacheName(),GeneratedType.NONE,null);
             return store.getAll(id);
 
         } catch (Exception e)
@@ -171,7 +191,7 @@ public class PersistenceSession implements IPersistenceSession {
         try
         {
             pc = factory.getPersistenceConfiguration().getPersistentClass(clazz);
-            Orhm  ormH = new Orhm(pc.getId().getCacheName(),null,null,_id);
+            Orhm  ormH = new Orhm(pc.getPersistentPropertyID().getCacheName(),GeneratedType.NONE,_id);
             store.lock(ormH);
             bean = store.get(ormH);
             return bean;
@@ -188,23 +208,15 @@ public class PersistenceSession implements IPersistenceSession {
         PersistentClass pc = null;
         pc=factory.getPersistenceConfiguration().getPersistentClass(bean);
 
-        for (PersistentProperty pp : pc.getPersistentProperties())
+        Object idclass =  pc.getPersistentPropertyID().getValue(bean);
+        if (idclass != null)
         {
-            if(pp.isId())
-            {
-                Object idclass =  pp.getValue(bean);
-                if (idclass != null)
-                {
-                    Orhm  ormH = new Orhm(pc.getId().getCacheName(),null,null,idclass);
-                    store.unlock(ormH);
-                }
-                else
-                {
-                    logger.warn("the id is null");
-                }
-
-                break;
-            }
+            Orhm  ormH = new Orhm(pc.getPersistentPropertyID().getCacheName(),GeneratedType.NONE,idclass);
+            store.unlock(ormH);
+        }
+        else
+        {
+            logger.warn("the id is null");
         }
     }
 

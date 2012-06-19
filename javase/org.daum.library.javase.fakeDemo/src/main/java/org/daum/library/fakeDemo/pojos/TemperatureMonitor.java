@@ -14,9 +14,9 @@ import java.util.Date;
  */
 public class TemperatureMonitor implements Serializable{
 
+    @Id
     public Date date;
     public double  value;
-    @Id
     public Date getDate()
     {
         return date;

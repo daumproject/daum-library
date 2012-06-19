@@ -21,6 +21,7 @@
     </properties>
 
     <modules>
+        <module>../org.daum.library.android.demos</module>
         <module>../org.daum.library.android.ormHM</module>
         <module>../org.daum.library.android.ehcache</module>
         <module>../org.daum.library.android.replicatingMap</module>

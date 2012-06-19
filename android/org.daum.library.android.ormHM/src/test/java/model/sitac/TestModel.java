@@ -1,8 +1,8 @@
 package model.sitac;
 
-import org.daum.library.ormHM.annotations.GeneratedValue;
+import org.daum.library.ormHM.annotations.Generated;
 import org.daum.library.ormHM.annotations.Id;
-import org.daum.library.ormHM.persistence.GenerationType;
+import org.daum.library.ormHM.persistence.GeneratedType;
 
 import java.io.Serializable;
 
@@ -15,7 +15,7 @@ import java.io.Serializable;
 public class TestModel implements Serializable {
 
     @Id()
-    @GeneratedValue(strategy = GenerationType.UUID)
+    @Generated(strategy = GeneratedType.UUID)
     private  String id ="";
     int sum = 0;
 

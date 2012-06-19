@@ -1,18 +1,13 @@
 package org.daum.library.ormHM.store;
 
-import org.apache.commons.beanutils.ConvertUtils;
-import org.apache.commons.beanutils.PropertyUtils;
 import org.daum.library.ormHM.api.PersistenceSessionStore;
-import org.daum.library.ormHM.persistence.GenerationType;
 import org.daum.library.ormHM.persistence.Orhm;
 import org.daum.library.ormHM.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,13 +22,18 @@ public class LocalStore implements PersistenceSessionStore {
 
     @Override
     public void save(Orhm id, Object bean) throws PersistenceException {
-
         String name =id.getCacheName();
         if(!store.containsKey(id.getCacheName()))
         {
             Cache cache  =  new Cache(name) ;
             store.put(name,cache);
         }
+        store.get(name).put(id.getId(), bean);
+    }
+
+    @Override
+    public void update(Orhm id, Object bean) throws PersistenceException {
+        String name =id.getCacheName();
         store.get(name).put(id.getId(), bean);
     }
 

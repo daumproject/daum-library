@@ -1,5 +1,7 @@
 package org.daum.library.ormHM.api;
 
+import org.daum.library.ormHM.utils.PersistenceException;
+
 /**
  * Created by jed
  * User: jedartois@gmail.com
@@ -9,5 +11,6 @@ package org.daum.library.ormHM.api;
 public interface IPersistenceConfiguration {
     public PersistenceSessionStore getConnectionConfiguration();
     public IPersistenceSessionFactory getPersistenceSessionFactory();
-    public void setConnectionConfiguration(PersistenceSessionStore connectionConfiguration);
+    public void setStore(PersistenceSessionStore connectionConfiguration);
+    public void addPersistentClass(Class pc) throws PersistenceException;
 }

@@ -20,7 +20,7 @@ public class PersistentClass
     private PersistentProperty property;
     private String tablename;
     private List<PersistentProperty> persistantProperties =  new ArrayList<PersistentProperty>();
-    private PersistentProperty id;
+    private PersistentProperty persistentPropertyID;
 
     public PersistentClass(){
 
@@ -64,27 +64,20 @@ public class PersistentClass
         this.tablename = tablename;
     }
 
-    public List<PersistentProperty> getPersistantProperties() {
-        return persistantProperties;
+    public PersistentProperty getPersistentPropertyID() {
+        return persistentPropertyID;
     }
 
-    public void setPersistantProperties(
-            List<PersistentProperty> persistantProperties) {
-        this.persistantProperties = persistantProperties;
-    }
-
-    public PersistentProperty getId() {
-        return id;
-    }
-
-    public void setId(PersistentProperty id) {
-        this.id = id;
+    public void setPersistentPropertyID(PersistentProperty persistentPropertyID) {
+        this.persistentPropertyID = persistentPropertyID;
     }
 
     public void parse() throws PersistenceException {
         try
         {
-            clazz = Class.forName(getName());
+
+            //  clazz = Class.forName(getName());
+            clazz = getClass().getClassLoader().loadClass(getName());
         }
         catch(ClassNotFoundException e)
         {
@@ -99,26 +92,32 @@ public class PersistentClass
         {
             Field field = fields[i];
             property = new PersistentProperty(this, field);
-            persistantProperties.add(property);
-        //   System.out.println(field.getName());
+            if(property.isId())
+            {
+                setPersistentPropertyID(property);
+                break;
+            } else
+            {
+                /*
+           for(int i=0;i < methods.length;i++)
+           {
+               Method method = methods[i];
+               String methodName = method.getName();
+               Class[] types = method.getParameterTypes();
+               if(methodName.startsWith("get") && types.length == 0 && method.getDeclaringClass().equals(clazz))
+               {
+                   property = new PersistentProperty(this, method);
+                   String propertyName = methodName.substring(3,4).toLowerCase() + methodName.substring(4);
+                   if(property.getType() != null)
+                   {
+                       persistantProperties.add(property);
+                   }
+               }
+           }     */
+            }
         }
 
-         /*
-        for(int i=0;i < methods.length;i++)
-        {
-            Method method = methods[i];
-            String methodName = method.getName();
-            Class[] types = method.getParameterTypes();
-            if(methodName.startsWith("get") && types.length == 0 && method.getDeclaringClass().equals(clazz))
-            {
-                property = new PersistentProperty(this, method);
-                String propertyName = methodName.substring(3,4).toLowerCase() + methodName.substring(4);
-                if(property.getType() != null)
-                {
-                    persistantProperties.add(property);
-                }
-            }
-        }     */
+
     }
 
     public Object createInstance() throws PersistenceException, InstantiationException, IllegalAccessException
@@ -136,6 +135,7 @@ public class PersistentClass
     public List<PersistentProperty> getPersistentProperties() {
         return persistantProperties;
     }
+
 
     public PersistentProperty getPersistentProperty(String string)
     {

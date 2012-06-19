@@ -10,6 +10,7 @@ import org.daum.library.ormHM.utils.PersistenceException;
  */
 public interface IPersistenceSession {
     public void save(Object bean) throws PersistenceException;
+    public void update(Object bean) throws PersistenceException;
     public void delete(Object bean) throws PersistenceException;
     public Object get(Class clazz,Object _id) throws PersistenceException;
     public Object getAll(Class clazz) throws PersistenceException;

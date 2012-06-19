@@ -51,7 +51,7 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
     public void start()
     {
         try {
-            configuration = new PersistenceConfiguration();
+            configuration = new PersistenceConfiguration(getNodeName());
             configuration.addPersistentClass(TemperatureMonitor.class);
             configuration.addPersistentClass(Moyen.class);
             configuration.addPersistentClass(HeartMonitor.class);
@@ -126,7 +126,7 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
 
         StoreImpl storeImpl = new StoreImpl(replicatingService);
 
-        configuration.setConnectionConfiguration(storeImpl);
+        configuration.setStore(storeImpl);
         factory = configuration.getPersistenceSessionFactory();
 
         initMoyen();
