@@ -37,8 +37,6 @@ public class SITACComponent extends AbstractComponentType {
         });
     }
 
-
-
     @Stop
     public void stop() {
 

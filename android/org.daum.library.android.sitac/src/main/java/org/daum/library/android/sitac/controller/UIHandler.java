@@ -2,6 +2,7 @@ package org.daum.library.android.sitac.controller;
 
 import java.util.Hashtable;
 
+import org.daum.common.gps.impl.GpsPoint;
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.command.AddModelCommand;
 import org.daum.library.android.sitac.command.DeleteModelCommand;
@@ -54,7 +55,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	public void onSelectedEntityButtonClicked() {
 		if (mapView != null && selectedEntityView != null) {
 			if (selectedEntityView.getState() == SITACSelectedEntityView.STATE_DELETION) {
-				IModel m = factory.build(selectedEntity);
+				IModel m = map.get(selectedEntity);
 				CmdManager.getInstance(engine).execute(DeleteModelCommand.class, m, selectedEntity);
 				
 			} else if (selectedEntityView.getState() == SITACSelectedEntityView.STATE_SELECTION_CONFIRM) {
@@ -85,11 +86,12 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 			// if the state is EDITED, then update the corresponding data in the engine
 			} else if (selectedEntity.getState() == IEntity.STATE_EDITED) {
 				IModel m;
-				if (!map.contains(selectedEntity)) {
+				if (!map.containsKey(selectedEntity)) {
 					m = factory.build(selectedEntity);
 					map.put(selectedEntity, m);
 				} else {
 					m = map.get(selectedEntity);
+					m.setLocation(new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6()));
 				}
 				CmdManager.getInstance(engine).execute(UpdateModelCommand.class, m, selectedEntity);
 			}
