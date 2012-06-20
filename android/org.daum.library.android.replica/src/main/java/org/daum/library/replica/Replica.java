@@ -1,10 +1,8 @@
 package org.daum.library.replica;
 
-import org.daum.library.replica.msg.Command;
 import org.daum.library.replica.msg.Message;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
-import org.kevoree.framework.MessagePort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,9 +21,9 @@ import org.slf4j.LoggerFactory;
 })
 @Provides({
         @ProvidedPort(name = "remote", type = PortType.MESSAGE) ,
-        @ProvidedPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class)
+        @ProvidedPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class)
 })
-public class Replica extends AbstractComponentType implements ReplicatingService {
+public class Replica extends AbstractComponentType implements ReplicaService {
 
     KChannelImpl kChannel=null;
 

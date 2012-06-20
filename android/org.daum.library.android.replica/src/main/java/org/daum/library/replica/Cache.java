@@ -16,7 +16,7 @@ public class Cache extends  DHashMap<Object,VersionedValue>{
     private String name = "";
     private CacheManager cacheManger=null;
     private SystemTime systemTime = new SystemTime();
-    private  int MaxEntriesLocalHeap=1000;
+    private int MaxEntriesLocalHeap=1000;
 
 
     public Cache(String cachename,CacheManager cacheManger)
@@ -43,14 +43,16 @@ public class Cache extends  DHashMap<Object,VersionedValue>{
             Update e = new Update();
             VersionedValue version = new VersionedValue(value);
 
-            e.op = StoreRequest.ADD;
+            e.op = StoreCommand.ADD;
             e.key = key;
             e.setVersionedValue(version);
             e.cache = name;
+            // local
+            VersionedValue last = super.put(key, version);
+
             // remote
             cacheManger.remoteDisptach(e);
-            // local
-            return super.put(key, version);
+            return  last;
         }
     }
 
@@ -64,9 +66,9 @@ public class Cache extends  DHashMap<Object,VersionedValue>{
 
     public void localDispatch(Update replica)
     {
-        logger.debug("Local dispatch "+replica.getCache());
+        logger.debug("Local dispatch "+name);
 
-        if (replica.op.equals(StoreRequest.ADD))
+        if (replica.op.equals(StoreCommand.ADD))
         {
             VersionedValue old = (VersionedValue) super.get(replica.key);
             if(old == null)
@@ -81,11 +83,11 @@ public class Cache extends  DHashMap<Object,VersionedValue>{
                     super.put(replica.key, replica.getVersionedValue());
                 } else
                 {
-                    logger.debug("receive old version ");
+                    logger.debug("receive old version");
                 }
             }
 
-        } else if (replica.op.equals(StoreRequest.DELETE))
+        } else if (replica.op.equals(StoreCommand.DELETE))
         {
             super.remove(replica.key);
         }
@@ -96,11 +98,12 @@ public class Cache extends  DHashMap<Object,VersionedValue>{
     public VersionedValue remove(Object key) {
         //logger.warn("WARNING !! TODO backup remove until synchronize is finish");
         Update e = new Update();
-        e.op = StoreRequest.DELETE;
+        e.op = StoreCommand.DELETE;
         e.key =  key;
         e.cache = name;
+        VersionedValue last = super.remove(key);
         cacheManger.remoteDisptach(e);
-        return super.remove(key);
+        return   last;
     }
 
 }

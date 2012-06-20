@@ -1,5 +1,7 @@
 package org.daum.library.replica.msg;
 
+import org.daum.library.replica.StoreCommand;
+
 /**
  * Created with IntelliJ IDEA.
  * User: jed
@@ -11,6 +13,7 @@ public class NotifyUpdate implements Message {
 
     private String cache;
     private Object key;
+    private StoreCommand cmd;
 
     public String getCache() {
         return cache;
@@ -27,4 +30,14 @@ public class NotifyUpdate implements Message {
     public void setKey(Object key) {
         this.key = key;
     }
+
+
+    public StoreCommand getCmd(){
+        return cmd;
+    }
+
+    public void setCmd(StoreCommand cmd){
+        this.cmd = cmd;
+    }
+
 }

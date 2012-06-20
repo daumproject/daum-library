@@ -11,12 +11,9 @@ import java.util.Observable;
  * Time: 11:50
  * To change this template use File | Settings | File Templates.
  */
-public class PropertyChangeListener extends Observable
-{
-    private  Class zclass;
-    public PropertyChangeListener(Class zclass)
-    {
-        this.zclass  = zclass;
-    }
+public interface PropertyChangeListener extends java.util.EventListener {
+
+    void update(PropertyChangeEvent propertyChangeEvent);
+
 
 }
