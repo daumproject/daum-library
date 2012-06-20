@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
         @ProvidedPort(name = "remote", type = PortType.MESSAGE) ,
         @ProvidedPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class)
 })
-public class ReplicatingManager extends AbstractComponentType implements ReplicatingService {
+public class Replica extends AbstractComponentType implements ReplicatingService {
 
     KChannelImpl kChannel=null;
 

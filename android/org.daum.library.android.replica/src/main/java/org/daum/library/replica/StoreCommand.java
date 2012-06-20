@@ -6,6 +6,6 @@ package org.daum.library.replica;
  * Date: 24/05/12
  * Time: 16:28
  */
-public enum StoreRequest {
+public enum StoreCommand {
     ADD, DELETE,UPDATE, REQUEST_SNAPSHOT,SNAPSHOT,HEARTBEAT
 }
