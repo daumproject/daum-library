@@ -60,7 +60,7 @@ public class ModelJtable extends AbstractTableModel{
                 update.setName(obj.toString());
                 try
                 {
-                    s = factory.openSession();
+                    s = factory.getSession();
                     s.save(update);
                     s.close();
 
@@ -76,7 +76,7 @@ public class ModelJtable extends AbstractTableModel{
                 update.setCaserne(obj.toString());
                 try
                 {
-                    s = factory.openSession();
+                    s = factory.getSession();
                     s.save(update);
                     s.close();
 

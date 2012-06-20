@@ -7,7 +7,7 @@ import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.daum.library.replica.ReplicatingService;
+import org.daum.library.replica.ReplicaService;
 import org.daum.library.replica.utils.SystemTime;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
@@ -28,7 +28,7 @@ import java.util.Set;
 
 @Library(name = "JavaSE", names = {"Android"})
 @Requires({
-        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class, optional = true)
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
 })
 @Provides({
         @ProvidedPort(name = "inputvalue", type = PortType.MESSAGE)
@@ -44,7 +44,7 @@ public class ArduinoGW extends AbstractComponentType {
 
     public PersistenceConfiguration configuration = null;
     private PersistenceSessionFactoryImpl factory = null;
-    private ReplicatingService replicatingService = null;
+    private ReplicaService replicatingService = null;
     private PersistenceSession s = null;
 
     @Start
@@ -77,14 +77,14 @@ public class ArduinoGW extends AbstractComponentType {
     @Port(name = "inputvalue")
     public void inputvalue(Object msg) {
         if (replicatingService == null) {
-            replicatingService = this.getPortByName("service", ReplicatingService.class);
+            replicatingService = this.getPortByName("service", ReplicaService.class);
             StoreImpl storeImpl = new StoreImpl(replicatingService);
             configuration.setStore(storeImpl);
             factory = configuration.getPersistenceSessionFactory();
         }
 
         try {
-            s = factory.openSession();
+            s = factory.getSession();
             SystemTime systemTime = new SystemTime();
             try {
                 //c/28

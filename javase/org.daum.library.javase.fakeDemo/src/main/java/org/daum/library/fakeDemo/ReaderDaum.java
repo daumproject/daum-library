@@ -7,7 +7,9 @@ import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.daum.library.replica.ReplicatingService;
+import org.daum.library.ormH.utils.StoreHelper;
+import org.daum.library.replica.*;
+import org.daum.library.replica.msg.NotifyUpdate;
 import org.daum.library.replica.utils.SystemTime;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
@@ -29,7 +31,7 @@ import java.util.Set;
 
 @Library(name = "JavaSE", names = {"Android"})
 @Requires({
-        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class, optional = true)  ,
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)  ,
         @RequiredPort(name = "value", type = PortType.MESSAGE, optional = true)
 })
 @Provides({
@@ -48,8 +50,8 @@ public class ReaderDaum extends AbstractComponentType {
     private SystemTime systemTime = new SystemTime();
     public PersistenceConfiguration configuration=null;
     private PersistenceSessionFactoryImpl factory=null;
-  //  private  FrameMoyens frameMoyens=null;
-    private ReplicatingService replicatingService =  null;
+    //  private  FrameMoyens frameMoyens=null;
+    private ReplicaService replicatingService =  null;
     private  PersistenceSession s=null;
 
 
@@ -64,105 +66,102 @@ public class ReaderDaum extends AbstractComponentType {
             configuration.addPersistentClass(Moyen.class);
             configuration.addPersistentClass(HeartMonitor.class);
 
-            manageMoyens();
+            replicatingService =   this.getPortByName("service", ReplicaService.class);
+            StoreImpl storeImpl = new StoreImpl(replicatingService);
+            configuration.setStore(storeImpl);
+            factory = configuration.getPersistenceSessionFactory();
+
         } catch (PersistenceException e) {
             logger.error("",e);
         }
+
+
+        // listeners
+
+        ChangeListener.getInstance().addEventListener(TemperatureMonitor.class,new PropertyChangeListener() {
+            @Override
+            public void update(PropertyChangeEvent propertyChangeEvent) {
+
+                if(propertyChangeEvent.getCmd().equals(StoreCommand.ADD))
+                {
+                    processTemperature(propertyChangeEvent.getKey());
+                }
+
+            }
+        }  );
+
+
+        ChangeListener.getInstance().addEventListener(HeartMonitor.class,new PropertyChangeListener() {
+            @Override
+            public void update(PropertyChangeEvent propertyChangeEvent) {
+
+                if(propertyChangeEvent.getCmd().equals(StoreCommand.ADD))
+                {
+                    processHeartMonitor(propertyChangeEvent.getKey());
+                }
+
+            }
+        }  );
+
     }
 
 
     @Stop
     public void stop() {
-        /*
-        if(frameMoyens != null){
-            KevoreeLayout.getInstance().releaseTab(getName());
-            frameMoyens = null;
-        } */
+
     }
 
     @Update
     public void update() {
         stop();
-        manageMoyens();
-    }
-
-    public void manageMoyens(){
-        if(getDictionary().get("mode").toString().equals("moyens"))
-        {
-         //   frameMoyens  = new FrameMoyens(getNodeName(),this);
-         //   KevoreeLayout.getInstance().displayTab(frameMoyens,getName());
-        }  else
-        {
-            /*
-            if(frameMoyens != null){
-                KevoreeLayout.getInstance().releaseTab(getName());
-            } */
-        }
-
     }
 
 
-    @Port(name = "notify")
-    public void notifybyReplica(Object msg) {
-
-        if(replicatingService == null)
-        {
-            replicatingService =   this.getPortByName("service", ReplicatingService.class);
-            StoreImpl storeImpl = new StoreImpl(replicatingService);
-            configuration.setStore(storeImpl);
-            factory = configuration.getPersistenceSessionFactory();
-        }
-
+    public void processTemperature(Object key){
+        TemperatureMonitor temp = null;
         try
         {
-            s  = factory.openSession();
-
-
-            if(getDictionary().get("mode").toString().equals("temperature"))
+            s  = factory.getSession();
+            if(s != null)
             {
-                Set<Object> dates =  s.getAll(TemperatureMonitor.class).keySet();
-                if(dates.size() > 0)
+                temp = (TemperatureMonitor) s.get(TemperatureMonitor.class,key);
+                s.close();
+                if(temp != null)
                 {
-                    Date last =  systemTime.getDatemin(dates);
-                    TemperatureMonitor temp = (TemperatureMonitor) s.get(TemperatureMonitor.class,last);
-                    if(temp != null)
-                    {
-                        String format = "temperature="+temp.getValue();
-                        this.getPortByName("value", MessagePort.class).process(format);
-                    }
+                    String format = "temperature="+temp.getValue();
+                    getPortByName("value", MessagePort.class).process(format);
                 }
-
-            }else if(getDictionary().get("mode").toString().equals("moyens"))
-            {
-                Map<Object,Object> moyens = s.getAll(Moyen.class);
-                if(moyens.size() >0)
-                {
-                 //   frameMoyens.updateMoyens(moyens);
-
-                }
-            }  else if(getDictionary().get("mode").toString().equals("heart"))
-            {
-
-                Set<Object> dates =  s.getAll(HeartMonitor.class).keySet();
-                if(dates.size() > 0)
-                {
-                    Date last =  systemTime.getDatemin(dates);
-                    HeartMonitor temp = (HeartMonitor) s.get(HeartMonitor.class,last);
-                    if(temp != null)
-                    {
-                        String format = "heart="+temp.getValue();
-                        this.getPortByName("value", MessagePort.class).process(format);
-                    }
-                }
-
             }
 
 
+        } catch (PersistenceException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+    }
+
+    public void processHeartMonitor(Object key){
+        HeartMonitor temp = null;
+
+        try
+        {
+            s  = factory.getSession();
+            temp = (HeartMonitor) s.get(HeartMonitor.class,key);
             s.close();
+            if(temp != null)
+            {
+                String format = "HeartMonitor="+temp.getValue();
+                getPortByName("value", MessagePort.class).process(format);
+            }
+
+        } catch (PersistenceException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        catch (Exception e){
-            logger.error("could not openSession ",e);
-        }
+    }
+
+    @Port(name = "notify")
+    public void notifybyReplica(Object m)
+    {
+        ChangeListener.getInstance().receive(m);
     }
 
 
