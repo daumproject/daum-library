@@ -23,6 +23,7 @@ public class ModelFactory implements IModelFactory {
 		if (e instanceof DemandEntity) return build((DemandEntity) e);
 		else if (e instanceof TargetEntity) return build((TargetEntity) e);
 		else if (e instanceof DangerEntity) return build((DangerEntity) e);
+		else if (e instanceof ZoneEntity) return build((ZoneEntity) e);
 		else if (e instanceof ArrowEntity) return build((ArrowEntity) e);
 		else Log.w(TAG, "build("+e.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
 		return null;
@@ -69,6 +70,10 @@ public class ModelFactory implements IModelFactory {
 		ArrowAction a = new ArrowAction(type, location, points);
 		return a;
 	}
+	
+//	private ZoneAction build(ZoneEntity ent) {
+//		
+//	}
 
 	private Target build(TargetEntity ent) {
 		IGeoPoint geoP = ent.getGeoPoint();

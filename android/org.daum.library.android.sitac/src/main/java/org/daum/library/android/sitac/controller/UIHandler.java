@@ -101,7 +101,6 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 			
 			// if it's an arrowEntity
 			if (selectedEntity instanceof ArrowEntity) {
-				Log.w(TAG, "this entity is an ArrowEntity");
 				// add the singleTap point to the entity
 				((ArrowEntity) selectedEntity).addPoint(geoP);
 				
