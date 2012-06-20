@@ -22,9 +22,12 @@ import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.MapView.Projection;
 
+import android.util.Log;
 import android.view.MotionEvent;
 
 public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventListener, OnMenuViewEventListener {
+	
+	private static final String TAG = "UIHandler";
 	
 	private SITACMapView mapView;
 	private SITACSelectedEntityView selectedEntityView;
@@ -98,6 +101,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 			
 			// if it's an arrowEntity
 			if (selectedEntity instanceof ArrowEntity) {
+				Log.w(TAG, "this entity is an ArrowEntity");
 				// add the singleTap point to the entity
 				((ArrowEntity) selectedEntity).addPoint(geoP);
 				
