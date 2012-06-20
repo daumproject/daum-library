@@ -1,8 +1,5 @@
 package org.daum.library.android.sitac;
 
-import android.util.Log;
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.controller.ISITACController;
 import org.daum.library.android.sitac.view.SITACView;
 import org.kevoree.android.framework.helper.UIServiceHandler;
@@ -39,6 +36,8 @@ public class SITACComponent extends AbstractComponentType {
             }
         });
     }
+
+
 
     @Stop
     public void stop() {
