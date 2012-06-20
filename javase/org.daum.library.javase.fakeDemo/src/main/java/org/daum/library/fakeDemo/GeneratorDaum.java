@@ -8,7 +8,7 @@ import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.daum.library.replica.ReplicaService;
+import org.daum.library.replica.cache.ReplicaService;
 import org.daum.library.replica.utils.SystemTime;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;

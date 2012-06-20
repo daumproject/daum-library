@@ -7,9 +7,11 @@ import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.daum.library.ormH.utils.StoreHelper;
-import org.daum.library.replica.*;
-import org.daum.library.replica.msg.NotifyUpdate;
+import org.daum.library.replica.cache.ReplicaService;
+import org.daum.library.replica.cache.StoreCommand;
+import org.daum.library.replica.listener.ChangeListener;
+import org.daum.library.replica.listener.PropertyChangeEvent;
+import org.daum.library.replica.listener.PropertyChangeListener;
 import org.daum.library.replica.utils.SystemTime;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
@@ -78,30 +80,28 @@ public class ReaderDaum extends AbstractComponentType {
 
         // listeners
 
-        ChangeListener.getInstance().addEventListener(TemperatureMonitor.class,new PropertyChangeListener() {
+        ChangeListener.getInstance().addEventListener(TemperatureMonitor.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent propertyChangeEvent) {
 
-                if(propertyChangeEvent.getCmd().equals(StoreCommand.ADD))
-                {
+                if (propertyChangeEvent.getCmd().equals(StoreCommand.ADD)) {
                     processTemperature(propertyChangeEvent.getKey());
                 }
 
             }
-        }  );
+        });
 
 
-        ChangeListener.getInstance().addEventListener(HeartMonitor.class,new PropertyChangeListener() {
+        ChangeListener.getInstance().addEventListener(HeartMonitor.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent propertyChangeEvent) {
 
-                if(propertyChangeEvent.getCmd().equals(StoreCommand.ADD))
-                {
+                if (propertyChangeEvent.getCmd().equals(StoreCommand.ADD)) {
                     processHeartMonitor(propertyChangeEvent.getKey());
                 }
 
             }
-        }  );
+        });
 
     }
 

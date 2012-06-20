@@ -3,8 +3,8 @@ package org.daum.library.fakeDemo;
 import org.daum.library.ormH.api.PersistenceSessionStore;
 import org.daum.library.ormH.persistence.Orhm;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.daum.library.replica.Cache;
-import org.daum.library.replica.ReplicaService;
+import org.daum.library.replica.cache.Cache;
+import org.daum.library.replica.cache.ReplicaService;
 
 
 import java.util.HashMap;
