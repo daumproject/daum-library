@@ -3,6 +3,7 @@ package org.daum.library.android.sitac.view.map;
 import java.util.ArrayList;
 
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
+import org.daum.library.android.sitac.view.entity.ArrowEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.views.MapView;
@@ -42,7 +43,9 @@ public class MapOverlay extends Overlay {
 	public boolean onLongPress(MotionEvent e, MapView mapView) {
 		if (listener != null) {			
 			IGeoPoint geoP = mapView.getProjection().fromPixels(e.getX(), e.getY());
-			for (IEntity ent : entities) {
+			IEntity ent;
+			for (int i = entities.size()-1; i>= 0; i--) {
+				ent = entities.get(i);
 				if (ent.containsPoint(geoP, mapView)) {
 					listener.onEntitySelected(ent);
 					return true;
@@ -66,7 +69,16 @@ public class MapOverlay extends Overlay {
 	}
 
 	public void addEntity(IEntity entity) {
-		entities.add(entity);
+		// this little trick do two things
+		// - first it makes ArrowEntity (sub-)classes
+		// 	be drawn on the "bottom" of the entity stack
+		// - second it makes ArrowEntity (sub-)classes
+		// 	be "clicked" after other entities in the priority order
+		// which mean that if a DemandEntity is in a ZoneEntity, the
+		// DemandEntity will answer first and consume the longPress event
+		if (entity instanceof ArrowEntity) {
+			entities.add(0, entity);
+		} else entities.add(entity);
 	}
 
 	public void deleteEntity(IEntity entity) {

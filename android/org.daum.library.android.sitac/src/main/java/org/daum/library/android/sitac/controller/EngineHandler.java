@@ -33,6 +33,7 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	public void onAdd(IModel m, IEntity e) {
 		if (D) Log.i(TAG, "onAdd(): "+m);
 		if (e == null) e = factory.build(m);
+		e.setId(m.getId());
 		e.setState(IEntity.STATE_EDITED);
 		
 		if (e.getGeoPoint() == null) {

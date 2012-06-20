@@ -18,7 +18,7 @@ import android.graphics.drawable.Drawable;
 
 public abstract class Entity implements IEntity {
 	
-	private long id = -1;
+	private String id;
 	private String type;
 	private String message;
 	private Drawable icon;
@@ -111,12 +111,12 @@ public abstract class Entity implements IEntity {
 	}
 
 	@Override
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 	
 	@Override
-	public void setId(long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 	

@@ -2,6 +2,7 @@ package org.daum.library.android.sitac.controller;
 
 import java.util.Hashtable;
 
+import org.daum.common.gps.impl.GpsPoint;
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.command.AddModelCommand;
 import org.daum.library.android.sitac.command.DeleteModelCommand;
@@ -16,6 +17,7 @@ import org.daum.library.android.sitac.view.SITACSelectedEntityView;
 import org.daum.library.android.sitac.view.entity.ArrowEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.entity.IModelFactory;
+import org.daum.library.android.sitac.view.entity.ZoneEntity;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -24,6 +26,8 @@ import org.osmdroid.views.MapView.Projection;
 import android.view.MotionEvent;
 
 public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventListener, OnMenuViewEventListener {
+	
+	private static final String TAG = "UIHandler";
 	
 	private SITACMapView mapView;
 	private SITACSelectedEntityView selectedEntityView;
@@ -54,7 +58,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	public void onSelectedEntityButtonClicked() {
 		if (mapView != null && selectedEntityView != null) {
 			if (selectedEntityView.getState() == SITACSelectedEntityView.STATE_DELETION) {
-				IModel m = factory.build(selectedEntity);
+				IModel m = map.get(selectedEntity);
 				CmdManager.getInstance(engine).execute(DeleteModelCommand.class, m, selectedEntity);
 				
 			} else if (selectedEntityView.getState() == SITACSelectedEntityView.STATE_SELECTION_CONFIRM) {
@@ -85,11 +89,12 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 			// if the state is EDITED, then update the corresponding data in the engine
 			} else if (selectedEntity.getState() == IEntity.STATE_EDITED) {
 				IModel m;
-				if (!map.contains(selectedEntity)) {
+				if (!map.containsKey(selectedEntity)) {
 					m = factory.build(selectedEntity);
 					map.put(selectedEntity, m);
 				} else {
 					m = map.get(selectedEntity);
+					m.setLocation(new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6()));
 				}
 				CmdManager.getInstance(engine).execute(UpdateModelCommand.class, m, selectedEntity);
 			}
@@ -100,7 +105,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 				((ArrowEntity) selectedEntity).addPoint(geoP);
 				
 				// if the arrowEntity has at least one line, ask for drawing ending
-				if (((ArrowEntity) selectedEntity).hasOneLine()) {
+				if (((ArrowEntity) selectedEntity).isDrawable()) {
 					// display the "terminate action" button
 					selectedEntityView.setState(SITACSelectedEntityView.STATE_SELECTION_CONFIRM);
 					selectedEntityView.show();

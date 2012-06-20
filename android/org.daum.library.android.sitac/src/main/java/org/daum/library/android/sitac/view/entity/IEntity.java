@@ -12,9 +12,9 @@ public interface IEntity extends IObservable {
 	public static final int STATE_NEW = 0;
 	public static final int STATE_EDITED = 1;
 
-	public long getId();
+	public String getId();
 
-	public void setId(long id);
+	public void setId(String id);
 
 	/**
 	 * Draws the entity on the canvas

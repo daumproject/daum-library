@@ -6,6 +6,9 @@ import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.MapView.Projection;
 
+import pythagoras.f.IRectangle;
+import pythagoras.f.Line;
+import pythagoras.f.Rectangle;
 import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
@@ -16,6 +19,19 @@ public class ArrowEntity extends Entity {
     public static final String CHEM = "Risques particuliers";
     public static final String FIRE = "Extinction";
     public static final String WATER = "Eau";
+    
+	/**
+	 * Width of the "virtual click" that is use
+	 * to check if it intersects with this entity lines.
+	 **/
+	private static final int TOLERANCE_WIDTH = 10;
+	/**
+	 * Height of the "virtual click" that is use
+	 * to check if it intersects with this entity lines.
+	 **/
+	private static final int TOLERANCE_HEIGHT = 10;
+    
+    private ArrayList<Line> lines; 
 	
 	protected ArrayList<IGeoPoint> points;
 	
@@ -26,6 +42,7 @@ public class ArrowEntity extends Entity {
 	public ArrowEntity(Drawable icon, String type, String message, int arrowColor) {
 		super(icon, type, message);
 		points = new ArrayList<IGeoPoint>();
+		lines = new ArrayList<Line>();
 		paint.setColor(arrowColor);
 	}
 	
@@ -42,8 +59,10 @@ public class ArrowEntity extends Entity {
 			canvas.drawPoint(pts[0].x, pts[0].y, paint);
 		} else {
 			// draw the lines
+			lines.clear();
 			for (i=0; i<pts.length-1; i++) {
 				canvas.drawLine(pts[i].x, pts[i].y, pts[i+1].x, pts[i+1].y, paint);
+				lines.add(new Line(pts[i].x, pts[i].y, pts[i+1].x, pts[i+1].y));
 			}
 			
 			// draw the head of the arrow
@@ -53,12 +72,12 @@ public class ArrowEntity extends Entity {
 	
 	@Override
 	public boolean containsPoint(IGeoPoint geoP, MapView mapView) {
-		Projection prj = mapView.getProjection();
-		for (int i=0; i<points.size()-1; i++) {
-			Point a = prj.toMapPixels(points.get(i), null);
-			Point b = prj.toMapPixels(points.get(i+1), null);
-			Point pt = prj.toMapPixels(geoP, null);
-			if (isPointOnLine(a, b, pt)) return true;
+		Point pt = mapView.getProjection().toMapPixels(geoP, null);
+		IRectangle r = new Rectangle(pt.x - (TOLERANCE_WIDTH / 2), pt.y
+				- (TOLERANCE_HEIGHT / 2), TOLERANCE_WIDTH, TOLERANCE_HEIGHT);
+		for (Line line : lines) {
+			// test if the "virtual click" rectangle intersects one of the lines
+			if (line.intersects(r)) return true;
 		}
 		return false;
 	}
@@ -70,20 +89,10 @@ public class ArrowEntity extends Entity {
 	
 	/**
 	 * 
-	 * @return true if there's at least one line to draw not just one and only
-	 *         point
+	 * @return true if there's enough point to properly draw the entity
 	 */
-	public boolean hasOneLine() {
+	public boolean isDrawable() {
 		return (points.size() > 1);
-	}
-	
-	public boolean isPointOnLine(Point a, Point b, Point pt) {
-		float A = -(b.y-a.y) / (b.x-a.x);
-		float B = a.y - (A * a.x); // y = Ax + B
-		int pt_y = Math.abs((int) (pt.x*A + B));
-		pt.y = Math.abs(pt.y);
-		
-		return Math.abs(pt_y - pt.y) < 10;
 	}
 
 	public ArrayList<IGeoPoint> getPoints() {

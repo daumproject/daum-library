@@ -178,8 +178,8 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 		hideBtnParams.addRule(ALIGN_PARENT_TOP);
 		addView(hideShowButton, hideBtnParams);
 	}
-	
-	private void defineCallbacks() {
+
+    private void defineCallbacks() {
 		hideShowButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -226,19 +226,10 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 			}
 		});
 
-        menu.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                Log.w(TAG, "onTouch menu listener");
-                return false;
-            }
-        });
-		
 		menu.setOnChildClickListener(new OnChildClickListener() {
 
 			@Override
 			public boolean onChildClick(ExpandableListView list, View itemView, int grpPos, int childPos, long id) {
-                Log.e(TAG, "onChildClick familia !");
 				final IExpandableMenuItem grp = adapter.getGroup(grpPos);
 				final IExpandableMenuItem item = adapter.getChild(grpPos, childPos);
 				

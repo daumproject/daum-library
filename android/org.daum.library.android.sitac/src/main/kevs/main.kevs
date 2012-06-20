@@ -1,14 +1,10 @@
 // core
 merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}"
 merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultChannels/{kevoree.version}"
-merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.fakeDomo/{kevoree.version}"
 merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}"
 merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}"
-//merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}"
 
-//merge "mvn:org.kevoree.library.android/org.kevoree.library.android.bluetooth/{kevoree.version}"
-
-merge "mvn:http://maven.kevoree.org/daum/snapshots!org.daum.library.android/org.daum.library.android.agetac.sitac/1.7.6-SNAPSHOT"
+merge "mvn:http://maven.kevoree.org/daum/snapshots!org.daum.library.android/org.daum.library.android.sitac/1.8.0-SNAPSHOT"
 
 addNode node0: AndroidNode {logLevel = "DEBUG", coreLogLevel = "DEBUG"}
 
