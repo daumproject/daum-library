@@ -17,12 +17,12 @@ import org.daum.library.android.sitac.view.SITACSelectedEntityView;
 import org.daum.library.android.sitac.view.entity.ArrowEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.entity.IModelFactory;
+import org.daum.library.android.sitac.view.entity.ZoneEntity;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.MapView.Projection;
 
-import android.util.Log;
 import android.view.MotionEvent;
 
 public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventListener, OnMenuViewEventListener {
@@ -105,7 +105,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 				((ArrowEntity) selectedEntity).addPoint(geoP);
 				
 				// if the arrowEntity has at least one line, ask for drawing ending
-				if (((ArrowEntity) selectedEntity).hasOneLine()) {
+				if (((ArrowEntity) selectedEntity).isDrawable()) {
 					// display the "terminate action" button
 					selectedEntityView.setState(SITACSelectedEntityView.STATE_SELECTION_CONFIRM);
 					selectedEntityView.show();

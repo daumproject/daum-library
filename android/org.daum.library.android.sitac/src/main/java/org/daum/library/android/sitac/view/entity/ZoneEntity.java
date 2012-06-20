@@ -64,4 +64,9 @@ public class ZoneEntity extends ArrowEntity {
 			canvas.drawLine(pts[i].x, pts[i].y, pts[0].x, pts[0].y, pointPaint);
 		}
 	}
+	
+	@Override
+	public boolean isDrawable() {
+		return (points.size() >= 3);
+	}
 }

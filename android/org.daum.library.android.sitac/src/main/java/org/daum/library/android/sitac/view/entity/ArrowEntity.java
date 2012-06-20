@@ -70,10 +70,9 @@ public class ArrowEntity extends Entity {
 	
 	/**
 	 * 
-	 * @return true if there's at least one line to draw not just one and only
-	 *         point
+	 * @return true if there's enough point to properly draw the entity
 	 */
-	public boolean hasOneLine() {
+	public boolean isDrawable() {
 		return (points.size() > 1);
 	}
 	
