@@ -43,7 +43,7 @@ public class DrawableFactory {
 	
 	public static Drawable buildDrawable(Context ctx, String imgPath) {
 		try {
-			InputStream is = ctx.getClass().getResourceAsStream(imgPath);
+			InputStream is = DrawableFactory.class.getResourceAsStream(imgPath);
 			return new BitmapDrawable(ctx.getResources(), is);
 		} catch (Exception e) {
 			Log.w(TAG, "Error while creating drawable for image \""+imgPath+"\"");
