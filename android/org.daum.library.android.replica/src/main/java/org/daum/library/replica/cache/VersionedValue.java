@@ -1,4 +1,4 @@
-package org.daum.library.replica;
+package org.daum.library.replica.cache;
 
 /**
  * Created by jed

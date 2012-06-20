@@ -1,4 +1,4 @@
-package org.daum.library.replica;
+package org.daum.library.replica.cluster;
 
 /**
  * Created by jed

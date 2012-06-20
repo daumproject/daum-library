@@ -1,7 +1,7 @@
 package org.daum.library.replica.msg;
 
-import org.daum.library.replica.Node;
-import org.daum.library.replica.StoreCommand;
+import org.daum.library.replica.cluster.Node;
+import org.daum.library.replica.cache.StoreCommand;
 
 import java.io.Serializable;
 

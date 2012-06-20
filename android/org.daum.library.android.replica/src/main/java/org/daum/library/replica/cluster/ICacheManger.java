@@ -1,5 +1,6 @@
-package org.daum.library.replica;
+package org.daum.library.replica.cluster;
 
+import org.daum.library.replica.cache.Cache;
 import org.daum.library.replica.msg.Message;
 
 /**
@@ -9,6 +10,6 @@ import org.daum.library.replica.msg.Message;
  * Time: 14:27
  */
 public interface ICacheManger {
-    public  Cache getCache(String name);
+    public Cache getCache(String name);
     public void processingMSG(Message e);
 }

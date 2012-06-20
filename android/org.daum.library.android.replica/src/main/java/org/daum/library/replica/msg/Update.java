@@ -1,6 +1,6 @@
 package org.daum.library.replica.msg;
 
-import org.daum.library.replica.VersionedValue;
+import org.daum.library.replica.cache.VersionedValue;
 
 /**
  * Created by jed

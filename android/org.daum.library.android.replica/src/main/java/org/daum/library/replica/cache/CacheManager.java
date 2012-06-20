@@ -1,5 +1,7 @@
-package org.daum.library.replica;
+package org.daum.library.replica.cache;
 
+import org.daum.library.replica.cluster.ICacheManger;
+import org.daum.library.replica.cluster.ICluster;
 import org.daum.library.replica.msg.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,11 +16,11 @@ import java.util.Set;
  * Date: 23/05/12
  * Time: 14:52
  */
-public class CacheManager implements  ICacheManger
+public class CacheManager implements ICacheManger
 {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private DHashMap<String, Cache> store = new DHashMap<String,Cache>();
-    private  ICluster cluster;
+    private ICluster cluster;
 
     public CacheManager(ICluster cluster)
     {

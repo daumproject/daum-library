@@ -1,4 +1,6 @@
-package org.daum.library.replica;
+package org.daum.library.replica.cache;
+
+import org.daum.library.replica.cache.Cache;
 
 /**
  * Created by jed
@@ -9,5 +11,5 @@ package org.daum.library.replica;
  */
 public interface ReplicaService
 {
-    public  Cache getCache(String name);
+    public Cache getCache(String name);
 }

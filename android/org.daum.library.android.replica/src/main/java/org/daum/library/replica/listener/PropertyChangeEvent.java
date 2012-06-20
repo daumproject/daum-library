@@ -1,4 +1,6 @@
-package org.daum.library.replica;
+package org.daum.library.replica.listener;
+
+import org.daum.library.replica.cache.StoreCommand;
 
 /**
  * Created with IntelliJ IDEA.

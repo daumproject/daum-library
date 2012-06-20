@@ -1,8 +1,7 @@
-package org.daum.library.replica;
+package org.daum.library.replica.listener;
 
 import org.daum.library.replica.msg.NotifyUpdate;
-
-import javax.swing.event.EventListenerList;
+import org.daum.library.replica.listener.EventListenerList;
 import java.util.HashMap;
 
 /**
@@ -12,7 +11,7 @@ import java.util.HashMap;
  * Time: 11:55
  * To change this template use File | Settings | File Templates.
  */
-public class ChangeListener
+public class ChangeListener implements IChangeListener
 {
     private  static ChangeListener singleton = null;
 

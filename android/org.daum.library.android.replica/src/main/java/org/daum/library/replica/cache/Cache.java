@@ -1,4 +1,4 @@
-package org.daum.library.replica;
+package org.daum.library.replica.cache;
 
 import org.daum.library.replica.msg.Update;
 import org.daum.library.replica.utils.SystemTime;
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * Date: 23/05/12
  * Time: 15:43
  */
-public class Cache extends  DHashMap<Object,VersionedValue>{
+public class Cache extends DHashMap<Object,VersionedValue> {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private String name = "";
     private CacheManager cacheManger=null;

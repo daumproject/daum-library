@@ -1,8 +1,6 @@
-package org.daum.library.replica;
+package org.daum.library.replica.listener;
 
-import org.daum.library.replica.msg.NotifyUpdate;
-
-import java.util.Observable;
+import org.daum.library.replica.listener.PropertyChangeEvent;
 
 /**
  * Created with IntelliJ IDEA.

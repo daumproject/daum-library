@@ -1,5 +1,9 @@
-package org.daum.library.replica;
+package org.daum.library.replica.cluster;
 
+import org.daum.library.replica.cache.CacheManager;
+import org.daum.library.replica.cache.StoreCommand;
+import org.daum.library.replica.channel.Channel;
+import org.daum.library.replica.channel.KChannelImpl;
 import org.daum.library.replica.msg.Command;
 import org.daum.library.replica.msg.Message;
 import org.daum.library.replica.utils.SystemTime;
@@ -20,7 +24,7 @@ public class ClusterImpl implements  ICluster,Runnable{
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private  Node currentNode;
+    private Node currentNode;
     private List<Node> nodesOfCluster = new ArrayList<Node>();
     private SystemTime systemTime = new SystemTime();
     private  Thread tsnapshot =null;
@@ -103,14 +107,13 @@ public class ClusterImpl implements  ICluster,Runnable{
 
     public void synchronize()
     {
-        if(tsnapshot !=null)
-        {
-
             tsnapshot = new Thread(new Runnable() {
                 @Override
                 public void run() {
 
-                    while (getNodesOfCluster().isEmpty() && alive == true && !Thread.currentThread().isInterrupted()){
+                    while (getNodesOfCluster().isEmpty() && alive == true && !Thread.currentThread().isInterrupted())
+                    {
+                        logger.debug("Waiting to discovery nodes...");
                         try
                         {
                             Thread.sleep(freqHearBeat);
@@ -118,9 +121,11 @@ public class ClusterImpl implements  ICluster,Runnable{
                             //ignore
                         }
                     }
+
                     Long min =Long.MAX_VALUE;
                     Node nodeReqSnapshot=null;
                     boolean sync = synchronizedNodesInCluster();
+
                     for( Node node : nodesOfCluster){
 
                         if(!currentNode.equals(node))
@@ -145,15 +150,13 @@ public class ClusterImpl implements  ICluster,Runnable{
                     req.op= StoreCommand.REQUEST_SNAPSHOT;
                     req.source = currentNode;
                     req.dest = nodeReqSnapshot;
-                    logger.info("Replication is processing with " + req.dest);
+                    logger.info("Synchronization request sent to" + req.dest);
 
                     chanel.write(req);
                 }
             });
 
             tsnapshot.start();
-        }
-
 
     }
 
