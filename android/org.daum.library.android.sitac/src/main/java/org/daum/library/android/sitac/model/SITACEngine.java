@@ -52,11 +52,6 @@ public class SITACEngine {
             session = factory.openSession();
             session.save(m);
             
-            Map<Object, Object> map = session.getAll(m.getClass());
-            for (Object o : map.values()) {
-            	System.out.println("[[ADD]] "+o);
-            }
-            
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while persisting object", ex);
         } finally {
@@ -71,12 +66,7 @@ public class SITACEngine {
         try {
             session = factory.openSession();
             session.update(m);
-            
-            Map<Object, Object> map = session.getAll(m.getClass());
-            for (Object o : map.values()) {
-            	System.out.println("[[MAJ]] "+o);
-            }
-            
+
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while persisting object", ex);
         } finally {
@@ -91,12 +81,7 @@ public class SITACEngine {
         try {
             session = factory.openSession();
             session.delete(m);
-            
-            Map<Object, Object> map = session.getAll(m.getClass());
-            for (Object o : map.values()) {
-            	System.out.println("[[DEL]] "+o);
-            }
-            
+
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while persisting object", ex);
         } finally {

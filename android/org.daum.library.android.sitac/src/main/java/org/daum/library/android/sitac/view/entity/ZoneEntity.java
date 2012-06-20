@@ -15,6 +15,7 @@ import android.graphics.drawable.Drawable;
 public class ZoneEntity extends ArrowEntity {
 	
 	private Paint pointPaint;
+	private pythagoras.d.Path zone;
 	
 	public ZoneEntity(Drawable icon, String type, int color) {
 		this(icon, type, "", color);
@@ -28,7 +29,6 @@ public class ZoneEntity extends ArrowEntity {
 		pointPaint = new Paint(paint);
 		pointPaint.setStyle(Style.STROKE);
 		pointPaint.setColor(Color.argb(255, Color.red(color), Color.green(color), Color.blue(color)));
-		pointPaint.setStrokeWidth(4);
 	}
 
 	@Override
@@ -40,24 +40,29 @@ public class ZoneEntity extends ArrowEntity {
 		
 		if (pts.length <= 2) {
 			// just draw the first point
+			pointPaint.setStrokeWidth(4);
 			for (Point p : pts) {
 				canvas.drawPoint(p.x, p.y, pointPaint);
 			}
 		} else {
 			// draw the filled zone
 			Path path = new Path();
+			zone = new pythagoras.d.Path(pythagoras.d.Path.WIND_EVEN_ODD);
 			path.setFillType(Path.FillType.EVEN_ODD);
 			path.moveTo(pts[0].x, pts[0].y);
+			zone.moveTo(pts[0].x, pts[0].y);
 			for (i=1; i<pts.length-1; i++) {
 				path.lineTo(pts[i].x, pts[i].y);
+				zone.lineTo(pts[i].x, pts[i].y);
 			}
 			path.lineTo(pts[pts.length-1].x, pts[pts.length-1].y);
+			zone.lineTo(pts[pts.length-1].x, pts[pts.length-1].y);
 			path.close();
-			
+			zone.closePath();
 			canvas.drawPath(path, paint);
 			
 			// draw the boundary lines
-			// draw the lines
+			pointPaint.setStrokeWidth(2);
 			for (i=0; i<pts.length-1; i++) {
 				canvas.drawLine(pts[i].x, pts[i].y, pts[i+1].x, pts[i+1].y, pointPaint);
 			}
@@ -68,5 +73,11 @@ public class ZoneEntity extends ArrowEntity {
 	@Override
 	public boolean isDrawable() {
 		return (points.size() >= 3);
+	}
+	
+	@Override
+	public boolean containsPoint(IGeoPoint geoP, MapView mapView) {
+		Point pt = mapView.getProjection().toMapPixels(geoP, null);
+		return zone.contains(pt.x, pt.y);
 	}
 }

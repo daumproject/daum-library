@@ -4,7 +4,7 @@ merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultCh
 merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}"
 merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}"
 
-merge "mvn:http://maven.kevoree.org/daum/snapshots!org.daum.library.android/org.daum.library.android.agetac.sitac/1.8.0-SNAPSHOT"
+merge "mvn:http://maven.kevoree.org/daum/snapshots!org.daum.library.android/org.daum.library.android.sitac/1.8.0-SNAPSHOT"
 
 addNode node0: AndroidNode {logLevel = "DEBUG", coreLogLevel = "DEBUG"}
 
