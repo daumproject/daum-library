@@ -75,8 +75,7 @@ public class MessagesComponent extends AbstractComponentType implements IMessage
 
     @Update
     public void update() {
-        stop();
-        start();
+
     }
 
     @Port(name="inMessage")

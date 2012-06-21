@@ -53,34 +53,48 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 			selectedEntityView.show();
 		}
 	}
-
+	
 	@Override
-	public void onSelectedEntityButtonClicked() {
-		if (mapView != null && selectedEntityView != null) {
-			IModel m;
-			switch (selectedEntityView.getState()) {
-				case DELETION:
-					m = modelMap.get(selectedEntity);
-					CmdManager.getInstance(engine).execute(DeleteModelCommand.class, m, selectedEntity);
-					break;
-					
-				case CONFIRM:
-					// if we are here, it means that the user just confirm that his zone/arrow action is
-					// ok as it is right now, he do not want more points to be added to it
-					// so now we can add it to the engine
-					m = factory.build(selectedEntity);
-					// delete the IShapedEntity because it is on the map just to render
-					// locally to the user what he was doing
-					mapView.deleteEntity(selectedEntity);
-					modelMap.put(selectedEntity, m);
-					CmdManager.getInstance(engine).execute(AddModelCommand.class, m, selectedEntity);
-					break;
-			}
-
-			// hiding the selectedEntityView
-			selectedEntityView.hide();
-			selectedEntity = null;
-		}
+	public void onDeleteButtonClicked() {
+		IModel m = modelMap.get(selectedEntity);
+		CmdManager.getInstance(engine).execute(DeleteModelCommand.class, m, selectedEntity);
+		
+		// hiding the selectedEntityView
+		selectedEntityView.hide();
+		selectedEntity = null;
+	}
+	
+	@Override
+	public void onConfirmButtonClicked() {
+		// if we are here, it means that the user just confirm that his zone/arrow action is
+		// ok as it is right now, he do not want more points to be added to it
+		// so now we can add it to the engine
+		IModel m = factory.build(selectedEntity);
+		// delete the IShapedEntity because it is on the map just to render
+		// locally to the user what he was doing
+		mapView.deleteEntity(selectedEntity);
+		modelMap.put(selectedEntity, m);
+		CmdManager.getInstance(engine).execute(AddModelCommand.class, m, selectedEntity);
+		
+		// putting selectedEntityView's state back to SELECTION
+		// to enable entity selection on map again
+		selectedEntityView.setState(SITACSelectedEntityView.State.SELECTION);
+		
+		// hiding the selectedEntityView
+		selectedEntityView.hide();
+		selectedEntity = null;
+	}
+	
+	@Override
+	public void onRedoButtonClicked() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void onUndoButtonClicked() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -162,11 +176,17 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	@Override
 	public void onEntitySelected(IEntity e) {
 		if (mapView != null && selectedEntityView != null) {
-			// updating the selectedEntityView
-			selectedEntity = e;
-			selectedEntityView.updateView(selectedEntity.getIcon(), selectedEntity.getType()+selectedEntity.getMessage());
-			selectedEntityView.setState(SITACSelectedEntityView.State.DELETION);
-			selectedEntityView.show();
+			switch (selectedEntityView.getState()) {
+				case CONFIRM:
+					break;
+				default:
+					// updating the selectedEntityView
+					selectedEntity = e;
+					selectedEntityView.updateView(selectedEntity.getIcon(), selectedEntity.getType()+selectedEntity.getMessage());
+					selectedEntityView.setState(SITACSelectedEntityView.State.DELETION);
+					selectedEntityView.show();
+					break;
+			}
 		}
 	}
 

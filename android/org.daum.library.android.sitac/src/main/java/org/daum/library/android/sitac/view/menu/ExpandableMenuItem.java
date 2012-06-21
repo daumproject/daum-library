@@ -21,7 +21,7 @@ public class ExpandableMenuItem implements IExpandableMenuItem {
 	}
 	
 	public ExpandableMenuItem(Context context, String iconPath, String text) {
-		if (iconPath != null) this.icon = DrawableFactory.buildDrawable(context, iconPath);
+		if (iconPath != null) this.icon = DrawableFactory.build(context, iconPath);
 		this.text = text;
 	}
 

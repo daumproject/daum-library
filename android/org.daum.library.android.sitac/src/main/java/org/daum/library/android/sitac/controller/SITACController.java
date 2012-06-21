@@ -1,7 +1,6 @@
 package org.daum.library.android.sitac.controller;
 
 import java.util.Hashtable;
-import java.util.Map;
 
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.command.AddModelCommand;

@@ -146,7 +146,7 @@ public class EntityFactory implements IEntityFactory {
 	}
 	
 	private ZoneEntity build(ZoneAction z) {
-		Drawable icon = DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_ZONE);
+		Drawable icon = DrawableFactory.build(ctx, DrawableFactory.PICTO_ZONE);
 		String name = "Zone";
 		int color = Color.argb(60, 0, 0, 0); // black with a lot of transparence
 
@@ -161,16 +161,16 @@ public class EntityFactory implements IEntityFactory {
 	private Drawable getIcon(ArrowAction.Type type) {
 		switch (type) {
 			case WATER:
-				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_LINE_BLUE);
+				return DrawableFactory.build(ctx, DrawableFactory.PICTO_LINE_BLUE);
 				
 			case FIRE:
-				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_LINE_RED);
+				return DrawableFactory.build(ctx, DrawableFactory.PICTO_LINE_RED);
 				
 			case CHEM:
-				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_LINE_ORANGE);
+				return DrawableFactory.build(ctx, DrawableFactory.PICTO_LINE_ORANGE);
 				
 			case SAP:
-				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_LINE_GREEN);
+				return DrawableFactory.build(ctx, DrawableFactory.PICTO_LINE_GREEN);
 				
 			default:
 				return null;
@@ -180,28 +180,28 @@ public class EntityFactory implements IEntityFactory {
 	private Drawable getIcon(VehicleSector sector, boolean isDotted) {
 		switch (sector) {
 			case SAP:
-				if (isDotted) return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_GREEN_DOTTED_AGRES); 
-				else return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_GREEN_AGRES);
+				if (isDotted) return DrawableFactory.build(ctx, DrawableFactory.PICTO_GREEN_DOTTED_AGRES); 
+				else return DrawableFactory.build(ctx, DrawableFactory.PICTO_GREEN_AGRES);
 				
 			case ALIM:
-				if (isDotted) return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_BLUE_DOTTED_AGRES); 
-				else return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_BLUE_AGRES);
+				if (isDotted) return DrawableFactory.build(ctx, DrawableFactory.PICTO_BLUE_DOTTED_AGRES); 
+				else return DrawableFactory.build(ctx, DrawableFactory.PICTO_BLUE_AGRES);
 				
 			case INC:
-				if (isDotted) return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_RED_DOTTED_AGRES); 
-				else return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_RED_AGRES);
+				if (isDotted) return DrawableFactory.build(ctx, DrawableFactory.PICTO_RED_DOTTED_AGRES); 
+				else return DrawableFactory.build(ctx, DrawableFactory.PICTO_RED_AGRES);
 				
 			case CHEM:
-				if (isDotted) return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_ORANGE_DOTTED_AGRES); 
-				else return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_ORANGE_AGRES);
+				if (isDotted) return DrawableFactory.build(ctx, DrawableFactory.PICTO_ORANGE_DOTTED_AGRES); 
+				else return DrawableFactory.build(ctx, DrawableFactory.PICTO_ORANGE_AGRES);
 				
 			case COM:
-				if (isDotted) return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_VIOLET_DOTTED_AGRES); 
-				else return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_VIOLET_AGRES);
+				if (isDotted) return DrawableFactory.build(ctx, DrawableFactory.PICTO_VIOLET_DOTTED_AGRES); 
+				else return DrawableFactory.build(ctx, DrawableFactory.PICTO_VIOLET_AGRES);
 				
 			case RTN:
-				if (isDotted) return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_BLACK_DOTTED_AGRES); 
-				else return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_BLACK_AGRES);
+				if (isDotted) return DrawableFactory.build(ctx, DrawableFactory.PICTO_BLACK_DOTTED_AGRES); 
+				else return DrawableFactory.build(ctx, DrawableFactory.PICTO_BLACK_AGRES);
 				
 			default:
 				return null;
@@ -211,13 +211,13 @@ public class EntityFactory implements IEntityFactory {
 	private Drawable getIcon(Danger.Type dangerType) {
 		switch (dangerType) {
 			case WATER:
-				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_BLUE_UP);
+				return DrawableFactory.build(ctx, DrawableFactory.PICTO_BLUE_UP);
 				
 			case FIRE:
-				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_RED_UP);
+				return DrawableFactory.build(ctx, DrawableFactory.PICTO_RED_UP);
 				
 			case CHEM:
-				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_ORANGE_UP);
+				return DrawableFactory.build(ctx, DrawableFactory.PICTO_ORANGE_UP);
 				
 			default:
 				return null;
@@ -227,16 +227,16 @@ public class EntityFactory implements IEntityFactory {
 	private Drawable getIcon(Target.Type targetType) {
 		switch (targetType) {
 			case WATER:
-				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_BLUE_DOWN);
+				return DrawableFactory.build(ctx, DrawableFactory.PICTO_BLUE_DOWN);
 				
 			case FIRE:
-				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_RED_DOWN);
+				return DrawableFactory.build(ctx, DrawableFactory.PICTO_RED_DOWN);
 				
 			case CHEM:
-				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_ORANGE_DOWN);
+				return DrawableFactory.build(ctx, DrawableFactory.PICTO_ORANGE_DOWN);
 				
 			case VICTIM:
-				return DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_GREEN_DOWN);
+				return DrawableFactory.build(ctx, DrawableFactory.PICTO_GREEN_DOWN);
 				
 			default:
 				return null;

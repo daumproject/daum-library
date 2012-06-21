@@ -1,13 +1,14 @@
 package org.daum.library.android.sitac;
 
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
 import org.daum.library.android.sitac.controller.ISITACController;
 import org.daum.library.android.sitac.view.SITACView;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
-import org.kevoree.annotation.*;
+import org.kevoree.annotation.ComponentType;
+import org.kevoree.annotation.Library;
+import org.kevoree.annotation.Start;
+import org.kevoree.annotation.Stop;
+import org.kevoree.annotation.Update;
 import org.kevoree.framework.AbstractComponentType;
 
 /**

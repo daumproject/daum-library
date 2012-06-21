@@ -38,10 +38,9 @@ public class SITACSelectedEntityView extends LinearLayout {
 	private Context ctx;
 	private String msg;
 	private Drawable icon;
-	private TextView titleView;
-	private ImageView iconView;
+	private ImageView iconView, undoView, redoView;
 	private TextView msgView;
-	private LinearLayout subLayout;
+	private LinearLayout undoRedoLayout;
 	private Button actionBtn;
 	private State state;
 	private OnSelectedEntityEventListener listener;
@@ -52,24 +51,36 @@ public class SITACSelectedEntityView extends LinearLayout {
 		this.ctx = context;
 		this.state = State.SELECTION;
 		initUI();
+		configUI();
+		updateUI();
+		defineCallbacks();
 	}
 
+	/**
+	 * Init views that will be used to update UI
+	 */
 	private void initUI() {
-		titleView = new TextView(ctx);
 		iconView = new ImageView(ctx);
 		msgView = new TextView(ctx);
-		subLayout = new LinearLayout(ctx);
+		undoRedoLayout = new LinearLayout(ctx);
 		actionBtn = new Button(ctx);
+		undoView = new ImageView(ctx);
+		redoView = new ImageView(ctx);
 	}
 	
+	/**
+	 * Config UI just one time
+	 */
 	private void configUI() {
 		setOrientation(LinearLayout.VERTICAL);
 		setPadding(8, 8, 8, 8);
 		
+		TextView titleView = new TextView(ctx);
 		titleView.setText(TEXT_TITLE);
         titleView.setTextColor(Color.LTGRAY);
 		addView(titleView);
 		
+		LinearLayout subLayout = new LinearLayout(ctx);
 		subLayout.setOrientation(LinearLayout.HORIZONTAL);
 		LinearLayout.LayoutParams subLayoutParams = new LayoutParams(
 				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
@@ -95,23 +106,52 @@ public class SITACSelectedEntityView extends LinearLayout {
 		subLayout.addView(msgView, tvParams);
 		
 		addView(subLayout, subLayoutParams);
-		
 
+		actionBtn.setText(TEXT_DELETE);
+		actionBtn.setTextColor(Color.WHITE);
+		addView(actionBtn, new LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		
-		if (state != State.SELECTION) {
-			switch (state) {
-				case DELETION:
-					actionBtn.setText(TEXT_DELETE);
-					break;
-					
-				case CONFIRM:
-					actionBtn.setText(TEXT_CONFIRM);
-					break;
-			}
-			LayoutParams btnParams = new LayoutParams(
-					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-	        actionBtn.setTextColor(Color.WHITE);
-			addView(actionBtn, btnParams);
+		undoRedoLayout.setOrientation(LinearLayout.HORIZONTAL);
+		undoView = new ImageView(ctx);
+		redoView = new ImageView(ctx);
+		undoView.setImageDrawable(DrawableFactory.build(ctx, DrawableFactory.ICON_UNDO));
+		redoView.setImageDrawable(DrawableFactory.build(ctx, DrawableFactory.ICON_REDO));
+		undoView.setClickable(true);
+		redoView.setClickable(true);
+		LayoutParams undoRedoParams = new LayoutParams(
+				LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+		undoRedoParams.weight = 1;
+		undoRedoLayout.addView(undoView, undoRedoParams);
+		undoRedoLayout.addView(redoView, undoRedoParams);
+		addView(undoRedoLayout);
+		
+	}
+	
+	/**
+	 * Update UI with new data
+	 */
+	private void updateUI() {
+		iconView.setImageDrawable(icon);
+		msgView.setText(msg);
+		
+		switch (state) {
+			case SELECTION:
+				actionBtn.setVisibility(View.GONE);
+				undoRedoLayout.setVisibility(View.GONE);
+				break;
+			
+			case DELETION:
+				actionBtn.setText(TEXT_DELETE);
+				actionBtn.setVisibility(View.VISIBLE);
+				undoRedoLayout.setVisibility(View.GONE);
+				break;
+				
+			case CONFIRM:
+				actionBtn.setText(TEXT_CONFIRM);
+				actionBtn.setVisibility(View.VISIBLE);
+				undoRedoLayout.setVisibility(View.VISIBLE);
+				break;
 		}
 		
 		measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -128,21 +168,68 @@ public class SITACSelectedEntityView extends LinearLayout {
 		setBackgroundDrawable(roundedBackground);
 	}
 	
+	/**
+	 * Define callbacks for the views
+	 */
 	private void defineCallbacks() {
-		if (state == State.DELETION || state == State.CONFIRM) {
-			actionBtn.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					if (listener != null) listener.onSelectedEntityButtonClicked();
+		actionBtn.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (listener != null) {
+					switch (state) {
+						case DELETION:
+							listener.onDeleteButtonClicked();
+							break;
+	
+						case CONFIRM:
+							listener.onConfirmButtonClicked();
+							break;
+					}
 				}
-			});
+			}
+		});
+				
+		undoView.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction()) {
+					case MotionEvent.ACTION_DOWN:
+						undoView.setImageDrawable(DrawableFactory.build(ctx, DrawableFactory.ICON_UNDO_PRESSED));
+						return true;
+						
+					case MotionEvent.ACTION_UP:
+						undoView.setImageDrawable(DrawableFactory.build(ctx, DrawableFactory.ICON_UNDO));
+						if (listener != null) listener.onUndoButtonClicked();
+						return true;
+				}
+				return false;
+			}
+		});
 		
-		}
+		redoView.setOnTouchListener(new OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				switch (event.getAction()) {
+					case MotionEvent.ACTION_DOWN:
+						redoView.setImageDrawable(DrawableFactory.build(ctx, DrawableFactory.ICON_REDO_PRESSED));
+						return true;
+						
+					case MotionEvent.ACTION_UP:
+						redoView.setImageDrawable(DrawableFactory.build(ctx, DrawableFactory.ICON_REDO));
+						if (listener != null) listener.onRedoButtonClicked();
+						return true;
+				}
+				return false;
+			}
+		});
 		
+		// prevent underlying views to get touchEvents 
 		setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				// return true to prevent the underlying views to get touchEvents
+				// consume the event
 				return true;
 			}
 		});
@@ -158,10 +245,7 @@ public class SITACSelectedEntityView extends LinearLayout {
 	}
 
 	public void show() {
-		subLayout.removeAllViews();
-		removeAllViews();
-		configUI();
-		defineCallbacks();
+		updateUI();
 		requestLayout();
 		setVisibility(View.VISIBLE);
 	}

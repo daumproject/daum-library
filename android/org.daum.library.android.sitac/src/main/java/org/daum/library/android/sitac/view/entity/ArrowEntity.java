@@ -24,12 +24,12 @@ public class ArrowEntity extends ShapedEntity {
 	 * Width of the "virtual click" that is use
 	 * to check if it intersects with this entity lines.
 	 **/
-	private static final int TOLERANCE_WIDTH = 10;
+	private static final int TOLERANCE_WIDTH = 15;
 	/**
 	 * Height of the "virtual click" that is use
 	 * to check if it intersects with this entity lines.
 	 **/
-	private static final int TOLERANCE_HEIGHT = 10;
+	private static final int TOLERANCE_HEIGHT = 15;
     
     private ArrayList<Line> lines; 
 	
