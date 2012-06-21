@@ -1,10 +1,5 @@
 package org.daum.library.android.sitac;
 
-import android.app.Activity;
-import android.app.Application;
-import android.app.FragmentManager;
-import android.content.ComponentCallbacks;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -31,7 +26,6 @@ public class SITACComponent extends AbstractComponentType {
 
     private KevoreeAndroidService uiService;
     private ISITACController sitacCtrl;
-    private boolean stop = false;
 
     @Start
     public void start() {
@@ -48,7 +42,6 @@ public class SITACComponent extends AbstractComponentType {
 
     @Stop
     public void stop() {
-        stop = true;
     }
 
     @Update
