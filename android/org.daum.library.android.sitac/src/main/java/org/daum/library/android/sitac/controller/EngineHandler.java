@@ -1,5 +1,7 @@
 package org.daum.library.android.sitac.controller;
 
+import java.util.Hashtable;
+
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.android.sitac.view.SITACMapView;
@@ -24,17 +26,23 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	private SITACMapView mapView;
 	private SITACMenuView menuView;
 	private IEntityFactory factory;
+	private Hashtable<IEntity, IModel> modelMap;
 	
-	public EngineHandler(IEntityFactory factory) {
+	public EngineHandler(IEntityFactory factory, Hashtable<IEntity, IModel> modelMap) {
 		this.factory = factory;
+		this.modelMap = modelMap;
 	}
 	
 	@Override
 	public void onAdd(IModel m, IEntity e) {
 		if (D) Log.i(TAG, "onAdd(): "+m);
 		if (e == null) e = factory.build(m);
+		
+		this.modelMap.put(e, m);
+		
 		e.setId(m.getId());
-		e.setState(IEntity.STATE_EDITED);
+		// the model is now saved, so we should update the associated entity state
+		e.setState(IEntity.State.SAVED);
 		
 		if (e.getGeoPoint() == null) {
 			// the entity has no location, add it to the noLocationMenu
@@ -48,7 +56,6 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	@Override
 	public void onUpdate(IModel m, IEntity e) {
 		if (D) Log.i(TAG, "onUpdate(): "+m);
-		e.setState(IEntity.STATE_EDITED);
 	}
 	
 	@Override

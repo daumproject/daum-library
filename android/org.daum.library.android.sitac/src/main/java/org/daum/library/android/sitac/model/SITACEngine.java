@@ -7,6 +7,7 @@ import org.daum.common.model.api.Danger;
 import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.IModel;
 import org.daum.common.model.api.Target;
+import org.daum.common.model.api.ZoneAction;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
@@ -18,7 +19,7 @@ import org.daum.library.ormH.utils.PersistenceException;
 import android.util.Log;
 
 /**
- * Here you should save/update/delete data from the Replica
+ * SITACEngine save/update/delete data from/to the Replica/Persistence system
  */
 public class SITACEngine {
 	
@@ -35,6 +36,7 @@ public class SITACEngine {
             configuration.addPersistentClass(Danger.class);
             configuration.addPersistentClass(Target.class);
             configuration.addPersistentClass(ArrowAction.class);
+            configuration.addPersistentClass(ZoneAction.class);
 
             this.factory = configuration.getPersistenceSessionFactory();
 
@@ -49,7 +51,7 @@ public class SITACEngine {
 	public void add(IModel m, IEntity e) {
         PersistenceSession session = null;
         try {
-            session = factory.openSession();
+            session = factory.getSession();
             session.save(m);
             
         } catch (PersistenceException ex) {
@@ -64,7 +66,7 @@ public class SITACEngine {
 	public void update(IModel m, IEntity e) {
         PersistenceSession session = null;
         try {
-            session = factory.openSession();
+            session = factory.getSession();
             session.update(m);
 
         } catch (PersistenceException ex) {
@@ -79,9 +81,9 @@ public class SITACEngine {
 	public void delete(IModel m, IEntity e) {
         PersistenceSession session = null;
         try {
-            session = factory.openSession();
+            session = factory.getSession();
             session.delete(m);
-
+            
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while persisting object", ex);
         } finally {

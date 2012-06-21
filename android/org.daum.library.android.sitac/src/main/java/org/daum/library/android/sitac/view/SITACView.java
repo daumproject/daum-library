@@ -12,7 +12,7 @@ public class SITACView extends RelativeLayout {
 	private SITACController sitacCtrl;
 	private SITACMapView mapView;
 	private SITACMenuView menuView;
-	private SITACSelectedEntityView currentEntityView;
+	private SITACSelectedEntityView selectedEntityView;
 
 	public SITACView(Context context) {
 		super(context);
@@ -28,8 +28,8 @@ public class SITACView extends RelativeLayout {
 		sitacCtrl.registerMapView(mapView);
 		menuView = new SITACMenuView(ctx);
 		sitacCtrl.registerMenuView(menuView);
-		currentEntityView = new SITACSelectedEntityView(ctx);
-		sitacCtrl.registerSelectedEntityView(currentEntityView);
+		selectedEntityView = new SITACSelectedEntityView(ctx);
+		sitacCtrl.registerSelectedEntityView(selectedEntityView);
 	}
 	
 	private void configUI() {
@@ -42,13 +42,15 @@ public class SITACView extends RelativeLayout {
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		entityParams.addRule(ALIGN_PARENT_TOP);
 		entityParams.addRule(ALIGN_PARENT_RIGHT);
-		addView(currentEntityView, entityParams);
+		addView(selectedEntityView, entityParams);
+		// hide the view by default because no entities are selected
+		selectedEntityView.hide();
 	}
 	
 	private void defineCallbacks() {
 		mapView.setOnOverlayEventListener(sitacCtrl.getUIHandler());
 		menuView.setOnMenuViewEventListener(sitacCtrl.getUIHandler());
-		currentEntityView.setOnSelectedEntityEventListener(sitacCtrl.getUIHandler());
+		selectedEntityView.setOnSelectedEntityEventListener(sitacCtrl.getUIHandler());
 	}
 	
 	public ISITACController getController() {

@@ -24,8 +24,9 @@ public abstract class Entity implements IEntity {
 	private Drawable icon;
 	private Bitmap bmp;
 	private IGeoPoint geoPoint;
-	private int state;
+	private State state;
 	private boolean tagTextEnabled = true;
+	
 	
 	private int bmpWidth	= 0;
 	private int bmpHeight	= 0;
@@ -55,7 +56,7 @@ public abstract class Entity implements IEntity {
 		this.paint.setAntiAlias(true);
 		this.paint.setTextSize(13);
 		this.bounds = new Rect();
-		this.state = STATE_NEW;
+		this.state = State.NEW;
 		
 		this.observable = new MyObservable();
 	}
@@ -170,12 +171,12 @@ public abstract class Entity implements IEntity {
 	}
 
 	@Override
-	public int getState() {
+	public State getState() {
 		return state;
 	}
 
 	@Override
-	public void setState(int state) {
+	public void setState(State state) {
 		this.state = state;
 	}
 	

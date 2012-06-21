@@ -20,14 +20,6 @@ import org.daum.library.android.messages.listener.MessagesEvent.MessagesEventTyp
  */
 public class NewMessageView extends AbstractMessagesView {
 
-    private static final int ID_MESSAGES_VIEW = 1;
-    private static final int ID_DEMANDE_ET = 2;
-    private static final int ID_PREVOIS_ET = 3;
-    private static final int ID_FAIS_ET = 4;
-    private static final int ID_SUIS_ET = 5;
-    private static final int ID_VOIS_ET = 6;
-    private static final int ID_SEND_BTN = 7;
-
     // String constants
     private static final String TEXT_SEND           = "Envoyer";
     private static final String TEXT_CLEAR          = "Effacer";
@@ -74,27 +66,22 @@ public class NewMessageView extends AbstractMessagesView {
 
         // EditText
         et_jeDemande.setImmuableHint(JE_DEMANDE);
-        et_jeDemande.setId(ID_DEMANDE_ET);
         et_jeDemande.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         et_jeDemande.setNextFocusDownId(et_jePrevois.getId());
 
         et_jePrevois.setImmuableHint(JE_PREVOIS);
-        et_jePrevois.setId(ID_PREVOIS_ET);
         et_jePrevois.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         et_jePrevois.setNextFocusDownId(et_jeFais.getId());
 
         et_jeFais.setImmuableHint(JE_FAIS);
-        et_jeFais.setId(ID_FAIS_ET);
         et_jeFais.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         et_jeFais.setNextFocusDownId(et_jeSuis.getId());
 
         et_jeSuis.setImmuableHint(JE_SUIS);
-        et_jeSuis.setId(ID_SUIS_ET);
         et_jeSuis.setImeOptions(EditorInfo.IME_ACTION_NEXT);
         et_jeSuis.setNextFocusDownId(et_jeVois.getId());
 
         et_jeVois.setImmuableHint(JE_VOIS);
-        et_jeVois.setId(ID_VOIS_ET);
         et_jeVois.setImeOptions(EditorInfo.IME_ACTION_SEND);
         et_jeVois.setNextFocusDownId(btn_send.getId());
 
@@ -117,7 +104,6 @@ public class NewMessageView extends AbstractMessagesView {
         addViewToLeftLayout(newMsgLayout, newMsgParams);
 
         // configuring buttons
-        btn_send.setId(ID_SEND_BTN);
         btn_send.setText(TEXT_SEND);
         btn_clear.setText(TEXT_CLEAR);
 

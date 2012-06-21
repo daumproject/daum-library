@@ -8,9 +8,15 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
 public interface IEntity extends IObservable {
-
-	public static final int STATE_NEW = 0;
-	public static final int STATE_EDITED = 1;
+	
+	public enum State {
+		/** default Entity State; mark the entity as "not saved into any engine" */
+		NEW,
+		/**  mark the entity as "saved into one engine" */
+		SAVED,
+		/** mark the entity as "displayed on map" but not saved into an engine */
+		ON_MAP
+	}
 
 	public String getId();
 
@@ -102,18 +108,17 @@ public interface IEntity extends IObservable {
 	/**
 	 * Get the state of the entity
 	 * 
-	 * @return int entity's state
+	 * @return State entity's state
 	 */
-	public int getState();
+	public State getState();
 
 	/**
-	 * Change the state of the entity You should use the STATE_XXX defined in
-	 * IEntity
+	 * Change the state of the entity
 	 * 
 	 * @param state
 	 *            new state
 	 */
-	public void setState(int state);
+	public void setState(State state);
 
 	/**
 	 * If set to true, an entity that does not override it's draw(Canvas,
