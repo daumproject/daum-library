@@ -9,7 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
  * Time: 14:07
  */
 public class Updates  extends AMessage {
-
+    private static final long serialVersionUID = 1521L;
     private  LinkedBlockingQueue<Update> updates = new LinkedBlockingQueue<Update>();
 
     public LinkedBlockingQueue<Update> getUpdates() {

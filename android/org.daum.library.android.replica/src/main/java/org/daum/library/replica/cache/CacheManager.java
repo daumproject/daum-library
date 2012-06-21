@@ -111,6 +111,7 @@ public class CacheManager implements ICacheManger
                         getCache(msg.cache).putIfAbsent(msg.key, msg.getVersionedValue());
                     }
 
+
                     cluster.getCurrentNode().setSynchronized();
                 }
 
@@ -158,7 +159,7 @@ public class CacheManager implements ICacheManger
                         storeSnapshot.dest =   command.source;
                         cluster.getChannel().write(storeSnapshot);
 
-                        logger.info("Snapshot is sent for "+ command.source);
+                        logger.info("Snapshot is sent for "+ cluster.getCurrentNode());
                     }
                 }
             }

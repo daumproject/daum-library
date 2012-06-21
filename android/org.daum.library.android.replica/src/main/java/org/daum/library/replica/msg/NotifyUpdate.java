@@ -10,7 +10,7 @@ import org.daum.library.replica.cache.StoreCommand;
  * To change this template use File | Settings | File Templates.
  */
 public class NotifyUpdate implements Message {
-
+    private static final long serialVersionUID = 1518L;
     private String cache;
     private Object key;
     private StoreCommand cmd;
