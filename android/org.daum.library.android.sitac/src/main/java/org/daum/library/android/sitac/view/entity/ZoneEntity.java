@@ -33,40 +33,42 @@ public class ZoneEntity extends ShapedEntity {
 
 	@Override
 	public void draw(Canvas canvas, MapView mapView) {
-		Point[] pts = new Point[points.size()];
-		int i=0;
-		Projection prj = mapView.getProjection();
-		for (IGeoPoint geoP : points) pts[i++] = prj.toMapPixels(geoP, null);
-		
-		if (pts.length <= 2) {
-			// just draw the first point
-			pointPaint.setStrokeWidth(4);
-			for (Point p : pts) {
-				canvas.drawPoint(p.x, p.y, pointPaint);
-			}
-		} else {
-			// draw the filled zone
-			Path path = new Path();
-			zone = new pythagoras.d.Path(pythagoras.d.Path.WIND_EVEN_ODD);
-			path.setFillType(Path.FillType.EVEN_ODD);
-			path.moveTo(pts[0].x, pts[0].y);
-			zone.moveTo(pts[0].x, pts[0].y);
-			for (i=1; i<pts.length-1; i++) {
-				path.lineTo(pts[i].x, pts[i].y);
-				zone.lineTo(pts[i].x, pts[i].y);
-			}
-			path.lineTo(pts[pts.length-1].x, pts[pts.length-1].y);
-			zone.lineTo(pts[pts.length-1].x, pts[pts.length-1].y);
-			path.close();
-			zone.closePath();
-			canvas.drawPath(path, paint);
+		if (points.size() > 0) {
+			Point[] pts = new Point[points.size()];
+			int i=0;
+			Projection prj = mapView.getProjection();
+			for (IGeoPoint geoP : points) pts[i++] = prj.toMapPixels(geoP, null);
 			
-			// draw the boundary lines
-			pointPaint.setStrokeWidth(2);
-			for (i=0; i<pts.length-1; i++) {
-				canvas.drawLine(pts[i].x, pts[i].y, pts[i+1].x, pts[i+1].y, pointPaint);
+			if (pts.length <= 2) {
+				// just draw the first point
+				pointPaint.setStrokeWidth(4);
+				for (Point p : pts) {
+					canvas.drawPoint(p.x, p.y, pointPaint);
+				}
+			} else {
+				// draw the filled zone
+				Path path = new Path();
+				zone = new pythagoras.d.Path(pythagoras.d.Path.WIND_EVEN_ODD);
+				path.setFillType(Path.FillType.EVEN_ODD);
+				path.moveTo(pts[0].x, pts[0].y);
+				zone.moveTo(pts[0].x, pts[0].y);
+				for (i=1; i<pts.length-1; i++) {
+					path.lineTo(pts[i].x, pts[i].y);
+					zone.lineTo(pts[i].x, pts[i].y);
+				}
+				path.lineTo(pts[pts.length-1].x, pts[pts.length-1].y);
+				zone.lineTo(pts[pts.length-1].x, pts[pts.length-1].y);
+				path.close();
+				zone.closePath();
+				canvas.drawPath(path, paint);
+				
+				// draw the boundary lines
+				pointPaint.setStrokeWidth(2);
+				for (i=0; i<pts.length-1; i++) {
+					canvas.drawLine(pts[i].x, pts[i].y, pts[i+1].x, pts[i+1].y, pointPaint);
+				}
+				canvas.drawLine(pts[i].x, pts[i].y, pts[0].x, pts[0].y, pointPaint);
 			}
-			canvas.drawLine(pts[i].x, pts[i].y, pts[0].x, pts[0].y, pointPaint);
 		}
 	}
 	

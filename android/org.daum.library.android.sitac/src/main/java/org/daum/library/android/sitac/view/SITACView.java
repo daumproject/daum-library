@@ -17,7 +17,7 @@ public class SITACView extends RelativeLayout {
 	public SITACView(Context context) {
 		super(context);
 		this.ctx = context;
-		this.sitacCtrl = SITACController.getInstance(ctx);
+		this.sitacCtrl = new SITACController(ctx);
 		initUI();
 		configUI();
 		defineCallbacks();
@@ -43,7 +43,7 @@ public class SITACView extends RelativeLayout {
 		entityParams.addRule(ALIGN_PARENT_TOP);
 		entityParams.addRule(ALIGN_PARENT_RIGHT);
 		addView(selectedEntityView, entityParams);
-		// hide the view by default because no entities are selected
+		// hide the selectedEntityView by default because no entities are selected
 		selectedEntityView.hide();
 	}
 	

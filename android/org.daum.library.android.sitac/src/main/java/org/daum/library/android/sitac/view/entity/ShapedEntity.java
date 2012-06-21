@@ -25,6 +25,10 @@ public abstract class ShapedEntity extends Entity implements IShapedEntity {
 		points.add(geoP);
 		notifyObservers();
 	}
+	
+	public void removePoint(IGeoPoint geoP) {
+		if (points.remove(geoP)) notifyObservers();
+	}
 
 	public ArrayList<IGeoPoint> getPoints() {
 		return points;

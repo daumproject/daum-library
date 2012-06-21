@@ -18,10 +18,6 @@ public interface IEntity extends IObservable {
 		ON_MAP
 	}
 
-	public String getId();
-
-	public void setId(String id);
-
 	/**
 	 * Draws the entity on the canvas
 	 * 

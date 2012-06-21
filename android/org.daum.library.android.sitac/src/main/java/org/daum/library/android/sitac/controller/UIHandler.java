@@ -4,13 +4,20 @@ import java.util.Hashtable;
 
 import org.daum.common.gps.impl.GpsPoint;
 import org.daum.common.model.api.IModel;
-import org.daum.library.android.sitac.command.AddModelCommand;
-import org.daum.library.android.sitac.command.DeleteModelCommand;
-import org.daum.library.android.sitac.command.UpdateModelCommand;
+import org.daum.library.android.sitac.command.RedoCommand;
+import org.daum.library.android.sitac.command.UndoCommand;
+import org.daum.library.android.sitac.command.engine.AddModelCommand;
+import org.daum.library.android.sitac.command.engine.DeleteModelCommand;
+import org.daum.library.android.sitac.command.engine.UpdateModelCommand;
+import org.daum.library.android.sitac.command.ui.AddPointCommand;
+import org.daum.library.android.sitac.engine.SITACEngine;
+import org.daum.library.android.sitac.engine.UndoRedoEngine;
 import org.daum.library.android.sitac.listener.OnMenuViewEventListener;
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
 import org.daum.library.android.sitac.listener.OnSelectedEntityEventListener;
-import org.daum.library.android.sitac.model.SITACEngine;
+import org.daum.library.android.sitac.manager.CmdManager;
+import org.daum.library.android.sitac.manager.EngineCmdManager;
+import org.daum.library.android.sitac.manager.UICmdManager;
 import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACMenuView;
 import org.daum.library.android.sitac.view.SITACSelectedEntityView;
@@ -33,12 +40,14 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	private SITACSelectedEntityView selectedEntityView;
 	private IEntity selectedEntity;
 	private IModelFactory factory;
-	private SITACEngine engine;
+	private SITACEngine modelEngine;
+	private UndoRedoEngine undoRedoEngine;
 	private Hashtable<IEntity, IModel> modelMap;
 	
-	public UIHandler(IModelFactory factory, SITACEngine engine, Hashtable<IEntity, IModel> modelMap) {
+	public UIHandler(IModelFactory factory, SITACEngine modelEngine, Hashtable<IEntity, IModel> modelMap) {
 		this.factory = factory;
-		this.engine = engine;
+		this.modelEngine = modelEngine;
+		this.undoRedoEngine = new UndoRedoEngine();
 		this.modelMap = modelMap;
 	}
 	
@@ -57,7 +66,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	@Override
 	public void onDeleteButtonClicked() {
 		IModel m = modelMap.get(selectedEntity);
-		CmdManager.getInstance(engine).execute(DeleteModelCommand.class, m, selectedEntity);
+		EngineCmdManager.getInstance(modelEngine).execute(DeleteModelCommand.class, m, selectedEntity);
 		
 		// hiding the selectedEntityView
 		selectedEntityView.hide();
@@ -74,7 +83,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 		// locally to the user what he was doing
 		mapView.deleteEntity(selectedEntity);
 		modelMap.put(selectedEntity, m);
-		CmdManager.getInstance(engine).execute(AddModelCommand.class, m, selectedEntity);
+		EngineCmdManager.getInstance(modelEngine).execute(AddModelCommand.class, m, selectedEntity);
 		
 		// putting selectedEntityView's state back to SELECTION
 		// to enable entity selection on map again
@@ -87,14 +96,12 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	
 	@Override
 	public void onRedoButtonClicked() {
-		// TODO Auto-generated method stub
-		
+		CmdManager.getInstance(undoRedoEngine).execute(RedoCommand.class);
 	}
 	
 	@Override
 	public void onUndoButtonClicked() {
-		// TODO Auto-generated method stub
-		
+		CmdManager.getInstance(undoRedoEngine).execute(UndoCommand.class);
 	}
 
 	@Override
@@ -110,7 +117,8 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 				case NEW:
 					if (selectedEntity instanceof IShapedEntity) {
 						// add the singleTap point to the IShapedEntity
-						((ShapedEntity) selectedEntity).addPoint(geoP);
+//						((ShapedEntity) selectedEntity).addPoint(geoP);
+						UICmdManager.getInstance(undoRedoEngine).execute(AddPointCommand.class, selectedEntity, geoP);
 						// but do not add it to the engine until the user
 						// confirm that the entity is okay, instead display
 						// it on the mapView to ensure that the user sees
@@ -123,7 +131,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 					} else {
 						m = factory.build(selectedEntity);
 						modelMap.put(selectedEntity, m);
-						CmdManager.getInstance(engine).execute(AddModelCommand.class, m, selectedEntity);
+						EngineCmdManager.getInstance(modelEngine).execute(AddModelCommand.class, m, selectedEntity);
 						// the entity has been added to the engine, we can hide the selectedEntityView
 						selectedEntityView.hide();
 						// discard the selectedEntity
@@ -146,7 +154,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 							m.setLocation(new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6()));
 						}
 						// update the model on the engine
-						CmdManager.getInstance(engine).execute(UpdateModelCommand.class, m, selectedEntity);
+						EngineCmdManager.getInstance(modelEngine).execute(UpdateModelCommand.class, m, selectedEntity);
 						// the entity has been moved on map and its model has been updated
 						// so we can hide the selectedEntityView
 						selectedEntityView.hide();
@@ -158,7 +166,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 				case ON_MAP:
 					// just add the singleTap point to the IShapedEntity
 					// because it is already displayed on the map
-					((ShapedEntity) selectedEntity).addPoint(geoP);
+					UICmdManager.getInstance(undoRedoEngine).execute(AddPointCommand.class, selectedEntity, geoP);
 					
 					if (((ShapedEntity) selectedEntity).isPersistable()) {
 						selectedEntityView.setState(SITACSelectedEntityView.State.CONFIRM);

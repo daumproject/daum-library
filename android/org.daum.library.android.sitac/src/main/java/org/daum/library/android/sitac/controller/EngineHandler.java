@@ -38,9 +38,8 @@ public class EngineHandler implements OnEngineStateChangeListener {
 		if (D) Log.i(TAG, "onAdd(): "+m);
 		if (e == null) e = factory.build(m);
 		
-		this.modelMap.put(e, m);
+		modelMap.put(e, m);
 		
-		e.setId(m.getId());
 		// the model is now saved, so we should update the associated entity state
 		e.setState(IEntity.State.SAVED);
 		
@@ -61,6 +60,7 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	@Override
 	public void onDelete(IEntity e) {
 		mapView.deleteEntity(e);
+		modelMap.remove(e);
 	}
 
     public void registerMenuView(SITACMenuView menuView) {

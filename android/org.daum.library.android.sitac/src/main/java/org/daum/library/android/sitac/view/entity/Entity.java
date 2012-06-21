@@ -18,7 +18,6 @@ import android.graphics.drawable.Drawable;
 
 public abstract class Entity implements IEntity {
 	
-	private String id;
 	private String type;
 	private String message;
 	private Drawable icon;
@@ -109,16 +108,6 @@ public abstract class Entity implements IEntity {
 //		pa.setStyle(Paint.Style.STROKE);
 //		pa.setStrokeWidth(1);
 //		canvas.drawRect(bounds, pa);
-	}
-
-	@Override
-	public String getId() {
-		return id;
-	}
-	
-	@Override
-	public void setId(String id) {
-		this.id = id;
 	}
 	
 	@Override

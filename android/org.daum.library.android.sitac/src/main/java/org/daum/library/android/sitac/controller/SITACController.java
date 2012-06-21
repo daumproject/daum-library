@@ -3,8 +3,9 @@ package org.daum.library.android.sitac.controller;
 import java.util.Hashtable;
 
 import org.daum.common.model.api.IModel;
-import org.daum.library.android.sitac.command.AddModelCommand;
-import org.daum.library.android.sitac.model.SITACEngine;
+import org.daum.library.android.sitac.command.engine.AddModelCommand;
+import org.daum.library.android.sitac.engine.SITACEngine;
+import org.daum.library.android.sitac.manager.EngineCmdManager;
 import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACMenuView;
 import org.daum.library.android.sitac.view.SITACSelectedEntityView;
@@ -26,8 +27,6 @@ public class SITACController implements ISITACController {
 	private static final String TAG = "SITACController";
 	private static final boolean D = true;
 	
-	private static SITACController instance;
-	
 	private Context ctx;
 	private SITACMapView mapView;
     private SITACEngine engine;
@@ -38,7 +37,7 @@ public class SITACController implements ISITACController {
 	private IModelFactory modelFactory;
 	private Hashtable<IEntity, IModel> modelMap;
 	
-	private SITACController(Context context) {
+	public SITACController(Context context) {
 		this.ctx = context;
 		this.entityFactory = new EntityFactory(ctx);
 		this.modelFactory = new ModelFactory();
@@ -54,15 +53,10 @@ public class SITACController implements ISITACController {
 		// delegate the UI events to the UIHandler
 		this.uiHandler = new UIHandler(modelFactory, engine, modelMap);
 	}
-	
-	public static SITACController getInstance(Context ctx) {
-		if (instance == null) instance = new SITACController(ctx);
-		return instance;
-	}
 
     @Override
     public void addModel(IModel m) {
-        CmdManager.getInstance(engine).execute(AddModelCommand.class, m);
+        EngineCmdManager.getInstance(engine).execute(AddModelCommand.class, m);
     }
 
     @Override

@@ -44,25 +44,27 @@ public class ArrowEntity extends ShapedEntity {
 	
 	@Override
 	public void draw(Canvas canvas, MapView mapView) {
-		Point[] pts = new Point[points.size()];
-		int i=0;
-		Projection prj = mapView.getProjection();
-		for (IGeoPoint geoP : points) pts[i++] = prj.toMapPixels(geoP, null);
-		
-		paint.setStrokeWidth(5);
-		if (pts.length <= 1) {
-			// just draw the first point
-			canvas.drawPoint(pts[0].x, pts[0].y, paint);
-		} else {
-			// draw the lines
-			lines.clear();
-			for (i=0; i<pts.length-1; i++) {
-				canvas.drawLine(pts[i].x, pts[i].y, pts[i+1].x, pts[i+1].y, paint);
-				lines.add(new Line(pts[i].x, pts[i].y, pts[i+1].x, pts[i+1].y));
-			}
+		if (points.size() > 0) {
+			Point[] pts = new Point[points.size()];
+			int i=0;
+			Projection prj = mapView.getProjection();
+			for (IGeoPoint geoP : points) pts[i++] = prj.toMapPixels(geoP, null);
 			
-			// draw the head of the arrow
-			// TODO
+			paint.setStrokeWidth(5);
+			if (pts.length <= 1) {
+				// just draw the first point
+				canvas.drawPoint(pts[0].x, pts[0].y, paint);
+			} else {
+				// draw the lines
+				lines.clear();
+				for (i=0; i<pts.length-1; i++) {
+					canvas.drawLine(pts[i].x, pts[i].y, pts[i+1].x, pts[i+1].y, paint);
+					lines.add(new Line(pts[i].x, pts[i].y, pts[i+1].x, pts[i+1].y));
+				}
+				
+				// draw the head of the arrow
+				// TODO
+			}
 		}
 	}
 	
