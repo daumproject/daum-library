@@ -1,5 +1,8 @@
 package org.daum.library.android.sitac.controller;
 
+import java.util.Hashtable;
+import java.util.Map;
+
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.command.AddModelCommand;
 import org.daum.library.android.sitac.model.SITACEngine;
@@ -7,6 +10,7 @@ import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACMenuView;
 import org.daum.library.android.sitac.view.SITACSelectedEntityView;
 import org.daum.library.android.sitac.view.entity.EntityFactory;
+import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.entity.IEntityFactory;
 import org.daum.library.android.sitac.view.entity.IModelFactory;
 import org.daum.library.android.sitac.view.entity.ModelFactory;
@@ -33,20 +37,23 @@ public class SITACController implements ISITACController {
 	private LocationManager locMgr;
 	private IEntityFactory entityFactory;
 	private IModelFactory modelFactory;
+	private Hashtable<IEntity, IModel> modelMap;
 	
 	private SITACController(Context context) {
 		this.ctx = context;
 		this.entityFactory = new EntityFactory(ctx);
 		this.modelFactory = new ModelFactory();
 		this.locMgr = (LocationManager) ctx.getSystemService(Context.LOCATION_SERVICE);
+		
+		this.modelMap = new Hashtable<IEntity, IModel>();
 
 		// delegate the engine updates to the engineHandler
-		this.engineHandler = new EngineHandler(entityFactory);
+		this.engineHandler = new EngineHandler(entityFactory, modelMap);
 		
 		this.engine = new SITACEngine(engineHandler);
 		
 		// delegate the UI events to the UIHandler
-		this.uiHandler = new UIHandler(modelFactory, engine);
+		this.uiHandler = new UIHandler(modelFactory, engine, modelMap);
 	}
 	
 	public static SITACController getInstance(Context ctx) {

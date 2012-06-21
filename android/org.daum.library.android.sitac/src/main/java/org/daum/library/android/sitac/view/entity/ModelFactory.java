@@ -3,6 +3,7 @@ package org.daum.library.android.sitac.view.entity;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.daum.common.gps.api.IGpsPoint;
 import org.daum.common.gps.impl.GpsPoint;
 import org.daum.common.model.api.ArrowAction;
 import org.daum.common.model.api.Danger;
@@ -10,6 +11,7 @@ import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.IModel;
 import org.daum.common.model.api.Target;
 import org.daum.common.model.api.VehicleType;
+import org.daum.common.model.api.ZoneAction;
 import org.osmdroid.api.IGeoPoint;
 
 import android.util.Log;
@@ -54,7 +56,7 @@ public class ModelFactory implements IModelFactory {
 		IGeoPoint geoP = ent.getGeoPoint();
 		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
 		ArrayList<IGeoPoint> geoPts = ent.getPoints();
-		ArrayList<GpsPoint> points = new ArrayList<GpsPoint>();
+		ArrayList<IGpsPoint> points = new ArrayList<IGpsPoint>();
 		for (IGeoPoint gp : geoPts) {
 			points.add(new GpsPoint(gp.getLatitudeE6(), gp.getLongitudeE6()));
 		}
@@ -71,9 +73,14 @@ public class ModelFactory implements IModelFactory {
 		return a;
 	}
 	
-//	private ZoneAction build(ZoneEntity ent) {
-//		
-//	}
+	private ZoneAction build(ZoneEntity ent) {
+		ArrayList<IGeoPoint> geoPts = ent.getPoints();
+		ArrayList<IGpsPoint> pts = new ArrayList<IGpsPoint>();
+		for (IGeoPoint geoP : geoPts) pts.add(new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6()));
+		IGeoPoint geoP = ent.getGeoPoint();
+		IGpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
+		return new ZoneAction(location, pts);
+	}
 
 	private Target build(TargetEntity ent) {
 		IGeoPoint geoP = ent.getGeoPoint();

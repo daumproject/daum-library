@@ -1,7 +1,6 @@
 package org.daum.library.android.sitac.view.entity;
 
 import org.daum.common.gps.api.IGpsPoint;
-import org.daum.common.gps.impl.GpsPoint;
 import org.daum.common.model.api.ArrowAction;
 import org.daum.common.model.api.Danger;
 import org.daum.common.model.api.Demand;
@@ -9,6 +8,7 @@ import org.daum.common.model.api.IModel;
 import org.daum.common.model.api.Target;
 import org.daum.common.model.api.VehicleSector;
 import org.daum.common.model.api.VehicleType;
+import org.daum.common.model.api.ZoneAction;
 import org.daum.library.android.sitac.view.DrawableFactory;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
@@ -35,6 +35,7 @@ public class EntityFactory implements IEntityFactory {
 		else if (m instanceof Target) return build((Target) m);
 		else if (m instanceof Danger) return build((Danger) m);
 		else if (m instanceof ArrowAction) return build((ArrowAction) m);
+		else if (m instanceof ZoneAction) return build((ZoneAction) m);
 		else Log.w(TAG, "build("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
 		return null;
 	}
@@ -138,7 +139,20 @@ public class EntityFactory implements IEntityFactory {
 		}
 		ArrowEntity e = new ArrowEntity(icon, name, arrowColor);
 		e.setGeoPoint(new GeoPoint(a.getLocation().getLat(), a.getLocation().getLong_()));
-		for (GpsPoint gpsPt : a.getPoints()) {
+		for (IGpsPoint gpsPt : a.getPoints()) {
+			e.addPoint(new GeoPoint(gpsPt.getLat(), gpsPt.getLong_()));
+		}
+		return e;
+	}
+	
+	private ZoneEntity build(ZoneAction z) {
+		Drawable icon = DrawableFactory.buildDrawable(ctx, DrawableFactory.PICTO_ZONE);
+		String name = "Zone";
+		int color = Color.argb(60, 0, 0, 0); // black with a lot of transparence
+
+		ZoneEntity e = new ZoneEntity(icon, name, color);
+		e.setGeoPoint(new GeoPoint(z.getLocation().getLat(), z.getLocation().getLong_()));
+		for (IGpsPoint gpsPt : z.getPoints()) {
 			e.addPoint(new GeoPoint(gpsPt.getLat(), gpsPt.getLong_()));
 		}
 		return e;

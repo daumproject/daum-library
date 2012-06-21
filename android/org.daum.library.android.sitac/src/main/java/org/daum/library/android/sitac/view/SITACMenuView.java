@@ -279,10 +279,10 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 			
 		});
 	}
-	
+
 	/**
 	 * Adds an entity to the noLocationMenu
-	 * If the menu is not currently displayed, it will be added to the view
+	 * If the menu is not currently displayed, it will be set to VISIBLE
 	 * 
 	 * @param e a demand entity with no location set
 	 */

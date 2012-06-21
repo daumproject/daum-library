@@ -12,7 +12,7 @@ import android.graphics.Path;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 
-public class ZoneEntity extends ArrowEntity {
+public class ZoneEntity extends ShapedEntity {
 	
 	private Paint pointPaint;
 	private pythagoras.d.Path zone;
@@ -71,7 +71,7 @@ public class ZoneEntity extends ArrowEntity {
 	}
 	
 	@Override
-	public boolean isDrawable() {
+	public boolean isPersistable() {
 		return (points.size() >= 3);
 	}
 	

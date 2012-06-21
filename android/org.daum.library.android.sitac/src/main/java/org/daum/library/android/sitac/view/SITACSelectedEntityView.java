@@ -25,10 +25,11 @@ public class SITACSelectedEntityView extends LinearLayout {
 	
 	private static final String TAG = SITACSelectedEntityView.class.getSimpleName();
 	
-	// public state constants
-	public static final int STATE_SELECTION			= 0;
-	public static final int STATE_SELECTION_CONFIRM	= 1;
-	public static final int STATE_DELETION			= 2;
+	public enum State {
+		SELECTION,
+		CONFIRM,
+		DELETION
+	}
 	
 	private static final String TEXT_DELETE = "Supprimer";
 	private static final String TEXT_TITLE = "Sélection:";
@@ -42,13 +43,14 @@ public class SITACSelectedEntityView extends LinearLayout {
 	private TextView msgView;
 	private LinearLayout subLayout;
 	private Button actionBtn;
-	private int state = STATE_SELECTION;
+	private State state;
 	private OnSelectedEntityEventListener listener;
 	
 
 	public SITACSelectedEntityView(Context context) {
 		super(context);
 		this.ctx = context;
+		this.state = State.SELECTION;
 		initUI();
 	}
 
@@ -94,13 +96,21 @@ public class SITACSelectedEntityView extends LinearLayout {
 		
 		addView(subLayout, subLayoutParams);
 		
-		if (state != STATE_SELECTION) {
-			if (state == STATE_DELETION) actionBtn.setText(TEXT_DELETE);
-			else if (state == STATE_SELECTION_CONFIRM) actionBtn.setText(TEXT_CONFIRM);
-			
+
+		
+		if (state != State.SELECTION) {
+			switch (state) {
+				case DELETION:
+					actionBtn.setText(TEXT_DELETE);
+					break;
+					
+				case CONFIRM:
+					actionBtn.setText(TEXT_CONFIRM);
+					break;
+			}
 			LayoutParams btnParams = new LayoutParams(
 					LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-            actionBtn.setTextColor(Color.WHITE);
+	        actionBtn.setTextColor(Color.WHITE);
 			addView(actionBtn, btnParams);
 		}
 		
@@ -119,7 +129,7 @@ public class SITACSelectedEntityView extends LinearLayout {
 	}
 	
 	private void defineCallbacks() {
-		if (state == STATE_DELETION || state == STATE_SELECTION_CONFIRM) {
+		if (state == State.DELETION || state == State.CONFIRM) {
 			actionBtn.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -156,11 +166,11 @@ public class SITACSelectedEntityView extends LinearLayout {
 		setVisibility(View.VISIBLE);
 	}
 	
-	public void setState(int state) {
+	public void setState(State state) {
 		this.state = state;
 	}
 	
-	public int getState() {
+	public State getState() {
 		return state;
 	}
 	

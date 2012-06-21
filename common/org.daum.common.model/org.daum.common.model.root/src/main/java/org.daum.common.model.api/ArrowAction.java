@@ -21,9 +21,9 @@ public class ArrowAction implements IModel {
 	private String id = "";
 	private ArrowAction.Type type;
 	private IGpsPoint location;
-	private ArrayList<GpsPoint> points;
+	private ArrayList<IGpsPoint> points;
 	
-	public ArrowAction(Type type, GpsPoint location, ArrayList<GpsPoint> points) {
+	public ArrowAction(Type type, GpsPoint location, ArrayList<IGpsPoint> points) {
 		this.type = type;
 		this.location = location;
 		this.points = points;
@@ -47,7 +47,7 @@ public class ArrowAction implements IModel {
 		return location;
 	}
 	
-	public ArrayList<GpsPoint> getPoints() {
+	public ArrayList<IGpsPoint> getPoints() {
 		return points;
 	}
 

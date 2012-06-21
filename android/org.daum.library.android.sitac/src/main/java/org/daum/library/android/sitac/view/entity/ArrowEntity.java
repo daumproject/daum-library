@@ -13,7 +13,7 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 
-public class ArrowEntity extends Entity {
+public class ArrowEntity extends ShapedEntity {
 
     public static final String SAP = "Secours à personnes";
     public static final String CHEM = "Risques particuliers";
@@ -33,17 +33,13 @@ public class ArrowEntity extends Entity {
     
     private ArrayList<Line> lines; 
 	
-	protected ArrayList<IGeoPoint> points;
-	
 	public ArrowEntity(Drawable icon, String type, int arrowColor) {
 		this(icon, type, "", arrowColor);
 	}
 
 	public ArrowEntity(Drawable icon, String type, String message, int arrowColor) {
-		super(icon, type, message);
-		points = new ArrayList<IGeoPoint>();
+		super(icon, type, message, arrowColor);
 		lines = new ArrayList<Line>();
-		paint.setColor(arrowColor);
 	}
 	
 	@Override
@@ -82,20 +78,8 @@ public class ArrowEntity extends Entity {
 		return false;
 	}
 	
-	public void addPoint(IGeoPoint geoP) {
-		points.add(geoP);
-		notifyObservers();
-	}
-	
-	/**
-	 * 
-	 * @return true if there's enough point to properly draw the entity
-	 */
-	public boolean isDrawable() {
+	@Override
+	public boolean isPersistable() {
 		return (points.size() > 1);
-	}
-
-	public ArrayList<IGeoPoint> getPoints() {
-		return points;
 	}
 }

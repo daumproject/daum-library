@@ -13,6 +13,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 
 public class MapOverlay extends Overlay {
@@ -58,9 +59,12 @@ public class MapOverlay extends Overlay {
 	@Override
 	protected void draw(Canvas canvas, MapView mapV, boolean shadow) {
 		if (!shadow) {
+			String str = "";
 			for (IEntity ent : entities) {
+				str += ent.getClass().getSimpleName()+", ";
 				if (ent.getGeoPoint() != null) ent.draw(canvas, mapV);
 			}
+			Log.d(TAG, str);
 		}
 	}
 	
