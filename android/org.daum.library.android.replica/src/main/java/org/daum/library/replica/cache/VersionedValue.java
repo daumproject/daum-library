@@ -8,12 +8,9 @@ package org.daum.library.replica.cache;
  */
 public class VersionedValue implements java.io.Serializable, java.lang.Cloneable {
 
-    private volatile long version;
-    private volatile long hitCount;
-    private volatile int timeToLive;
-    private volatile int timeToIdle;
-    private volatile long lastUpdateTime;
+    private static final long serialVersionUID = 1515L;
 
+    private volatile long version;
     private java.lang.Object value;
 
     public VersionedValue(Object value)
@@ -60,38 +57,6 @@ public class VersionedValue implements java.io.Serializable, java.lang.Cloneable
         {
             return false;
         }
-    }
-
-    public long getHitCount() {
-        return hitCount;
-    }
-
-    public void setHitCount(long hitCount) {
-        this.hitCount = hitCount;
-    }
-
-    public int getTimeToLive() {
-        return timeToLive;
-    }
-
-    public void setTimeToLive(int timeToLive) {
-        this.timeToLive = timeToLive;
-    }
-
-    public int getTimeToIdle() {
-        return timeToIdle;
-    }
-
-    public void setTimeToIdle(int timeToIdle) {
-        this.timeToIdle = timeToIdle;
-    }
-
-    public long getLastUpdateTime() {
-        return lastUpdateTime;
-    }
-
-    public void setLastUpdateTime(long lastUpdateTime) {
-        this.lastUpdateTime = lastUpdateTime;
     }
 
     public Object getValue() {

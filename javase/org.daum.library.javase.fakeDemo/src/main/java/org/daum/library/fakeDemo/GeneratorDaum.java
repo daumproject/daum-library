@@ -147,6 +147,7 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
 
                     if(getDictionary().get("mode").toString().equals("temperature"))
                     {
+
                         range_min=20;
                         range_max=38;
 
@@ -155,6 +156,8 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
                         temperatureMonitor.setDate(systemTime.getCurrentDate());
                         int heatbeat_value = range_min + random.nextInt(range_max - range_min);
                         temperatureMonitor.setValue(heatbeat_value);
+
+                        logger.debug("Generate "+temperatureMonitor.getValue());
 
                         // save
                         s.save(temperatureMonitor);
@@ -179,7 +182,7 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
                         heartMonitor.setDate(systemTime.getCurrentDate());
                         int heatbeat_value = range_min + random.nextInt(range_max - range_min);
                         heartMonitor.setValue(heatbeat_value);
-
+                        logger.debug("Generate "+heartMonitor.getValue());
                         // save
                         s.save(heartMonitor);
 

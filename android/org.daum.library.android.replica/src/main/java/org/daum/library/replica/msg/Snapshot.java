@@ -10,7 +10,7 @@ import java.util.List;
  * Time: 11:56
  */
 public class Snapshot extends AMessage {
-
+    private static final long serialVersionUID = 1519L;
     public List<Update> snapshot = new ArrayList<Update>();
 
     public List<Update> getSnapshot() {

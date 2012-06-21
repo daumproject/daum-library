@@ -10,5 +10,4 @@ import java.util.concurrent.ConcurrentHashMap;
  * Time: 10:44
  */
 public class DHashMap<K, V> extends ConcurrentHashMap<K, V> implements Serializable {
-    private  long updated;
 }

@@ -10,7 +10,7 @@ import org.daum.library.replica.cache.VersionedValue;
  */
 
 public class Update extends AMessage {
-
+    private static final long serialVersionUID = 1520L;
     public Object key;
     public VersionedValue versionedValue;
     public String cache;

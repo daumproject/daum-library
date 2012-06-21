@@ -51,9 +51,7 @@ public class ClusterImpl implements  ICluster,Runnable{
         logger.debug("Cluster is closing");
         alive = false;
         theartbeat.interrupt();
-
         tsnapshot.interrupt();
-
     }
 
     @Override

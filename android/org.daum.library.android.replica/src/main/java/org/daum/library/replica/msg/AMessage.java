@@ -12,7 +12,7 @@ import java.io.Serializable;
  * Time: 11:58
  */
 public abstract class AMessage implements Message,Serializable{
-
+    private static final long serialVersionUID = 1516L;
     public StoreCommand op;
     public  Node source;
     public  Node dest;
