@@ -8,7 +8,7 @@ import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.daum.library.replica.ReplicatingService;
+import org.daum.library.replica.cache.ReplicaService;
 import org.daum.library.replica.utils.SystemTime;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
@@ -27,7 +27,7 @@ import java.util.Set;
  */
 @Library(name = "JavaSE", names = {"Android"})
 @Requires({
-        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class, optional = true)
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
 })
 @DictionaryType({
         @DictionaryAttribute(name = "period", optional = false,defaultValue = "2000",fragmentDependant = false) ,
@@ -66,8 +66,10 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
 
     @Stop
     public void stop() {
+
+        alive = false;
         tgen.interrupt();
-        alive  = false;
+
     }
 
     @Update
@@ -100,7 +102,7 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
 
             try
             {
-                PersistenceSession s = factory.openSession();
+                PersistenceSession s = factory.getSession();
                 s.save(m1);
                 s.save(m2);
                 s.save(m3);
@@ -120,9 +122,12 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
         period = Integer.parseInt(getDictionary().get("period").toString());
         MaxEntries =   Integer.parseInt(getDictionary().get("MaxEntries").toString());
 
+        if(period < 300){
+            period =300;
+        }
         int range_min;
         int range_max;
-        ReplicatingService replicatingService =  this.getPortByName("service", ReplicatingService.class);
+        ReplicaService replicatingService =  this.getPortByName("service", ReplicaService.class);
 
         StoreImpl storeImpl = new StoreImpl(replicatingService);
 
@@ -131,19 +136,20 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
 
         initMoyen();
 
-        while(alive)
+        while(alive && !Thread.currentThread().isInterrupted())
         {
             try
             {
-                PersistenceSession s = factory.openSession();
+                PersistenceSession s = factory.getSession();
 
                 try
                 {
 
                     if(getDictionary().get("mode").toString().equals("temperature"))
                     {
-                        range_min=30;
+                        range_min=20;
                         range_max=38;
+
                         // generate Random
                         TemperatureMonitor temperatureMonitor = new TemperatureMonitor();
                         temperatureMonitor.setDate(systemTime.getCurrentDate());

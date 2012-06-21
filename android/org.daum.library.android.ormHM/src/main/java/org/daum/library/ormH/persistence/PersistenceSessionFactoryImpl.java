@@ -26,7 +26,7 @@ public class PersistenceSessionFactoryImpl implements IPersistenceSessionFactory
     this.persistenceConfiguration = persistenceConfiguration;
   }
 
-  public PersistenceSession openSession() throws PersistenceException {
+  private PersistenceSession openSession() throws PersistenceException {
     return new PersistenceSession(this);
   }
 

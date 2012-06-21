@@ -3,8 +3,9 @@ package org.daum.library.fakeDemo;
 import org.daum.library.ormH.api.PersistenceSessionStore;
 import org.daum.library.ormH.persistence.Orhm;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.daum.library.replica.Cache;
-import org.daum.library.replica.ReplicatingService;
+import org.daum.library.replica.cache.Cache;
+import org.daum.library.replica.cache.ReplicaService;
+
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,9 +18,9 @@ import java.util.Map;
  */
 public class StoreImpl implements PersistenceSessionStore {
 
-    private ReplicatingService replicatingService=null;
+    private ReplicaService replicatingService=null;
 
-    public StoreImpl(ReplicatingService cache){
+    public StoreImpl(ReplicaService cache){
         this.replicatingService = cache;
     }
 

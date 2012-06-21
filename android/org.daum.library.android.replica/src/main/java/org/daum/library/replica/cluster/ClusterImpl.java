@@ -1,5 +1,9 @@
-package org.daum.library.replica;
+package org.daum.library.replica.cluster;
 
+import org.daum.library.replica.cache.CacheManager;
+import org.daum.library.replica.cache.StoreCommand;
+import org.daum.library.replica.channel.Channel;
+import org.daum.library.replica.channel.KChannelImpl;
 import org.daum.library.replica.msg.Command;
 import org.daum.library.replica.msg.Message;
 import org.daum.library.replica.utils.SystemTime;
@@ -20,7 +24,7 @@ public class ClusterImpl implements  ICluster,Runnable{
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private  Node currentNode;
+    private Node currentNode;
     private List<Node> nodesOfCluster = new ArrayList<Node>();
     private SystemTime systemTime = new SystemTime();
     private  Thread tsnapshot =null;
@@ -43,14 +47,13 @@ public class ClusterImpl implements  ICluster,Runnable{
 
     public void shutdown()
     {
-        try
-        {
-            alive = false;
-            theartbeat.interrupt();
-            tsnapshot.interrupt();
-        }   catch (Exception e){
-            logger.warn("shutdown CacheManager ",e);
-        }
+
+        logger.debug("Cluster is closing");
+        alive = false;
+        theartbeat.interrupt();
+
+        tsnapshot.interrupt();
+
     }
 
     @Override
@@ -104,56 +107,56 @@ public class ClusterImpl implements  ICluster,Runnable{
 
     public void synchronize()
     {
-        if(tsnapshot !=null)
-        {
-            tsnapshot.interrupt();
-        }
-        tsnapshot = new Thread(new Runnable() {
-            @Override
-            public void run() {
+            tsnapshot = new Thread(new Runnable() {
+                @Override
+                public void run() {
 
-                while (getNodesOfCluster().isEmpty() && alive == true && !Thread.currentThread().isInterrupted()){
-                    try
+                    while (getNodesOfCluster().isEmpty() && alive == true && !Thread.currentThread().isInterrupted())
                     {
-                        Thread.sleep(freqHearBeat);
-                    } catch (InterruptedException e) {
-                        //ignore
+                        logger.debug("Waiting to discovery nodes...");
+                        try
+                        {
+                            Thread.sleep(freqHearBeat);
+                        } catch (InterruptedException e) {
+                            //ignore
+                        }
                     }
-                }
-                Long min =Long.MAX_VALUE;
-                Node nodeReqSnapshot=null;
-                boolean sync = synchronizedNodesInCluster();
-                for( Node node : nodesOfCluster){
 
-                    if(!currentNode.equals(node))
-                    {
-                        if(sync)
+                    Long min =Long.MAX_VALUE;
+                    Node nodeReqSnapshot=null;
+                    boolean sync = synchronizedNodesInCluster();
+
+                    for( Node node : nodesOfCluster){
+
+                        if(!currentNode.equals(node))
                         {
-                            if(node.getLastTickTime() < min && node.isSynchronized())
+                            if(sync)
                             {
-                                nodeReqSnapshot = node;
-                            }
-                        } else
-                        {
-                            if(node.getLastTickTime() < min)
+                                if(node.getLastTickTime() < min && node.isSynchronized())
+                                {
+                                    nodeReqSnapshot = node;
+                                }
+                            } else
                             {
-                                nodeReqSnapshot = node;
+                                if(node.getLastTickTime() < min)
+                                {
+                                    nodeReqSnapshot = node;
+                                }
                             }
                         }
                     }
+
+                    Command req = new Command();
+                    req.op= StoreCommand.REQUEST_SNAPSHOT;
+                    req.source = currentNode;
+                    req.dest = nodeReqSnapshot;
+                    logger.info("Synchronization request sent to" + req.dest);
+
+                    chanel.write(req);
                 }
+            });
 
-                Command req = new Command();
-                req.op= StoreRequest.REQUEST_SNAPSHOT;
-                req.source = currentNode;
-                req.dest = nodeReqSnapshot;
-                logger.info("Replication is processing with " + req.dest);
-
-                chanel.write(req);
-            }
-        });
-
-        tsnapshot.start();
+            tsnapshot.start();
 
     }
 
@@ -172,7 +175,7 @@ public class ClusterImpl implements  ICluster,Runnable{
     @Override
     public void run() {
 
-        while (alive && !Thread.currentThread().isInterrupted())
+        while (alive == true && !Thread.currentThread().isInterrupted())
         {
             try
             {
@@ -181,12 +184,13 @@ public class ClusterImpl implements  ICluster,Runnable{
                 //ignore
             }
             Command req = new Command();
-            req.op= StoreRequest.HEARTBEAT;
+            req.op= StoreCommand.HEARTBEAT;
             req.source = currentNode;
 
             chanel.write(req);
 
-            logger.debug("Sending heatbeat of "+ currentNode);
+            // logger.debug("Sending heatbeat of "+ currentNode);
         }
+        logger.debug("HeartBeat is closed");
     }
 }

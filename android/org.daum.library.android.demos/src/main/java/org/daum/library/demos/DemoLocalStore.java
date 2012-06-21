@@ -66,7 +66,7 @@ public class DemoLocalStore  extends AbstractComponentType implements  Runnable 
 
             while(!Thread.currentThread().isInterrupted())
             {
-                s = factory.openSession();
+                s = factory.getSession();
                 if(s !=null)
                 {
                     TestDemo test = new TestDemo();

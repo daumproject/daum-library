@@ -11,7 +11,6 @@ import org.daum.library.ormH.utils.PersistenceException;
  * Time: 14:01
  */
 public interface IPersistenceSessionFactory {
-    public PersistenceSession openSession() throws PersistenceException;
     public PersistenceSession getSession() throws PersistenceException;
     public void close(PersistenceSession session);
     public PersistenceConfiguration getPersistenceConfiguration();

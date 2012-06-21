@@ -1,4 +1,4 @@
-package org.daum.library.replica;
+package org.daum.library.replica.cluster;
 
 import java.io.Serializable;
 
@@ -56,6 +56,6 @@ public class Node implements INode,Serializable {
     }
     @Override
     public String toString(){
-        return "{"+nodeID+":"+isSynchronized()+"}";
+        return "{"+nodeID+" isSynchronized="+isSynchronized()+"}";
     }
 }

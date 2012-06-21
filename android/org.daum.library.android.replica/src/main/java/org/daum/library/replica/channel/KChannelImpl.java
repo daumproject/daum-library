@@ -1,4 +1,4 @@
-package org.daum.library.replica;
+package org.daum.library.replica.channel;
 
 import org.daum.library.replica.msg.*;
 import org.kevoree.framework.AbstractComponentType;

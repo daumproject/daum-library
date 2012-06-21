@@ -1,10 +1,14 @@
 package org.daum.library.replica;
 
-import org.daum.library.replica.msg.Command;
+import org.daum.library.replica.cache.Cache;
+import org.daum.library.replica.cache.ReplicaService;
+import org.daum.library.replica.channel.KChannelImpl;
+import org.daum.library.replica.cluster.ClusterImpl;
+import org.daum.library.replica.cluster.ICluster;
+import org.daum.library.replica.cluster.Node;
 import org.daum.library.replica.msg.Message;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
-import org.kevoree.framework.MessagePort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,14 +27,14 @@ import org.slf4j.LoggerFactory;
 })
 @Provides({
         @ProvidedPort(name = "remote", type = PortType.MESSAGE) ,
-        @ProvidedPort(name = "service", type = PortType.SERVICE, className = ReplicatingService.class)
+        @ProvidedPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class)
 })
-public class ReplicatingManager extends AbstractComponentType implements ReplicatingService {
+public class Replica extends AbstractComponentType implements ReplicaService {
 
     KChannelImpl kChannel=null;
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private  ICluster cluster;
+    private ICluster cluster;
     @Start
     public void start()
     {

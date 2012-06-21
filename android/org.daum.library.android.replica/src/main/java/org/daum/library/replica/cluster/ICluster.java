@@ -1,5 +1,7 @@
-package org.daum.library.replica;
+package org.daum.library.replica.cluster;
 
+import org.daum.library.replica.channel.Channel;
+import org.daum.library.replica.channel.KChannelImpl;
 import org.daum.library.replica.msg.Message;
 
 import java.util.List;
