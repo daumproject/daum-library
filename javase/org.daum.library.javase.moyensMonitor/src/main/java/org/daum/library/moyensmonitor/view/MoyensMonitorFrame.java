@@ -36,7 +36,7 @@ public class MoyensMonitorFrame extends JFrame {
 	private static final String VALIDATE_BTN = "Valider la demande";
 	
 	private MoyensMonitorController controller;
-	private MoyensTableModel newDemandAdapter, answeredDemandAdapter;
+	private MoyensTableModel newDemandsModel, answeredDemandsModel;
 	private MoyensTableView newDemandsView, answeredDemandsView;
 	private JButton validateBtn;
 	private JTextField	tf_agres,
@@ -69,12 +69,12 @@ public class MoyensMonitorFrame extends JFrame {
         answeredDemands = new ArrayList<Demand>();
 
         // tableView adapters
-        newDemandAdapter = new MoyensTableModel(newDemands);
-        answeredDemandAdapter = new MoyensTableModel(answeredDemands);
+        newDemandsModel = new MoyensTableModel(newDemands);
+        answeredDemandsModel = new MoyensTableModel(answeredDemands);
 
         // tableViews
-        newDemandsView = new MoyensTableView(newDemandAdapter);
-        answeredDemandsView = new MoyensTableView(answeredDemandAdapter);
+        newDemandsView = new MoyensTableView(newDemandsModel);
+        answeredDemandsView = new MoyensTableView(answeredDemandsModel);
 
         // text fields
         tf_agres = new JTextField();
@@ -172,7 +172,7 @@ public class MoyensMonitorFrame extends JFrame {
 							selectedDemand = newDemands.get(rowId);
 							String[] values = new String[8];
 							for (int i=0; i<8; i++) {
-								values[i] = newDemandAdapter.getValueAt(rowId, i);
+								values[i] = newDemandsModel.getValueAt(rowId, i);
 							}
 							tf_agres.setText(values[0]);
 							tf_cis.setText(values[1]);
@@ -193,7 +193,7 @@ public class MoyensMonitorFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (listener != null && selectedDemand != null) {
 					listener.onValidateButtonClicked(selectedDemand, tf_cis.getText().trim());
-					newDemandAdapter.fireTableDataChanged();
+					newDemandsModel.fireTableDataChanged();
 					tf_agres.setText("");
 					tf_cis.setText("");
 					tf_demande.setText("");
@@ -216,8 +216,16 @@ public class MoyensMonitorFrame extends JFrame {
 	public ArrayList<Demand> getAnsweredDemandList() {
 		return answeredDemands;
 	}
-	
-	public void setOnMoyensMonitorEventListener(OnMoyensMonitorEventListener listener) {
+
+    public MoyensTableModel getNewDemandsModel() {
+        return newDemandsModel;
+    }
+
+    public MoyensTableModel getAnsweredDemandsModel() {
+        return answeredDemandsModel;
+    }
+
+    public void setOnMoyensMonitorEventListener(OnMoyensMonitorEventListener listener) {
 		this.listener = listener;
 	}
 }

@@ -28,6 +28,7 @@
             <artifactId>org.daum.common.util.javase.root</artifactId>
             <version>1.0</version>
         </dependency>
+
         <dependency>
             <groupId>org.daum.library.javase</groupId>
             <artifactId>org.daum.library.javase.replica</artifactId>
