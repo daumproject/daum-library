@@ -6,6 +6,7 @@ import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.LocalStore;
+import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +22,10 @@ public class MoyensEngine {
 	private OnEngineStateChangeListener listener;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
-	public MoyensEngine(String nodeName, OnEngineStateChangeListener engineHandler) {
+	public MoyensEngine(String nodeName, ReplicaStore storeImpl, OnEngineStateChangeListener engineHandler) {
         try {
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
-            configuration.setStore(new LocalStore());
+            configuration.setStore(storeImpl);
             configuration.addPersistentClass(Demand.class);
 
             this.factory = configuration.getPersistenceSessionFactory();

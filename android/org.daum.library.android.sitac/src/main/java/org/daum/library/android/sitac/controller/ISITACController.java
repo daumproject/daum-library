@@ -1,6 +1,7 @@
 package org.daum.library.android.sitac.controller;
 
 import org.daum.common.model.api.IModel;
+import org.daum.library.ormH.store.ReplicaStore;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,5 +36,4 @@ public interface ISITACController {
      * @param m
      */
     public void addModel(IModel m);
-
 }

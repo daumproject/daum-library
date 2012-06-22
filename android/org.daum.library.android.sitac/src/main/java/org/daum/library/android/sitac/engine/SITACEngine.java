@@ -14,6 +14,7 @@ import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.LocalStore;
+import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 
 import android.util.Log;
@@ -28,10 +29,10 @@ public class SITACEngine {
     private PersistenceSessionFactoryImpl factory;
 	private OnEngineStateChangeListener listener;
 	
-	public SITACEngine(OnEngineStateChangeListener engineHandler) {
+	public SITACEngine(String nodeName, ReplicaStore store, OnEngineStateChangeListener engineHandler) {
         try {
-            PersistenceConfiguration configuration = new PersistenceConfiguration("FIXME");
-            configuration.setStore(new LocalStore());
+            PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
+            configuration.setStore(store);
             configuration.addPersistentClass(Demand.class);
             configuration.addPersistentClass(Danger.class);
             configuration.addPersistentClass(Target.class);

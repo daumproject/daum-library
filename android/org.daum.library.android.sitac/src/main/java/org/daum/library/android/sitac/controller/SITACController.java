@@ -14,6 +14,7 @@ import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.entity.IEntityFactory;
 import org.daum.library.android.sitac.view.entity.IModelFactory;
 import org.daum.library.android.sitac.view.entity.ModelFactory;
+import org.daum.library.ormH.store.ReplicaStore;
 import org.osmdroid.util.GeoPoint;
 
 import android.content.Context;
@@ -37,7 +38,7 @@ public class SITACController implements ISITACController {
 	private IModelFactory modelFactory;
 	private Hashtable<IEntity, IModel> modelMap;
 	
-	public SITACController(Context context) {
+	public SITACController(Context context, String nodeName, ReplicaStore store) {
 		this.ctx = context;
 		this.entityFactory = new EntityFactory(ctx);
 		this.modelFactory = new ModelFactory();
@@ -48,7 +49,7 @@ public class SITACController implements ISITACController {
 		// delegate the engine updates to the engineHandler
 		this.engineHandler = new EngineHandler(entityFactory, modelMap);
 		
-		this.engine = new SITACEngine(engineHandler);
+		this.engine = new SITACEngine(nodeName, store, engineHandler);
 		
 		// delegate the UI events to the UIHandler
 		this.uiHandler = new UIHandler(modelFactory, engine, modelMap);

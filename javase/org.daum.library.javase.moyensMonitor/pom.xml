@@ -18,12 +18,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.daum.library.javase</groupId>
-            <artifactId>org.daum.library.javase.replica</artifactId>
-            <version>1.6</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.daum.common.model.javase</groupId>
             <artifactId>org.daum.common.model.javase.root</artifactId>
             <version>1.3.3</version>
@@ -34,7 +28,17 @@
             <artifactId>org.daum.common.util.javase.root</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.daum.library.javase</groupId>
+            <artifactId>org.daum.library.javase.replica</artifactId>
+            <version>1.6</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.daum.library.javase</groupId>
+            <artifactId>org.daum.library.javase.ormH</artifactId>
+            <version>1.7</version>
+        </dependency>
     </dependencies>
 
 

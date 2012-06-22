@@ -25,6 +25,7 @@ import org.daum.common.model.api.VehicleType;
 import org.daum.library.moyensmonitor.controller.MoyensMonitorController;
 import org.daum.library.moyensmonitor.listener.OnMoyensMonitorEventListener;
 import org.daum.library.moyensmonitor.model.MoyensTableModel;
+import org.daum.library.ormH.store.ReplicaStore;
 
 public class MoyensMonitorFrame extends JFrame {
 
@@ -49,7 +50,7 @@ public class MoyensMonitorFrame extends JFrame {
 	private Demand selectedDemand;
 	private OnMoyensMonitorEventListener listener;
 	
-	public MoyensMonitorFrame(String nodeName) {
+	public MoyensMonitorFrame(String nodeName, ReplicaStore storeImpl) {
 		super(FRAME_TITLE);
 
 		setSize(800, 600);
@@ -59,7 +60,7 @@ public class MoyensMonitorFrame extends JFrame {
 		configUI();
 		defineCallbacks();
 		
-		this.controller = new MoyensMonitorController(this, nodeName);
+		this.controller = new MoyensMonitorController(this, nodeName, storeImpl);
 	}
 
     private void initUI() {

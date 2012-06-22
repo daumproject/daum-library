@@ -2,13 +2,12 @@ package org.daum.library.android.sitac;
 
 import org.daum.library.android.sitac.controller.ISITACController;
 import org.daum.library.android.sitac.view.SITACView;
+import org.daum.library.ormH.store.ReplicaStore;
+import org.daum.library.replica.cache.ReplicaService;
+import org.daum.library.replica.listener.ChangeListener;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
-import org.kevoree.annotation.ComponentType;
-import org.kevoree.annotation.Library;
-import org.kevoree.annotation.Start;
-import org.kevoree.annotation.Stop;
-import org.kevoree.annotation.Update;
+import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 
 /**
@@ -20,6 +19,13 @@ import org.kevoree.framework.AbstractComponentType;
  */
 
 @Library(name = "Android")
+@Requires({
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)  ,
+        @RequiredPort(name = "value", type = PortType.MESSAGE, optional = true)
+})
+@Provides({
+        @ProvidedPort(name = "notify", type = PortType.MESSAGE)
+})
 @ComponentType
 public class SITACComponent extends AbstractComponentType {
 
@@ -30,11 +36,14 @@ public class SITACComponent extends AbstractComponentType {
 
     @Start
     public void start() {
+        ReplicaService replicatingService =   this.getPortByName("service", ReplicaService.class);
+        final ReplicaStore storeImpl = new ReplicaStore(replicatingService);
+
         uiService = UIServiceHandler.getUIService();
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                SITACView sitacView = new SITACView(uiService.getRootActivity());
+                SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
                 sitacCtrl = sitacView.getController();
                 uiService.addToGroup("SITAC", sitacView);
             }
@@ -49,5 +58,10 @@ public class SITACComponent extends AbstractComponentType {
     public void update() {
         stop();
         start();
+    }
+
+    @Port(name = "notify")
+    public void notifybyReplica(Object m) {
+        ChangeListener.getInstance().receive(m);
     }
 }
