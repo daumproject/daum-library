@@ -18,14 +18,14 @@ import java.util.Map;
  */
 public class LocalStore implements PersistenceSessionStore {
     private static Logger logger =  LoggerFactory.getLogger(LocalStore.class);
-    private static HashMap<String, Cache> store = new HashMap<String,Cache>();
+    private static HashMap<String, LocalCache> store = new HashMap<String,LocalCache>();
 
     @Override
     public void save(Orhm id, Object bean) throws PersistenceException {
         String name =id.getCacheName();
         if(!store.containsKey(id.getCacheName()))
         {
-            Cache cache  =  new Cache(name) ;
+            LocalCache cache  =  new LocalCache(name) ;
             store.put(name,cache);
         }
         store.get(name).put(id.getId(), bean);
@@ -60,7 +60,7 @@ public class LocalStore implements PersistenceSessionStore {
 
         HashMap<Object,Object> result = new HashMap<Object, Object>();
         String name =id.getCacheName();
-        Cache cache =  store.get(name);
+        LocalCache cache =  store.get(name);
         if(cache != null)
         {
             for( Object key : cache.keySet())

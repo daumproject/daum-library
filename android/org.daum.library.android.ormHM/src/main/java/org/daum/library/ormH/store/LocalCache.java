@@ -9,10 +9,10 @@ import java.util.HashMap;
  * Time: 15:15
  * To change this template use File | Settings | File Templates.
  */
-public class Cache extends HashMap<Object,Object> {
+public class LocalCache extends HashMap<Object,Object> {
     private String name = "";
 
-    public Cache(String cachename)
+    public LocalCache(String cachename)
     {
       this.name = cachename;
 
