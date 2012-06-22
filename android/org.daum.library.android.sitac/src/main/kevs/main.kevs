@@ -1,18 +1,29 @@
-// core
-merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}"
-merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultChannels/{kevoree.version}"
-merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}"
-merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}"
+    // core
+    merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}"
+    merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultChannels/{kevoree.version}"
+    merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}"
+    merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}"
 
-merge "mvn:http://maven.kevoree.org/daum/snapshots!org.daum.library.android/org.daum.library.android.sitac/1.8.0-SNAPSHOT"
+    merge "mvn:http://maven.kevoree.org/daum/snapshots!org.daum.library.android/org.daum.library.android.sitac/1.8.0-SNAPSHOT"
+    //merge "mvn:http://maven.kevoree.org/daum/release!org.daum.library.android/org.daum.library.android.ormH/1.7"
 
-addNode node0: AndroidNode {logLevel = "DEBUG", coreLogLevel = "DEBUG"}
+    addNode node0: AndroidNode {logLevel = "DEBUG", coreLogLevel = "DEBUG"}
 
-addGroup sync: NanoRestGroup
+    addGroup sync: NanoRestGroup
 
-addToGroup sync *
+    addToGroup sync *
 
-addComponent sitacComp0@node0: SITACComponent
+    addComponent sitacComp0@node0: SITACComponent
+//    addComponent replica0@node0: Replica
 
-// network addresses
-network node0 { "KEVOREE.remote.node.ip"= "192.168.1.147" }
+//    addChannel defMsgService: defMSG
+//    addChannel defMsgNotify: defMSG
+
+//    bind sitacComp0.service@node0 => defMsgService
+//    bind replica0.service@node0 => defMsgService
+
+//    bind sitacComp0.notify@node0 => defMsgNotify
+//    bind replica0.notify@node0 => defMsgNotify
+
+    // network addresses
+    network node0 { "KEVOREE.remote.node.ip"= "192.168.1.147" }

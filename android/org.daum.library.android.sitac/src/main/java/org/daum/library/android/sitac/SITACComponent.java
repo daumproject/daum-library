@@ -61,7 +61,7 @@ public class SITACComponent extends AbstractComponentType {
     }
 
     @Port(name = "notify")
-    public void notifybyReplica(Object m) {
+    public void notifiedByReplica(Object m) {
         ChangeListener.getInstance().receive(m);
     }
 }
