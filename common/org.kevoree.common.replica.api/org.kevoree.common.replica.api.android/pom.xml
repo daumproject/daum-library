@@ -2,18 +2,35 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.kevoree.common.replicatingService.android</groupId>
-    <artifactId>org.kevoree.common.replicatingService.android.root</artifactId>
-    <packaging>jar</packaging>
+    <groupId>org.kevoree.common.replica.api.android</groupId>
+    <artifactId>org.kevoree.common.replica.api.android.root</artifactId>
     <name>Kevoree :: Common :: Android </name>
-    <version>1.7.5</version>
+    <version>1.7.9</version>
 
     <parent>
-        <artifactId>org.kevoree.common.replicatingService</artifactId>
-        <groupId>org.kevoree.common.replicatingService</groupId>
-        <version>1.7.5</version>
+        <groupId>org.kevoree.common.replica.api</groupId>
+        <artifactId>org.kevoree.common.replica.api.root</artifactId>
+        <version>1.7.9</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>org.daum.library.android</groupId>
+            <artifactId>org.daum.library.android.ormH</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.daum.library.android</groupId>
+            <artifactId>org.daum.library.android.replica</artifactId>
+            <version>1.6</version>
+        </dependency>
+
+    </dependencies>
+
+
 
     <properties>
         <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
@@ -22,7 +39,7 @@
     </properties>
 
     <build>
-        <sourceDirectory>../org.kevoree.common.gps/src/main/java</sourceDirectory>
+        <sourceDirectory>../org.kevoree.common.replica.api.root</sourceDirectory>
         <plugins>
 
             <plugin>

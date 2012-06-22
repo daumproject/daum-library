@@ -2,26 +2,41 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.kevoree.common.replicatingService</groupId>
-    <artifactId>org.kevoree.common.replicatingService</artifactId>
+    <groupId>org.kevoree.common.replica.api</groupId>
+    <artifactId>org.kevoree.common.replica.api.root</artifactId>
     <packaging>pom</packaging>
-    <name>DAUM :: Common replicatingService Root</name>
-    <version>1.7.5</version>
+    <name>DAUM :: Replica API Root</name>
+    <version>1.7.9</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>org.daum.library.javase</groupId>
+            <artifactId>org.daum.library.javase.ormH</artifactId>
+            <version>1.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.daum.library.javase</groupId>
+            <artifactId>org.daum.library.javase.replica</artifactId>
+            <version>1.6</version>
+        </dependency>
+
+    </dependencies>
+
     <parent>
         <groupId>org.daum.library</groupId>
         <artifactId>org.daum.library</artifactId>
-        <version>1.7.5</version>
+        <version>1.7.9</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <modules>
-        <module>./org.kevoree.common.replicatingService.android</module>
-        <module>./org.kevoree.common.replicatingService.javase</module>
+        <module>./org.kevoree.common.replica.api.android</module>
+        <module>./org.kevoree.common.replica.api.javase</module>
     </modules>
 
     <distributionManagement>
