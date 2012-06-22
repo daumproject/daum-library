@@ -6,7 +6,7 @@
     <artifactId>org.daum.common.model</artifactId>
     <packaging>pom</packaging>
     <name>DAUM :: Common :: Model :: Root</name>
-    <version>1.3.2</version>
+    <version>1.3.3</version>
 
     <parent>
         <groupId>org.daum.library</groupId>

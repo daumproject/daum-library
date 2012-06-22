@@ -9,6 +9,7 @@ public class TimeFormatter {
 	public static String getGroupeHoraire(Date d){
 
 		String res="";
+		if (d == null) return res;
 
 		Calendar c = new GregorianCalendar();
 		c.setTime(d);
