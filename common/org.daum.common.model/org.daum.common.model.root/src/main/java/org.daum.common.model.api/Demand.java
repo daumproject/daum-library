@@ -80,12 +80,40 @@ public class Demand implements IModel {
 		return cis;
 	}
 
+	public void setNumber(String number) {
+		this.number = number;
+	}
+
+	public void setCis(String cis) {
+		this.cis = cis;
+	}
+
+	public void setGh_demande(Date gh_demande) {
+		this.gh_demande = gh_demande;
+	}
+
+	public void setGh_crm(Date gh_crm) {
+		this.gh_crm = gh_crm;
+	}
+
+	public void setGh_engage(Date gh_engage) {
+		this.gh_engage = gh_engage;
+	}
+
+	public void setGh_desengagement(Date gh_desengagement) {
+		this.gh_desengagement = gh_desengagement;
+	}
+
 	public Date getGh_demande() {
 		return gh_demande;
 	}
 
 	public Date getGh_depart() {
 		return gh_depart;
+	}
+	
+	public void setGh_depart(Date date) {
+		this.gh_depart = date;
 	}
 
 	public Date getGh_crm() {
