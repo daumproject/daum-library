@@ -20,9 +20,10 @@
     <modules>
         <module>../org.daum.library.javase.ehcache</module>
         <module>../org.daum.library.javase.replica</module>
-        <module>../org.daum.library.javase.ormHM</module>
+        <module>../org.daum.library.javase.ormH</module>
         <module>../org.daum.library.javase.fakeDemo</module>
         <module>../org.daum.library.javase.moyensMonitor</module>
+        <!--<module>../org.daum.library.javase.kestrelChannels</module>-->
     </modules>
 
     <dependencies>

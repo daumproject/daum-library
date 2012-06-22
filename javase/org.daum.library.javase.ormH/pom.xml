@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.daum.library.javase</groupId>
+    <artifactId>org.daum.library.javase.ormH</artifactId>
+    <name>DAUM :: Library :: JavaSE :: ormH</name>
+    <version>1.7</version>
+
+    <parent>
+        <artifactId>org.daum.library.javase.root</artifactId>
+        <groupId>org.daum.library.javase</groupId>
+        <version>1.7.9</version>
+        <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.daum.library.javase</groupId>
+            <artifactId>org.daum.library.javase.replica</artifactId>
+            <version>1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>1.6.4</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.8.2</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <sourceDirectory>../../android/org.daum.library.android.ormHM/src/main/java</sourceDirectory>
+    </build>
+
+</project>

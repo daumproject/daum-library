@@ -48,11 +48,8 @@ import java.util.Set;
 public class ReaderDaum extends AbstractComponentType {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
-    private SystemTime systemTime = new SystemTime();
     public PersistenceConfiguration configuration=null;
     private PersistenceSessionFactoryImpl factory=null;
-    //  private  FrameMoyens frameMoyens=null;
     private ReplicaService replicatingService =  null;
     private  PersistenceSession s=null;
 

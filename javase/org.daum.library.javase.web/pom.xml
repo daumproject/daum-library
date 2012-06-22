@@ -5,8 +5,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.daum.library.javase</groupId>
-    <artifactId>org.daum.library.javase.fakeDemo</artifactId>
-    <name>DAUM :: Library :: JavaSE :: FakeDemo</name>
+    <artifactId>org.daum.library.javase.web</artifactId>
+    <name>DAUM :: Library :: JavaSE :: Web</name>
     <version>1.2</version>
 
     <parent>
@@ -17,16 +17,29 @@
     </parent>
 
     <dependencies>
+
         <dependency>
-            <groupId>org.daum.library.javase</groupId>
-            <artifactId>org.daum.library.javase.ormH</artifactId>
-            <version>1.7</version>
+            <groupId>org.kevoree.corelibrary.javase</groupId>
+            <artifactId>org.kevoree.library.javase.webserver.api</artifactId>
+            <version>${kevoree.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.webbitserver</groupId>
+            <artifactId>webbit</artifactId>
+            <version>0.4.7</version>
         </dependency>
 
         <dependency>
             <groupId>org.daum.library.javase</groupId>
-            <artifactId>org.daum.library.javase.replica</artifactId>
-            <version>1.6</version>
+            <artifactId>org.daum.library.javase.fakeDemo</artifactId>
+            <version>1.2</version>
+
+        </dependency>
+        <dependency>
+            <groupId>org.daum.library.javase</groupId>
+            <artifactId>org.daum.library.javase.ormH</artifactId>
+            <version>1.7</version>
         </dependency>
 
     </dependencies>
