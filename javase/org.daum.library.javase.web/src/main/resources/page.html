@@ -1,0 +1,38 @@
+<html>
+<body>
+
+
+<!-- Results
+<input id="userInput" type="text">
+<button onclick="ws.send(document.getElementById('userInput').value)">Send</button>
+-->
+
+
+<div id="image">
+    </div>
+
+
+    <div id="text">
+
+</div>
+
+<script>
+
+    function showMessage(text)
+    {
+    document.getElementById('image').innerHTML = 'updating';
+    document.getElementById('image').innerHTML = '<img src=tmp.jpg></img>';
+    document.getElementById('text').innerHTML = text;
+    }
+
+    var ws = new WebSocket('ws://localhost:8082/jed');
+    showMessage('Connecting...');
+    ws.onopen = function() { showMessage('Connected!'); };
+    ws.onclose = function() { showMessage('Lost connection'); };
+    ws.onmessage = function(msg) { showMessage(msg.data); };
+</script>
+
+
+
+</body>
+</html>
