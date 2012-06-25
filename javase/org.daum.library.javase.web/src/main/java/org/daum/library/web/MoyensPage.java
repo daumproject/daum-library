@@ -19,6 +19,10 @@ import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
 import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
 import scala.Option;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -70,6 +74,8 @@ public class MoyensPage extends AbstractPage {
         return ip;
     }
 
+
+
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse)
     {
@@ -84,13 +90,13 @@ public class MoyensPage extends AbstractPage {
 
             if(session != null)
             {
-                Map<Object,Object> demands=   session.getAll(Demand.class);
+                Map<Object,Demand> demands= (Map<Object, Demand>) session.getAll(Demand.class);
 
                 if(demands != null)
                 {
                     for(Object key : demands.keySet())
                     {
-                        Demand d = (Demand)  demands.get(key);
+                        Demand d = demands.get(key);
                         html.append(d+"<br>");
                     }
                 }

@@ -4,7 +4,9 @@ import org.daum.library.moyensmonitor.view.MoyensMonitorFrame;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.replica.cache.ReplicaService;
 import org.daum.library.replica.listener.ChangeListener;
+import org.kevoree.ContainerRoot;
 import org.kevoree.annotation.*;
+import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 @Library(name = "JavaSE")
 @Requires({
-        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true,needCheckDependency = true)
 })
 @Provides({
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
@@ -35,15 +37,37 @@ public class MoyensMonitorComponent extends AbstractComponentType {
     @Start
     public void start() {
         logger.debug(TAG, "start component !!!! ");
-        try {
-            ReplicaService replicatingService =   this.getPortByName("service", ReplicaService.class);
-            ReplicaStore storeImpl = new ReplicaStore(replicatingService);
 
-            frame = new MoyensMonitorFrame(getNodeName(), storeImpl);
-            frame.setVisible(true);
-        } catch (Exception e) {
-            logger.error(TAG, "error start compo", e);
-        }
+        getModelService().registerModelListener(new ModelListener()
+        {
+            @Override
+            public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1)
+            {
+
+                return false;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return false;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void modelUpdated()
+            {
+                try {
+                    ReplicaService replicatingService =   getPortByName("service", ReplicaService.class);
+                    ReplicaStore storeImpl = new ReplicaStore(replicatingService);
+
+                    frame = new MoyensMonitorFrame(getNodeName(), storeImpl);
+                    frame.setVisible(true);
+                } catch (Exception e) {
+                    logger.error(TAG+" ", e);
+                }
+
+
+            }
+        });
     }
 
     @Stop
