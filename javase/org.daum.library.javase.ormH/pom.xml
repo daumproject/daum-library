@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.daum.library.javase</groupId>
             <artifactId>org.daum.library.javase.replica</artifactId>
-            <version>1.6</version>
+            <version>1.7</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -35,7 +35,7 @@
 
 
     <build>
-        <sourceDirectory>../../android/org.daum.library.android.ormHM/src/main/java</sourceDirectory>
+        <sourceDirectory>../../android/org.daum.library.android.ormH/src/main/java</sourceDirectory>
     </build>
 
 </project>

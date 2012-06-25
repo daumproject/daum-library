@@ -57,6 +57,8 @@ public class TestSession {
 
         PersistenceSession s = factory.getSession();
 
+        assertEquals(0,s.getAll(Moyen.class).size());
+
         Moyen m1 = new Moyen(new MoyenType(1), "FPT");
         Moyen m2 = new Moyen(new MoyenType(2), "VSAV");
         Moyen m3 = new Moyen(new MoyenType(1), "FPT");
