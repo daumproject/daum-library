@@ -48,7 +48,8 @@ public class MoyensMonitorComponent extends AbstractComponentType {
             }
 
             @Override
-            public void modelUpdated() {
+            public void modelUpdated()
+            {
                 try {
                     ReplicaService replicatingService =   getPortByName("service", ReplicaService.class);
                     ReplicaStore storeImpl = new ReplicaStore(replicatingService);

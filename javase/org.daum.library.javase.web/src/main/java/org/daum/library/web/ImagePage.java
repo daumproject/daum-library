@@ -77,7 +77,7 @@ public class ImagePage extends AbstractPage
             g.clearRect(0, 0, 500, 100);
 
             Courbe tempCourbe = new Courbe();
-            Map<Object,Object> listtemp = s.getAll(TemperatureMonitor.class);
+            Map<Object,TemperatureMonitor> listtemp = (Map<Object, TemperatureMonitor>) s.getAll(TemperatureMonitor.class);
             if(listtemp != null)
             {
                 int i=0;

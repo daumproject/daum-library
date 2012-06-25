@@ -162,7 +162,7 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
                         // save
                         s.save(temperatureMonitor);
 
-                        Set<Object> dates =  s.getAll(TemperatureMonitor.class).keySet();
+                        Set<Object> dates = (Set<Object>) s.getAll(TemperatureMonitor.class).keySet();
                         if(dates.size() > MaxEntries-1)
                         {
                             //delete first
@@ -186,7 +186,7 @@ public class GeneratorDaum extends AbstractComponentType implements Runnable{
                         // save
                         s.save(heartMonitor);
 
-                        Set<Object> dates =  s.getAll(HeartMonitor.class).keySet();
+                        Set<Object> dates = (Set<Object>) s.getAll(HeartMonitor.class).keySet();
                         if(dates.size() > MaxEntries-1)
                         {
                             //delete first

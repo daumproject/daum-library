@@ -5,12 +5,12 @@
     <groupId>org.kevoree.common.replica.api.android</groupId>
     <artifactId>org.kevoree.common.replica.api.android.root</artifactId>
     <name>Kevoree :: Common :: Android </name>
-    <version>1.7.9</version>
+    <version>1.8.1</version>
 
     <parent>
         <groupId>org.kevoree.common.replica.api</groupId>
         <artifactId>org.kevoree.common.replica.api.root</artifactId>
-        <version>1.7.9</version>
+        <version>1.8.1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 

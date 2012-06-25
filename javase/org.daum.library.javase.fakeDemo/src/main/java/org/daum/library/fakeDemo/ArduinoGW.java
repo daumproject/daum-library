@@ -108,7 +108,7 @@ public class ArduinoGW extends AbstractComponentType {
                             s.save(temperatureMonitor);
 
 
-                            Set<Object> dates = s.getAll(TemperatureMonitor.class).keySet();
+                            Set<Object> dates = (Set<Object>) s.getAll(TemperatureMonitor.class).keySet();
                             if (dates.size() > 3) {
                                 //delete first
                                 Date d = systemTime.getDatemin(dates);

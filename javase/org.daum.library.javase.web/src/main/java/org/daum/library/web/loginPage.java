@@ -16,7 +16,7 @@ import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
 public class loginPage  extends AbstractPage {
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse response) {
-        response.setContent("Hello World");
+        response.setContent("LOGIN");
         return response;  //To change body of implemented methods use File | Settings | File Templates.
     }
 }
