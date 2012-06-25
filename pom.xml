@@ -6,10 +6,10 @@
     <artifactId>org.daum.library</artifactId>
     <packaging>pom</packaging>
     <name>DAUM :: Library :: Root</name>
-    <version>1.7.9</version>
+    <version>1.8.1</version>
 
     <properties>
-        <kevoree.version>1.7.9</kevoree.version>
+        <kevoree.version>1.8.1</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scala.version>2.9.2</scala.version>
         <kevoree.exclude>com.google.android:*,commons-*:*,org.apache.httpcomponents:*,org.khronos:*,xerces:*,xpp3:*,org.json:*,cglib:*,org.objenesis:*</kevoree.exclude>
