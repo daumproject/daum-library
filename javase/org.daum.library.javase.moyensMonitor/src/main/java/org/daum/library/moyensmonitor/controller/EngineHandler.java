@@ -24,7 +24,7 @@ public class EngineHandler implements OnEngineStateChangeListener {
 
 	@Override
 	public void onAdd(Demand d) {
-        if (d.getGh_depart() == null) {
+        if (!newDemands.contains(d) && !answeredDemands.contains(d) && d.getGh_depart() == null) {
             newDemands.add(d);
             newDemandsModel.fireTableDataChanged();
         } else {

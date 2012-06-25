@@ -38,7 +38,12 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	@Override
 	public void onAdd(IModel m, IEntity e) {
 		if (D) Log.i(TAG, "onAdd(): "+m);
-		if (e == null) e = factory.build(m);
+		if (e == null) {
+            if (modelMap.containsValue(m)) {
+
+            }
+            e = factory.build(m);
+        }
 		
 		modelMap.put(e, m);
 		
@@ -78,7 +83,11 @@ public class EngineHandler implements OnEngineStateChangeListener {
             }
         }
 	}
-	
+
+    public void onReplicaUpdate() {
+
+    }
+
 	@Override
 	public void onDelete(IModel m, IEntity e) {
 		mapView.deleteEntity(e);

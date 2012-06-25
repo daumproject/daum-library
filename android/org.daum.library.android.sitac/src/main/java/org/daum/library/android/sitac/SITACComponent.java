@@ -4,6 +4,8 @@ import android.util.Log;
 import org.daum.library.android.sitac.controller.ISITACController;
 import org.daum.library.android.sitac.view.SITACView;
 import org.daum.library.ormH.persistence.Orhm;
+import org.daum.library.ormH.persistence.PersistenceConfiguration;
+import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
@@ -13,6 +15,7 @@ import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
+import org.daum.library.ormH.persistence.PersistenceSession;
 import org.kevoree.framework.AbstractComponentType;
 
 /**
@@ -33,7 +36,7 @@ import org.kevoree.framework.AbstractComponentType;
 @ComponentType
 public class SITACComponent extends AbstractComponentType {
 
-    private static final String TAG = "STIACComponent";
+    private static final String TAG = "SITACComponent";
 
     private KevoreeAndroidService uiService;
     private ISITACController sitacCtrl;
@@ -72,10 +75,12 @@ public class SITACComponent extends AbstractComponentType {
                     });
             }
         });
+
     }
 
     @Stop
     public void stop() {
+
     }
 
     @Update
