@@ -5,6 +5,7 @@ import org.daum.library.replica.channel.KChannelImpl;
 import org.daum.library.replica.msg.Message;
 
 import java.util.List;
+import java.util.concurrent.locks.Lock;
 
 /**
  * Created by jed
@@ -18,8 +19,11 @@ public interface ICluster {
     public Node getCurrentNode();
     public void addNode(Node node);
     public void shutdown();
+
     public Channel getChannel();
     public void synchronize();
+
+
 
     public ICacheManger getCacheManager();
     public void remoteReceived(Message o);

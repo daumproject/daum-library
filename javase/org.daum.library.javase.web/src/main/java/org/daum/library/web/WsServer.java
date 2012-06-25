@@ -47,6 +47,7 @@ public class WsServer extends AbstractComponentType {
             @Override
             public void update(PropertyChangeEvent propertyChangeEvent)
             {
+
                 if(propertyChangeEvent.isAdded())
                 {
                     webSocketChannel.broadcast("update");

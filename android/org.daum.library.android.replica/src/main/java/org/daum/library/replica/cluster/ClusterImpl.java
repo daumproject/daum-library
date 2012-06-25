@@ -12,6 +12,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 
 /**
@@ -42,6 +44,7 @@ public class ClusterImpl implements  ICluster,Runnable{
         theartbeat = new Thread(this);
         cacheManger = new CacheManager(this);
         theartbeat.start();
+
     }
 
 
@@ -97,6 +100,7 @@ public class ClusterImpl implements  ICluster,Runnable{
         }
         return false;
     }
+
 
     public void remoteReceived(Message o)
     {
@@ -157,6 +161,7 @@ public class ClusterImpl implements  ICluster,Runnable{
             tsnapshot.start();
 
     }
+
 
     @Override
     public ICacheManger getCacheManager() {

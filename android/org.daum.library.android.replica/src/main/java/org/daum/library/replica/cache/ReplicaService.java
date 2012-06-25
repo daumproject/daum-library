@@ -11,5 +11,18 @@ import org.daum.library.replica.cache.Cache;
  */
 public interface ReplicaService
 {
+    /**
+     * get the cache manager
+     * @param name the name of the cache
+     * @return  Cache
+     */
     public Cache getCache(String name);
+
+    /**
+     * Waiting that the replica is synchronized
+     */
+    public void waitingSync();
+
+   // public void waitingSync(int timeout);
+
 }

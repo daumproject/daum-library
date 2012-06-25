@@ -75,4 +75,12 @@ public class Replica extends AbstractComponentType implements ReplicaService {
     }
 
 
+    @Port(name = "service", method = "waitingSync")
+    @Override
+    public void waitingSync() {
+      logger.debug("Waiting Sync");
+
+    }
+
+
 }

@@ -28,7 +28,6 @@ public class Node implements INode,Serializable {
         this.isSynchronized = true;
     }
 
-
     public void setSynchronized(boolean aSynchronized) {
         isSynchronized = aSynchronized;
     }

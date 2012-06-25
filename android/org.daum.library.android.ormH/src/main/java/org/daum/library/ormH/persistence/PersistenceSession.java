@@ -75,7 +75,7 @@ public class PersistenceSession implements IPersistenceSession {
 
 
             }   catch (Exception e){
-                logger.error("The persistence class is not added in addPersistentClass");
+                logger.error("The persistence class "+bean.getClass()+" is not added in addPersistentClass ",e);
 
             }
         }else {
@@ -108,7 +108,7 @@ public class PersistenceSession implements IPersistenceSession {
 
 
             }   catch (Exception e){
-                logger.error("The persistence class is not added in addPersistentClass");
+                logger.error("The persistence class "+bean.getClass()+" is not added in addPersistentClass ",e);
 
             }
         }else {
@@ -137,8 +137,7 @@ public class PersistenceSession implements IPersistenceSession {
                     throw new PersistenceException("the annotation id is not define");
                 }
             }catch (Exception e){
-                logger.error("The format of the bean is not correct or The persistence class is not added in addPersistentClassThe persistence class is not added in addPersistentClass");
-            }
+                logger.error("The persistence class "+bean.getClass()+" is not added in addPersistentClass ",e);           }
         }else {
             logger.error(" Fail to delete bean is null");
         }

@@ -74,7 +74,6 @@ public class ChangeListener implements IChangeListener
                     update.setIsadded();
                 } else  if(e.getCmd().equals(StoreCommand.UPDATE)){
                     update.setIsupdated();
-
                 } else  if(e.getCmd().equals(StoreCommand.DELETE))
                 {
                    update.setIsdeleted();

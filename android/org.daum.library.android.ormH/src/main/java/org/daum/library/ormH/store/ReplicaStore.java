@@ -5,6 +5,8 @@ import org.daum.library.ormH.persistence.Orhm;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.Cache;
 import org.daum.library.replica.cache.ReplicaService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 import java.util.HashMap;
@@ -20,6 +22,7 @@ import java.util.Map;
 public class ReplicaStore  implements PersistenceSessionStore {
 
     private ReplicaService replicatingService=null;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public ReplicaStore(ReplicaService cache)throws PersistenceException {
         this.replicatingService = cache;
@@ -31,16 +34,26 @@ public class ReplicaStore  implements PersistenceSessionStore {
 
     @Override
     public void save(Orhm id, Object bean) throws PersistenceException {
-        if(replicatingService == null){
+
+        logger.debug("Saving "+id.getCacheName()+" "+id.getId()+" "+id.getGeneratedType());
+        if(bean == null)
+        {
+            throw new PersistenceException("The bean  is null");
+        } else  if(replicatingService == null){
             throw new PersistenceException("service is null");
         }
         Cache cache = replicatingService.getCache(id.getCacheName());
+        if(cache == null)
+        {
+            throw new PersistenceException("The cache "+id.getCacheName()+" is null ");
+        }
         cache.put(id.getId(),bean);
     }
 
     @Override
     public void update(Orhm orhm, Object bean) throws PersistenceException {
-        if(replicatingService == null){
+        if(replicatingService == null)
+        {
             throw new PersistenceException("service is null");
         }
         Cache cache = replicatingService.getCache(orhm.getCacheName());

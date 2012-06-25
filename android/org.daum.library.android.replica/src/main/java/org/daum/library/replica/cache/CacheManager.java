@@ -36,6 +36,10 @@ public class CacheManager implements ICacheManger
                 logger.debug("Creating cache "+name);
                 Cache cache  =  new Cache(name,this) ;
                 store.put(name,cache);
+                if(store.get(name) != null)
+                {
+                    logger.debug("The cache is created "+name);
+                }
             }
         } else
         {
@@ -111,8 +115,10 @@ public class CacheManager implements ICacheManger
                         getCache(msg.cache).putIfAbsent(msg.key, msg.getVersionedValue());
                     }
 
-
+                    // notify is sync
                     cluster.getCurrentNode().setSynchronized();
+
+
                 }
 
             } else if(o instanceof Command)
