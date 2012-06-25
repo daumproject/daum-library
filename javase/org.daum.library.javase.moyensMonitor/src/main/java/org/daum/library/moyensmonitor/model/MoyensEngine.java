@@ -21,7 +21,7 @@ import java.util.Map;
  */
 public class MoyensEngine {
 	
-	private static final String TAG = "SITACEngine";
+	private static final String TAG = "MoyensEngine";
 
     private PersistenceSessionFactoryImpl factory;
 	private OnEngineStateChangeListener listener;
@@ -41,7 +41,7 @@ public class MoyensEngine {
 
             // check if there is already some data in the replica
             session = factory.getSession();
-            Map<Object, Object> demands = session.getAll(Demand.class);
+            Map<Object, Demand> demands = (Map<Object, Demand>) session.getAll(Demand.class);
             for (Object d : demands.values()) {
                 if (listener != null) listener.onAdd((Demand) d);
             }

@@ -53,11 +53,11 @@ public class SITACEngine {
             // check if there is already some data in the replica
             if (listener != null) {
                 session = factory.getSession();
-                Map<Object, Object> objects;
+                Map<Object, IModel> models;
                 for (Class c : classes) {
-                    objects = session.getAll(c);
-                    for (Object o : objects.values()) {
-                        listener.onAdd((IModel) o, null);
+                    models = (Map<Object, IModel>) session.getAll(c);
+                    for (IModel o : models.values()) {
+                        listener.onAdd(o, null);
                     }
                 }
             }

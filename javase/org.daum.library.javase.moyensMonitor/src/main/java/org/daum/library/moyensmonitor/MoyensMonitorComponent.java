@@ -1,12 +1,9 @@
 package org.daum.library.moyensmonitor;
 
-import org.daum.common.model.api.Demand;
 import org.daum.library.moyensmonitor.view.MoyensMonitorFrame;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.replica.cache.ReplicaService;
 import org.daum.library.replica.listener.ChangeListener;
-import org.daum.library.replica.listener.PropertyChangeEvent;
-import org.daum.library.replica.listener.PropertyChangeListener;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 
