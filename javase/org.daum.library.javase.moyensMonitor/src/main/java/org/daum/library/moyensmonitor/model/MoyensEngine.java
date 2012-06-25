@@ -46,16 +46,31 @@ public class MoyensEngine {
                 if (listener != null) listener.onAdd((Demand) d);
             }
 
-            // add callback to handle remote events on replica
-            // TODO
-
-
         } catch (PersistenceException ex) {
             logger.error(TAG, "Error while initializing persistence in engine", ex);
 
         } finally {
             if (session != null) session.close();
         }
+
+        // add callback to handle remote events on replica
+        ChangeListener.getInstance().addEventListener(Demand.class, new PropertyChangeListener() {
+            @Override
+            public void update(PropertyChangeEvent e) {
+                if (listener != null) {
+                    try {
+                        PersistenceSession session = factory.getSession();
+                        Demand d = (Demand) session.get(Demand.class, e.getId());
+                        if (e.isIsadded()) listener.onAdd(d);
+                        else if (e.isIsdeleted()) listener.onDelete(d);
+                        else if (e.isIsupdated())listener.onUpdate(d);
+
+                    } catch (PersistenceException ex) {
+                        logger.error(TAG, "Error while initializing replica events handler", ex);
+                    }
+                }
+            }
+        });
 
 		listener = engineHandler;
 	}

@@ -18,6 +18,9 @@ import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 
 import android.util.Log;
+import org.daum.library.replica.listener.ChangeListener;
+import org.daum.library.replica.listener.PropertyChangeEvent;
+import org.daum.library.replica.listener.PropertyChangeListener;
 
 /**
  * SITACEngine save/update/delete data from/to the Replica/Persistence system
@@ -62,15 +65,32 @@ public class SITACEngine {
                 }
             }
 
-            // add callback to handle remote events on replica
-            // TODO
-
-
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while initializing persistence in engine", ex);
 
         } finally {
             if (session != null) session.close();
+        }
+
+        // add callback to handle remote events on replica
+        for (final Class c : classes) {
+            ChangeListener.getInstance().addEventListener(c, new PropertyChangeListener() {
+                @Override
+                public void update(PropertyChangeEvent e) {
+                    if (listener != null) {
+                        try {
+                            PersistenceSession session = factory.getSession();
+                            IModel m = (IModel) session.get(c, e.getId());
+                            if (e.isIsadded()) listener.onAdd(m, null);
+                            else if (e.isIsdeleted()) listener.onDelete(m, null);
+                            else if (e.isIsupdated()) listener.onUpdate(m, null);
+
+                        } catch (PersistenceException ex) {
+                            Log.e(TAG, "Error while initializing replica events handler", ex);
+                        }
+                    }
+                }
+            });
         }
 
         listener = engineHandler;
@@ -117,6 +137,6 @@ public class SITACEngine {
         } finally {
             if (session != null) session.close();
         }
-		if (listener != null) listener.onDelete(e);
+		if (listener != null) listener.onDelete(m, e);
 	}
 }

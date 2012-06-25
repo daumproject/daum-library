@@ -1,13 +1,16 @@
 package org.daum.library.android.sitac;
 
+import android.util.Log;
 import org.daum.library.android.sitac.controller.ISITACController;
 import org.daum.library.android.sitac.view.SITACView;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.replica.cache.ReplicaService;
 import org.daum.library.replica.listener.ChangeListener;
+import org.kevoree.ContainerRoot;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
+import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
 
 /**
@@ -35,16 +38,33 @@ public class SITACComponent extends AbstractComponentType {
 
     @Start
     public void start() {
-        ReplicaService replicatingService =   this.getPortByName("service", ReplicaService.class);
-        final ReplicaStore storeImpl = new ReplicaStore(replicatingService);
-
         uiService = UIServiceHandler.getUIService();
-        uiService.getRootActivity().runOnUiThread(new Runnable() {
+
+        getModelService().registerModelListener(new ModelListener() {
             @Override
-            public void run() {
-                SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
-                sitacCtrl = sitacView.getController();
-                uiService.addToGroup("SITAC", sitacView);
+            public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return false;
+            }
+
+            @Override
+            public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return false;
+            }
+
+            @Override
+            public void modelUpdated() {
+                Log.d(TAG, "modelUpdated()!!!");
+                ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
+                final ReplicaStore storeImpl = new ReplicaStore(replicatingService);
+                Log.d(TAG, ">>>> replicatingService= "+replicatingService);
+                uiService.getRootActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
+                        sitacCtrl = sitacView.getController();
+                        uiService.addToGroup("SITAC", sitacView);
+                    }
+                });
             }
         });
     }
@@ -55,8 +75,7 @@ public class SITACComponent extends AbstractComponentType {
 
     @Update
     public void update() {
-        stop();
-        start();
+
     }
 
     @Port(name = "notify")
