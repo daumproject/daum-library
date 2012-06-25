@@ -28,6 +28,12 @@
 
         <dependency>
             <groupId>org.daum.library.android</groupId>
+            <artifactId>org.daum.library.android.replica</artifactId>
+            <version>1.8</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.daum.library.android</groupId>
             <artifactId>org.daum.library.android.ormH</artifactId>
             <version>1.8</version>
         </dependency>
