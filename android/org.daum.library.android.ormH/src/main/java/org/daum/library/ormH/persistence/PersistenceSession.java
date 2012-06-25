@@ -164,7 +164,7 @@ public class PersistenceSession implements IPersistenceSession {
 
 
 
-    public Map<Object,Object> getAll(Class clazz) throws PersistenceException
+    public Map<?,?> getAll(Class clazz) throws PersistenceException
     {
         PersistentClass pc= null;
         Orhm id=null;
