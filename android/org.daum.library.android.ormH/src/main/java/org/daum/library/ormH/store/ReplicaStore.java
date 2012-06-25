@@ -21,10 +21,12 @@ public class ReplicaStore  implements PersistenceSessionStore {
 
     private ReplicaService replicatingService=null;
 
-    public ReplicaStore(ReplicaService cache)
-    {
+    public ReplicaStore(ReplicaService cache)throws PersistenceException {
         this.replicatingService = cache;
-
+        if(replicatingService == null)
+        {
+            throw new PersistenceException("service is null");
+        }
     }
 
     @Override
