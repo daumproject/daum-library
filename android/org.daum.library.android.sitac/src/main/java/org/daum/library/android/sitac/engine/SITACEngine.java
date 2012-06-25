@@ -43,12 +43,15 @@ public class SITACEngine {
 	
 	public SITACEngine(String nodeName, ReplicaStore store, OnEngineStateChangeListener engineHandler) {
         PersistenceSession session = null;
+        listener = engineHandler;
 
         try {
             // configuring persistence
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
             configuration.setStore(store);
-            for (Class c : classes) configuration.addPersistentClass(c);
+            for (Class c : classes) {
+                configuration.addPersistentClass(c);
+            }
 
             // retrieve the persistence factory
             this.factory = configuration.getPersistenceSessionFactory();
@@ -78,22 +81,23 @@ public class SITACEngine {
                 @Override
                 public void update(PropertyChangeEvent e) {
                     if (listener != null) {
+                        PersistenceSession session = null;
                         try {
-                            PersistenceSession session = factory.getSession();
+                            session = factory.getSession();
                             IModel m = (IModel) session.get(c, e.getId());
-                            if (e.isIsadded()) listener.onAdd(m, null);
-                            else if (e.isIsdeleted()) listener.onDelete(m, null);
-                            else if (e.isIsupdated()) listener.onUpdate(m, null);
+                            if (e.isAdded()) listener.onAdd(m, null);
+                            else if (e.isDeleted()) listener.onDelete(m, null);
+                            else if (e.isUpdated()) listener.onUpdate(m, null);
 
                         } catch (PersistenceException ex) {
                             Log.e(TAG, "Error while initializing replica events handler", ex);
+                        } finally {
+                            if (session != null) session.close();
                         }
                     }
                 }
             });
         }
-
-        listener = engineHandler;
 	}
 	
 	public void add(IModel m, IEntity e) {

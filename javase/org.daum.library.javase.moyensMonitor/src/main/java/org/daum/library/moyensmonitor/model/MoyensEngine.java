@@ -29,6 +29,7 @@ public class MoyensEngine {
 	
 	public MoyensEngine(String nodeName, ReplicaStore storeImpl, OnEngineStateChangeListener engineHandler) {
         PersistenceSession session = null;
+        listener = engineHandler;
 
         try {
             // configuring persistence
@@ -61,9 +62,9 @@ public class MoyensEngine {
                     try {
                         PersistenceSession session = factory.getSession();
                         Demand d = (Demand) session.get(Demand.class, e.getId());
-                        if (e.isIsadded()) listener.onAdd(d);
-                        else if (e.isIsdeleted()) listener.onDelete(d);
-                        else if (e.isIsupdated())listener.onUpdate(d);
+                        if (e.isAdded()) listener.onAdd(d);
+                        else if (e.isDeleted()) listener.onDelete(d);
+                        else if (e.isUpdated())listener.onUpdate(d);
 
                     } catch (PersistenceException ex) {
                         logger.error(TAG, "Error while initializing replica events handler", ex);
@@ -71,8 +72,6 @@ public class MoyensEngine {
                 }
             }
         });
-
-		listener = engineHandler;
 	}
 	
 	public void add(Demand d) {

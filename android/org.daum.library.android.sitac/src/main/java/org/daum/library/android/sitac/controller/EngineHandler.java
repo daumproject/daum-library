@@ -80,7 +80,7 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	}
 	
 	@Override
-	public void onDelete(IEntity e) {
+	public void onDelete(IModel m, IEntity e) {
 		mapView.deleteEntity(e);
 		modelMap.remove(e);
 	}

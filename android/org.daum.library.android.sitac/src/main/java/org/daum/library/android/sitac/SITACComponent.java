@@ -4,6 +4,7 @@ import android.util.Log;
 import org.daum.library.android.sitac.controller.ISITACController;
 import org.daum.library.android.sitac.view.SITACView;
 import org.daum.library.ormH.store.ReplicaStore;
+import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
 import org.daum.library.replica.listener.ChangeListener;
 import org.kevoree.ContainerRoot;
@@ -53,18 +54,20 @@ public class SITACComponent extends AbstractComponentType {
 
             @Override
             public void modelUpdated() {
-                Log.d(TAG, "modelUpdated()!!!");
-                ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
-                final ReplicaStore storeImpl = new ReplicaStore(replicatingService);
-                Log.d(TAG, ">>>> replicatingService= "+replicatingService);
-                uiService.getRootActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
-                        sitacCtrl = sitacView.getController();
-                        uiService.addToGroup("SITAC", sitacView);
-                    }
-                });
+                    uiService.getRootActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
+                                final ReplicaStore storeImpl = new ReplicaStore(replicatingService);
+                                final SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
+                                sitacCtrl = sitacView.getController();
+                                uiService.addToGroup("SITAC", sitacView);
+                            } catch (PersistenceException e) {
+                                Log.e(TAG, "Error while initializing ReplicaStore", e);
+                            }
+                        }
+                    });
             }
         });
     }
