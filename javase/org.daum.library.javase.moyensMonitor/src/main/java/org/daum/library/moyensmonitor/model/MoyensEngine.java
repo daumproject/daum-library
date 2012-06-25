@@ -47,6 +47,7 @@ public class MoyensEngine {
             }
 
             // add callback to handle remote events on replica
+            // TODO
 
 
         } catch (PersistenceException ex) {

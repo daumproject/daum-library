@@ -26,27 +26,53 @@ public class SITACEngine {
 	
 	private static final String TAG = "SITACEngine";
 
+    private final Class[] classes = {
+            Demand.class,
+            Danger.class,
+            Target.class,
+            ArrowAction.class,
+            ZoneAction.class
+    };
+
     private PersistenceSessionFactoryImpl factory;
 	private OnEngineStateChangeListener listener;
 	
 	public SITACEngine(String nodeName, ReplicaStore store, OnEngineStateChangeListener engineHandler) {
+        PersistenceSession session = null;
+
         try {
+            // configuring persistence
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
             configuration.setStore(store);
-            configuration.addPersistentClass(Demand.class);
-            configuration.addPersistentClass(Danger.class);
-            configuration.addPersistentClass(Target.class);
-            configuration.addPersistentClass(ArrowAction.class);
-            configuration.addPersistentClass(ZoneAction.class);
+            for (Class c : classes) configuration.addPersistentClass(c);
 
+            // retrieve the persistence factory
             this.factory = configuration.getPersistenceSessionFactory();
 
-        } catch (PersistenceException e)
-        {
-            e.printStackTrace();
+            // check if there is already some data in the replica
+            if (listener != null) {
+                session = factory.getSession();
+                Map<Object, Object> objects;
+                for (Class c : classes) {
+                    objects = session.getAll(c);
+                    for (Object o : objects.values()) {
+                        listener.onAdd((IModel) o, null);
+                    }
+                }
+            }
+
+            // add callback to handle remote events on replica
+            // TODO
+
+
+        } catch (PersistenceException ex) {
+            Log.e(TAG, "Error while initializing persistence in engine", ex);
+
+        } finally {
+            if (session != null) session.close();
         }
 
-		listener = engineHandler;
+        listener = engineHandler;
 	}
 	
 	public void add(IModel m, IEntity e) {
@@ -56,7 +82,7 @@ public class SITACEngine {
             session.save(m);
             
         } catch (PersistenceException ex) {
-            Log.e(TAG, "Error while persisting object", ex);
+            Log.e(TAG, "Error while adding object in Replica", ex);
         } finally {
             if (session != null) session.close();
         }
@@ -71,7 +97,7 @@ public class SITACEngine {
             session.update(m);
 
         } catch (PersistenceException ex) {
-            Log.e(TAG, "Error while persisting object", ex);
+            Log.e(TAG, "Error while updating object in Replica", ex);
         } finally {
             if (session != null) session.close();
         }
@@ -86,7 +112,7 @@ public class SITACEngine {
             session.delete(m);
             
         } catch (PersistenceException ex) {
-            Log.e(TAG, "Error while persisting object", ex);
+            Log.e(TAG, "Error while deleting object in Replica", ex);
         } finally {
             if (session != null) session.close();
         }
