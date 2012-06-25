@@ -20,8 +20,7 @@ import org.kevoree.framework.AbstractComponentType;
 
 @Library(name = "Android")
 @Requires({
-        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)  ,
-        @RequiredPort(name = "value", type = PortType.MESSAGE, optional = true)
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
 })
 @Provides({
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)

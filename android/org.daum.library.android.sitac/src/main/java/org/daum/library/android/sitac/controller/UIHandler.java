@@ -1,8 +1,10 @@
 package org.daum.library.android.sitac.controller;
 
+import java.util.Date;
 import java.util.Hashtable;
 
 import org.daum.common.gps.impl.GpsPoint;
+import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.command.RedoCommand;
 import org.daum.library.android.sitac.command.UndoCommand;
@@ -66,7 +68,12 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	@Override
 	public void onDeleteButtonClicked() {
 		IModel m = modelMap.get(selectedEntity);
-		EngineCmdManager.getInstance(modelEngine).execute(DeleteModelCommand.class, m, selectedEntity);
+		if (m instanceof Demand) {
+            ((Demand) m).setGh_desengagement(new Date());
+            EngineCmdManager.getInstance(modelEngine).execute(UpdateModelCommand.class, m, selectedEntity);
+        } else {
+            EngineCmdManager.getInstance(modelEngine).execute(DeleteModelCommand.class, m, selectedEntity);
+        }
 		
 		// hiding the selectedEntityView
 		selectedEntityView.hide();

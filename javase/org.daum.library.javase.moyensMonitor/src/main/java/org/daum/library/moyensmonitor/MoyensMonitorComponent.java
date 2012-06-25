@@ -6,6 +6,8 @@ import org.daum.library.replica.cache.ReplicaService;
 import org.daum.library.replica.listener.ChangeListener;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,17 +27,23 @@ import org.kevoree.framework.AbstractComponentType;
 @ComponentType
 public class MoyensMonitorComponent extends AbstractComponentType {
 
+    private static final String TAG = "MoyensMonitorComponent";
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private MoyensMonitorFrame frame;
 
     @Start
     public void start() {
-        ReplicaService replicatingService =   this.getPortByName("service", ReplicaService.class);
-        ReplicaStore storeImpl = new ReplicaStore(replicatingService);
+        logger.debug(TAG, "start component !!!! ");
+        try {
+            ReplicaService replicatingService =   this.getPortByName("service", ReplicaService.class);
+            ReplicaStore storeImpl = new ReplicaStore(replicatingService);
 
-        frame = new MoyensMonitorFrame(getNodeName(), storeImpl);
-        frame.setVisible(true);
-
-
+            frame = new MoyensMonitorFrame(getNodeName(), storeImpl);
+            frame.setVisible(true);
+        } catch (Exception e) {
+            logger.error(TAG, "error start compo", e);
+        }
     }
 
     @Stop
