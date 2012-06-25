@@ -2,8 +2,10 @@ package org.daum.library.android.sitac.controller;
 
 import java.util.Hashtable;
 
+import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
+import org.daum.library.android.sitac.view.DrawableFactory;
 import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACMenuView;
 import org.daum.library.android.sitac.view.entity.DemandEntity;
@@ -55,6 +57,26 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	@Override
 	public void onUpdate(IModel m, IEntity e) {
 		if (D) Log.i(TAG, "onUpdate(): "+m);
+
+        if (m instanceof Demand) {
+            Demand d = (Demand) m;
+            // change drawable according to Demand state
+            if (d.getGh_engage() != null && d.getGh_desengagement() == null) {
+                // vehicle is supposed to be arrived in da place
+                if (modelMap.containsKey(e)) {
+                    modelMap.remove(e);
+                    mapView.deleteEntity(e);
+                }
+                e = factory.build(m);
+                modelMap.put(e, m);
+                mapView.addEntity(e);
+
+            } else if (d.getGh_desengagement() != null) {
+                // vehicle has left, remove it from the map
+                mapView.deleteEntity(e);
+                modelMap.remove(e);
+            }
+        }
 	}
 	
 	@Override

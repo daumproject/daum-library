@@ -26,6 +26,7 @@ public class SITACEngine {
 	
 	private static final String TAG = "SITACEngine";
 
+    /** Persisted classes in replica */
     private final Class[] classes = {
             Demand.class,
             Danger.class,
