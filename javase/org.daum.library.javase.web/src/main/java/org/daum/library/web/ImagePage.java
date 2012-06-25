@@ -38,11 +38,8 @@ public class ImagePage extends AbstractPage
     private ReplicaService replicaService =  null;
     private PersistenceSession s=null;
 
-
     public void init()
-
     {
-
         if(replicaService == null )
         {
             try
@@ -52,7 +49,6 @@ public class ImagePage extends AbstractPage
                 ReplicaStore store = new ReplicaStore(replicaService);
                 configuration.setStore(store);
                 configuration.addPersistentClass(TemperatureMonitor.class);
-
                 factory = configuration.getPersistenceSessionFactory();
 
             } catch (PersistenceException e)
@@ -92,7 +88,6 @@ public class ImagePage extends AbstractPage
                         TemperatureMonitor t = (TemperatureMonitor) listtemp.get(key);
                         tempCourbe.add(t.getValue());
                        i++;
-
                     }
                 }
 

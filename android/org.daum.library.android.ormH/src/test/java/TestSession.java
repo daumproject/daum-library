@@ -57,6 +57,8 @@ public class TestSession {
 
         PersistenceSession s = factory.getSession();
 
+        assertEquals(0,s.getAll(Moyen.class).size());
+
         Moyen m1 = new Moyen(new MoyenType(1), "FPT");
         Moyen m2 = new Moyen(new MoyenType(2), "VSAV");
         Moyen m3 = new Moyen(new MoyenType(1), "FPT");
@@ -104,7 +106,7 @@ public class TestSession {
         IPersistenceSessionFactory factory=null;
         factory = configuration.getPersistenceSessionFactory();
         PersistenceSession s = factory.getSession();
-        Map<Object,Object> result = s.getAll(Moyen.class);
+        Map<Object,Moyen> result = (Map<Object, Moyen>) s.getAll(Moyen.class);
         assertEquals(result.size(),5);
         s.close();
     }
@@ -114,17 +116,17 @@ public class TestSession {
         IPersistenceSessionFactory factory=null;
         factory = configuration.getPersistenceSessionFactory();
         PersistenceSession s = factory.getSession();
-        Map<Object,Object> re = s.getAll(Moyen.class);
+        Map<Object,Moyen> re = (Map<Object, Moyen>) s.getAll(Moyen.class);
         Moyen m1=null;
         for( Object key : re.keySet())
         {
-            m1 = (Moyen)re.get(key);
+            m1 = re.get(key);
             break;
         }
 
         s.delete(m1);
 
-        Map<Object,Object> result = s.getAll(Moyen.class);
+        Map<Object,Moyen> result = (Map<Object, Moyen>) s.getAll(Moyen.class);
         assertEquals(result.size(),4);
         s.close();
     }
@@ -180,7 +182,7 @@ public class TestSession {
         IPersistenceSessionFactory factory=null;
         factory = configuration.getPersistenceSessionFactory();
         PersistenceSession s = factory.getSession();
-        Map<Object,Object>  result=  s.getAll(TestModel.class);
+        Map<Object,TestModel>  result= (Map<Object, TestModel>) s.getAll(TestModel.class);
 
         assertEquals(result.size(),iteration);
         s.close();

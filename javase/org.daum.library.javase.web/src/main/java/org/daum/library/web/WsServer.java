@@ -32,7 +32,9 @@ public class WsServer extends AbstractComponentType {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     @Start
-    public void startServer() {
+    public void startServer()
+    {
+
         webSocketChannel = new WebSocketChannel();
         webServer = WebServers.createWebServer(8082)
                 .add("/jed", webSocketChannel)

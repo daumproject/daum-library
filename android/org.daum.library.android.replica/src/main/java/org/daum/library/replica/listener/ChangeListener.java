@@ -1,7 +1,8 @@
 package org.daum.library.replica.listener;
 
+import org.daum.library.replica.cache.StoreCommand;
 import org.daum.library.replica.msg.NotifyUpdate;
-import org.daum.library.replica.listener.EventListenerList;
+
 import java.util.HashMap;
 
 /**
@@ -67,16 +68,25 @@ public class ChangeListener implements IChangeListener
             NotifyUpdate e = (NotifyUpdate)msg;
             if(listHashMap.containsKey(e.getCache()))
             {
-                PropertyChangeEvent t = new PropertyChangeEvent();
-                t.setKey(e.getKey());
-                t.setCmd(e.getCmd());
+                PropertyChangeEvent update = new PropertyChangeEvent();
+                update.setId(e.getId());
+                if(e.getCmd().equals(StoreCommand.ADD)){
+                    update.setIsadded();
+                } else  if(e.getCmd().equals(StoreCommand.UPDATE)){
+                    update.setIsupdated();
+
+                } else  if(e.getCmd().equals(StoreCommand.DELETE))
+                {
+                   update.isIsdeleted();
+                }
+
 
                 Object[] listeners = listHashMap.get(e.getCache()).getListenerList();
                 if(listeners != null)
                 {
                     for (int i = 0; i < listeners.length;i += 2)
                     {
-                        ((PropertyChangeListener) listeners[i + 1]).update(t);
+                        ((PropertyChangeListener) listeners[i + 1]).update(update);
                     }
 
                 }

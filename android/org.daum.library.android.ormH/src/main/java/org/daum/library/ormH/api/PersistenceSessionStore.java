@@ -17,7 +17,7 @@ public interface PersistenceSessionStore
     public void update(Orhm id,Object bean)throws PersistenceException;
     public void delete(Orhm id) throws PersistenceException;
     public Object get(Orhm id) throws PersistenceException;
-    public Map<Object,Object> getAll(Orhm id) throws PersistenceException;
+    public Map<?,?> getAll(Orhm id) throws PersistenceException;
     public Object lock(Orhm id)throws PersistenceException;
     public void unlock(Orhm id)throws PersistenceException;
 
