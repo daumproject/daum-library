@@ -20,8 +20,7 @@ import org.kevoree.framework.AbstractComponentType;
 
 @Library(name = "JavaSE")
 @Requires({
-        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)  ,
-        @RequiredPort(name = "value", type = PortType.MESSAGE, optional = true)
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
 })
 @Provides({
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
@@ -53,7 +52,7 @@ public class MoyensMonitorComponent extends AbstractComponentType {
     }
 
     @Port(name = "notify")
-    public void notifybyReplica(Object m) {
+    public void notifiedByReplica(Object m) {
         ChangeListener.getInstance().receive(m);
     }
 }
