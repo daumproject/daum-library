@@ -19,30 +19,31 @@ public class PropertyChangeEvent {
     public Object getId() {
         return id;
     }
-
     public void setId(Object id) {
         this.id = id;
     }
 
-    public boolean isIsupdated() {
+    public boolean isAdded() {
+        return isadded;
+    }
+    public boolean isUpdated() {
         return isupdated;
     }
 
-    public void setIsupdated() {
-        this.isupdated = true;
+    public boolean isDeleted() {
+        return isdeleted;
     }
 
-    public boolean isIsadded() {
-        return isadded;
+
+    public void setIsupdated()
+    {
+        this.isupdated = true;
     }
 
     public void setIsadded() {
         this.isadded = true;
     }
 
-    public boolean isIsdeleted() {
-        return isdeleted;
-    }
 
     public void setIsdeleted() {
         this.isdeleted = true;
