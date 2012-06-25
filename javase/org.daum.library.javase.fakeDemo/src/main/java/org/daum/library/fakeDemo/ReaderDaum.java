@@ -81,8 +81,8 @@ public class ReaderDaum extends AbstractComponentType {
             @Override
             public void update(PropertyChangeEvent propertyChangeEvent) {
 
-                if (propertyChangeEvent.getCmd().equals(StoreCommand.ADD)) {
-                    processTemperature(propertyChangeEvent.getKey());
+                if (propertyChangeEvent.isIsadded()) {
+                    processTemperature(propertyChangeEvent.getId());
                 }
 
             }
@@ -93,8 +93,9 @@ public class ReaderDaum extends AbstractComponentType {
             @Override
             public void update(PropertyChangeEvent propertyChangeEvent) {
 
-                if (propertyChangeEvent.getCmd().equals(StoreCommand.ADD)) {
-                    processHeartMonitor(propertyChangeEvent.getKey());
+                if (propertyChangeEvent.isIsadded()){
+
+                    processHeartMonitor(propertyChangeEvent.getId());
                 }
 
             }
