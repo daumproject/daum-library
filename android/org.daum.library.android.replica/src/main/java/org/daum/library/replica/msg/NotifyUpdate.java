@@ -12,7 +12,7 @@ import org.daum.library.replica.cache.StoreCommand;
 public class NotifyUpdate implements Message {
     private static final long serialVersionUID = 1518L;
     private String cache;
-    private Object key;
+    private Object id;
     private StoreCommand cmd;
 
     public String getCache() {
@@ -23,12 +23,12 @@ public class NotifyUpdate implements Message {
         this.cache = cache;
     }
 
-    public Object getKey() {
-        return key;
+    public Object getId() {
+        return id;
     }
 
-    public void setKey(Object key) {
-        this.key = key;
+    public void setId(Object id) {
+        this.id = id;
     }
 
 

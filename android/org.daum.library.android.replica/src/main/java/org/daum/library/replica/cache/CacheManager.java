@@ -77,7 +77,7 @@ public class CacheManager implements ICacheManger
 
                     //notify update from remote
                     NotifyUpdate notifyUpdate = new NotifyUpdate();
-                    notifyUpdate.setKey(update.getKey());
+                    notifyUpdate.setId(update.getKey());
                     notifyUpdate.setCache(update.cache);
                     notifyUpdate.setCmd(update.getOp());
                     cluster.getChannel().write(notifyUpdate);
@@ -179,7 +179,7 @@ public class CacheManager implements ICacheManger
 
         // notify an update from local
         NotifyUpdate notifyUpdate = new NotifyUpdate();
-        notifyUpdate.setKey(update.getKey());
+        notifyUpdate.setId(update.getKey());
         notifyUpdate.setCache(update.cache);
         notifyUpdate.setCmd(update.getOp());
         cluster.getChannel().write(notifyUpdate);

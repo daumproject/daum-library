@@ -10,22 +10,41 @@ import org.daum.library.replica.cache.StoreCommand;
  * To change this template use File | Settings | File Templates.
  */
 public class PropertyChangeEvent {
-    private Object key;
-    private StoreCommand cmd;
 
-    public Object getKey() {
-        return key;
+    private  boolean isupdated=false;
+    private boolean isadded=false;
+    private boolean isdeleted=false;
+
+    private Object id;
+    public Object getId() {
+        return id;
     }
 
-    public void setKey(Object key) {
-        this.key = key;
+    public void setId(Object id) {
+        this.id = id;
     }
 
-    public StoreCommand getCmd() {
-        return cmd;
+    public boolean isIsupdated() {
+        return isupdated;
     }
 
-    public void setCmd(StoreCommand cmd) {
-        this.cmd = cmd;
+    public void setIsupdated() {
+        this.isupdated = true;
+    }
+
+    public boolean isIsadded() {
+        return isadded;
+    }
+
+    public void setIsadded() {
+        this.isadded = true;
+    }
+
+    public boolean isIsdeleted() {
+        return isdeleted;
+    }
+
+    public void setIsdeleted() {
+        this.isdeleted = true;
     }
 }
