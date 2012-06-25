@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
 import org.daum.library.android.sitac.view.entity.ArrowEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
+import org.daum.library.android.sitac.view.entity.ShapedEntity;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
@@ -59,12 +60,9 @@ public class MapOverlay extends Overlay {
 	@Override
 	protected void draw(Canvas canvas, MapView mapV, boolean shadow) {
 		if (!shadow) {
-			String str = "";
 			for (IEntity ent : entities) {
-				str += ent.getClass().getSimpleName()+", ";
 				if (ent.getGeoPoint() != null) ent.draw(canvas, mapV);
 			}
-			Log.d(TAG, str);
 		}
 	}
 	
@@ -74,13 +72,13 @@ public class MapOverlay extends Overlay {
 
 	public void addEntity(IEntity entity) {
 		// this little trick do two things
-		// - first it makes ArrowEntity (sub-)classes
+		// - first it makes ShapedEntity objects
 		// 	be drawn on the "bottom" of the entity stack
-		// - second it makes ArrowEntity (sub-)classes
+		// - second it makes ShapedEntity objects
 		// 	be "clicked" after other entities in the priority order
 		// which mean that if a DemandEntity is in a ZoneEntity, the
 		// DemandEntity will answer first and consume the longPress event
-		if (entity instanceof ArrowEntity) {
+		if (entity instanceof ShapedEntity) {
 			entities.add(0, entity);
 		} else entities.add(entity);
 	}

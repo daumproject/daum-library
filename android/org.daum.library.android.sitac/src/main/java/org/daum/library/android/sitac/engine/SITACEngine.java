@@ -49,9 +49,7 @@ public class SITACEngine {
             // configuring persistence
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
             configuration.setStore(store);
-            for (Class c : classes) {
-                configuration.addPersistentClass(c);
-            }
+            for (Class c : classes) configuration.addPersistentClass(c);
 
             // retrieve the persistence factory
             this.factory = configuration.getPersistenceSessionFactory();
