@@ -23,8 +23,9 @@ public interface OnEngineStateChangeListener {
 
 	/**
 	 * Called when a model object has been deleted from the engine
-	 * 
+	 *
+     * @param m the deleted model
 	 * @param e the entity to delete
 	 */
-	void onDelete(IEntity e);
+	void onDelete(IModel m, IEntity e);
 }

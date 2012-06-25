@@ -21,7 +21,7 @@ import org.slf4j.LoggerFactory;
 
 @Library(name = "JavaSE")
 @Requires({
-        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true,needCheckDependency = true)
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
 })
 @Provides({
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
@@ -36,20 +36,15 @@ public class MoyensMonitorComponent extends AbstractComponentType {
 
     @Start
     public void start() {
-        logger.debug(TAG, "start component !!!! ");
-
-        getModelService().registerModelListener(new ModelListener()
-        {
+        getModelService().registerModelListener(new ModelListener() {
             @Override
-            public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1)
-            {
-
-                return false;  //To change body of implemented methods use File | Settings | File Templates.
+            public boolean preUpdate(ContainerRoot c1, ContainerRoot c2) {
+                return false;
             }
 
             @Override
-            public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;  //To change body of implemented methods use File | Settings | File Templates.
+            public boolean initUpdate(ContainerRoot c1, ContainerRoot c2) {
+                return false;
             }
 
             @Override
@@ -62,13 +57,13 @@ public class MoyensMonitorComponent extends AbstractComponentType {
                     frame = new MoyensMonitorFrame(getNodeName(), storeImpl);
                     frame.setVisible(true);
                 } catch (Exception e) {
-                    logger.error(TAG+" ", e);
+                    logger.error(TAG, "error start compo", e);
                 }
-
-
             }
         });
     }
+
+
 
     @Stop
     public void stop() {
@@ -77,7 +72,7 @@ public class MoyensMonitorComponent extends AbstractComponentType {
 
     @Update
     public void update() {
-
+        logger.debug(">>>>>>> update()");
     }
 
     @Port(name = "notify")
