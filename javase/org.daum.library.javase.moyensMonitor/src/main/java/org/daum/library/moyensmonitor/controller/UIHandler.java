@@ -3,6 +3,7 @@ package org.daum.library.moyensmonitor.controller;
 import java.util.Date;
 
 import org.daum.common.model.api.Demand;
+import org.daum.common.model.api.VehicleType;
 import org.daum.library.moyensmonitor.listener.OnMoyensMonitorEventListener;
 import org.daum.library.moyensmonitor.model.MoyensEngine;
 
@@ -20,4 +21,9 @@ public class UIHandler implements OnMoyensMonitorEventListener {
 		d.setCis(cis);
 		engine.update(d);
 	}
+
+    @Override
+    public void onAddFakeDemand() {
+        engine.add(new Demand(VehicleType.CAEM));
+    }
 }

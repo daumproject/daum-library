@@ -69,6 +69,7 @@ public class SITACEngine {
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while initializing persistence in engine", ex);
 
+
         } finally {
             if (session != null) session.close();
         }

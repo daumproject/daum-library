@@ -5,4 +5,6 @@ import org.daum.common.model.api.Demand;
 public interface OnMoyensMonitorEventListener {
 
 	void onValidateButtonClicked(Demand d, String cis);
+
+    void onAddFakeDemand();
 }

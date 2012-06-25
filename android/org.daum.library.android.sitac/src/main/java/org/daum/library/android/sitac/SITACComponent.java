@@ -3,6 +3,7 @@ package org.daum.library.android.sitac;
 import android.util.Log;
 import org.daum.library.android.sitac.controller.ISITACController;
 import org.daum.library.android.sitac.view.SITACView;
+import org.daum.library.ormH.persistence.Orhm;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
@@ -59,8 +60,9 @@ public class SITACComponent extends AbstractComponentType {
                         public void run() {
                             try {
                                 ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
-                                final ReplicaStore storeImpl = new ReplicaStore(replicatingService);
-                                final SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
+                                ReplicaStore storeImpl = new ReplicaStore(replicatingService);
+
+                                SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
                                 sitacCtrl = sitacView.getController();
                                 uiService.addToGroup("SITAC", sitacView);
                             } catch (PersistenceException e) {

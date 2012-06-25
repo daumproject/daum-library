@@ -34,11 +34,12 @@ public class MoyensMonitorFrame extends JFrame {
 	private static final String NEW_DEMAND_TAB = "Nouvelles demandes";
 	private static final String ANSWERED_DEMAND_TAB = "Demandes traitées";
 	private static final String VALIDATE_BTN = "Valider la demande";
+    private static final String ADD_DEMAND_BTN = "Ajouter une fakeDemand";
 	
 	private MoyensMonitorController controller;
 	private MoyensTableModel newDemandsModel, answeredDemandsModel;
 	private MoyensTableView newDemandsView, answeredDemandsView;
-	private JButton validateBtn;
+	private JButton validateBtn, addDemandBtn;
 	private JTextField	tf_agres,
 						tf_cis,
 						tf_demande,
@@ -87,6 +88,7 @@ public class MoyensMonitorFrame extends JFrame {
 
         // button
         validateBtn = new JButton(VALIDATE_BTN);
+        addDemandBtn = new JButton(ADD_DEMAND_BTN);
     }
 	
 	private void configUI() {
@@ -133,6 +135,7 @@ public class MoyensMonitorFrame extends JFrame {
 		// btn panel
 		JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
 		btnPanel.add(validateBtn);
+        btnPanel.add(addDemandBtn);
 
 		
 		JPanel southPanel = new JPanel(new GridLayout(2, 1));
@@ -207,6 +210,15 @@ public class MoyensMonitorFrame extends JFrame {
 				}
 			}
 		});
+
+        addDemandBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (listener != null) {
+                    listener.onAddFakeDemand();
+                }
+            }
+        });
 	}
 	
 	public ArrayList<Demand> getNewDemandList() {
