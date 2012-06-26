@@ -1,7 +1,5 @@
 package org.daum.library.replica.listener;
 
-import org.daum.library.replica.cache.StoreCommand;
-
 /**
  * Created with IntelliJ IDEA.
  * User: jed
@@ -11,6 +9,7 @@ import org.daum.library.replica.cache.StoreCommand;
  */
 public class PropertyChangeEvent {
 
+    private Event event;
     private  boolean isupdated=false;
     private boolean isadded=false;
     private boolean isdeleted=false;
@@ -23,18 +22,26 @@ public class PropertyChangeEvent {
         this.id = id;
     }
 
+    public Event getEvent() {
+        return event;
+    }
+
+    public void setEvent(Event event) {
+        this.event = event;
+    }
+
+    @Deprecated
     public boolean isAdded() {
         return isadded;
     }
+    @Deprecated
     public boolean isUpdated() {
         return isupdated;
     }
-
+    @Deprecated
     public boolean isDeleted() {
         return isdeleted;
     }
-
-
     public void setIsupdated()
     {
         this.isupdated = true;

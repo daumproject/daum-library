@@ -6,6 +6,6 @@ package org.daum.library.replica.cache;
  * Date: 24/05/12
  * Time: 16:28
  */
-public enum StoreCommand {
+public enum StoreEvent {
     ADD, DELETE,UPDATE, REQUEST_SNAPSHOT,SNAPSHOT,HEARTBEAT
 }

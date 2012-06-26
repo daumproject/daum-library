@@ -1,6 +1,5 @@
 package org.daum.library.replica.listener;
 
-import org.daum.library.replica.cache.StoreCommand;
 import org.daum.library.replica.msg.NotifyUpdate;
 
 import java.util.HashMap;
@@ -70,13 +69,21 @@ public class ChangeListener implements IChangeListener
             {
                 PropertyChangeEvent update = new PropertyChangeEvent();
                 update.setId(e.getId());
-                if(e.getCmd().equals(StoreCommand.ADD)){
-                    update.setIsadded();
-                } else  if(e.getCmd().equals(StoreCommand.UPDATE)){
-                    update.setIsupdated();
-                } else  if(e.getCmd().equals(StoreCommand.DELETE))
+                switch (e.getEvent())
                 {
-                   update.setIsdeleted();
+                    case ADD :
+                        update.setIsadded();
+                        update.setEvent(Event.ADD);
+                        break;
+                    case UPDATE:
+                        update.setIsupdated();
+                        update.setEvent(Event.UPDATE);
+                        break;
+
+                    case DELETE:
+                        update.setIsdeleted();
+                        update.setEvent(Event.DELETE);
+                        break;
                 }
 
 

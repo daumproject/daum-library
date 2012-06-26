@@ -1,7 +1,7 @@
 package org.daum.library.replica.cluster;
 
 import org.daum.library.replica.cache.CacheManager;
-import org.daum.library.replica.cache.StoreCommand;
+import org.daum.library.replica.cache.StoreEvent;
 import org.daum.library.replica.channel.Channel;
 import org.daum.library.replica.channel.KChannelImpl;
 import org.daum.library.replica.msg.Command;
@@ -12,8 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
 
 /**
@@ -149,7 +147,7 @@ public class ClusterImpl implements  ICluster,Runnable{
                     }
 
                     Command req = new Command();
-                    req.op= StoreCommand.REQUEST_SNAPSHOT;
+                    req.op= StoreEvent.REQUEST_SNAPSHOT;
                     req.source = currentNode;
                     req.dest = nodeReqSnapshot;
                     logger.info("Synchronization request sent to" + req.dest);
@@ -187,7 +185,7 @@ public class ClusterImpl implements  ICluster,Runnable{
                 //ignore
             }
             Command req = new Command();
-            req.op= StoreCommand.HEARTBEAT;
+            req.op= StoreEvent.HEARTBEAT;
             req.source = currentNode;
 
             chanel.write(req);

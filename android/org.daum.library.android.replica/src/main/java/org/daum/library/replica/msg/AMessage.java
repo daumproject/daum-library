@@ -1,7 +1,7 @@
 package org.daum.library.replica.msg;
 
+import org.daum.library.replica.cache.StoreEvent;
 import org.daum.library.replica.cluster.Node;
-import org.daum.library.replica.cache.StoreCommand;
 
 import java.io.Serializable;
 
@@ -13,15 +13,15 @@ import java.io.Serializable;
  */
 public abstract class AMessage implements Message,Serializable{
     private static final long serialVersionUID = 1516L;
-    public StoreCommand op;
+    public StoreEvent op;
     public  Node source;
     public  Node dest;
 
-    public StoreCommand getOp() {
+    public StoreEvent getOp() {
         return op;
     }
 
-    public void setOp(StoreCommand op) {
+    public void setOp(StoreEvent op) {
         this.op = op;
     }
 
