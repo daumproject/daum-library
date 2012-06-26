@@ -8,7 +8,6 @@ import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
-import org.daum.library.replica.cache.StoreCommand;
 import org.daum.library.replica.listener.ChangeListener;
 import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
@@ -79,11 +78,20 @@ public class ReaderDaum extends AbstractComponentType {
 
         ChangeListener.getInstance().addEventListener(TemperatureMonitor.class, new PropertyChangeListener() {
             @Override
-            public void update(PropertyChangeEvent propertyChangeEvent) {
+            public void update(PropertyChangeEvent e) {
 
-                if (propertyChangeEvent.isIsadded()) {
-                    processTemperature(propertyChangeEvent.getId());
+
+                switch (e.getEvent())
+                {
+                    case ADD:
+                        processTemperature(e.getId());
+                        break;
+
+                    case UPDATE:
+                        processTemperature(e.getId());
+                        break;
                 }
+
 
             }
         });
@@ -91,11 +99,16 @@ public class ReaderDaum extends AbstractComponentType {
 
         ChangeListener.getInstance().addEventListener(HeartMonitor.class, new PropertyChangeListener() {
             @Override
-            public void update(PropertyChangeEvent propertyChangeEvent) {
+            public void update(PropertyChangeEvent e) {
+                switch (e.getEvent())
+                {
+                    case ADD:
+                        processHeartMonitor(e.getId());
+                        break;
 
-                if (propertyChangeEvent.isIsadded()){
-
-                    processHeartMonitor(propertyChangeEvent.getId());
+                    case UPDATE:
+                        processHeartMonitor(e.getId());
+                        break;
                 }
 
             }

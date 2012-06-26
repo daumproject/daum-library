@@ -1,7 +1,7 @@
 package org.daum.library.web;
 
+import org.daum.common.model.api.Demand;
 import org.daum.library.fakeDemo.pojos.TemperatureMonitor;
-import org.daum.library.replica.cache.StoreCommand;
 import org.daum.library.replica.listener.ChangeListener;
 import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
@@ -34,32 +34,64 @@ public class WsServer extends AbstractComponentType {
     @Start
     public void startServer()
     {
-
-        webSocketChannel = new WebSocketChannel();
-        webServer = WebServers.createWebServer(8082)
-                .add("/jed", webSocketChannel)
-                .add(new StaticFileHandler("/web"));
-        webServer.start();
-
-        logger.debug("Server running at " + webServer.getUri());
-
         ChangeListener.getInstance().addEventListener(TemperatureMonitor.class,new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent propertyChangeEvent)
             {
-
-                if(propertyChangeEvent.isAdded())
+                switch (propertyChangeEvent.getEvent())
                 {
-                    webSocketChannel.broadcast("update");
+                    case ADD:
+                        webSocketChannel.broadcast("TemperatureMonitor");
+                        break;
+                    case DELETE:
+
+                        webSocketChannel.broadcast("TemperatureMonitor");
+
+                        break;
+
+                    case UPDATE:
+                        webSocketChannel.broadcast("TemperatureMonitor");
+
+                        break;
                 }
 
-                if(propertyChangeEvent.isUpdated())
-                {
-                    webSocketChannel.broadcast("update");
-                }
 
             }
         });
+
+        ChangeListener.getInstance().addEventListener(Demand.class,new PropertyChangeListener() {
+            @Override
+            public void update(PropertyChangeEvent propertyChangeEvent)
+            {
+
+                switch (propertyChangeEvent.getEvent())
+                {
+                    case ADD:
+                        webSocketChannel.broadcast("TemperatureMonitor");
+                        break;
+                    case DELETE:
+
+                        webSocketChannel.broadcast("TemperatureMonitor");
+
+                        break;
+
+                    case UPDATE:
+                        webSocketChannel.broadcast("TemperatureMonitor");
+
+                        break;
+                }
+            }           });
+
+
+        webSocketChannel = new WebSocketChannel();
+        webServer = WebServers.createWebServer(8082)
+                .add("/jed", webSocketChannel);
+
+        webServer.start();
+
+        logger.debug("Server running at " + webServer.getUri());
+
+
     }
 
     @Stop
