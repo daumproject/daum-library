@@ -84,6 +84,8 @@ public class CacheManager implements ICacheManger
                     notifyUpdate.setId(update.getKey());
                     notifyUpdate.setCache(update.cache);
                     notifyUpdate.setEvent(update.getOp());
+                    notifyUpdate.setNode(update.getSourceNode());
+
                     cluster.getChannel().write(notifyUpdate);
 
                 }
@@ -115,10 +117,11 @@ public class CacheManager implements ICacheManger
                         getCache(msg.cache).putIfAbsent(msg.key, msg.getVersionedValue());
                     }
 
-                    // notify is sync
+                    // notify is syncEvent
+                    SyncEvent syncEvent = new SyncEvent();
+                    // todo add node
+                    cluster.getChannel().write(syncEvent);
                     cluster.getCurrentNode().setSynchronized();
-
-
                 }
 
             } else if(o instanceof Command)
@@ -188,6 +191,7 @@ public class CacheManager implements ICacheManger
         notifyUpdate.setId(update.getKey());
         notifyUpdate.setCache(update.cache);
         notifyUpdate.setEvent(update.getOp());
+        notifyUpdate.setNode(update.getSourceNode());
         cluster.getChannel().write(notifyUpdate);
     }
 

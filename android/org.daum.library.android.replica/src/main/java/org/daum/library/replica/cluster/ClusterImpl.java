@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 
 /**
@@ -34,6 +35,7 @@ public class ClusterImpl implements  ICluster,Runnable{
     private  ICacheManger cacheManger=null;
     private  final int freqHearBeat = 8000;
 
+
     public ClusterImpl(Node current, Channel chanel)
     {
         alive = true;
@@ -44,7 +46,6 @@ public class ClusterImpl implements  ICluster,Runnable{
         theartbeat.start();
 
     }
-
 
     public void shutdown()
     {
@@ -159,6 +160,8 @@ public class ClusterImpl implements  ICluster,Runnable{
             tsnapshot.start();
 
     }
+
+
 
 
     @Override

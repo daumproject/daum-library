@@ -18,11 +18,4 @@ public interface ReplicaService
      */
     public Cache getCache(String name);
 
-    /**
-     * Waiting that the replica is synchronized
-     */
-    public void waitingSync();
-
-   // public void waitingSync(int timeout);
-
 }

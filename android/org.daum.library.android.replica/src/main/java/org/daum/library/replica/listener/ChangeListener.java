@@ -1,6 +1,7 @@
 package org.daum.library.replica.listener;
 
 import org.daum.library.replica.msg.NotifyUpdate;
+import org.daum.library.replica.msg.SyncEvent;
 
 import java.util.HashMap;
 
@@ -13,6 +14,11 @@ import java.util.HashMap;
  */
 public class ChangeListener implements IChangeListener
 {
+
+    private  HashMap<String,EventListenerList> listHashMap = new HashMap<String,EventListenerList>();
+    private  EventListenerList syncList = new EventListenerList();
+
+
     private  static ChangeListener singleton = null;
 
     public static ChangeListener getInstance()
@@ -23,9 +29,15 @@ public class ChangeListener implements IChangeListener
         return  singleton;
     }
 
+    public void addSyncListener(SyncListener syncListener)
+    {
+        syncList.add(SyncListener.class,syncListener);
+    }
 
-    HashMap<String,EventListenerList> listHashMap = new HashMap<String,EventListenerList>();
-
+    public void removeSyncListener(SyncListener syncListener)
+    {
+        syncList.add(SyncListener.class,syncListener);
+    }
 
     public void addEventListener (Class zclass,PropertyChangeListener listener) {
 
@@ -63,25 +75,25 @@ public class ChangeListener implements IChangeListener
 
     public void receive(Object msg)
     {
-        if(msg instanceof NotifyUpdate){
+        if(msg instanceof NotifyUpdate)
+        {
             NotifyUpdate e = (NotifyUpdate)msg;
             if(listHashMap.containsKey(e.getCache()))
             {
                 PropertyChangeEvent update = new PropertyChangeEvent();
                 update.setId(e.getId());
+                update.setNode(e.getNode());
+
                 switch (e.getEvent())
                 {
                     case ADD :
-                        update.setIsadded();
                         update.setEvent(Event.ADD);
                         break;
                     case UPDATE:
-                        update.setIsupdated();
                         update.setEvent(Event.UPDATE);
                         break;
 
                     case DELETE:
-                        update.setIsdeleted();
                         update.setEvent(Event.DELETE);
                         break;
                 }
@@ -99,6 +111,13 @@ public class ChangeListener implements IChangeListener
 
             }
 
+        }  else if(msg instanceof SyncEvent)
+        {
+            Object[] listeners =   syncList.getListenerList();
+            for (int i = 0; i < listeners.length;i += 2)
+            {
+                ((SyncListener) listeners[i + 1]).sync((SyncEvent)msg);
+            }
         }
     }
 

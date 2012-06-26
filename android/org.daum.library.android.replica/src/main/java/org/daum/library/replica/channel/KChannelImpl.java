@@ -22,7 +22,7 @@ public class KChannelImpl implements Channel {
     {
         if(e instanceof Update ||(e instanceof Updates) || (e instanceof Snapshot) || (e instanceof Command)){
             abstractComponentType.getPortByName("broadcast", MessagePort.class).process(e);
-        } else if(e instanceof  NotifyUpdate)
+        } else if(e instanceof  NotifyUpdate | e instanceof SyncEvent)
         {
             abstractComponentType.getPortByName("notification", MessagePort.class).process(e);
         }

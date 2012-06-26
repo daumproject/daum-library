@@ -71,30 +71,39 @@ public class Cache extends DHashMap<Object,VersionedValue> {
     public void localDispatch(Update replica)
     {
         logger.debug("Local dispatch "+name);
-
-        if (replica.op.equals(StoreEvent.ADD) || replica.op.equals(StoreEvent.UPDATE))
+        try
         {
-            VersionedValue old = (VersionedValue) super.get(replica.key);
-            if(old == null)
+            if (replica.op.equals(StoreEvent.ADD) || replica.op.equals(StoreEvent.UPDATE))
             {
-                super.put(replica.key, replica.getVersionedValue());
-            }
-            else
-            {
-                // compare version
-                if(old.before(replica.getVersionedValue()))
+                VersionedValue old = (VersionedValue) super.get(replica.key);
+                if(old == null)
                 {
                     super.put(replica.key, replica.getVersionedValue());
-                } else
-                {
-                    logger.debug("receive old version");
                 }
-            }
+                else
+                {
+                    // compare version
+                    if(old.before(replica.getVersionedValue()))
+                    {
+                        super.put(replica.key, replica.getVersionedValue());
+                    } else
+                    {
+                        logger.warn("received old version");
+                    }
+                }
 
-        } else if (replica.op.equals(StoreEvent.DELETE))
-        {
-            super.remove(replica.key);
+            } else if (replica.op.equals(StoreEvent.DELETE))
+            {
+                if(super.get(replica.key) != null)
+                {
+                    super.remove(replica.key);
+                }
+
+            }
+        } catch (Exception e){
+            logger.error("Local dispatch ",e);
         }
+
     }
 
 

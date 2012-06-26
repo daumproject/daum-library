@@ -1,6 +1,7 @@
 package org.daum.library.replica.msg;
 
 import org.daum.library.replica.cache.StoreEvent;
+import org.daum.library.replica.cluster.Node;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +15,7 @@ public class NotifyUpdate implements Message {
     private String cache;
     private Object id;
     private StoreEvent event;
+    private Node node;
 
     public String getCache() {
         return cache;
@@ -40,4 +42,11 @@ public class NotifyUpdate implements Message {
         this.event = event;
     }
 
+    public Node getNode() {
+        return node;
+    }
+
+    public void setNode(Node node) {
+        this.node = node;
+    }
 }
