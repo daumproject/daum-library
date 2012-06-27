@@ -83,7 +83,9 @@ public class CacheManager implements ICacheManger
                     NotifyUpdate notifyUpdate = new NotifyUpdate();
                     notifyUpdate.setId(update.getKey());
                     notifyUpdate.setCache(update.cache);
-                    notifyUpdate.setCmd(update.getOp());
+                    notifyUpdate.setEvent(update.getOp());
+                    notifyUpdate.setNode(update.getSourceNode());
+
                     cluster.getChannel().write(notifyUpdate);
 
                 }
@@ -115,24 +117,25 @@ public class CacheManager implements ICacheManger
                         getCache(msg.cache).putIfAbsent(msg.key, msg.getVersionedValue());
                     }
 
-                    // notify is sync
+                    // notify is syncEvent
+                    SyncEvent syncEvent = new SyncEvent();
+                    // todo add node
+                    cluster.getChannel().write(syncEvent);
                     cluster.getCurrentNode().setSynchronized();
-
-
                 }
 
             } else if(o instanceof Command)
             {
                 final Command command = (Command)o;
 
-                if(command.getOp().equals(StoreCommand.HEARTBEAT))
+                if(command.getOp().equals(StoreEvent.HEARTBEAT))
                 {
                     if(!command.source.equals(cluster.getCurrentNode()))
                     {
                         logger.info("Cluster "+ cluster.getNodesOfCluster());
                         cluster.addNode(command.getSourceNode());
                     }
-                } else  if(command.getOp().equals(StoreCommand.REQUEST_SNAPSHOT))
+                } else  if(command.getOp().equals(StoreEvent.REQUEST_SNAPSHOT))
                 {
 
                     logger.debug(" "+cluster.getCurrentNode()+" "+command);
@@ -147,7 +150,7 @@ public class CacheManager implements ICacheManger
                             for( Object key: store.get(namecache).keySet()){
 
                                 Update snapshot = new Update();
-                                snapshot.op = StoreCommand.SNAPSHOT;
+                                snapshot.op = StoreEvent.SNAPSHOT;
                                 snapshot.dest = command.source;
                                 snapshot.source = cluster.getCurrentNode();
                                 snapshot.cache = namecache;
@@ -187,7 +190,8 @@ public class CacheManager implements ICacheManger
         NotifyUpdate notifyUpdate = new NotifyUpdate();
         notifyUpdate.setId(update.getKey());
         notifyUpdate.setCache(update.cache);
-        notifyUpdate.setCmd(update.getOp());
+        notifyUpdate.setEvent(update.getOp());
+        notifyUpdate.setNode(update.getSourceNode());
         cluster.getChannel().write(notifyUpdate);
     }
 

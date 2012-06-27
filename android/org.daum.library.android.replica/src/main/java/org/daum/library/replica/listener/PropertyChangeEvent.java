@@ -1,6 +1,6 @@
 package org.daum.library.replica.listener;
 
-import org.daum.library.replica.cache.StoreCommand;
+import org.daum.library.replica.cluster.Node;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,11 +11,10 @@ import org.daum.library.replica.cache.StoreCommand;
  */
 public class PropertyChangeEvent {
 
-    private  boolean isupdated=false;
-    private boolean isadded=false;
-    private boolean isdeleted=false;
-
+    private Event event;
     private Object id;
+    private Node node;
+
     public Object getId() {
         return id;
     }
@@ -23,29 +22,20 @@ public class PropertyChangeEvent {
         this.id = id;
     }
 
-    public boolean isAdded() {
-        return isadded;
-    }
-    public boolean isUpdated() {
-        return isupdated;
+    public Event getEvent() {
+        return event;
     }
 
-    public boolean isDeleted() {
-        return isdeleted;
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
 
-    public void setIsupdated()
-    {
-        this.isupdated = true;
+    public Node getNode() {
+        return node;
     }
 
-    public void setIsadded() {
-        this.isadded = true;
-    }
-
-
-    public void setIsdeleted() {
-        this.isdeleted = true;
+    public void setNode(Node node) {
+        this.node = node;
     }
 }

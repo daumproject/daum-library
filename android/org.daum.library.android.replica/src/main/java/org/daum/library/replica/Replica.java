@@ -74,13 +74,4 @@ public class Replica extends AbstractComponentType implements ReplicaService {
         return cluster.getCacheManager().getCache(name);
     }
 
-
-    @Port(name = "service", method = "waitingSync")
-    @Override
-    public void waitingSync() {
-      logger.debug("Waiting Sync");
-
-    }
-
-
 }

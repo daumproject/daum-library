@@ -15,14 +15,13 @@ import org.kevoree.annotation.Requires;
 import org.kevoree.framework.KevoreePropertyHelper;
 import org.kevoree.framework.NetworkHelper;
 import org.kevoree.library.javase.webserver.AbstractPage;
+import org.kevoree.library.javase.webserver.FileServiceHelper;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
 import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
 import scala.Option;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.io.*;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -41,7 +40,7 @@ public class MoyensPage extends AbstractPage {
     private PersistenceSessionFactoryImpl factory=null;
     private ReplicaService replicaService =  null;
     private PersistenceSession s=null;
-
+    private HashMap<String,byte[]> cache = new HashMap<String, byte[]>();
 
     public void init()
     {
@@ -55,6 +54,7 @@ public class MoyensPage extends AbstractPage {
                 configuration.setStore(store);
                 configuration.addPersistentClass(Demand.class);
                 factory = configuration.getPersistenceSessionFactory();
+
 
             } catch (PersistenceException e)
             {
@@ -75,14 +75,49 @@ public class MoyensPage extends AbstractPage {
     }
 
 
+    public byte[] load(String url)
+    {
+        if(cache.containsKey(url))
+        {
+            return cache.get(url);
+        } else {
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            try
+            {
+                InputStream res =    getClass().getClassLoader().getResourceAsStream(url);
+                if(res != null){
+                    int nRead;
+                    byte[] data = new byte[16384];
+                    while ((nRead = res.read(data, 0, data.length)) != -1) {
+                        buffer.write(data, 0, nRead);
+                    }
+                    buffer.flush();
+                    cache.put(url,buffer.toByteArray());
+                } else
+                {
+                    return "404".getBytes();
+                }
+
+            } catch (IOException e) {
+                logger.error("",e);
+                return "404".getBytes();
+            }
+            return buffer.toByteArray();
+        }
+
+    }
 
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse)
     {
-        logger.debug("MoyensPage");
+
+        logger.debug("MoyensPage "+kevoreeHttpRequest.getUrl());
+
+        StringBuilder data = new StringBuilder();
         init();
-        StringBuilder html = new StringBuilder();
-        html.append("<html>");
+
+        String template =   new String(load("pages/moyens.html"));
+
         PersistenceSession session = null;
         try
         {
@@ -96,8 +131,14 @@ public class MoyensPage extends AbstractPage {
                 {
                     for(Object key : demands.keySet())
                     {
-                        Demand d = demands.get(key);
-                        html.append(d+"<br>");
+                        Demand demand = demands.get(key);
+                        data.append("<tr class='gradeX'>");
+                        data.append(" <td>"+demand.getId()+"</td>      ");
+                        data.append(" <td>"+demand.getType()+"  </td> ");
+                        data.append(" <td>"+demand.getGh_crm()+"  </td> ");
+                        data.append(" <td>"+demand.getGh_demande()+"  </td> ");
+                        data.append("  </tr>     ");
+
                     }
                 }
 
@@ -113,8 +154,8 @@ public class MoyensPage extends AbstractPage {
 
         }
 
-        html.append("</html>");
-        kevoreeHttpResponse.setContent(html.toString());
+
+        kevoreeHttpResponse.setContent( template.replace("$contenu$",data).replace("$ip$",getAddress(getNodeName())));
         return kevoreeHttpResponse;
     }
 

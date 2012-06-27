@@ -1,6 +1,7 @@
 package org.daum.library.replica.msg;
 
-import org.daum.library.replica.cache.StoreCommand;
+import org.daum.library.replica.cache.StoreEvent;
+import org.daum.library.replica.cluster.Node;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +14,8 @@ public class NotifyUpdate implements Message {
     private static final long serialVersionUID = 1518L;
     private String cache;
     private Object id;
-    private StoreCommand cmd;
+    private StoreEvent event;
+    private Node node;
 
     public String getCache() {
         return cache;
@@ -32,12 +34,19 @@ public class NotifyUpdate implements Message {
     }
 
 
-    public StoreCommand getCmd(){
-        return cmd;
+    public StoreEvent getEvent(){
+        return event;
     }
 
-    public void setCmd(StoreCommand cmd){
-        this.cmd = cmd;
+    public void setEvent(StoreEvent event){
+        this.event = event;
     }
 
+    public Node getNode() {
+        return node;
+    }
+
+    public void setNode(Node node) {
+        this.node = node;
+    }
 }

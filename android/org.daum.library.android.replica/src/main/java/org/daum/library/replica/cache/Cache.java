@@ -42,8 +42,12 @@ public class Cache extends DHashMap<Object,VersionedValue> {
 
             Update e = new Update();
             VersionedValue version = new VersionedValue(value);
-
-            e.op = StoreCommand.ADD;
+            if(super.get(key) == null)
+            {
+                e.op = StoreEvent.ADD;
+            } else {
+                e.op = StoreEvent.UPDATE;
+            }
             e.key = key;
             e.setVersionedValue(version);
             e.cache = name;
@@ -67,30 +71,39 @@ public class Cache extends DHashMap<Object,VersionedValue> {
     public void localDispatch(Update replica)
     {
         logger.debug("Local dispatch "+name);
-
-        if (replica.op.equals(StoreCommand.ADD))
+        try
         {
-            VersionedValue old = (VersionedValue) super.get(replica.key);
-            if(old == null)
+            if (replica.op.equals(StoreEvent.ADD) || replica.op.equals(StoreEvent.UPDATE))
             {
-                super.put(replica.key, replica.getVersionedValue());
-            }
-            else
-            {
-                // compare version
-                if(old.before(replica.getVersionedValue()))
+                VersionedValue old = (VersionedValue) super.get(replica.key);
+                if(old == null)
                 {
                     super.put(replica.key, replica.getVersionedValue());
-                } else
-                {
-                    logger.debug("receive old version");
                 }
-            }
+                else
+                {
+                    // compare version
+                    if(old.before(replica.getVersionedValue()))
+                    {
+                        super.put(replica.key, replica.getVersionedValue());
+                    } else
+                    {
+                        logger.warn("received old version");
+                    }
+                }
 
-        } else if (replica.op.equals(StoreCommand.DELETE))
-        {
-            super.remove(replica.key);
+            } else if (replica.op.equals(StoreEvent.DELETE))
+            {
+                if(super.get(replica.key) != null)
+                {
+                    super.remove(replica.key);
+                }
+
+            }
+        } catch (Exception e){
+            logger.error("Local dispatch ",e);
         }
+
     }
 
 
@@ -98,7 +111,7 @@ public class Cache extends DHashMap<Object,VersionedValue> {
     public VersionedValue remove(Object key) {
         //logger.warn("WARNING !! TODO backup remove until synchronize is finish");
         Update e = new Update();
-        e.op = StoreCommand.DELETE;
+        e.op = StoreEvent.DELETE;
         e.key =  key;
         e.cache = name;
         VersionedValue last = super.remove(key);
