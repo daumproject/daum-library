@@ -4,11 +4,20 @@ import android.util.Log;
 import org.daum.common.model.api.Demand;
 import org.daum.library.android.moyens.view.MoyensView;
 import org.daum.library.android.moyens.view.listener.IMoyensListener;
+import org.daum.library.ormH.store.ReplicaStore;
+import org.daum.library.ormH.utils.PersistenceException;
+import org.daum.library.replica.cache.ReplicaService;
+import org.daum.library.replica.listener.ChangeListener;
+import org.kevoree.ContainerRoot;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
+import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 
 /**
@@ -21,31 +30,59 @@ import org.kevoree.framework.MessagePort;
 
 
 @Library(name = "Android")
-@Provides({
-        @ProvidedPort(name = "inDemand", type = PortType.MESSAGE)
-})
 @Requires({
-        @RequiredPort(name = "outDemand", type = PortType.MESSAGE)
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
+})
+@Provides({
+        @ProvidedPort(name = "notify", type = PortType.MESSAGE)
 })
 @ComponentType
-public class MoyensComponent extends AbstractComponentType implements IMoyensListener {
+public class MoyensComponent extends AbstractComponentType implements IMoyensListener, MoyensEngine.OnEventListener {
 
     // Debugging
     private static final String TAG = "MoyensComponent";
-    private static boolean D = true;
 
     // String constants
     private static final String TAB_NAME = "Moyens";
 
     private KevoreeAndroidService uiService;
     private MoyensView moyensView;
+    private MoyensEngine engine;
+
 
     @Start
     public void start() {
-        if (D) Log.i(TAG, "BEGIN start");
         this.uiService = UIServiceHandler.getUIService();
+
         initUI();
-        if (D) Log.i(TAG, "END start");
+
+        getModelService().registerModelListener(new ModelListener() {
+            @Override
+            public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return false;
+            }
+
+            @Override
+            public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return false;
+            }
+
+            @Override
+            public void modelUpdated() {
+                try {
+                    ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
+                    ReplicaStore storeImpl = new ReplicaStore(replicatingService);
+
+                    engine = new MoyensEngine(storeImpl, getNodeName());
+                    engine.setOnEventListener(MoyensComponent.this);
+
+                } catch (PersistenceException e) {
+                    Log.e(TAG, "Error while initializing ReplicaStore", e);
+                }
+            }
+        });
+
+
     }
 
     private void initUI() {
@@ -74,27 +111,38 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
         start();
     }
 
-    @Port(name="inDemand")
-    public void demandIncoming(final Object inResource) {
-        if (D) Log.i(TAG, "BEGIN demandIncoming");
-        if (inResource instanceof Demand) {
-            uiService.getRootActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    moyensView.addDemand((Demand) inResource);
-                }
-            });
-
-        } else {
-            Log.w(TAG, "Cannot handle received object on port \"inDemand\". (received: "+inResource.getClass().getSimpleName()+", expected: "+Demand.class.getSimpleName()+")");
-        }
-        if (D) Log.i(TAG, "END demandIncoming");
+    @Port(name="notify")
+    public void notifiedByReplica(final Object m) {
+        uiService.getRootActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ChangeListener.getInstance().receive(m);
+            }
+        });
     }
 
     @Override
     public void onDemandAsked(Demand newDemand) {
-        getPortByName("outDemand", MessagePort.class).process(newDemand);
-        moyensView.addDemand(newDemand);
-        if (D) Log.i("Moyens asked: ", newDemand.toString());
+        engine.add(newDemand);
+    }
+
+    @Override
+    public void onLocalAdd(Demand d) {
+        moyensView.addDemand(d);
+    }
+
+    @Override
+    public void onRemoteAdd(Demand d) {
+        moyensView.addDemand(d);
+    }
+
+    @Override
+    public void onRemoteUpdate(Demand d) {
+        moyensView.updateDemand(d);
+    }
+
+    @Override
+    public void onReplicaSynced(Collection<Demand> data) {
+        moyensView.addDemands(new ArrayList<Demand>(data));
     }
 }

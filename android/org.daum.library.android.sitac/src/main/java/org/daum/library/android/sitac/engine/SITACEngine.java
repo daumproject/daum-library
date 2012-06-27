@@ -48,7 +48,6 @@ public class SITACEngine {
 	
 	public SITACEngine(final String nodeName, ReplicaStore store, OnEngineStateChangeListener engineHandler) {
         this.nodeName = nodeName;
-        PersistenceSession session = null;
         listener = engineHandler;
 
         try {
@@ -62,10 +61,6 @@ public class SITACEngine {
 
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while initializing persistence in engine", ex);
-
-
-        } finally {
-            if (session != null) session.close();
         }
 
         // add a callback to populate engine when sync is ready
@@ -73,8 +68,9 @@ public class SITACEngine {
             @Override
             public void sync(SyncEvent e) {
                 if (listener != null) {
+                    PersistenceSession session = null;
                     try {
-                        PersistenceSession session = factory.getSession();
+                        session = factory.getSession();
                         ArrayList<IModel> data = new ArrayList<IModel>();
                         for (Class c : classes) {
                             data.addAll((Collection<IModel>) session.getAll(c).values());
@@ -83,6 +79,9 @@ public class SITACEngine {
 
                     } catch (PersistenceException ex) {
                         Log.e(TAG, "Error while retrieving data on sync", ex);
+
+                    } finally {
+                        if (session != null) session.close();
                     }
                 }
             }

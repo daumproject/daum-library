@@ -126,8 +126,7 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
      * @param d the resource to add
      */
     public void addDemand(Demand d) {
-        demands.add(d);
-        adapter.notifyDataSetChanged();
+        updateDemand(d);
         listView.setSelection(demands.size()-1);
     }
 
@@ -136,9 +135,21 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
      * @param dlist the demandList to add
      */
     public void addDemands(ArrayList<Demand> dlist) {
-        demands.addAll(dlist);
-        adapter.notifyDataSetChanged();
+        for (Demand d : dlist) updateDemand(d);
         listView.setSelection(demands.size()-1);
+    }
+
+    public void updateDemand(Demand d) {
+        for (Demand de : demands) {
+            if (de.getId().equals(d.getId())) {
+                demands.remove(de);
+                demands.add(d);
+                adapter.notifyDataSetChanged();
+                return;
+            }
+        }
+        demands.add(d);
+        adapter.notifyDataSetChanged();
     }
 
     /**
