@@ -1,8 +1,10 @@
 package org.daum.library.android.sitac.view.entity;
 
 import android.graphics.drawable.Drawable;
+import org.daum.common.model.api.IModel;
+import org.daum.library.android.sitac.visitor.IVIsitor;
 
-public class DangerEntity extends Entity {
+public class DangerEntity extends AbstractEntity {
 
     public static final String WATER = "Eau";
     public static final String FIRE = "Incendie";
@@ -16,4 +18,9 @@ public class DangerEntity extends Entity {
 		super(icon, type, message);
 		setTagTextEnabled(false);
 	}
+
+    @Override
+    public void accept(IVIsitor visitor, IModel m) {
+        visitor.visit(this, m);
+    }
 }

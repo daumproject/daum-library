@@ -7,4 +7,8 @@ public interface OnMoyensMonitorEventListener {
 	void onValidateButtonClicked(Demand d, String cis);
 
     void onAddFakeDemand();
+
+    void onDeleteBtnClicked(Demand d);
+
+    void onEditDemand(Demand d, String[] values);
 }

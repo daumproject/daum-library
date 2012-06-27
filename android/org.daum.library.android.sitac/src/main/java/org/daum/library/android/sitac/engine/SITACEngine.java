@@ -1,5 +1,7 @@
 package org.daum.library.android.sitac.engine;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Map;
 
 import org.daum.common.model.api.ArrowAction;
@@ -21,6 +23,8 @@ import android.util.Log;
 import org.daum.library.replica.listener.ChangeListener;
 import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
+import org.daum.library.replica.listener.SyncListener;
+import org.daum.library.replica.msg.SyncEvent;
 
 /**
  * SITACEngine save/update/delete data from/to the Replica/Persistence system
@@ -37,11 +41,13 @@ public class SITACEngine {
             ArrowAction.class,
             ZoneAction.class
     };
+    private final String nodeName;
 
     private PersistenceSessionFactoryImpl factory;
 	private OnEngineStateChangeListener listener;
 	
-	public SITACEngine(String nodeName, ReplicaStore store, OnEngineStateChangeListener engineHandler) {
+	public SITACEngine(final String nodeName, ReplicaStore store, OnEngineStateChangeListener engineHandler) {
+        this.nodeName = nodeName;
         PersistenceSession session = null;
         listener = engineHandler;
 
@@ -54,18 +60,6 @@ public class SITACEngine {
             // retrieve the persistence factory
             this.factory = configuration.getPersistenceSessionFactory();
 
-            // check if there is already some data in the replica
-            if (listener != null) {
-                session = factory.getSession();
-                Map<Object, IModel> models;
-                for (Class c : classes) {
-                    models = (Map<Object, IModel>) session.getAll(c);
-                    for (IModel o : models.values()) {
-                        listener.onAdd(o, null);
-                    }
-                }
-            }
-
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while initializing persistence in engine", ex);
 
@@ -73,6 +67,26 @@ public class SITACEngine {
         } finally {
             if (session != null) session.close();
         }
+
+        // add a callback to populate engine when sync is ready
+        ChangeListener.getInstance().addSyncListener(new SyncListener() {
+            @Override
+            public void sync(SyncEvent e) {
+                if (listener != null) {
+                    try {
+                        PersistenceSession session = factory.getSession();
+                        ArrayList<IModel> data = new ArrayList<IModel>();
+                        for (Class c : classes) {
+                            data.addAll((Collection<IModel>) session.getAll(c).values());
+                        }
+                        listener.onReplicaSynced(data);
+
+                    } catch (PersistenceException ex) {
+                        Log.e(TAG, "Error while retrieving data on sync", ex);
+                    }
+                }
+            }
+        });
 
         // add callback to handle remote events on replica
         for (final Class c : classes) {
@@ -84,9 +98,26 @@ public class SITACEngine {
                         try {
                             session = factory.getSession();
                             IModel m = (IModel) session.get(c, e.getId());
-                            if (e.isAdded()) listener.onAdd(m, null);
-                            else if (e.isDeleted()) listener.onDelete(m, null);
-                            else if (e.isUpdated()) listener.onUpdate(m, null);
+                            switch (e.getEvent()) {
+                                case ADD:
+                                    if (!e.getNode().getNodeID().equals(nodeName)) {
+                                        listener.onRemoteAdd(m);
+                                    }
+                                    break;
+
+                                case DELETE:
+                                    if (!e.getNode().getNodeID().equals(nodeName)) {
+                                        Log.d(TAG, "case DELETE");
+                                        listener.onRemoteDelete(m);
+                                    }
+                                    break;
+
+                                case UPDATE:
+                                    if (!e.getNode().getNodeID().equals(nodeName)) {
+                                        listener.onRemoteUpdate(m);
+                                    }
+                                    break;
+                            }
 
                         } catch (PersistenceException ex) {
                             Log.e(TAG, "Error while initializing replica events handler", ex);
@@ -104,14 +135,13 @@ public class SITACEngine {
         try {
             session = factory.getSession();
             session.save(m);
+            if (listener != null) listener.onLocalAdd(m, e);
             
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while adding object in Replica", ex);
         } finally {
             if (session != null) session.close();
         }
-
-		if (listener != null) listener.onAdd(m, e);
 	}
 
 	public void update(IModel m, IEntity e) {
@@ -119,14 +149,13 @@ public class SITACEngine {
         try {
             session = factory.getSession();
             session.update(m);
+            if (listener != null) listener.onLocalUpdate(m, e);
 
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while updating object in Replica", ex);
         } finally {
             if (session != null) session.close();
         }
-
-		if (listener != null) listener.onUpdate(m, e);
 	}
 	
 	public void delete(IModel m, IEntity e) {
@@ -134,12 +163,12 @@ public class SITACEngine {
         try {
             session = factory.getSession();
             session.delete(m);
+            if (listener != null) listener.onLocalDelete(m, e);
             
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while deleting object in Replica", ex);
         } finally {
             if (session != null) session.close();
         }
-		if (listener != null) listener.onDelete(m, e);
 	}
 }

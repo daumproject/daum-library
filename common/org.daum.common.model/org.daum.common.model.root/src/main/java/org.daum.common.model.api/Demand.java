@@ -59,11 +59,13 @@ public class Demand implements IModel {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
+    @Override
     public IGpsPoint getLocation() {
 		return location;
 	}
 
+    @Override
 	public void setLocation(IGpsPoint location) {
 		this.location = location;
 	}
@@ -130,9 +132,8 @@ public class Demand implements IModel {
 
 	@Override
 	public String toString() {
-//		return type.name() + "_" + number + "_" + cis + "_" + gh_crm
-//				+ "_" + gh_demande + "_" + gh_depart + "_"
-//				+ gh_engage + "_" + gh_desengagement+ "_" +location;
-		return "[" + id + "]" + type.name() + location;
+		return "[" + id + "]"+type.name() + "_" + number + "_" + cis + "_" + gh_crm
+				+ "_" + gh_demande + "_" + gh_depart + "_"
+				+ gh_engage + "_" + gh_desengagement+ "_" +location;
 	}
 }

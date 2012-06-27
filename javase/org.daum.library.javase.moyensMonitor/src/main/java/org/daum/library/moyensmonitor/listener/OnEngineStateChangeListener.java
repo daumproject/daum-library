@@ -2,21 +2,16 @@ package org.daum.library.moyensmonitor.listener;
 
 import org.daum.common.model.api.Demand;
 
-public interface OnEngineStateChangeListener {
+import java.util.Collection;
 
-	/**
-	 * Called when a new model object is added to the engine
-	 * 
-	 * @param d the new demand added
-	 */
-	void onAdd(Demand d);
+public interface OnEngineStateChangeListener {
 	
 	/**
-	 * Called when a new model object is updated in the engine
+	 * Called when the data has been changed
 	 * 
-	 * @param d the updated demand
+	 * @param demands all the demands
 	 */
-	void onUpdate(Demand d);
+	void doUpdate(Collection<Demand> demands);
 
 	/**
 	 * Called when a model object has been deleted from the engine

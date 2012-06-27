@@ -184,25 +184,22 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 			
 			@Override
 			public void onClick(View v) {
-				Button b = (Button) v;
-				if (b.getText().equals(TEXT_HIDE_BTN)) {
+				if (hideShowButton.getText().equals(TEXT_HIDE_BTN)) {
 					// hide the menu
 					params.width = hideShowButton.getWidth();
 					params.height = hideShowButton.getHeight();
 					menu.setVisibility(View.GONE);
 					noLocationMenu.setVisibility(View.GONE);
-					resizeButton.setVisibility(View.GONE);
 					setLayoutParams(params);
-					b.setText(TEXT_SHOW_BTN);
+                    hideShowButton.setText(TEXT_SHOW_BTN);
 				} else {
 					// show the menu
 					params.width = MENU_WIDTH;
 					params.height = LayoutParams.WRAP_CONTENT;
 					menu.setVisibility(View.VISIBLE);
 					if (!noLocationItems.isEmpty()) noLocationMenu.setVisibility(View.VISIBLE);
-					resizeButton.setVisibility(View.VISIBLE);
 					setLayoutParams(params);
-					b.setText(TEXT_HIDE_BTN);
+                    hideShowButton.setText(TEXT_HIDE_BTN);
 				}
 			}
 		});
@@ -287,15 +284,15 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	 * @param e a demand entity with no location set
 	 */
 	public void addEntityWithNoLocation(DemandEntity e) {
-		IExpandableMenuItem item = new ExpandableMenuItem(e.getIcon(), e.getType()+e.getMessage());
-		noLocationMenuList.getItems(0).add(item);
-		if (hideShowButton.getText().equals(TEXT_HIDE_BTN) && noLocationMenu.getVisibility() == View.GONE) {
-			noLocationMenu.setVisibility(View.VISIBLE);
-		}
-		
-		e.addObserver(this);
-		noLocationDemands.put(e, item);
-		noLocationAdapter.notifyDataSetChanged();
+        IExpandableMenuItem item = new ExpandableMenuItem(e.getIcon(), e.getType()+e.getMessage());
+        noLocationMenuList.getItems(0).add(item);
+
+        e.addObserver(this);
+        noLocationDemands.put(e, item);
+        noLocationAdapter.notifyDataSetChanged();
+        if (hideShowButton.getText().equals(TEXT_HIDE_BTN) && noLocationMenu.getVisibility() == View.GONE) {
+            noLocationMenu.setVisibility(View.VISIBLE);
+        }
 	}
 
 	@Override

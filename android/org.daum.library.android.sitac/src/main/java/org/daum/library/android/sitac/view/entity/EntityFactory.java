@@ -23,7 +23,7 @@ public class EntityFactory implements IEntityFactory {
 	
 	private static final String TAG = "EntityFactory";
 	
-	private Context ctx;
+	private static Context ctx;
 	
 	public EntityFactory(Context ctx) {
 		this.ctx = ctx;
@@ -158,7 +158,7 @@ public class EntityFactory implements IEntityFactory {
 		return e;
 	}
 	
-	private Drawable getIcon(ArrowAction.Type type) {
+	public static Drawable getIcon(ArrowAction.Type type) {
 		switch (type) {
 			case WATER:
 				return DrawableFactory.build(ctx, DrawableFactory.PICTO_LINE_BLUE);
@@ -177,7 +177,7 @@ public class EntityFactory implements IEntityFactory {
 		}
 	}
 
-	private Drawable getIcon(VehicleSector sector, boolean isDotted) {
+    public static Drawable getIcon(VehicleSector sector, boolean isDotted) {
 		switch (sector) {
 			case SAP:
 				if (isDotted) return DrawableFactory.build(ctx, DrawableFactory.PICTO_GREEN_DOTTED_AGRES); 
@@ -207,8 +207,8 @@ public class EntityFactory implements IEntityFactory {
 				return null;
 		}
 	}
-	
-	private Drawable getIcon(Danger.Type dangerType) {
+
+    public static Drawable getIcon(Danger.Type dangerType) {
 		switch (dangerType) {
 			case WATER:
 				return DrawableFactory.build(ctx, DrawableFactory.PICTO_BLUE_UP);
@@ -223,8 +223,8 @@ public class EntityFactory implements IEntityFactory {
 				return null;
 		}
 	}
-	
-	private Drawable getIcon(Target.Type targetType) {
+
+    public static Drawable getIcon(Target.Type targetType) {
 		switch (targetType) {
 			case WATER:
 				return DrawableFactory.build(ctx, DrawableFactory.PICTO_BLUE_DOWN);

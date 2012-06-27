@@ -174,7 +174,9 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 					// just add the singleTap point to the IShapedEntity
 					// because it is already displayed on the map
 					UICmdManager.getInstance(undoRedoEngine).execute(AddPointCommand.class, selectedEntity, geoP);
-					
+
+                    // check if the entity has enough information to be saved
+                    // if it is, display the confirm button in the SITACSelectedEntityView
 					if (((ShapedEntity) selectedEntity).isPersistable()) {
 						selectedEntityView.setState(SITACSelectedEntityView.State.CONFIRM);
 						selectedEntityView.show();

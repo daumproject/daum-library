@@ -89,7 +89,12 @@ public class SITACComponent extends AbstractComponentType {
     }
 
     @Port(name = "notify")
-    public void notifiedByReplica(Object m) {
-        ChangeListener.getInstance().receive(m);
+    public void notifiedByReplica(final Object m) {
+        uiService.getRootActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ChangeListener.getInstance().receive(m);
+            }
+        });
     }
 }

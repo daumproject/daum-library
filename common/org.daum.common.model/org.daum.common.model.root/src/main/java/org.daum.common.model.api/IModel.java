@@ -11,4 +11,6 @@ public interface IModel extends Serializable {
     public void setId(String id);
 
 	public void setLocation(IGpsPoint gpsPoint);
+
+	public IGpsPoint getLocation();
 }

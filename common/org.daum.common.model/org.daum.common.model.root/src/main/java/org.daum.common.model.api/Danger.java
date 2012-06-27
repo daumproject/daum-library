@@ -37,10 +37,12 @@ public class Danger implements IModel {
         this.id = id;
     }
 
+    @Override
 	public IGpsPoint getLocation() {
 		return location;
 	}
 
+    @Override
 	public void setLocation(IGpsPoint location) {
 		this.location = location;
 	}

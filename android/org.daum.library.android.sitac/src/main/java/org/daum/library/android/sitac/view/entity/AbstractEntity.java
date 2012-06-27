@@ -3,6 +3,8 @@ package org.daum.library.android.sitac.view.entity;
 import java.util.Observer;
 
 import org.daum.library.android.sitac.observer.MyObservable;
+import org.daum.library.android.sitac.visitor.IVIsitor;
+import org.daum.common.model.api.IModel;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.views.MapView;
 
@@ -16,7 +18,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
-public abstract class Entity implements IEntity {
+public abstract class AbstractEntity implements IEntity {
 	
 	private String type;
 	private String message;
@@ -43,11 +45,11 @@ public abstract class Entity implements IEntity {
 	protected Rect bounds;
 	protected Paint paint;
 	
-	public Entity(Drawable icon, String type) {
+	public AbstractEntity(Drawable icon, String type) {
 		this(icon, type, "");
 	}
 	
-	public Entity(Drawable icon, String type, String message) {
+	public AbstractEntity(Drawable icon, String type, String message) {
 		this.icon = icon;
 		this.type = type;
 		this.message = message;
@@ -184,4 +186,9 @@ public abstract class Entity implements IEntity {
 		observable.setChanged();
 		observable.notifyObservers(this);
 	}
+
+    @Override
+    public String toString() {
+        return "["+state+"] "+message;
+    }
 }

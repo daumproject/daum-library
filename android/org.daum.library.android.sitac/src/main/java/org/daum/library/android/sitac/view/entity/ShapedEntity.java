@@ -2,11 +2,13 @@ package org.daum.library.android.sitac.view.entity;
 
 import java.util.ArrayList;
 
+import org.daum.common.model.api.IModel;
+import org.daum.library.android.sitac.visitor.IVIsitor;
 import org.osmdroid.api.IGeoPoint;
 
 import android.graphics.drawable.Drawable;
 
-public abstract class ShapedEntity extends Entity implements IShapedEntity {
+public abstract class ShapedEntity extends AbstractEntity implements IShapedEntity {
     
 	protected ArrayList<IGeoPoint> points;
 	
@@ -33,4 +35,9 @@ public abstract class ShapedEntity extends Entity implements IShapedEntity {
 	public ArrayList<IGeoPoint> getPoints() {
 		return points;
 	}
+
+    @Override
+    public void accept(IVIsitor visitor, IModel m) {
+        visitor.visit(this, m);
+    }
 }

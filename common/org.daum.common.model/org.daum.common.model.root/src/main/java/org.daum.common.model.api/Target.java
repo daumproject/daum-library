@@ -39,6 +39,7 @@ public class Target implements IModel {
         this.id = id;
     }
 
+    @Override
 	public IGpsPoint getLocation() {
 		return location;
 	}

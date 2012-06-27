@@ -1,0 +1,61 @@
+// crée 2 noeuds avec d'un côté la SITAC (Android) et de l'autre MoyensMonitor (JavaSE)
+
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.defaultChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.socketChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.javaseNode/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}'
+
+merge 'mvn:org.daum.library.android/org.daum.library.android.replica/1.8'
+merge 'mvn:org.daum.library.javase/org.daum.library.javase.replica/1.8'
+
+merge 'mvn:org.daum.library.javase/org.daum.library.javase.moyensmonitor/1.2'
+merge 'mvn:org.daum.library.android/org.daum.library.android.sitac/1.8.2-SNAPSHOT'
+
+addNode node0:AndroidNode
+addNode node1:JavaSENode
+{
+  addComponent SITACComp265@node0 : SITACComponent {}
+  addComponent Replica994@node0 : Replica {}
+  addChannel SocketCha579 : SocketChannel {port='9016',maximum_size_messaging='50',timer='2000'}
+  addChannel defMSG620 : defMSG {}
+  addChannel defSERVIC177 : defSERVICE {}
+  bind Replica994.remote@node0 => SocketCha579
+  bind Replica994.broadcast@node0 => SocketCha579
+  bind Replica994.notification@node0 => defMSG620
+  bind SITACComp265.notify@node0 => defMSG620
+  bind SITACComp265.service@node0 => defSERVIC177
+  bind Replica994.service@node0 => defSERVIC177
+  updateDictionary SocketCha579 {port='9016'}@node1,{port='9015'}@node0
+  updateDictionary defMSG620 
+  updateDictionary defSERVIC177 
+  updateDictionary SITACComp265@node0 
+  updateDictionary Replica994@node0 
+}
+
+{
+  addGroup sync: NanoRestGroup
+  addToGroup sync *
+}
+
+{
+  addComponent Replica15@node1 : Replica {}
+  addComponent MoyensMon251@node1 : MoyensMonitorComponent {}
+  addChannel defMSG429 : defMSG {}
+  addChannel SocketCha579 : SocketChannel {port='9016',maximum_size_messaging='50',timer='2000'}
+  addChannel defSERVIC604 : defSERVICE {}
+  bind Replica15.notification@node1 => defMSG429
+  bind MoyensMon251.notify@node1 => defMSG429
+  bind Replica15.remote@node1 => SocketCha579
+  bind Replica15.broadcast@node1 => SocketCha579
+  bind MoyensMon251.service@node1 => defSERVIC604
+  bind Replica15.service@node1 => defSERVIC604
+  updateDictionary defMSG429 
+  updateDictionary SocketCha579 {port='9016'}@node1,{port='9015'}@node0
+  updateDictionary defSERVIC604 
+  updateDictionary Replica15@node1 
+  updateDictionary MoyensMon251@node1 
+}

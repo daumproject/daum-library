@@ -1,16 +1,17 @@
 package org.daum.library.android.sitac.view.entity;
 
 import org.daum.library.android.sitac.observer.IObservable;
+import org.daum.library.android.sitac.visitor.IElement;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.views.MapView;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 
-public interface IEntity extends IObservable {
+public interface IEntity extends IObservable, IElement {
 	
 	public enum State {
-		/** default Entity State; mark the entity as "not saved into any engine" */
+		/** default AbstractEntity State; mark the entity as "not saved into any engine" */
 		NEW,
 		/**  mark the entity as "saved into one engine" */
 		SAVED,
@@ -118,7 +119,7 @@ public interface IEntity extends IObservable {
 
 	/**
 	 * If set to true, an entity that does not override it's draw(Canvas,
-	 * MapView) method from Entity will display a little tag with the entity
+	 * MapView) method from AbstractEntity will display a little tag with the entity
 	 * type + message
 	 * 
 	 * @param enabled

@@ -42,7 +42,8 @@ public class ArrowAction implements IModel {
 	public Type getType() {
 		return type;
 	}
-	
+
+    @Override
 	public IGpsPoint getLocation() {
 		return location;
 	}

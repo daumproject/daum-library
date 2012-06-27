@@ -51,4 +51,8 @@ public class MoyensTableModel extends AbstractTableModel {
 				return "-no data-";
 		}
 	}
+
+    public ArrayList<Demand> getData() {
+        return data;
+    }
 }

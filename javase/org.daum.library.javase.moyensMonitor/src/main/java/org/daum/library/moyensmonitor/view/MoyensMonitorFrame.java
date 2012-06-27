@@ -1,31 +1,22 @@
 package org.daum.library.moyensmonitor.view;
 
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.border.Border;
-import javax.swing.border.CompoundBorder;
-import javax.swing.border.EmptyBorder;
 
 import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.VehicleType;
 import org.daum.library.moyensmonitor.controller.MoyensMonitorController;
 import org.daum.library.moyensmonitor.listener.OnMoyensMonitorEventListener;
 import org.daum.library.moyensmonitor.model.MoyensTableModel;
 import org.daum.library.ormH.store.ReplicaStore;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MoyensMonitorFrame extends JFrame {
 
@@ -35,21 +26,16 @@ public class MoyensMonitorFrame extends JFrame {
 	private static final String ANSWERED_DEMAND_TAB = "Demandes traitées";
 	private static final String VALIDATE_BTN = "Valider la demande";
     private static final String ADD_DEMAND_BTN = "Ajouter une fakeDemand";
+    private static final String EDIT_BTN = "Enregistrer modifications";
+    private static final String DELETE_BTN = "Supprimer";
 	
 	private MoyensMonitorController controller;
 	private MoyensTableModel newDemandsModel, answeredDemandsModel;
-	private MoyensTableView newDemandsView, answeredDemandsView;
-	private JButton validateBtn, addDemandBtn;
-	private JTextField	tf_agres,
-						tf_cis,
-						tf_demande,
-						tf_depart,
-						tf_crm,
-						tf_engage,
-						tf_deseng;
+	private TabContentView newDemandsView, answeredDemandsView;
+	private JButton validateBtn, addDemandBtn, editBtn, deleteBtn;
 	private ArrayList<Demand> newDemands, answeredDemands;
-	private Demand selectedDemand;
 	private OnMoyensMonitorEventListener listener;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	public MoyensMonitorFrame(String nodeName, ReplicaStore storeImpl) {
 		super(FRAME_TITLE);
@@ -73,22 +59,15 @@ public class MoyensMonitorFrame extends JFrame {
         newDemandsModel = new MoyensTableModel(newDemands);
         answeredDemandsModel = new MoyensTableModel(answeredDemands);
 
-        // tableViews
-        newDemandsView = new MoyensTableView(newDemandsModel);
-        answeredDemandsView = new MoyensTableView(answeredDemandsModel);
-
-        // text fields
-        tf_agres = new JTextField();
-        tf_cis = new JTextField();
-        tf_demande = new JTextField();
-        tf_depart = new JTextField();
-        tf_crm = new JTextField();
-        tf_engage = new JTextField();
-        tf_deseng = new JTextField();
+        // tab content
+        newDemandsView = new TabContentView(newDemandsModel);
+        answeredDemandsView = new TabContentView(answeredDemandsModel);
 
         // button
         validateBtn = new JButton(VALIDATE_BTN);
         addDemandBtn = new JButton(ADD_DEMAND_BTN);
+        editBtn = new JButton(EDIT_BTN);
+        deleteBtn = new JButton(DELETE_BTN);
     }
 	
 	private void configUI() {
@@ -97,55 +76,16 @@ public class MoyensMonitorFrame extends JFrame {
 		// new demands panel
 		JPanel newDemandPanel = new JPanel(new BorderLayout());
 		newDemandPanel.add(newDemandsView, BorderLayout.CENTER);
-		
-		// demand in JTextField panel
-		JPanel txtFieldPanel = new JPanel(new GridLayout(1, 7));
-		
-		tf_agres.setEditable(false);
-		tf_cis.setEditable(false);
-		tf_demande.setEditable(false);
-		tf_depart.setEditable(false);
-		tf_crm.setEditable(false);
-		tf_engage.setEditable(false);
-		tf_deseng.setEditable(false);
-		
-		Border current = tf_agres.getBorder();
-		Border empty = new EmptyBorder(5, 5, 5, 5);
-		if (current == null) {
-			tf_agres.setBorder(empty);
-		} else {
-			Border padding = new CompoundBorder(empty, current);
-			tf_agres.setBorder(padding);
-			tf_cis.setBorder(padding);
-			tf_demande.setBorder(padding);
-			tf_depart.setBorder(padding);
-			tf_crm.setBorder(padding);
-			tf_engage.setBorder(padding);
-			tf_deseng.setBorder(padding);
-		}
-		
-		txtFieldPanel.add(tf_agres);
-		txtFieldPanel.add(tf_cis);
-		txtFieldPanel.add(tf_demande);
-		txtFieldPanel.add(tf_depart);
-		txtFieldPanel.add(tf_crm);
-		txtFieldPanel.add(tf_engage);
-		txtFieldPanel.add(tf_deseng);
-		
-		// btn panel
-		JPanel btnPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-		btnPanel.add(validateBtn);
-        btnPanel.add(addDemandBtn);
 
-		
-		JPanel southPanel = new JPanel(new GridLayout(2, 1));
-		southPanel.add(txtFieldPanel);
-		southPanel.add(btnPanel);
-		newDemandPanel.add(southPanel, BorderLayout.SOUTH);
+        newDemandsView.addButton(validateBtn);
+        newDemandsView.addButton(addDemandBtn);
 		
 		// answered demands panel
 		JPanel answeredDemandPanel = new JPanel(new BorderLayout());
 		answeredDemandPanel.add(answeredDemandsView, BorderLayout.CENTER);
+
+        answeredDemandsView.addButton(editBtn);
+        answeredDemandsView.addButton(deleteBtn);
 		
 		tabPane.addTab(NEW_DEMAND_TAB, newDemandPanel);
 		tabPane.addTab(ANSWERED_DEMAND_TAB, answeredDemandPanel);
@@ -153,60 +93,13 @@ public class MoyensMonitorFrame extends JFrame {
 	}
 	
 	private void defineCallbacks() {
-		newDemandsView.addMouseListener(new MouseListener() {
-			
-			@Override
-			public void mouseReleased(MouseEvent arg0) {}
-			
-			@Override
-			public void mousePressed(MouseEvent arg0) {}
-			
-			@Override
-			public void mouseExited(MouseEvent arg0) {}
-			
-			@Override
-			public void mouseEntered(MouseEvent arg0) {}
-			
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				if (e.getButton() == MouseEvent.BUTTON1) {
-						int rowId = newDemandsView.getSelectedRow();
-						if (rowId != -1) {
-							selectedDemand = newDemands.get(rowId);
-							String[] values = new String[8];
-							for (int i=0; i<8; i++) {
-								values[i] = newDemandsModel.getValueAt(rowId, i);
-							}
-							tf_agres.setText(values[0]);
-							tf_cis.setText(values[1]);
-							tf_demande.setText(values[2]);
-							tf_depart.setText(values[3]);
-							tf_crm.setText(values[4]);
-							tf_engage.setText(values[5]);
-							tf_deseng.setText(values[6]);
-							
-							tf_cis.setEditable(true);
-						}
-				}
-			}
-		});
-		
 		validateBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (listener != null && selectedDemand != null) {
-					listener.onValidateButtonClicked(selectedDemand, tf_cis.getText().trim());
-					newDemandsModel.fireTableDataChanged();
-					tf_agres.setText("");
-					tf_cis.setText("");
-					tf_demande.setText("");
-					tf_depart.setText("");
-					tf_crm.setText("");
-					tf_engage.setText("");
-					tf_deseng.setText("");
-					
-					tf_cis.setEditable(false);
-					selectedDemand = null;
+				if (listener != null && newDemandsView.getSelectedDemand() != null) {
+                    Demand selectedDemand = newDemandsView.getSelectedDemand();
+					listener.onValidateButtonClicked(selectedDemand, newDemandsView.getFieldValues()[1]);
+                    newDemandsView.resetSelection();
 				}
 			}
 		});
@@ -216,6 +109,28 @@ public class MoyensMonitorFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 if (listener != null) {
                     listener.onAddFakeDemand();
+                    newDemandsView.resetSelection();
+                }
+            }
+        });
+
+        editBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (listener != null && answeredDemandsView.getSelectedDemand() != null) {
+                    Demand selectedDemand = answeredDemandsView.getSelectedDemand();
+                    listener.onEditDemand(selectedDemand, answeredDemandsView.getFieldValues());
+                    answeredDemandsView.resetSelection();
+                }
+            }
+        });
+
+        deleteBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (listener != null && answeredDemandsView.getSelectedDemand() != null) {
+                    listener.onDeleteBtnClicked(answeredDemandsView.getSelectedDemand());
+                    answeredDemandsView.resetSelection();
                 }
             }
         });

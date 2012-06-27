@@ -1,6 +1,7 @@
 package org.daum.library.moyensmonitor.controller;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import org.daum.common.model.api.Demand;
 import org.daum.library.moyensmonitor.listener.OnEngineStateChangeListener;
@@ -22,30 +23,27 @@ public class EngineHandler implements OnEngineStateChangeListener {
         this.answeredDemandsModel = frame.getAnsweredDemandsModel();
 	}
 
-	@Override
-	public void onAdd(Demand d) {
-        if (!newDemands.contains(d) && !answeredDemands.contains(d) && d.getGh_depart() == null) {
-            newDemands.add(d);
-            newDemandsModel.fireTableDataChanged();
-        } else {
-            answeredDemands.add(d);
-            answeredDemandsModel.fireTableDataChanged();
-        }
-	}
 
 	@Override
-	public void onUpdate(Demand d) {
-		// update demand in UI
-		if (newDemands.contains(d) && d.getGh_depart() != null) {
-			newDemands.remove(d);
-            newDemandsModel.fireTableDataChanged();
-			answeredDemands.add(d);
-            answeredDemandsModel.fireTableDataChanged();
-		}
+	public void doUpdate(Collection<Demand> demands) {
+        newDemands.clear();
+        answeredDemands.clear();
+
+        for (Demand d : demands) {
+            if (d.getGh_depart() == null) {
+                newDemands.add(d);
+            } else {
+                answeredDemands.add(d);
+            }
+        }
+
+        newDemandsModel.fireTableDataChanged();
+        answeredDemandsModel.fireTableDataChanged();
 	}
 
 	@Override
 	public void onDelete(Demand d) {
+        System.out.println("onDelete("+d+")");
 		// delete demand in UI
         newDemands.remove(d);
         newDemandsModel.fireTableDataChanged();

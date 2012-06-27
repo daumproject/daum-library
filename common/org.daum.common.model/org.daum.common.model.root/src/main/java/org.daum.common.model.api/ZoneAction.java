@@ -36,7 +36,8 @@ public class ZoneAction implements IModel {
 	public void setLocation(IGpsPoint gpsPoint) {
 		this.location = gpsPoint;
 	}
-	
+
+    @Override
 	public IGpsPoint getLocation() {
 		return location;
 	}

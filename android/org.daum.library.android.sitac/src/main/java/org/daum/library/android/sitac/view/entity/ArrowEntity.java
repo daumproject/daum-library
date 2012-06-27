@@ -2,6 +2,8 @@ package org.daum.library.android.sitac.view.entity;
 
 import java.util.ArrayList;
 
+import org.daum.common.model.api.IModel;
+import org.daum.library.android.sitac.visitor.IVIsitor;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.MapView.Projection;
@@ -84,4 +86,9 @@ public class ArrowEntity extends ShapedEntity {
 	public boolean isPersistable() {
 		return (points.size() > 1);
 	}
+
+    @Override
+    public void accept(IVIsitor visitor, IModel m) {
+        visitor.visit(this, m);
+    }
 }
