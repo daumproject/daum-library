@@ -5,6 +5,8 @@ import org.daum.library.fakeDemo.pojos.TemperatureMonitor;
 import org.daum.library.replica.listener.ChangeListener;
 import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
+import org.daum.library.replica.listener.SyncListener;
+import org.daum.library.replica.msg.SyncEvent;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.slf4j.Logger;
@@ -13,6 +15,8 @@ import org.webbitserver.WebServer;
 import org.webbitserver.WebServers;
 import org.webbitserver.handler.StaticFileHandler;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Created with IntelliJ IDEA.
  * User: jed
@@ -20,8 +24,8 @@ import org.webbitserver.handler.StaticFileHandler;
  * Time: 13:14
  * To change this template use File | Settings | File Templates.
  */
+@Library(name = "JavaSE")
 @ComponentType
-
 @Provides({
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
 })
@@ -34,68 +38,16 @@ public class WsServer extends AbstractComponentType {
     @Start
     public void startServer()
     {
-        ChangeListener.getInstance().addEventListener(TemperatureMonitor.class,new PropertyChangeListener() {
-            @Override
-            public void update(PropertyChangeEvent propertyChangeEvent)
-            {
-                switch (propertyChangeEvent.getEvent())
-                {
-                    case ADD:
-                        webSocketChannel.broadcast("TemperatureMonitor");
-                        break;
-                    case DELETE:
-
-                        webSocketChannel.broadcast("TemperatureMonitor");
-
-                        break;
-
-                    case UPDATE:
-                        webSocketChannel.broadcast("TemperatureMonitor");
-
-                        break;
-                }
-
-
-            }
-        });
-
-        ChangeListener.getInstance().addEventListener(Demand.class,new PropertyChangeListener() {
-            @Override
-            public void update(PropertyChangeEvent propertyChangeEvent)
-            {
-
-                switch (propertyChangeEvent.getEvent())
-                {
-                    case ADD:
-                        webSocketChannel.broadcast("TemperatureMonitor");
-                        break;
-                    case DELETE:
-
-                        webSocketChannel.broadcast("TemperatureMonitor");
-
-                        break;
-
-                    case UPDATE:
-                        webSocketChannel.broadcast("TemperatureMonitor");
-
-                        break;
-                }
-            }           });
-
-
-        webSocketChannel = new WebSocketChannel();
+          webSocketChannel = new WebSocketChannel();
         webServer = WebServers.createWebServer(8082)
                 .add("/jed", webSocketChannel);
-
         webServer.start();
-
-        logger.debug("Server running at " + webServer.getUri());
-
 
     }
 
     @Stop
     public void stopServer() {
+    logger.debug("Stoping");
         webServer.stop();
         webServer = null;
         webSocketChannel = null;
