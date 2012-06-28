@@ -298,7 +298,7 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	@Override
 	public void update(Observable observable, Object data) {
 		// an entity of the NO_LOCATION group has its state changed
-		// if the entity gets a location, remove it from the menuGrp
+		// If the entity now has a location, remove it from the menuGrp
 		IEntity entity = (IEntity) data;
 		if (entity.getGeoPoint() != null) {
 			IExpandableMenuItem item = noLocationDemands.get(entity);

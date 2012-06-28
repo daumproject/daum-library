@@ -2,8 +2,6 @@ package org.daum.library.android.sitac.controller;
 
 import java.util.*;
 
-import org.daum.common.gps.api.IGpsPoint;
-import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.android.sitac.view.SITACMapView;
@@ -14,9 +12,7 @@ import org.daum.library.android.sitac.view.entity.IEntityFactory;
 
 import android.util.Log;
 import org.daum.library.android.sitac.visitor.EntityUpdateVisitor;
-import org.daum.library.android.sitac.visitor.IVIsitor;
-import org.osmdroid.api.IGeoPoint;
-import org.osmdroid.util.GeoPoint;
+import org.daum.library.android.sitac.visitor.IVisitor;
 
 /**
  * Handle engine's events and updates views accordingly
@@ -31,7 +27,7 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	private SITACMapView mapView;
 	private SITACMenuView menuView;
 	private IEntityFactory factory;
-    private IVIsitor visitor;
+    private IVisitor visitor;
 	private Map<IEntity, IModel> modelMap;
 	
 	public EngineHandler(IEntityFactory factory, Hashtable<IEntity, IModel> modelMap) {
@@ -41,39 +37,8 @@ public class EngineHandler implements OnEngineStateChangeListener {
 	}
 
     @Override
-    public void onLocalAdd(IModel m, IEntity e) {
-        Log.d(TAG, "onLocalAdd(IModel, IEntity)");
-        for (IModel model : modelMap.values()) {
-            if (model.getId().equals(m.getId()))  {
-                add(m, e);
-                update(m, e);
-                return;
-            }
-        }
-        add(m, e);
-    }
-
-    @Override
-    public void onLocalUpdate(IModel m, IEntity e) {
-        Log.d(TAG, "onLocalUpdate(IModel, IEntity)");
-        for (IModel model : modelMap.values()) {
-            if (model.getId().equals(m.getId()))  {
-                update(m, e);
-                return;
-            }
-        }
-        add(m, e);
-    }
-
-    @Override
-    public void onLocalDelete(IModel m, IEntity e) {
-        Log.d(TAG, "onLocalDelete(IModel, IEntity)");
-         delete(e);
-    }
-
-    @Override
-    public void onRemoteAdd(IModel m) {
-        Log.d(TAG, "onRemoteAdd(IModel)");
+    public void onAdd(IModel m) {
+        Log.d(TAG, "onAdd(IModel)");
         for (IModel model : modelMap.values()) {
             if (model.getId().equals(m.getId()))  {
                 update(m);
@@ -84,8 +49,8 @@ public class EngineHandler implements OnEngineStateChangeListener {
     }
 
     @Override
-    public void onRemoteUpdate(IModel m) {
-        Log.d(TAG, "onRemoteUpdate(IModel) "+m);
+    public void onUpdate(IModel m) {
+        Log.d(TAG, "onUpdate(IModel) "+m);
         for (IModel model : modelMap.values()) {
             if (model.getId().equals(m.getId()))  {
                 update(m);
@@ -96,40 +61,34 @@ public class EngineHandler implements OnEngineStateChangeListener {
     }
 
     @Override
-    public void onRemoteDelete(IModel m) {
-        Log.d(TAG, "onRemoteDelete(IModel)");
-        delete(getEntityWithModel(m));
+    public void onDelete(String id) {
+        Log.d(TAG, "onDelete(IModel)");
+        delete(getEntityWithModelId(id));
     }
 
     @Override
     public void onReplicaSynced(ArrayList<IModel> data) {
         Log.d(TAG, "onReplicaSynced(ArrayList<IModel>)");
         for (IModel m : data) {
-            for (IModel model : modelMap.values()) {
-                if (model.getId().equals(m.getId()))  {
-                    update(m);
-                    break;
-                }
-            }
-            add(m);
+            onUpdate(m);
         }
     }
 
     private void add(IModel m) {
-        Log.d(TAG, "add(IModel)");
+        Log.d(TAG, "add(IModel) with brand new entity");
         IEntity e = factory.build(m);
         add(m, e);
     }
 
     private void add(IModel m, IEntity e) {
-        Log.d(TAG, "add(IModel, IEntity)");
+        Log.d(TAG, "add(IModel, IEntity) in modelMap + setState");
         modelMap.put(e, m);
         e.setState(IEntity.State.SAVED);
         add(e);
     }
 
     private void add(IEntity e) {
-        Log.d(TAG, "add(IEntity)");
+        Log.d(TAG, "add(IEntity) to the mapView (and menuView if necessary)");
         if (e.getGeoPoint() == null) {
             // in case the entity has no location on map, add it to the menu
             menuView.addEntityWithNoLocation((DemandEntity) e);
@@ -142,27 +101,15 @@ public class EngineHandler implements OnEngineStateChangeListener {
         }
     }
 
-    private void update(IModel m, IEntity e) {
-        Log.d(TAG, "update(IModel, IEntity)");
-        modelMap.put(e, m); // update model in modelMap
-        e.accept(visitor, m);
-
-        Log.d(TAG, ">>> entity >> "+e);
-        for (IModel model : modelMap.values()) {
-            Log.d(TAG, ">>> map >> "+model);
-        }
-    }
-
     private void update(IModel m) {
         Log.d(TAG, "update(IModel)");
         IEntity e = getEntityWithModel(m);
         modelMap.put(e, m); // update model in modelMap
-        e.accept(visitor, m);
+        e.setState(IEntity.State.SAVED);
 
-        Log.d(TAG, ">>> entity >> "+e);
-        for (IModel model : modelMap.values()) {
-            Log.d(TAG, ">>> map >> "+model);
-        }
+        if (!mapView.hasEntity(e)) mapView.addEntity(e);
+
+        e.accept(visitor, m);
     }
 
     private void delete(IEntity e) {
@@ -185,6 +132,18 @@ public class EngineHandler implements OnEngineStateChangeListener {
             for (Map.Entry<IEntity, IModel> entry: entries) {
                 if (entry.getValue().getId().equals(m.getId())) {
                     entry.setValue(m); // update model
+                    return entry.getKey();
+                }
+            }
+        }
+        return null;
+    }
+
+    private IEntity getEntityWithModelId(String id) {
+        Set<Map.Entry<IEntity, IModel>> entries = modelMap.entrySet();
+        synchronized (modelMap) {
+            for (Map.Entry<IEntity, IModel> entry: entries) {
+                if (entry.getValue().getId().equals(id)) {
                     return entry.getKey();
                 }
             }

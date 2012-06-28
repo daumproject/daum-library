@@ -3,8 +3,6 @@ package org.daum.library.android.sitac.view.entity;
 import java.util.Observer;
 
 import org.daum.library.android.sitac.observer.MyObservable;
-import org.daum.library.android.sitac.visitor.IVIsitor;
-import org.daum.common.model.api.IModel;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.views.MapView;
 

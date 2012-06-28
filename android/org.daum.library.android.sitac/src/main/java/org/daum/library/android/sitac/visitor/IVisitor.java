@@ -11,7 +11,7 @@ import org.daum.library.android.sitac.view.entity.IEntity;
  * Time: 09:56
  * To change this template use File | Settings | File Templates.
  */
-public interface IVIsitor {
+public interface IVisitor {
 
     public void visit(DemandEntity entity, IModel m);
 

@@ -39,7 +39,6 @@ public class SITACComponent extends AbstractComponentType {
     private static final String TAG = "SITACComponent";
 
     private KevoreeAndroidService uiService;
-    private ISITACController sitacCtrl;
 
     @Start
     public void start() {
@@ -66,7 +65,6 @@ public class SITACComponent extends AbstractComponentType {
                                 ReplicaStore storeImpl = new ReplicaStore(replicatingService);
 
                                 SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
-                                sitacCtrl = sitacView.getController();
                                 uiService.addToGroup("SITAC", sitacView);
                             } catch (PersistenceException e) {
                                 Log.e(TAG, "Error while initializing ReplicaStore", e);

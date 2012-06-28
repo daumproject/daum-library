@@ -1,6 +1,8 @@
 package org.daum.library.android.sitac.controller;
 
 import org.daum.common.model.api.IModel;
+import org.daum.library.android.sitac.view.entity.IEntityFactory;
+import org.daum.library.android.sitac.view.entity.IModelFactory;
 import org.daum.library.ormH.store.ReplicaStore;
 
 /**
@@ -36,4 +38,21 @@ public interface ISITACController {
      * @param m
      */
     public void addModel(IModel m);
+
+    /**
+     * Change the entity factory with the given one
+     * If the factory given in parameter is null, then the old one is kept
+     * has the current one
+     * @param factory
+     */
+    public void setEntityFactory(IEntityFactory factory);
+
+    /**
+     * Change the model factory with the given one
+     * If the factory given in parameter is null, then the old one is kept
+     * has the current one
+     *
+     * @param factory
+     */
+    public void setModelFactory(IModelFactory factory);
 }

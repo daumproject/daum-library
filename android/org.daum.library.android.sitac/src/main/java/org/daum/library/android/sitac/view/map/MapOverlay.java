@@ -83,6 +83,10 @@ public class MapOverlay extends Overlay {
 		} else entities.add(entity);
 	}
 
+    public boolean hasEntity(IEntity entity) {
+        return entities.contains(entity);
+    }
+
 	public void deleteEntity(IEntity entity) {
 		entities.remove(entity);
 	}

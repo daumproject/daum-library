@@ -2,7 +2,7 @@ package org.daum.library.android.sitac.view.entity;
 
 import android.graphics.drawable.Drawable;
 import org.daum.common.model.api.IModel;
-import org.daum.library.android.sitac.visitor.IVIsitor;
+import org.daum.library.android.sitac.visitor.IVisitor;
 
 public class TargetEntity extends AbstractEntity {
 
@@ -21,7 +21,7 @@ public class TargetEntity extends AbstractEntity {
 	}
 
     @Override
-    public void accept(IVIsitor visitor, IModel m) {
+    public void accept(IVisitor visitor, IModel m) {
         visitor.visit(this, m);
     }
 

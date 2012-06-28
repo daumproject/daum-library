@@ -3,6 +3,7 @@ package org.daum.library.android.sitac.controller;
 import java.util.Date;
 import java.util.Hashtable;
 
+import android.util.Log;
 import org.daum.common.gps.impl.GpsPoint;
 import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.IModel;
@@ -209,10 +210,6 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 
 	public void registerMapView(SITACMapView mapView) {
 		this.mapView = mapView;
-	}
-
-	public void registerMenuView(SITACMenuView menuView) {
-				
 	}
 
 	public void registerSelectedEntityView(SITACSelectedEntityView view) {

@@ -127,17 +127,12 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
     }
 
     @Override
-    public void onLocalAdd(Demand d) {
+    public void onAdd(Demand d) {
         moyensView.addDemand(d);
     }
 
     @Override
-    public void onRemoteAdd(Demand d) {
-        moyensView.addDemand(d);
-    }
-
-    @Override
-    public void onRemoteUpdate(Demand d) {
+    public void onUpdate(Demand d) {
         moyensView.updateDemand(d);
     }
 

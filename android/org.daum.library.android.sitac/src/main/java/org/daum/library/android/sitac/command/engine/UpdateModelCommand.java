@@ -16,7 +16,7 @@ public class UpdateModelCommand implements IEngineCommand {
 	public <T> void execute(T... args) {
 		if (args.length == 2 && args[0] instanceof IModel
 				&& args[1] instanceof IEntity) {
-			engine.update((IModel) args[0], (IEntity) args[1]);
+			engine.update((IModel) args[0]);
 		} else {
 			throw new IllegalArgumentException(
 					"UpdateModelCommand should be called like this: execute(IModel, IEntity)");

@@ -60,6 +60,10 @@ public class SITACMapView extends RelativeLayout implements Observer {
 		entity.addObserver(this);
 		mapView.invalidate();
 	}
+
+    public boolean hasEntity(IEntity entity) {
+        return overlay.hasEntity(entity);
+    }
 	
 	public void deleteEntity(IEntity entity) {
 		overlay.deleteEntity(entity);

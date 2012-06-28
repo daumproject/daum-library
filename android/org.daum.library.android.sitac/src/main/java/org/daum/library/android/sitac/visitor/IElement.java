@@ -11,5 +11,5 @@ import org.daum.common.model.api.IModel;
  */
 public interface IElement {
 
-    public void accept(IVIsitor visitor, IModel m);
+    public void accept(IVisitor visitor, IModel m);
 }

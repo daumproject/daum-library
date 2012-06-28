@@ -101,13 +101,15 @@ public class SITACController implements ISITACController {
 	public void registerSelectedEntityView(SITACSelectedEntityView view) {
 		uiHandler.registerSelectedEntityView(view);
 	}
-	
+
+    @Override
 	public void setEntityFactory(IEntityFactory factory) {
-		this.entityFactory = factory;
+		if (factory != null) this.entityFactory = factory;
 	}
-	
+
+    @Override
 	public void setModelFactory(IModelFactory factory) {
-		this.modelFactory = factory;
+		if (factory != null) this.modelFactory = factory;
 	}
 	
 	public UIHandler getUIHandler() {

@@ -18,13 +18,12 @@ import org.osmdroid.util.GeoPoint;
  * Time: 09:58
  * To change this template use File | Settings | File Templates.
  */
-public class EntityUpdateVisitor implements IVIsitor {
+public class EntityUpdateVisitor implements IVisitor {
 
     private static final String TAG = "EntityUpdateVisitor";
 
     @Override
     public void visit(DemandEntity e, IModel m) {
-        Log.d(TAG, ">>>>>> VISIT DemandEntity "+m);
         // update the location
         if (m.getLocation() != null) {
             IGpsPoint p = m.getLocation();
@@ -51,7 +50,6 @@ public class EntityUpdateVisitor implements IVIsitor {
 
     @Override
     public void visit(IEntity e, IModel m) {
-        Log.d(TAG, ">>>>>> VISIT IEntity");
         if (m.getLocation() != null) {
             IGpsPoint p = m.getLocation();
             IGeoPoint geoP = new GeoPoint(p.getLat(), p.getLong_());

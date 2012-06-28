@@ -2,7 +2,6 @@ package org.daum.library.android.sitac.engine;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
 
 import org.daum.common.model.api.ArrowAction;
 import org.daum.common.model.api.Danger;
@@ -11,11 +10,9 @@ import org.daum.common.model.api.IModel;
 import org.daum.common.model.api.Target;
 import org.daum.common.model.api.ZoneAction;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
-import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
-import org.daum.library.ormH.store.LocalStore;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 
@@ -96,25 +93,23 @@ public class SITACEngine {
                         PersistenceSession session = null;
                         try {
                             session = factory.getSession();
-                            IModel m = (IModel) session.get(c, e.getId());
+                            IModel m = null;
                             switch (e.getEvent()) {
                                 case ADD:
-                                    if (!e.getNode().getNodeID().equals(nodeName)) {
-                                        listener.onRemoteAdd(m);
-                                    }
+                                    m = (IModel) session.get(c, e.getId());
+                                    Log.d(TAG, "Replica Event: ADD "+m);
+                                    listener.onAdd(m);
                                     break;
 
                                 case DELETE:
-                                    if (!e.getNode().getNodeID().equals(nodeName)) {
-                                        Log.d(TAG, "case DELETE");
-                                        listener.onRemoteDelete(m);
-                                    }
+                                    Log.d(TAG, "Replica Event: DELETE "+e.getId());
+                                    listener.onDelete((String) e.getId());
                                     break;
 
                                 case UPDATE:
-                                    if (!e.getNode().getNodeID().equals(nodeName)) {
-                                        listener.onRemoteUpdate(m);
-                                    }
+                                    m = (IModel) session.get(c, e.getId());
+                                    Log.d(TAG, "Replica Event: UPDATE "+m);
+                                    listener.onUpdate(m);
                                     break;
                             }
 
@@ -129,12 +124,11 @@ public class SITACEngine {
         }
 	}
 	
-	public void add(IModel m, IEntity e) {
+	public void add(IModel m) {
         PersistenceSession session = null;
         try {
             session = factory.getSession();
             session.save(m);
-            if (listener != null) listener.onLocalAdd(m, e);
             
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while adding object in Replica", ex);
@@ -143,12 +137,11 @@ public class SITACEngine {
         }
 	}
 
-	public void update(IModel m, IEntity e) {
+	public void update(IModel m) {
         PersistenceSession session = null;
         try {
             session = factory.getSession();
             session.update(m);
-            if (listener != null) listener.onLocalUpdate(m, e);
 
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while updating object in Replica", ex);
@@ -157,12 +150,11 @@ public class SITACEngine {
         }
 	}
 	
-	public void delete(IModel m, IEntity e) {
+	public void delete(IModel m) {
         PersistenceSession session = null;
         try {
             session = factory.getSession();
             session.delete(m);
-            if (listener != null) listener.onLocalDelete(m, e);
             
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while deleting object in Replica", ex);

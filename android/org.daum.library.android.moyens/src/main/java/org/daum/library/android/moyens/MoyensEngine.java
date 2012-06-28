@@ -58,15 +58,11 @@ public class MoyensEngine {
 
                         switch (e.getEvent()) {
                             case ADD:
-                                if (!e.getNode().getNodeID().equals(nodeName)) {
-                                    listener.onRemoteAdd(d);
-                                }
+                                listener.onAdd(d);
                                 break;
 
                             case UPDATE:
-                                if (!e.getNode().getNodeID().equals(nodeName)) {
-                                    listener.onRemoteUpdate(d);
-                                }
+                                listener.onUpdate(d);
                                 break;
                         }
 
@@ -104,7 +100,6 @@ public class MoyensEngine {
         try {
             session = factory.getSession();
             session.save(d);
-            if (listener != null) listener.onLocalAdd(d);
 
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while saving demand "+d, ex);
@@ -119,11 +114,24 @@ public class MoyensEngine {
     }
 
     public interface OnEventListener {
-        public void onLocalAdd(Demand d);
+        /**
+         * Called by the engine when a demand has been added to the replica
+         *
+         * @param d the new demand
+         */
+        public void onAdd(Demand d);
 
-        public void onRemoteAdd(Demand d);
-        public void onRemoteUpdate(Demand d);
+        /**
+         * Called be the engine when a demand has been updated in the replica
+         *
+         * @param d the updated demand
+         */
+        public void onUpdate(Demand d);
 
+        /**
+         * Called by the replica when its data are synced
+         * @param data the whole demand list know by the replica
+         */
         public void onReplicaSynced(Collection<Demand> data);
     }
 }

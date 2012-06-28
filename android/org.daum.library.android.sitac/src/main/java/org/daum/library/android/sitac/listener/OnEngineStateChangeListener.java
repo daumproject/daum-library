@@ -7,56 +7,26 @@ import java.util.ArrayList;
 
 public interface OnEngineStateChangeListener {
 
-	/**
-	 * Called when a new model object is added to the replica
-     * by the local node
-	 * 
-	 * @param m the new model added
-	 * @param e the entity to add
-	 */
-	void onLocalAdd(IModel m, IEntity e);
-	
-	/**
-	 * Called when a new model object is updated in the replica
-     * by the local node
-	 * 
-	 * @param m the updated model
-	 * @param e the entity to update
-	 */
-	void onLocalUpdate(IModel m, IEntity e);
-
-	/**
-	 * Called when a model object has been deleted in the replica
-     * by the local node
-	 *
-     * @param m the deleted model
-	 * @param e the entity to delete
-	 */
-	void onLocalDelete(IModel m, IEntity e);
-
     /**
      * Called when a new model object is added to the replica
-     * by another node
      *
      * @param m the new model added
      */
-    void onRemoteAdd(IModel m);
+    void onAdd(IModel m);
 
     /**
      * Called when a new model object is updated in the replica
-     * by another node
      *
      * @param m the updated model
      */
-    void onRemoteUpdate(IModel m);
+    void onUpdate(IModel m);
 
     /**
      * Called when a model object has been deleted from the replica
-     * by another node
      *
-     * @param m the deleted model
+     * @param id id of the deleted model
      */
-    void onRemoteDelete(IModel m);
+    void onDelete(String id);
 
     /**
      * Called when the engine is completly synced with his replica
