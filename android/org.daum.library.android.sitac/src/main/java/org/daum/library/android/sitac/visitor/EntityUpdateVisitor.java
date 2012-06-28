@@ -12,11 +12,18 @@ import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 
 /**
+ * EntityUpdateVisitor handles entities updates.
+ * The purpose of this class is to gather every entity update work
+ * in one and only location to make life easier for developers.
+ *
+ * By adding a visit method with a specific XXEntity related class you
+ * will be able to make specific processes for that very entity update work.
+ *
  * Created with IntelliJ IDEA.
  * User: max
  * Date: 27/06/12
  * Time: 09:58
- * To change this template use File | Settings | File Templates.
+ *
  */
 public class EntityUpdateVisitor implements IVisitor {
 

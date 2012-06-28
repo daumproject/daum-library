@@ -14,12 +14,11 @@ public class UpdateModelCommand implements IEngineCommand {
 
 	@Override
 	public <T> void execute(T... args) {
-		if (args.length == 2 && args[0] instanceof IModel
-				&& args[1] instanceof IEntity) {
+        if (args.length == 1 && args[0] instanceof IModel) {
 			engine.update((IModel) args[0]);
 		} else {
 			throw new IllegalArgumentException(
-					"UpdateModelCommand should be called like this: execute(IModel, IEntity)");
+					"UpdateModelCommand should be called like this: execute(IModel)");
 
 		}
 	}

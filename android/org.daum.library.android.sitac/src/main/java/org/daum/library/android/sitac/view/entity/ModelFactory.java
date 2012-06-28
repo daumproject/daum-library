@@ -54,7 +54,8 @@ public class ModelFactory implements IModelFactory {
 	
 	private ArrowAction build(ArrowEntity ent) {
 		IGeoPoint geoP = ent.getGeoPoint();
-		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
+        IGpsPoint location = null;
+        if (geoP != null) location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
 		ArrayList<IGeoPoint> geoPts = ent.getPoints();
 		ArrayList<IGpsPoint> points = new ArrayList<IGpsPoint>();
 		for (IGeoPoint gp : geoPts) {
@@ -78,7 +79,8 @@ public class ModelFactory implements IModelFactory {
 		ArrayList<IGpsPoint> pts = new ArrayList<IGpsPoint>();
 		for (IGeoPoint geoP : geoPts) pts.add(new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6()));
 		IGeoPoint geoP = ent.getGeoPoint();
-		IGpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
+        IGpsPoint location = null;
+        if (geoP != null) location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
 		return new ZoneAction(location, pts);
 	}
 

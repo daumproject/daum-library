@@ -36,8 +36,6 @@ public abstract class ShapedEntity extends AbstractEntity implements IShapedEnti
 		return points;
 	}
 
-    @Override
-    public void accept(IVisitor visitor, IModel m) {
-        visitor.visit(this, m);
-    }
+
+
 }

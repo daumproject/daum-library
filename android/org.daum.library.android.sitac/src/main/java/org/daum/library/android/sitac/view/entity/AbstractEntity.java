@@ -22,7 +22,6 @@ public abstract class AbstractEntity implements IEntity {
 	private String message;
 	private Drawable icon;
 	private Bitmap bmp;
-	private IGeoPoint geoPoint;
 	private State state;
 	private boolean tagTextEnabled = true;
 	
@@ -38,8 +37,9 @@ public abstract class AbstractEntity implements IEntity {
 	private int txtBgRight	= 0;
 	private int txtBgBottom	= 0;
 	private int bmpPaddingBottom = 0;
-	
+
 	protected MyObservable observable;
+    protected IGeoPoint geoPoint;
 	protected Rect bounds;
 	protected Paint paint;
 	

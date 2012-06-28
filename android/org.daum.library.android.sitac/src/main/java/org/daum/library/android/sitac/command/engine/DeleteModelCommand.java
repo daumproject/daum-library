@@ -14,12 +14,12 @@ public class DeleteModelCommand implements IEngineCommand {
 
 	@Override
 	public <T> void execute(T... args) {
-		if (args.length == 2 && args[0] instanceof IModel
-				&& args[1] instanceof IEntity) {
+		if (args.length == 1 && args[0] instanceof IModel) {
 			engine.delete((IModel) args[0]);
+
 		} else {
 			throw new IllegalArgumentException(
-					"DeleteModelCommand should be called like this: execute(IModel, IEntity)");
+					"DeleteModelCommand should be called like this: execute(IModel)");
 		}
 	}
 }

@@ -3,7 +3,6 @@ package org.daum.common.model.api;
 import java.util.ArrayList;
 
 import org.daum.common.gps.api.IGpsPoint;
-import org.daum.common.gps.impl.GpsPoint;
 import org.daum.library.ormH.annotations.Generated;
 import org.daum.library.ormH.annotations.Id;
 import org.daum.library.ormH.persistence.GeneratedType;
@@ -23,7 +22,7 @@ public class ArrowAction implements IModel {
 	private IGpsPoint location;
 	private ArrayList<IGpsPoint> points;
 	
-	public ArrowAction(Type type, GpsPoint location, ArrayList<IGpsPoint> points) {
+	public ArrowAction(Type type, IGpsPoint location, ArrayList<IGpsPoint> points) {
 		this.type = type;
 		this.location = location;
 		this.points = points;

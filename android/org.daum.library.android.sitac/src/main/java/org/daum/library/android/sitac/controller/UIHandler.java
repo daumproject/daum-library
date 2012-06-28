@@ -71,9 +71,9 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 		IModel m = modelMap.get(selectedEntity);
 		if (m instanceof Demand) {
             ((Demand) m).setGh_desengagement(new Date());
-            EngineCmdManager.getInstance(modelEngine).execute(UpdateModelCommand.class, m, selectedEntity);
+            EngineCmdManager.getInstance(modelEngine).execute(UpdateModelCommand.class, m);
         } else {
-            EngineCmdManager.getInstance(modelEngine).execute(DeleteModelCommand.class, m, selectedEntity);
+            EngineCmdManager.getInstance(modelEngine).execute(DeleteModelCommand.class, m);
         }
 		
 		// hiding the selectedEntityView
@@ -91,7 +91,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 		// locally to the user what he was doing
 		mapView.deleteEntity(selectedEntity);
 		modelMap.put(selectedEntity, m);
-		EngineCmdManager.getInstance(modelEngine).execute(AddModelCommand.class, m, selectedEntity);
+		EngineCmdManager.getInstance(modelEngine).execute(AddModelCommand.class, m);
 		
 		// putting selectedEntityView's state back to SELECTION
 		// to enable entity selection on map again
@@ -125,7 +125,6 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 				case NEW:
 					if (selectedEntity instanceof IShapedEntity) {
 						// add the singleTap point to the IShapedEntity
-//						((ShapedEntity) selectedEntity).addPoint(geoP);
 						UICmdManager.getInstance(undoRedoEngine).execute(AddPointCommand.class, selectedEntity, geoP);
 						// but do not add it to the engine until the user
 						// confirm that the entity is okay, instead display
@@ -139,7 +138,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 					} else {
 						m = factory.build(selectedEntity);
 						modelMap.put(selectedEntity, m);
-						EngineCmdManager.getInstance(modelEngine).execute(AddModelCommand.class, m, selectedEntity);
+						EngineCmdManager.getInstance(modelEngine).execute(AddModelCommand.class, m);
 						// the entity has been added to the engine, we can hide the selectedEntityView
 						selectedEntityView.hide();
 						// discard the selectedEntity
@@ -148,27 +147,25 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 					break;
 					
 				case SAVED:
-					if (!(selectedEntity instanceof IShapedEntity)) {
-						// check if we already have the model associated with this entity
-						if (!modelMap.containsKey(selectedEntity)) {
-							// create the model associated with this entity
-							m = factory.build(selectedEntity);
-							modelMap.put(selectedEntity, m);
-							
-						} else {
-							// we already have the model in the map
-							m = modelMap.get(selectedEntity);
-							// update the model location with the singleTap point
-							m.setLocation(new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6()));
-						}
-						// update the model on the engine
-						EngineCmdManager.getInstance(modelEngine).execute(UpdateModelCommand.class, m, selectedEntity);
-						// the entity has been moved on map and its model has been updated
-						// so we can hide the selectedEntityView
-						selectedEntityView.hide();
-						// discard the selectedEntity
-						selectedEntity = null;
-					}
+                    // check if we already have the model associated with this entity
+                    if (!modelMap.containsKey(selectedEntity)) {
+                        // create the model associated with this entity
+                        m = factory.build(selectedEntity);
+                        modelMap.put(selectedEntity, m);
+
+                    } else {
+                        // we already have the model in the map
+                        m = modelMap.get(selectedEntity);
+                        // update the model location with the singleTap point
+                        m.setLocation(new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6()));
+                    }
+                    // update the model on the engine
+                    EngineCmdManager.getInstance(modelEngine).execute(UpdateModelCommand.class, m);
+                    // the entity has been moved on map and its model has been updated
+                    // so we can hide the selectedEntityView
+                    selectedEntityView.hide();
+                    // discard the selectedEntity
+                    selectedEntity = null;
 					break;
 					
 				case ON_MAP:
@@ -196,7 +193,10 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 		if (mapView != null && selectedEntityView != null) {
 			switch (selectedEntityView.getState()) {
 				case CONFIRM:
+                    // do nothing because we need to wait for the user to confirm that his entity
+                    // is ready to be saved and drawn
 					break;
+
 				default:
 					// updating the selectedEntityView
 					selectedEntity = e;

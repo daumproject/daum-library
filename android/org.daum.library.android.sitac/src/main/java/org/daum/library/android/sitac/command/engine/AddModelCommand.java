@@ -14,16 +14,12 @@ public class AddModelCommand implements IEngineCommand {
 
 	@Override
 	public <T> void execute(T... args) {
-		if (args.length == 2 && args[0] instanceof IModel
-				&& args[1] instanceof IEntity) {
-			engine.add((IModel) args[0]);
-			
-		} else if (args.length == 1 && args[0] instanceof IModel) {
+        if (args.length == 1 && args[0] instanceof IModel) {
 			engine.add((IModel) args[0]);
 			
 		} else {
 			throw new IllegalArgumentException(
-					"AddModelCommand should be called like this: execute(IModel, IEntity) or execute(IModel)");
+					"AddModelCommand should be called like this: execute(IModel)");
 		}
 	}
 }
