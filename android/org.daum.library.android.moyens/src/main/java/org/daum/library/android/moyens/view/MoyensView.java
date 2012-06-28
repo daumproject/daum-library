@@ -2,6 +2,7 @@ package org.daum.library.android.moyens.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.util.Pair;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -167,6 +168,7 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
     @Override
     public void onActionClicked(String tab, String action) {
         if (listener != null) {
+            Log.d(TAG, "onActionClicked");
             Demand newDemand = new Demand(VehicleType.valueOf(action));
             listener.onDemandAsked(newDemand);
         }

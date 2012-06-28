@@ -63,7 +63,8 @@ public class EngineHandler implements OnEngineStateChangeListener {
     @Override
     public void onDelete(String id) {
         Log.d(TAG, "onDelete(IModel)");
-        delete(getEntityWithModelId(id));
+        IEntity e = getEntityWithModelId(id);
+        if (e != null) delete(e);
     }
 
     @Override
