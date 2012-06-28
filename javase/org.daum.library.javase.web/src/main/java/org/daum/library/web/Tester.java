@@ -1,5 +1,7 @@
 package org.daum.library.web;
 
+import org.webbitserver.WebServers;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -47,9 +49,23 @@ public class Tester {
     }
 
     public static void  main(String argv[]){
-        Tester t = new Tester();
-        String template =   new String(t.load("pages/moyens.html"));
 
-        System.out.println(template.replace("$contenu$",""));
+        final WebSocketChannel    webSocketChannel = new WebSocketChannel();
+        WebServers.createWebServer(8082)
+                .add("/jed", webSocketChannel).start();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+             while(true){
+                 webSocketChannel.broadcast("update");
+                 try {
+                     Thread.sleep(1000);
+                 } catch (InterruptedException e) {
+                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                 }
+             }
+            }
+        })      .start();
     }
 }

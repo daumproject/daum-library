@@ -48,40 +48,47 @@
     </div>
     <div class="spacer"></div>
 
-   </div>
+</div>
 
 <script type="text/javascript" charset="utf-8">
 
-        function showMessage(text)
-        {
-        document.getElementById('text').innerHTML = text;
-        }
-        var ws = new WebSocket('ws://$ip$:8082/jed');
-        showMessage('Connecting...');
-        ws.onopen = function() {
 
-        showMessage('Connected!');
+    $(document).ready(function() {
+    $('#moyens').dataTable();
+    } );
 
 
-        };
-        ws.onclose = function() {
 
-        showMessage('Lost connection');
+    function showMessage(text)
+    {
+    document.getElementById('text').innerHTML = text;
+    }
+    var ws = new WebSocket('ws://$ip$:8082/jed');
+    showMessage('Connecting...');
+    ws.onopen = function() {
 
-        };
-
-        ws.onmessage = function(msg) {
+    showMessage('Connected!');
 
 
-        showMessage(msg.data);
+    };
+    ws.onclose = function() {
+
+    showMessage('Lost connection');
+
+    };
+
+    ws.onmessage = function(msg) {
 
 
-        };
+    var oTable =  $('#moyens').dataTable();
 
-        $(document).ready(function() {
-        $('#moyens').dataTable();
-        } );
-    </script>
+    oTable.fnUpdate( ['a', 'b', 'c', 'd', 'e'], 1, 0 ); // Row
+
+
+    };
+
+
+</script>
 
 </body>
 
