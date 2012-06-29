@@ -123,6 +123,12 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
     }
 
     @Override
+    public void onDemandUpdated(Demand demand) {
+        Log.d(TAG, "!!!!!!!!!!!!!!!!!!!!!!!!! onDemandUpdated "+demand);
+        engine.update(demand);
+    }
+
+    @Override
     public void onAdd(final Demand d) {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override

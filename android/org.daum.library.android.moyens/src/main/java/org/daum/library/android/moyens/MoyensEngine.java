@@ -109,6 +109,20 @@ public class MoyensEngine {
         }
     }
 
+    public void update(Demand d) {
+        PersistenceSession session = null;
+        try {
+            session = factory.getSession();
+            session.update(d);
+
+        } catch (PersistenceException ex) {
+            Log.e(TAG, "Error while updating demand "+d, ex);
+
+        } finally {
+            if (session != null) session.close();
+        }
+    }
+
     public void setOnEventListener(OnEventListener listener) {
         this.listener = listener;
     }
