@@ -1,6 +1,9 @@
 package org.daum.library.android.sitac.view;
 
 import android.util.Log;
+import android.widget.*;
+import org.daum.library.android.sitac.engine.IUndoRedoEngine;
+import org.daum.library.android.sitac.engine.UndoRedoEngine;
 import org.daum.library.android.sitac.listener.OnSelectedEntityEventListener;
 
 import android.content.Context;
@@ -17,10 +20,6 @@ import android.text.InputType;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.entity.IShapedEntity;
 
@@ -34,13 +33,13 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
     public enum State {
 		SELECTION,
 		CONFIRM,
-        CONFIRM_UNPERSISTABLE,
 		DELETION
 	}
 	
 	private static final String TEXT_DELETE = "Supprimer";
 	private static final String TEXT_TITLE = "Sélection:";
 	private static final String TEXT_CONFIRM = "Terminer";
+    private static final String TEXT_SELECT_ENT_WHEN_DRAWING = "Impossible de sélectionner une autre entité pendant un tracé. Veuillez terminer l'action en cours.";
 	
 	private Context ctx;
     private IEntity entity;
@@ -156,20 +155,10 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
 				break;
 				
 			case CONFIRM:
-                actionBtn.setEnabled(true);
 				actionBtn.setText(TEXT_CONFIRM);
-                actionBtn.setTextColor(Color.WHITE);
 				actionBtn.setVisibility(View.VISIBLE);
 				undoRedoLayout.setVisibility(View.VISIBLE);
 				break;
-
-            case CONFIRM_UNPERSISTABLE:
-                actionBtn.setEnabled(false);
-                actionBtn.setText(TEXT_CONFIRM);
-                actionBtn.setTextColor(Color.GRAY);
-                actionBtn.setVisibility(View.VISIBLE);
-                undoRedoLayout.setVisibility(View.VISIBLE);
-                break;
 		}
 		
 		measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -260,42 +249,43 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
 
     /**
      * Update the view content according to the entity given in parameter
+     * if it can handle it in its current state
+     * The returned IEntity will be the one currently managed by this view
      *
-     * @param entity an IEntity
+     * @param e an IEntity
+     * @return IEntity that is currently managed by this view
      */
-    public void registerEntity(IEntity entity) {
-        if (this.entity != null) {
-            this.entity.deleteObserver(this); // do not observe old entity anymore
-        }
-        this.entity = entity; // register the new entity
-        this.entity.addObserver(this); // observe the new entity
-        this.icon = entity.getIcon();
-        this.msg = entity.getType()+entity.getMessage();
-        switch (this.entity.getState()) {
-            case SAVED:
-                state = State.DELETION;
-                break;
+    public IEntity registerEntity(IEntity e) {
+        switch (state) {
+            case CONFIRM:
+                Toast.makeText(ctx, TEXT_SELECT_ENT_WHEN_DRAWING, Toast.LENGTH_LONG).show();
+                return this.entity;
 
-            case NEW:
-                state = State.SELECTION;
-                break;
-
-            case ON_MAP:
-                if (entity instanceof IShapedEntity) {
-                    IShapedEntity shapedEntity = (IShapedEntity) entity;
-                    if (shapedEntity.isPersistable()) {
-                        state = State.CONFIRM;
-                    }
+            default:
+                if (this.entity != null) {
+                    this.entity.deleteObserver(this); // do not observe old entity anymore
                 }
-                break;
+                this.entity = e; // register the new entity
+                this.entity.addObserver(this); // observe the new entity
+                this.icon = e.getIcon();
+                this.msg = e.getType()+e.getMessage();
+                switch (entity.getState()) {
+                    case SAVED:
+                        state = State.DELETION;
+                        break;
+
+                    case NEW:
+                        state = State.SELECTION;
+                        break;
+
+                    case ON_MAP:
+                        state = State.CONFIRM;
+                        break;
+                }
+                show();
+                return entity;
         }
-        show();
     }
-	
-	public void updateView(Drawable icon, String message) {
-		this.icon = icon;
-		this.msg = message;
-	}
 	
 	public void hide() {
 		setVisibility(View.GONE);
@@ -310,7 +300,6 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
     @Override
     public void update(Observable o, Object arg) {
         if (arg instanceof IEntity) {
-            Log.d(TAG, "NOTIFIED SITAC SELECTED ENTITY");
             IEntity e = (IEntity) arg;
             switch (e.getState()) {
                 case SAVED:
@@ -319,29 +308,44 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
 
                 case ON_MAP:
                     if (e instanceof IShapedEntity) {
-                        IShapedEntity shapedEntity = (IShapedEntity) e;
-                        if (shapedEntity.isPersistable()) {
-                            state = State.CONFIRM;
+                        IShapedEntity sEnt = (IShapedEntity) e;
+                        if (sEnt.isPersistable()) {
+                            actionBtn.setEnabled(true);
+                            actionBtn.setTextColor(Color.WHITE);
                         } else {
-                            state = State.CONFIRM_UNPERSISTABLE;
+                            actionBtn.setEnabled(false);
+                            actionBtn.setTextColor(Color.GRAY);
                         }
+                        state = State.CONFIRM;
                         show();
                     }
                     break;
             }
 
+        } else if (arg instanceof IUndoRedoEngine) {
+            IUndoRedoEngine engine = (IUndoRedoEngine) arg;
+            if (engine.canRedo()) {
+                redoView.setEnabled(true);
+                redoView.setAlpha(255);
+            }
+            else {
+                redoView.setEnabled(false);
+                redoView.setAlpha(60);
+            }
+
+            if (engine.canUndo()) {
+                undoView.setEnabled(true);
+                undoView.setAlpha(255);
+            }
+            else {
+                undoView.setEnabled(false);
+                undoView.setAlpha(60);
+            }
+
         } else {
-            Log.w(TAG, "I don't know how to update myself with this object "+arg+". Just know how with IEntity");
+            Log.w(TAG, "I don't know how to update myself with this object " + arg + ". Just know how with IEntity");
         }
     }
-	
-	public void setState(State state) {
-		this.state = state;
-	}
-	
-	public State getState() {
-		return state;
-	}
 	
 	public void setOnSelectedEntityEventListener(OnSelectedEntityEventListener listener) {
 		this.listener = listener;

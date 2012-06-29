@@ -113,31 +113,45 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
 
     @Port(name="notify")
     public void notifiedByReplica(final Object m) {
+        ChangeListener.getInstance().receive(m);
+    }
+
+    @Override
+    public void onDemandAsked(Demand newDemand) {
+        Log.d(TAG, "!!!!!!!!!!!!!!!!!!!!!!!!! onDemandAsked "+newDemand);
+        engine.add(newDemand);
+    }
+
+    @Override
+    public void onAdd(final Demand d) {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ChangeListener.getInstance().receive(m);
+                Log.d(TAG, "?????????? onAdd event si si");
+                moyensView.addDemand(d);
             }
         });
     }
 
     @Override
-    public void onDemandAsked(Demand newDemand) {
-        engine.add(newDemand);
+    public void onUpdate(final Demand d) {
+        uiService.getRootActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "?????????? onUpdate event si si");
+                moyensView.updateDemand(d);
+            }
+        });
     }
 
     @Override
-    public void onAdd(Demand d) {
-        moyensView.addDemand(d);
-    }
-
-    @Override
-    public void onUpdate(Demand d) {
-        moyensView.updateDemand(d);
-    }
-
-    @Override
-    public void onReplicaSynced(Collection<Demand> data) {
-        moyensView.addDemands(new ArrayList<Demand>(data));
+    public void onReplicaSynced(final Collection<Demand> data) {
+        uiService.getRootActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "?????????? onReplicaSynced event si si");
+                moyensView.addDemands(new ArrayList<Demand>(data));
+            }
+        });
     }
 }

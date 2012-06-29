@@ -1,4 +1,4 @@
-package org.daum.library.android.sitac.manager;
+package org.daum.library.android.sitac.command.manager;
 
 import org.daum.library.android.sitac.command.ICommand;
 import org.daum.library.android.sitac.command.RedoCommand;

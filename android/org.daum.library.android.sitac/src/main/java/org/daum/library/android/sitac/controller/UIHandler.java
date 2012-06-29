@@ -12,20 +12,20 @@ import org.daum.library.android.sitac.command.engine.AddModelCommand;
 import org.daum.library.android.sitac.command.engine.DeleteModelCommand;
 import org.daum.library.android.sitac.command.engine.UpdateModelCommand;
 import org.daum.library.android.sitac.command.ui.AddPointCommand;
+import org.daum.library.android.sitac.command.ui.ClearUndoStackCommand;
 import org.daum.library.android.sitac.engine.SITACEngine;
 import org.daum.library.android.sitac.engine.UndoRedoEngine;
 import org.daum.library.android.sitac.listener.OnMenuViewEventListener;
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
 import org.daum.library.android.sitac.listener.OnSelectedEntityEventListener;
-import org.daum.library.android.sitac.manager.CmdManager;
-import org.daum.library.android.sitac.manager.EngineCmdManager;
-import org.daum.library.android.sitac.manager.UICmdManager;
+import org.daum.library.android.sitac.command.manager.CmdManager;
+import org.daum.library.android.sitac.command.manager.EngineCmdManager;
+import org.daum.library.android.sitac.command.manager.UICmdManager;
 import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACSelectedEntityView;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.entity.IModelFactory;
 import org.daum.library.android.sitac.view.entity.IShapedEntity;
-import org.daum.library.android.sitac.view.entity.AbstractShapedEntity;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -55,10 +55,8 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	@Override
 	public void onMenuItemSelected(IEntity entity) {
 		if (selectedEntityView != null) {
-			// updating the selectedEntity
-			selectedEntity = entity;
-            // register the selectedEntity to the selectedEntityView
-            selectedEntityView.registerEntity(selectedEntity);
+            // register the entity to the selectedEntityView
+			selectedEntity = selectedEntityView.registerEntity(entity);
 		}
 	}
 	
@@ -77,15 +75,18 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	
 	@Override
 	public void onConfirmButtonClicked() {
-		// if we are here, it means that the user just confirm that his zone/arrow action is
+		// if we are here, it means that the user just confirm that his IShapedEntity is
 		// ok as it is right now, he do not want more points to be added to it
 		// so now we can add it to the engine
 		IModel m = factory.build(selectedEntity);
-		// delete the IShapedEntity because it is on the map just to render
-		// locally to the user what he was doing
+		// delete the IShapedEntity from the map because it was there just to render
+		// in real-time what the user was doing
 		mapView.deleteEntity(selectedEntity);
 		modelMap.put(selectedEntity, m);
 		EngineCmdManager.getInstance(modelEngine).execute(AddModelCommand.class, m);
+        // clear the undo/redo commands stack from the undoRedoEngine to prevent
+        // further IShapedEntity to be edited by the commands the engine has
+        UICmdManager.getInstance(undoRedoEngine).execute(ClearUndoStackCommand.class);
 
 		selectedEntity = null;
 	}
@@ -172,18 +173,8 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	@Override
 	public void onEntitySelected(IEntity e) {
 		if (mapView != null && selectedEntityView != null) {
-			switch (selectedEntityView.getState()) {
-				case CONFIRM:
-                    // do nothing because we need to wait for the user to confirm that his entity
-                    // is ready to be saved and drawn
-					break;
-
-				default:
-					// updating the selectedEntityView
-					selectedEntity = e;
-					selectedEntityView.registerEntity(selectedEntity);
-					break;
-			}
+            // updating the selectedEntityView
+            selectedEntity = selectedEntityView.registerEntity(e);
 		}
 	}
 
@@ -193,6 +184,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 
 	public void registerSelectedEntityView(SITACSelectedEntityView view) {
 		this.selectedEntityView = view;
+        undoRedoEngine.addObserver(selectedEntityView);
 	}
 
 }

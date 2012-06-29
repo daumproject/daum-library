@@ -1,4 +1,4 @@
-package org.daum.library.android.sitac.manager;
+package org.daum.library.android.sitac.command.manager;
 
 import java.util.Hashtable;
 

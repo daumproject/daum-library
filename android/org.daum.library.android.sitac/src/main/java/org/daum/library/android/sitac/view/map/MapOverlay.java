@@ -74,8 +74,9 @@ public class MapOverlay extends Overlay {
 		// 	be drawn on the "bottom" of the entity stack
 		// - second it makes AbstractShapedEntity objects
 		// 	be "clicked" after other entities in the priority order
-		// which mean that if a DemandEntity is in a ZoneEntity, the
-		// DemandEntity will answer first and consume the longPress event
+		// which means that for example if a DemandEntity
+		// is in a ZoneEntity, the DemandEntity will
+		// answer first and consume the longPress event
 		if (entity instanceof AbstractShapedEntity) {
 			entities.add(0, entity);
 		} else entities.add(entity);

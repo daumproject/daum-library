@@ -5,7 +5,7 @@ import java.util.Hashtable;
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.command.engine.AddModelCommand;
 import org.daum.library.android.sitac.engine.SITACEngine;
-import org.daum.library.android.sitac.manager.EngineCmdManager;
+import org.daum.library.android.sitac.command.manager.EngineCmdManager;
 import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACMenuView;
 import org.daum.library.android.sitac.view.SITACSelectedEntityView;

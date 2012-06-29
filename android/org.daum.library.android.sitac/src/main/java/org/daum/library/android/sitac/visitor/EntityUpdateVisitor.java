@@ -51,7 +51,6 @@ public class EntityUpdateVisitor implements IVisitor {
         if (d.getGh_desengagement() != null) {
             // the vehicle left the intervention
             e.setGeoPoint(null);
-            Log.d(TAG, "geoPoint in visitor set to null for entity, it should not be displayed after that");
         }
     }
 

@@ -1,6 +1,7 @@
 package org.daum.library.android.sitac.view.entity;
 
 import java.util.ArrayList;
+import java.util.Observer;
 
 import org.osmdroid.api.IGeoPoint;
 
@@ -36,6 +37,9 @@ public abstract class AbstractShapedEntity extends AbstractEntity implements ISh
 
     @Override
     public void setGeoPoint(IGeoPoint geoPoint) {
+        // we do not want to save the location until
+        // the user confirm that his entity is ready
+        // to be saved
         if (getState() == State.SAVED) {
             super.setGeoPoint(geoPoint);
         }

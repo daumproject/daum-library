@@ -11,7 +11,7 @@ import android.graphics.drawable.Drawable;
 public interface IEntity extends IObservable, IElement {
 	
 	public enum State {
-		/** default AbstractEntity State; mark the entity as "not saved into any engine" */
+		/** default entity state; mark the entity as "not saved into any engine" */
 		NEW,
 		/**  mark the entity as "saved into one engine" */
 		SAVED,
@@ -51,7 +51,7 @@ public interface IEntity extends IObservable, IElement {
 	/**
 	 * Set the type of the entity. You should really be careful when using this
 	 * method because it is used by the IModelFactory to create the model from
-	 * the type
+	 * the type. So if the IModelFactory does not know the type, it will crash
 	 * 
 	 * @param type
 	 *            some model type
@@ -59,7 +59,7 @@ public interface IEntity extends IObservable, IElement {
 	public void setType(String type);
 
 	/**
-	 * A message use to add information for the user (like 01 in FPT01)
+	 * A message used to add information for the user (like 01 in FPT01)
 	 * 
 	 * @return message
 	 */
@@ -87,8 +87,7 @@ public interface IEntity extends IObservable, IElement {
 	public void setIcon(Drawable icon);
 
 	/**
-	 * The position of the entity on the map If this value is null, then the
-	 * entity as never been positionned on the map
+	 * For most entities this is its location on the map
 	 * 
 	 * @return geoPoint gps location of the entity
 	 */
@@ -123,12 +122,12 @@ public interface IEntity extends IObservable, IElement {
 	 * type + message
 	 * 
 	 * @param enabled
-	 *            boolean to active or not the tagText
+	 *            boolean to activate or not the tagText
 	 */
 	public void setTagTextEnabled(boolean enabled);
 
     /**
-     * Tells wether or not this entity can draw itself.
+     * Tells if this entity can draw itself or not
      *
      * @return true if it has enough data to draw itself
      */
