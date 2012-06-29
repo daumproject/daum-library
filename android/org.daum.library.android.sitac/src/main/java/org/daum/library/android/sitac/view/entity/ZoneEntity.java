@@ -1,6 +1,7 @@
 package org.daum.library.android.sitac.view.entity;
 
 import android.graphics.*;
+import android.util.Log;
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.visitor.IVisitor;
 import org.osmdroid.api.IGeoPoint;
@@ -9,10 +10,11 @@ import org.osmdroid.views.MapView.Projection;
 
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
-import pythagoras.d.PathIterator;
 
-public class ZoneEntity extends ShapedEntity {
-	
+public class ZoneEntity extends AbstractShapedEntity {
+
+    private static final String TAG = "ZoneEntity";
+
 	private Paint pointPaint;
 	private pythagoras.d.Path zone;
     private Path path;
@@ -50,9 +52,10 @@ public class ZoneEntity extends ShapedEntity {
 				for (Point p : pts) canvas.drawPoint(p.x, p.y, pointPaint);
 
 			} else {
-                //if (geoPoint != null) {
-                //    offsetPath(pts, prj.toMapPixels(geoPoint, null));
-                //}
+                if (geoPoint != null) {
+                    Log.d(TAG, "geoPoint is not null, setting offset to the ZoneEntity");
+                    offsetPath(pts, prj.toMapPixels(geoPoint, null));
+                }
 
 				// draw the filled zone
                 path.reset();

@@ -179,8 +179,13 @@ public abstract class AbstractEntity implements IEntity {
 	public void addObserver(Observer obs) {
 		observable.addObserver(obs);
 	}
-	
-	protected void notifyObservers() {
+
+    @Override
+    public void deleteObserver(Observer obs) {
+        observable.deleteObserver(obs);
+    }
+
+    protected void notifyObservers() {
 		observable.setChanged();
 		observable.notifyObservers(this);
 	}
@@ -188,5 +193,10 @@ public abstract class AbstractEntity implements IEntity {
     @Override
     public String toString() {
         return "["+state+"] "+message;
+    }
+
+    @Override
+    public boolean isDrawable() {
+        return geoPoint != null;
     }
 }

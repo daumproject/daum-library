@@ -15,7 +15,7 @@ import android.graphics.Canvas;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 
-public class ArrowEntity extends ShapedEntity {
+public class ArrowEntity extends AbstractShapedEntity {
 
     public static final String SAP = "Secours à personnes";
     public static final String CHEM = "Risques particuliers";

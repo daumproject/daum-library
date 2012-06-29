@@ -90,8 +90,8 @@ public class EngineHandler implements OnEngineStateChangeListener {
 
     private void add(IEntity e) {
         Log.d(TAG, "add(IEntity) to the mapView (and menuView if necessary)");
-        if (e.getGeoPoint() == null) {
-            // in case the entity has no location on map, add it to the menu
+        if (e.getGeoPoint() == null && e instanceof DemandEntity) {
+            // in case its a DemandEntity that has no location on map, add it to the menu
             menuView.addEntityWithNoLocation((DemandEntity) e);
         }
         mapView.addEntity(e);

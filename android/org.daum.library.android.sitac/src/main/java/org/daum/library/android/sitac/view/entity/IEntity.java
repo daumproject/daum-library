@@ -126,4 +126,11 @@ public interface IEntity extends IObservable, IElement {
 	 *            boolean to active or not the tagText
 	 */
 	public void setTagTextEnabled(boolean enabled);
+
+    /**
+     * Tells wether or not this entity can draw itself.
+     *
+     * @return true if it has enough data to draw itself
+     */
+    public boolean isDrawable();
 }

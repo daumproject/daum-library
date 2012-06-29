@@ -1,33 +1,50 @@
-// core
-merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}"
+ {
+merge 'mvn:org.daum.library.android/org.daum.library.android.messages/1.8.2-SNAPSHOT'
+merge 'mvn:org.daum.library.android/org.daum.library.android.replica/1.8'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}'
 merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}"
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nioChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}'
+addNode node0:AndroidNode
+addNode node1:AndroidNode
+ {
+  addComponent MessagesC795@node0 : MessagesComponent {}
+  addComponent Replica230@node0 : Replica {}
+addChannel defMSG513 : defMSG {}
+addChannel defSERVIC888 : defSERVICE {}
+addChannel SocketCha523 : SocketChannel {port='9003',replay='false',maximum_size_messaging='50',timer='2000'}
+bind Replica230.notification@node0 => defMSG513
+bind MessagesC795.notify@node0 => defMSG513
+bind MessagesC795.service@node0 => defSERVIC888
+bind Replica230.service@node0 => defSERVIC888
+bind Replica230.remote@node0 => SocketCha523
+bind Replica230.broadcast@node0 => SocketCha523
+updateDictionary defMSG513 
+updateDictionary defSERVIC888 
+updateDictionary SocketCha523 {port='9003'}@node1,{port='9002'}@node0
+updateDictionary MessagesC795@node0 
+updateDictionary Replica230@node0 
+}
 
-// lib
-merge "mvn:org.kevoree.library.android/org.kevoree.library.android.bluetooth/{kevoree.version}"
+ {
+  addComponent MessagesC281@node1 : MessagesComponent {}
+  addComponent Replica197@node1 : Replica {}
+addChannel defMSG177 : defMSG {}
+addChannel defSERVIC511 : defSERVICE {}
+addChannel SocketCha523 : SocketChannel {port='9003',replay='false',maximum_size_messaging='50',timer='2000'}
+bind Replica197.notification@node1 => defMSG177
+bind MessagesC281.notify@node1 => defMSG177
+bind MessagesC281.service@node1 => defSERVIC511
+bind Replica197.service@node1 => defSERVIC511
+bind Replica197.remote@node1 => SocketCha523
+bind Replica197.broadcast@node1 => SocketCha523
+updateDictionary defMSG177 
+updateDictionary defSERVIC511 
+updateDictionary SocketCha523 {port='9003'}@node1,{port='9002'}@node0
+updateDictionary MessagesC281@node1 
+updateDictionary Replica197@node1 
+}
 
-// daum
-merge "mvn:http://maven.kevoree.org/daum/snapshot!org.daum.library.android/org.daum.library.android.agetac.messages/1.7.6-SNAPSHOT"
-
-addNode node0: AndroidNode
-addNode node1: AndroidNode
-
-addGroup nanoRestGrp: NanoRestGroup
-
-addChannel bluetooth: BluetoothChannel
-
-addToGroup nanoRestGrp *
-
-addComponent messComp0@node0: MessagesComponent
-addComponent messComp1@node1: MessagesComponent
-
-// bind node0
-bind messComp0.inMessage@node0 => bluetooth
-bind messComp0.outMessage@node0 => bluetooth
-
-// bind node1
-bind messComp1.inMessage@node1 => bluetooth
-bind messComp1.outMessage@node1 => bluetooth
-
-// network addresses
-network node0 { "KEVOREE.remote.node.ip"= "192.168.1.147" }
-network node1 { "KEVOREE.remote.node.ip"= "192.168.1.121" }
+}

@@ -4,13 +4,13 @@ import org.daum.library.android.sitac.command.IUndoableCommand;
 import org.daum.library.android.sitac.engine.UndoRedoEngine;
 import org.daum.library.android.sitac.memento.IMemento;
 import org.daum.library.android.sitac.memento.PointMemento;
-import org.daum.library.android.sitac.view.entity.ShapedEntity;
+import org.daum.library.android.sitac.view.entity.AbstractShapedEntity;
 import org.osmdroid.api.IGeoPoint;
 
 public class RemovePointCommand implements IUICommand, IUndoableCommand {
 
 	private UndoRedoEngine undoRedoEngine;
-	private ShapedEntity shapedEnt;
+	private AbstractShapedEntity shapedEnt;
 	private IGeoPoint geoP;
 
 	public RemovePointCommand(UndoRedoEngine undoRedoEngine) {
@@ -24,14 +24,14 @@ public class RemovePointCommand implements IUICommand, IUndoableCommand {
 			this.shapedEnt = m.entity;
 			this.geoP = m.geoP;
 			
-		} else if (args.length == 2 && args[0] instanceof ShapedEntity
+		} else if (args.length == 2 && args[0] instanceof AbstractShapedEntity
 				&& args[1] instanceof IGeoPoint) {
-			this.shapedEnt = (ShapedEntity) args[0];
+			this.shapedEnt = (AbstractShapedEntity) args[0];
 			this.geoP = (IGeoPoint) args[1];
 
 		} else {
 			throw new IllegalArgumentException(
-					"RemovePointCommand should be called like this: execute(ShapedEntity, IGeoPoint) or execute(PointMemento)");
+					"RemovePointCommand should be called like this: execute(AbstractShapedEntity, IGeoPoint) or execute(PointMemento)");
 		}
 
 		shapedEnt.removePoint(geoP);

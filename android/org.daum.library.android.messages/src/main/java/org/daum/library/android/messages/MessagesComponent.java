@@ -4,15 +4,24 @@ import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TabHost;
+import android.widget.Toast;
 import org.daum.common.message.api.Message;
 import org.daum.library.android.messages.view.MessagesView;
 import org.daum.library.android.messages.view.ListItemView.MessageType;
+import org.daum.library.ormH.store.ReplicaStore;
+import org.daum.library.ormH.utils.PersistenceException;
+import org.daum.library.replica.cache.ReplicaService;
+import org.daum.library.replica.listener.ChangeListener;
+import org.kevoree.ContainerRoot;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
+import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
 import org.daum.library.android.messages.listener.IMessagesListener;
+
+import java.util.Collection;
 
 
 /**
@@ -23,14 +32,14 @@ import org.daum.library.android.messages.listener.IMessagesListener;
  */
 
 @Library(name = "Android")
-@Provides({
-        @ProvidedPort(name = "inMessage", type = PortType.MESSAGE)
-})
 @Requires({
-        @RequiredPort(name = "outMessage", type = PortType.MESSAGE, optional = true)
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
+})
+@Provides({
+        @ProvidedPort(name = "notify", type = PortType.MESSAGE)
 })
 @ComponentType
-public class MessagesComponent extends AbstractComponentType implements IMessagesListener {
+public class MessagesComponent extends AbstractComponentType implements IMessagesListener, MessagesEngine.OnEventListener {
 
     // Debugging
     private static final String TAG = "MessagesComponent";
@@ -40,13 +49,38 @@ public class MessagesComponent extends AbstractComponentType implements IMessage
 
     private KevoreeAndroidService uiService;
     private MessagesView messagesView;
+    private MessagesEngine engine;
 
     @Start
     public void start() {
-        if (D) Log.i(TAG, "BEGIN start");
         this.uiService = UIServiceHandler.getUIService();
+
+        getModelService().registerModelListener(new ModelListener() {
+            @Override
+            public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return false;
+            }
+
+            @Override
+            public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return false;
+            }
+
+            @Override
+            public void modelUpdated() {
+                try {
+                    ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
+                    ReplicaStore store = new ReplicaStore(replicatingService);
+                    engine = new MessagesEngine(store, getNodeName());
+                    engine.setOnEventListener(MessagesComponent.this);
+
+                } catch (PersistenceException e) {
+                    Log.e(TAG, "Error while initializing ReplicaStore", e);
+                }
+            }
+        });
+
         initUI();
-        if (D) Log.i(TAG, "END start");
     }
 
     private void initUI() {
@@ -56,13 +90,12 @@ public class MessagesComponent extends AbstractComponentType implements IMessage
                 public void run() {
                     Window window = uiService.getRootActivity().getWindow();
                     window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+                    messagesView = new MessagesView(uiService.getRootActivity(), getNodeName());
+                    messagesView.addEventListener(MessagesComponent.this);
+
+                    uiService.addToGroup(TAB_NAME, messagesView);
                 }
             });
-
-            messagesView = new MessagesView(uiService.getRootActivity(), getNodeName());
-            messagesView.addEventListener(this);
-
-            uiService.addToGroup(TAB_NAME, messagesView);
         } catch (Exception e) {
             Log.e(TAG, "Creating view failed", e);
         }
@@ -78,25 +111,44 @@ public class MessagesComponent extends AbstractComponentType implements IMessage
 
     }
 
-    @Port(name="inMessage")
-    public void messageIncoming(final Object inMessage) {
-        if (inMessage instanceof Message) {
-            uiService.getRootActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    messagesView.addMessage((Message) inMessage, MessageType.IN);
-                }
-            });
-        } else {
-            Log.w(TAG, "Cannot handle received object on port \"inMessage\"." +
-                    "Received object: "+inMessage.getClass().getSimpleName()+", type expected "+Message.class.getName());
-        }
+    @Port(name="notify")
+    public void notifiedByReplica(final Object m) {
+        ChangeListener.getInstance().receive(m);
     }
 
     @Override
     public void onSend(Message msg) {
-        getPortByName("outMessage", MessagePort.class).process(msg);
-        messagesView.addMessage(msg, MessageType.OUT);
-        if (D) Log.i("Message sent: ", msg.toString());
+        engine.add(msg);
+    }
+
+    @Override
+    public void onAdd(final Message msg, final MessageType type) {
+        uiService.getRootActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                messagesView.addMessage(msg, type);
+            }
+        });
+    }
+
+    @Override
+    public void onReplicaSynced(final Collection<Message> messages) {
+        uiService.getRootActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                for (Message m : messages) {
+                    // FIXME maybe change the way IN/OUT are determined because if the replica's id change..
+                    // this is going to crash pretty surely
+                    String id = m.getId().split("\\+")[0];
+                    Log.d(TAG, "replica synced: id >> "+id);
+                    if (id.equals(getNodeName())) {
+                        messagesView.addMessage(m, MessageType.OUT);
+
+                    } else {
+                        messagesView.addMessage(m, MessageType.IN);
+                    }
+                }
+            }
+        });
     }
 }

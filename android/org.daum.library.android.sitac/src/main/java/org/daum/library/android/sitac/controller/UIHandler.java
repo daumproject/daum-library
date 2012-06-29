@@ -3,7 +3,6 @@ package org.daum.library.android.sitac.controller;
 import java.util.Date;
 import java.util.Hashtable;
 
-import android.util.Log;
 import org.daum.common.gps.impl.GpsPoint;
 import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.IModel;
@@ -22,12 +21,11 @@ import org.daum.library.android.sitac.manager.CmdManager;
 import org.daum.library.android.sitac.manager.EngineCmdManager;
 import org.daum.library.android.sitac.manager.UICmdManager;
 import org.daum.library.android.sitac.view.SITACMapView;
-import org.daum.library.android.sitac.view.SITACMenuView;
 import org.daum.library.android.sitac.view.SITACSelectedEntityView;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.entity.IModelFactory;
 import org.daum.library.android.sitac.view.entity.IShapedEntity;
-import org.daum.library.android.sitac.view.entity.ShapedEntity;
+import org.daum.library.android.sitac.view.entity.AbstractShapedEntity;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
@@ -57,12 +55,10 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	@Override
 	public void onMenuItemSelected(IEntity entity) {
 		if (selectedEntityView != null) {
-			// updating the selectedEntityView
+			// updating the selectedEntity
 			selectedEntity = entity;
-			String txt = selectedEntity.getType()+selectedEntity.getMessage();
-			selectedEntityView.updateView(entity.getIcon(), txt);
-			selectedEntityView.setState(SITACSelectedEntityView.State.SELECTION);
-			selectedEntityView.show();
+            // register the selectedEntity to the selectedEntityView
+            selectedEntityView.registerEntity(selectedEntity);
 		}
 	}
 	
@@ -75,9 +71,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
         } else {
             EngineCmdManager.getInstance(modelEngine).execute(DeleteModelCommand.class, m);
         }
-		
-		// hiding the selectedEntityView
-		selectedEntityView.hide();
+
 		selectedEntity = null;
 	}
 	
@@ -92,13 +86,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 		mapView.deleteEntity(selectedEntity);
 		modelMap.put(selectedEntity, m);
 		EngineCmdManager.getInstance(modelEngine).execute(AddModelCommand.class, m);
-		
-		// putting selectedEntityView's state back to SELECTION
-		// to enable entity selection on map again
-		selectedEntityView.setState(SITACSelectedEntityView.State.SELECTION);
-		
-		// hiding the selectedEntityView
-		selectedEntityView.hide();
+
 		selectedEntity = null;
 	}
 	
@@ -172,13 +160,6 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 					// just add the singleTap point to the IShapedEntity
 					// because it is already displayed on the map
 					UICmdManager.getInstance(undoRedoEngine).execute(AddPointCommand.class, selectedEntity, geoP);
-
-                    // check if the entity has enough information to be saved
-                    // if it is, display the confirm button in the SITACSelectedEntityView
-					if (((ShapedEntity) selectedEntity).isPersistable()) {
-						selectedEntityView.setState(SITACSelectedEntityView.State.CONFIRM);
-						selectedEntityView.show();
-					}
 					
 					break;
 			}
@@ -200,9 +181,7 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 				default:
 					// updating the selectedEntityView
 					selectedEntity = e;
-					selectedEntityView.updateView(selectedEntity.getIcon(), selectedEntity.getType()+selectedEntity.getMessage());
-					selectedEntityView.setState(SITACSelectedEntityView.State.DELETION);
-					selectedEntityView.show();
+					selectedEntityView.registerEntity(selectedEntity);
 					break;
 			}
 		}

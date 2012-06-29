@@ -24,7 +24,6 @@ import java.util.*;
 public class MessagesListView extends AbstractMessagesView {
 
     private static final String TAG = "MessagesListView";
-    private static final boolean D = true;
 
     // String constants
     private static final String TEXT_GO_UP = "Remonter";
@@ -84,15 +83,23 @@ public class MessagesListView extends AbstractMessagesView {
 
 
     /**
-     * Adds a message to the ListView
+     * Adds a message to the ListView if it has not been already added
      * @param msg the message to add
      * @param type either MessageType.IN (received) or MessageType.OUT (emitted)
      */
     public void addMessage(Message msg, MessageType type) {
-        if (D) Log.i(TAG, "addMessage(SimpleMessage msg, MessageType type)");
+        for (Pair<MessageType, Message> pair : messages) {
+            if (pair.second.getId().equals(msg.getId())) {
+                // message is already in the list, do not add it
+                return;
+            }
+        }
+        // the message wasn't in the list, so add it
         messages.add(new Pair<MessageType, Message>(type, msg));
+
         adapter.notifyDataSetChanged();
+
+        // make the list go all the way down to the last message
         listView.setSelection(messages.size() - 1);
     }
-
 }

@@ -38,7 +38,8 @@ public class MessagesView extends TabHost implements IMessagesListener, TabHost.
     private NewMessageView newMsgView;
     private MessagesListView msgListView;
     private LinearLayout newMsgTabLayout, msgListTabLayout;
-    private ViewState state;
+    private ViewState state = ViewState.DISPLAYING_NEW_MSG;
+    private Toast newMsgToast;
 
     public MessagesView(Context context, String senderName) {
         super(context, null); // http://stackoverflow.com/questions/5408452/honeycomb-and-tabhost-specs
@@ -54,6 +55,7 @@ public class MessagesView extends TabHost implements IMessagesListener, TabHost.
     private void initUI() {
         newMsgView = new NewMessageView(ctx, senderName);
         msgListView = new MessagesListView(ctx);
+        newMsgToast = Toast.makeText(ctx, TEXT_NEW_MSG, Toast.LENGTH_SHORT);
     }
 
     private void configUI() {

@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.daum.library.android.messages</artifactId>
     <name>Daum :: Library :: Android :: Messages</name>
-    <version>1.8.0-SNAPSHOT</version>
+    <version>1.8.2-SNAPSHOT</version>
     <packaging>jar</packaging>
 
 
@@ -18,7 +18,13 @@
         <dependency>
             <groupId>org.daum.common.message.android</groupId>
             <artifactId>org.daum.common.message.android.root</artifactId>
-            <version>1.5</version>
+            <version>1.6</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.daum.library.android</groupId>
+            <artifactId>org.daum.library.android.ormH</artifactId>
+            <version>1.8</version>
         </dependency>
     </dependencies>
 

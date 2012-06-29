@@ -6,17 +6,25 @@
     <artifactId>org.daum.common.message.javase.root</artifactId>
     <packaging>jar</packaging>
     <name>Daum :: Common :: JavaSE </name>
-    <version>1.5</version>
+    <version>1.6</version>
 
     <parent>
         <artifactId>org.daum.common.message</artifactId>
         <groupId>org.daum.common.message</groupId>
-        <version>1.5</version>
+        <version>1.6</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <build>
         <sourceDirectory>../org.daum.common.message.root/src/main/</sourceDirectory>
     </build>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.daum.library.javase</groupId>
+            <artifactId>org.daum.library.javase.ormH</artifactId>
+            <version>1.8</version>
+        </dependency>
+    </dependencies>
 
 </project>

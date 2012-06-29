@@ -13,6 +13,7 @@ import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
+import org.daum.library.ormH.persistence.PersistentClass;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 

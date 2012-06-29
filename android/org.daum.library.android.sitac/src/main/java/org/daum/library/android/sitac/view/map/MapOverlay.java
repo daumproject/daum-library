@@ -3,9 +3,8 @@ package org.daum.library.android.sitac.view.map;
 import java.util.ArrayList;
 
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
-import org.daum.library.android.sitac.view.entity.ArrowEntity;
+import org.daum.library.android.sitac.view.entity.AbstractShapedEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
-import org.daum.library.android.sitac.view.entity.ShapedEntity;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
@@ -14,7 +13,6 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 
 public class MapOverlay extends Overlay {
@@ -61,7 +59,7 @@ public class MapOverlay extends Overlay {
 	protected void draw(Canvas canvas, MapView mapV, boolean shadow) {
 		if (!shadow) {
 			for (IEntity ent : entities) {
-				if (ent.getGeoPoint() != null) ent.draw(canvas, mapV);
+				if (ent.isDrawable()) ent.draw(canvas, mapV);
 			}
 		}
 	}
@@ -72,13 +70,13 @@ public class MapOverlay extends Overlay {
 
 	public void addEntity(IEntity entity) {
 		// this little trick do two things
-		// - first it makes ShapedEntity objects
+		// - first it makes AbstractShapedEntity objects
 		// 	be drawn on the "bottom" of the entity stack
-		// - second it makes ShapedEntity objects
+		// - second it makes AbstractShapedEntity objects
 		// 	be "clicked" after other entities in the priority order
 		// which mean that if a DemandEntity is in a ZoneEntity, the
 		// DemandEntity will answer first and consume the longPress event
-		if (entity instanceof ShapedEntity) {
+		if (entity instanceof AbstractShapedEntity) {
 			entities.add(0, entity);
 		} else entities.add(entity);
 	}

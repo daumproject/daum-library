@@ -1,5 +1,6 @@
 package org.daum.library.android.sitac.view;
 
+import android.util.Log;
 import org.daum.library.android.sitac.listener.OnSelectedEntityEventListener;
 
 import android.content.Context;
@@ -20,12 +21,17 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import org.daum.library.android.sitac.view.entity.IEntity;
+import org.daum.library.android.sitac.view.entity.IShapedEntity;
 
-public class SITACSelectedEntityView extends LinearLayout {
+import java.util.Observable;
+import java.util.Observer;
+
+public class SITACSelectedEntityView extends LinearLayout implements Observer {
 	
 	private static final String TAG = SITACSelectedEntityView.class.getSimpleName();
-	
-	public enum State {
+
+    public enum State {
 		SELECTION,
 		CONFIRM,
 		DELETION
@@ -36,6 +42,7 @@ public class SITACSelectedEntityView extends LinearLayout {
 	private static final String TEXT_CONFIRM = "Terminer";
 	
 	private Context ctx;
+    private IEntity entity;
 	private String msg;
 	private Drawable icon;
 	private ImageView iconView, undoView, redoView;
@@ -179,10 +186,15 @@ public class SITACSelectedEntityView extends LinearLayout {
 					switch (state) {
 						case DELETION:
 							listener.onDeleteButtonClicked();
+                            hide();
 							break;
 	
 						case CONFIRM:
 							listener.onConfirmButtonClicked();
+                            // putting selectedEntityView's state back to SELECTION
+                            // to enable entity selection on map again
+                            state = State.SELECTION;
+                            hide();
 							break;
 					}
 				}
@@ -234,6 +246,40 @@ public class SITACSelectedEntityView extends LinearLayout {
 			}
 		});
 	}
+
+    /**
+     * Update the view content according to the entity given in parameter
+     *
+     * @param entity an IEntity
+     */
+    public void registerEntity(IEntity entity) {
+        if (this.entity != null) {
+            this.entity.deleteObserver(this); // do not observe old entity anymore
+        }
+        this.entity = entity; // register the new entity
+        this.entity.addObserver(this); // observe the new entity
+        this.icon = entity.getIcon();
+        this.msg = entity.getType()+entity.getMessage();
+        switch (this.entity.getState()) {
+            case SAVED:
+                state = State.DELETION;
+                break;
+
+            case NEW:
+                state = State.SELECTION;
+                break;
+
+            case ON_MAP:
+                if (entity instanceof IShapedEntity) {
+                    IShapedEntity shapedEntity = (IShapedEntity) entity;
+                    if (shapedEntity.isPersistable()) {
+                        state = State.CONFIRM;
+                    }
+                }
+                break;
+        }
+        show();
+    }
 	
 	public void updateView(Drawable icon, String message) {
 		this.icon = icon;
@@ -249,6 +295,32 @@ public class SITACSelectedEntityView extends LinearLayout {
 		requestLayout();
 		setVisibility(View.VISIBLE);
 	}
+
+    @Override
+    public void update(Observable o, Object arg) {
+        if (arg instanceof IEntity) {
+            Log.d(TAG, "NOTIFIED SITAC SELECTED ENTITY");
+            IEntity e = (IEntity) arg;
+            switch (e.getState()) {
+                case SAVED:
+                    hide();
+                    break;
+
+                case ON_MAP:
+                    if (e instanceof IShapedEntity) {
+                        IShapedEntity shapedEntity = (IShapedEntity) e;
+                        if (shapedEntity.isPersistable()) {
+                            state = State.CONFIRM;
+                            show();
+                        }
+                    }
+                    break;
+            }
+
+        } else {
+            Log.w(TAG, "I don't know how to update myself with this object "+arg+". Just know how with IEntity");
+        }
+    }
 	
 	public void setState(State state) {
 		this.state = state;

@@ -6,6 +6,10 @@ import java.io.Serializable;
 import java.lang.String;
 import java.util.Date;
 
+import org.daum.library.ormH.annotations.Generated;
+import org.daum.library.ormH.annotations.Id;
+import org.daum.library.ormH.persistence.GeneratedType;
+
 /**
  * Created with IntelliJ IDEA.
  * User: max
@@ -15,6 +19,9 @@ import java.util.Date;
  */
 public class Message implements Serializable {
 
+    @Id
+    @Generated(strategy = GeneratedType.UUID)
+    private String id = "";
     public String jeSuis;
     public String jeVois;
     public String jePrevois;
@@ -40,6 +47,14 @@ public class Message implements Serializable {
         this.jeVois = v;
         this.groupeHoraire = TimeFormatter.getGroupeHoraire(new Date());
         this.sender = sender;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
