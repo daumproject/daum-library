@@ -2,6 +2,7 @@ package org.daum.library.android.moyens.view.quickactionbar;
 
 import java.util.ArrayList;
 
+import android.view.*;
 import org.daum.library.android.moyens.view.quickactionbar.listener.OnActionClickedListener;
 
 import android.content.Context;
@@ -12,8 +13,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
 import android.util.Pair;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.FrameLayout;
@@ -98,7 +97,8 @@ public class QuickActionsBar extends TabHost implements OnItemClickListener {
         Rect tmp = new Rect();
         parent.getDrawingRect(tmp);
         final Rect r = tmp;
-        
+
+        // adds a little right padding to the background
     	ShapeDrawable background = new ShapeDrawable(new Shape() {
 			@Override
 			public void draw(Canvas canvas, Paint paint) {

@@ -1,19 +1,21 @@
 package org.daum.library.android.moyens.view;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.util.Log;
 import android.util.Pair;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.*;
 import org.daum.common.model.api.*;
 import org.daum.library.android.moyens.view.listener.IMoyensListener;
 import org.daum.library.android.moyens.view.quickactionbar.QuickActionsBar;
 import org.daum.library.android.moyens.view.quickactionbar.listener.OnActionClickedListener;
 
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -42,6 +44,10 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
     private static final String TEXT_DEPART = "Départ";
     private static final String TEXT_ENGAGE = "Engagé";
     private static final String TEXT_DESENG = "Désengagement";
+    private static final String TEXT_DIALOG_TITLE = "Demande de confirmation";
+    private static final String TEXT_DIALOG_MESSAGE = " : voulez-vous le désengager ?";
+    private static final String TEXT_BTN_DESENG = "Désengager";
+    private static final String TEXT_BTN_CANCEL = "Annuler";
 
     private Context ctx;
     private ArrayList<Demand> demands;
@@ -56,6 +62,7 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         this.ctx = context;
         initUI();
         configUI();
+        defineCallbacks();
     }
 
     private void initUI() {
@@ -110,6 +117,30 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         addView(listView, listParams);
         addView(tv_emptyList, emptyTvParams);
         addView(qActionsBar, barParams);
+    }
+
+    private void defineCallbacks() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                builder.setTitle(TEXT_DIALOG_TITLE);
+                final Demand d = demands.get(i);
+                String num = (d.getNumber() == null) ? "" : d.getNumber();
+                String name = d.getType()+num;
+                builder.setMessage(name+TEXT_DIALOG_MESSAGE);
+                builder.setPositiveButton(TEXT_BTN_DESENG, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        d.setGh_desengagement(new Date());
+                        if (listener != null) listener.onDemandUpdated(d);
+                    }
+                });
+                builder.setNegativeButton(TEXT_BTN_CANCEL, null);
+                AlertDialog aDialog = builder.create();
+                aDialog.show();
+            }
+        });
     }
 
     /**

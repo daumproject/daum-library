@@ -16,4 +16,10 @@ public interface IMoyensListener {
      * @param newDemand the new demand
      */
     void onDemandAsked(Demand newDemand);
+
+    /**
+     * Called when a demand in the list has been updated
+     * @param demand the updated demand
+     */
+    void onDemandUpdated(Demand demand);
 }
