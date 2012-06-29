@@ -56,6 +56,7 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
     private QuickActionsBar qActionsBar;
     private ArrayList<Pair<String, ArrayList<String>>> qaBarData;
     private IMoyensListener listener;
+    private AlertDialog.Builder builder;
 
     public MoyensView(Context context) {
         super(context);
@@ -76,6 +77,8 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
             qaBarData.add(new Pair<String, ArrayList<String>>(sector.name(), actions));
         }
         qActionsBar = new QuickActionsBar(ctx, qaBarData);
+
+        builder = new AlertDialog.Builder(ctx);
     }
 
     private void configUI() {
@@ -113,6 +116,11 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         listParams.addRule(RelativeLayout.ABOVE, qActionsBar.getId());
         listParams.addRule(RelativeLayout.BELOW, headerView.getId());
 
+        // configuring the AlertDialog for desengagement
+        builder.setTitle(TEXT_DIALOG_TITLE);
+        builder.setNegativeButton(TEXT_BTN_CANCEL, null);
+
+
         addView(headerView, headerParams);
         addView(listView, listParams);
         addView(tv_emptyList, emptyTvParams);
@@ -123,22 +131,21 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                builder.setTitle(TEXT_DIALOG_TITLE);
                 final Demand d = demands.get(i);
-                String num = (d.getNumber() == null) ? "" : d.getNumber();
-                String name = d.getType()+num;
-                builder.setMessage(name+TEXT_DIALOG_MESSAGE);
-                builder.setPositiveButton(TEXT_BTN_DESENG, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        d.setGh_desengagement(new Date());
-                        if (listener != null) listener.onDemandUpdated(d);
-                    }
-                });
-                builder.setNegativeButton(TEXT_BTN_CANCEL, null);
-                AlertDialog aDialog = builder.create();
-                aDialog.show();
+                if (d.getGh_desengagement() == null) {
+                    String num = (d.getNumber() == null) ? "" : d.getNumber();
+                    String name = d.getType()+num;
+                    builder.setMessage(name+TEXT_DIALOG_MESSAGE);
+                    builder.setPositiveButton(TEXT_BTN_DESENG, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            d.setGh_desengagement(new Date());
+                            if (listener != null) listener.onDemandUpdated(d);
+                        }
+                    });
+                    AlertDialog aDialog = builder.create();
+                    aDialog.show();
+                }
             }
         });
     }
