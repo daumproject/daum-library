@@ -52,10 +52,10 @@ public class ZoneEntity extends AbstractShapedEntity {
 				for (Point p : pts) canvas.drawPoint(p.x, p.y, pointPaint);
 
 			} else {
-                if (geoPoint != null) {
-                    Log.d(TAG, "geoPoint is not null, setting offset to the ZoneEntity");
-                    offsetPath(pts, prj.toMapPixels(geoPoint, null));
-                }
+                //if (geoPoint != null) {
+                //    Log.d(TAG, "geoPoint is not null, setting offset to the ZoneEntity");
+                //    offsetPath(pts, prj.toMapPixels(geoPoint, null));
+                //}
 
 				// draw the filled zone
                 path.reset();

@@ -20,7 +20,6 @@ public class UndoRedoEngine {
 	}
 
 	public void save(IUndoableCommand cmd) {
-		System.out.println("index start save = "+index);
 		if (saving) {
 			if (index <= commands.size()-1) {
 				// erase from index to the end of the list
@@ -34,20 +33,17 @@ public class UndoRedoEngine {
 			revCommands.add(index, new Pair(revCmd, cmd.saveMemento()));
 			index++;
 		}
-		System.out.println("index after save = "+index);
 	}
 
 	public void undo() {
 		// disable command saving when undoing
 		saving = false;
-		System.out.println("index before undo = "+index);
 		index--;
 		if (index < 0) index = 0;
 		else {
 			Pair p = revCommands.get(index);
 			p.cmd.execute(p.mem);
 		}
-		System.out.println("index after undo = "+index);
 		// enable command saving when done undoing
 		saving = true;
 	}
@@ -55,13 +51,11 @@ public class UndoRedoEngine {
 	public void redo() {
 		// disable command saving when redoing
 		saving = false;
-		System.out.println("index redo start = "+index);
 		if (commands.size() != 0 && index <= commands.size()-1) {
 			Pair p = commands.get(index);
 			p.cmd.execute(p.mem);
 			index++;
 		}
-		System.out.println("index redo after = "+index);
 		// enable command saving when do redoing
 		saving = true;
 	}

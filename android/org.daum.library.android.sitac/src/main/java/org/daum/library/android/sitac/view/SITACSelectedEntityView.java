@@ -34,6 +34,7 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
     public enum State {
 		SELECTION,
 		CONFIRM,
+        CONFIRM_UNPERSISTABLE,
 		DELETION
 	}
 	
@@ -155,10 +156,20 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
 				break;
 				
 			case CONFIRM:
+                actionBtn.setEnabled(true);
 				actionBtn.setText(TEXT_CONFIRM);
+                actionBtn.setTextColor(Color.WHITE);
 				actionBtn.setVisibility(View.VISIBLE);
 				undoRedoLayout.setVisibility(View.VISIBLE);
 				break;
+
+            case CONFIRM_UNPERSISTABLE:
+                actionBtn.setEnabled(false);
+                actionBtn.setText(TEXT_CONFIRM);
+                actionBtn.setTextColor(Color.GRAY);
+                actionBtn.setVisibility(View.VISIBLE);
+                undoRedoLayout.setVisibility(View.VISIBLE);
+                break;
 		}
 		
 		measure(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -311,8 +322,10 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
                         IShapedEntity shapedEntity = (IShapedEntity) e;
                         if (shapedEntity.isPersistable()) {
                             state = State.CONFIRM;
-                            show();
+                        } else {
+                            state = State.CONFIRM_UNPERSISTABLE;
                         }
+                        show();
                     }
                     break;
             }

@@ -168,7 +168,6 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
     @Override
     public void onActionClicked(String tab, String action) {
         if (listener != null) {
-            Log.d(TAG, "onActionClicked");
             Demand newDemand = new Demand(VehicleType.valueOf(action));
             listener.onDemandAsked(newDemand);
         }
