@@ -5,7 +5,7 @@
     <groupId>org.daum.common</groupId>
     <artifactId>org.daum.common.root</artifactId>
     <packaging>pom</packaging>
-    <name>DAUM :: Common :: Common :: Root</name>
+    <name>DAUM :: Common :: Root :: Root</name>
 
     <parent>
         <groupId>org.daum.library</groupId>
