@@ -16,7 +16,7 @@ public class Cache extends DHashMap<Object,VersionedValue> {
     private String name = "";
     private CacheManager cacheManger=null;
     private SystemTime systemTime = new SystemTime();
-    private int MaxEntriesLocalHeap=1000;
+    private int MaxEntriesLocalHeap=8000;
 
 
     public Cache(String cachename,CacheManager cacheManger)
@@ -34,29 +34,44 @@ public class Cache extends DHashMap<Object,VersionedValue> {
 
         if(this.size() > MaxEntriesLocalHeap)
         {
-            // todo
+            //todo
             logger.warn("The Max Entries Local Heap is reached ");
             return null;
         }else
         {
-
             Update e = new Update();
-            VersionedValue version = new VersionedValue(value);
-            if(super.get(key) == null)
-            {
-                e.op = StoreEvent.ADD;
-            } else {
-                e.op = StoreEvent.UPDATE;
-            }
             e.key = key;
-            e.setVersionedValue(version);
             e.cache = name;
+
+            VersionedValue updated=new VersionedValue();
+            VersionedValue old = super.get(key);
+            if(old == null)
+            {
+                e.event = StoreEvent.ADD;
+                updated.setValue(value);
+                e.setVersionedValue(updated);
+            } else
+            {
+                // update
+                e.event = StoreEvent.UPDATE;
+                updated.setVersion(old.getVersion());
+                updated.updated();
+                updated.setValue(value);
+                e.setVersionedValue(updated);
+            }
+
             // local
-            VersionedValue last = super.put(key, version);
+            if(updated == null)
+            {
+                logger.error("update is null");
+            } else
+            {
+                super.put(key, updated);
+            }
 
             // remote
             cacheManger.remoteDisptach(e);
-            return  last;
+            return  updated;
         }
     }
 
@@ -73,26 +88,30 @@ public class Cache extends DHashMap<Object,VersionedValue> {
         logger.debug("Local dispatch "+name);
         try
         {
-            if (replica.op.equals(StoreEvent.ADD) || replica.op.equals(StoreEvent.UPDATE))
+            if (replica.event.equals(StoreEvent.ADD) || replica.event.equals(StoreEvent.UPDATE))
             {
-                VersionedValue old = (VersionedValue) super.get(replica.key);
+                VersionedValue old = get(replica.key);
                 if(old == null)
                 {
                     super.put(replica.key, replica.getVersionedValue());
                 }
                 else
                 {
-                    // compare version
-                    if(old.before(replica.getVersionedValue()))
+                    if(replica.getVersionedValue() != null)
                     {
-                        super.put(replica.key, replica.getVersionedValue());
-                    } else
-                    {
-                        logger.warn("received old version");
+                        if(replica.getVersionedValue().getVersion() > old.getVersion())
+                        {
+                            super.put(replica.key, replica.getVersionedValue());
+                        } else
+                        {
+                            logger.warn("Current version "+replica.getVersionedValue().getVersion()+" replica version ="+old.getVersion());
+                        }
+                    } else {
+                        logger.error("not versionned "+old.getVersion());
                     }
                 }
 
-            } else if (replica.op.equals(StoreEvent.DELETE))
+            } else if (replica.event.equals(StoreEvent.DELETE))
             {
                 if(super.get(replica.key) != null)
                 {
@@ -109,9 +128,10 @@ public class Cache extends DHashMap<Object,VersionedValue> {
 
     @Override
     public VersionedValue remove(Object key) {
-        //logger.warn("WARNING !! TODO backup remove until synchronize is finish");
+
+        // TODO backup remove until synchronize is finish");
         Update e = new Update();
-        e.op = StoreEvent.DELETE;
+        e.event = StoreEvent.DELETE;
         e.key =  key;
         e.cache = name;
         VersionedValue last = super.remove(key);

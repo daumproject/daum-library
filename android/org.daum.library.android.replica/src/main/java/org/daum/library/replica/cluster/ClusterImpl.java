@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Semaphore;
 
 
 /**
@@ -148,7 +147,7 @@ public class ClusterImpl implements  ICluster,Runnable{
                     }
 
                     Command req = new Command();
-                    req.op= StoreEvent.REQUEST_SNAPSHOT;
+                    req.event = StoreEvent.REQUEST_SNAPSHOT;
                     req.source = currentNode;
                     req.dest = nodeReqSnapshot;
                     logger.info("Synchronization request sent to" + req.dest);
@@ -188,7 +187,7 @@ public class ClusterImpl implements  ICluster,Runnable{
                 //ignore
             }
             Command req = new Command();
-            req.op= StoreEvent.HEARTBEAT;
+            req.event = StoreEvent.HEARTBEAT;
             req.source = currentNode;
 
             chanel.write(req);

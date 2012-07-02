@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -20,6 +21,7 @@ public class CacheManager implements ICacheManger
 {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private DHashMap<String, Cache> store = new DHashMap<String,Cache>();
+    private HashMap<String,Integer> history = new HashMap<String,Integer>();
     private ICluster cluster;
 
     public CacheManager(ICluster cluster)
@@ -36,19 +38,14 @@ public class CacheManager implements ICacheManger
                 logger.debug("Creating cache "+name);
                 Cache cache  =  new Cache(name,this) ;
                 store.put(name,cache);
-                if(store.get(name) != null)
-                {
-                    logger.debug("The cache is created "+name);
-                }
             }
+            return store.get(name);
         } else
         {
             logger.error("The name of cache is null : Do you have set the annotations ?");
             return null;
         }
-        return store.get(name);
     }
-
 
 
     public Set<String> getAllCache(){
@@ -69,106 +66,131 @@ public class CacheManager implements ICacheManger
 
     public void processingMSG(Message o)
     {
-        try {
-            if(o instanceof Update){
-
-                final Update update = (Update)o;
-
-                if(!update.getSourceNode().equals(cluster.getCurrentNode()))
-                {
-                    // set update
-                    getCache(update.cache).localDispatch(update);
-
-                    //notify update from remote
-                    NotifyUpdate notifyUpdate = new NotifyUpdate();
-                    notifyUpdate.setId(update.getKey());
-                    notifyUpdate.setCache(update.cache);
-                    notifyUpdate.setEvent(update.getOp());
-                    notifyUpdate.setNode(update.getSourceNode());
-
-                    cluster.getChannel().write(notifyUpdate);
-
-                }
-            }
-            if(o instanceof Updates)
+        try
+        {
+            // break cycle
+            if(history.containsKey(((AMessage)o).getUuid()))
             {
-                final Updates updates = (Updates)o;
-
-                if(!updates.getSourceNode().equals(cluster.getCurrentNode()))
+                Integer counter = history.get(((AMessage)o).getUuid());
+                counter++;
+                if(counter > cluster.getNodesOfCluster().size())
                 {
-                    logger.debug("Remote receive "+updates.getUpdates().size());
+                   history.remove(((AMessage)o).getUuid());
+                }else
+                {
+                  history.put(((AMessage)o).getUuid(),counter);
+                }
+                logger.debug("counter "+counter);
 
-                    for(Update update : updates.getUpdates()){
+            } else
+            {
+
+                if(o instanceof Update)
+                {
+                    // first
+                    history.put(((AMessage)o).getUuid(),1);
+                    final Update update = (Update)o;
+
+                    if(!update.getSourceNode().equals(cluster.getCurrentNode()))
+                    {
+                        // set update
                         getCache(update.cache).localDispatch(update);
-                    }
 
+                        //notify update from remote
+                        NotifyUpdate notifyUpdate = new NotifyUpdate();
+                        notifyUpdate.setId(update.getKey());
+                        notifyUpdate.setCache(update.cache);
+                        notifyUpdate.setEvent(update.getEvent());
+                        notifyUpdate.setNode(update.getSourceNode());
+
+                        cluster.getChannel().write(notifyUpdate);
+
+                    }
                 }
-
-            }else  if(o instanceof Snapshot){
-
-                final Snapshot storeSnapshot = (Snapshot)o;
-
-                if(storeSnapshot.dest.equals(cluster.getCurrentNode()))
-                {
-                    logger.debug(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest);
-
-                    for(Update msg:  storeSnapshot.snapshot)
-                    {
-                        getCache(msg.cache).putIfAbsent(msg.key, msg.getVersionedValue());
-                    }
-
-                    // notify is syncEvent
-                    SyncEvent syncEvent = new SyncEvent();
-                    // todo add node
-                    cluster.getChannel().write(syncEvent);
-                    cluster.getCurrentNode().setSynchronized();
-                }
-
-            } else if(o instanceof Command)
-            {
-                final Command command = (Command)o;
-
-                if(command.getOp().equals(StoreEvent.HEARTBEAT))
-                {
-                    if(!command.source.equals(cluster.getCurrentNode()))
-                    {
-                        logger.info("Cluster "+ cluster.getNodesOfCluster());
-                        cluster.addNode(command.getSourceNode());
-                    }
-                } else  if(command.getOp().equals(StoreEvent.REQUEST_SNAPSHOT))
+                if(o instanceof Updates)
                 {
 
-                    logger.debug(" "+cluster.getCurrentNode()+" "+command);
-                    if(!command.source.equals(cluster.getCurrentNode()) && command.dest.equals(cluster.getCurrentNode()))
+                    // first
+                    history.put(((AMessage)o).getUuid(),1);
+
+                    final Updates updates = (Updates)o;
+
+                    if(!updates.getSourceNode().equals(cluster.getCurrentNode()))
                     {
-                        logger.info("Creating snapshot for "+ command.source);
+                        logger.debug("Remote receive "+updates.getUpdates().size());
 
-                        final List<Update> current_snapshot= new ArrayList<Update>();
-
-                        for(String namecache : store.keySet())
-                        {
-                            for( Object key: store.get(namecache).keySet()){
-
-                                Update snapshot = new Update();
-                                snapshot.op = StoreEvent.SNAPSHOT;
-                                snapshot.dest = command.source;
-                                snapshot.source = cluster.getCurrentNode();
-                                snapshot.cache = namecache;
-                                snapshot.key = key;
-                                snapshot.setVersionedValue(store.get(namecache).get(key));
-                                current_snapshot.add(snapshot);
-                            }
+                        for(Update update : updates.getUpdates()){
+                            getCache(update.cache).localDispatch(update);
                         }
 
-                        logger.info("Snapshot is created for "+ command.source);
+                    }
 
-                        Snapshot storeSnapshot = new Snapshot();
-                        storeSnapshot.snapshot =   current_snapshot;
-                        storeSnapshot.source = cluster.getCurrentNode();
-                        storeSnapshot.dest =   command.source;
-                        cluster.getChannel().write(storeSnapshot);
+                }else  if(o instanceof Snapshot){
 
-                        logger.info("Snapshot is sent for "+ cluster.getCurrentNode());
+                    final Snapshot storeSnapshot = (Snapshot)o;
+
+                    if(storeSnapshot.dest.equals(cluster.getCurrentNode()))
+                    {
+                        logger.debug(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest);
+
+                        for(Update msg:  storeSnapshot.snapshot)
+                        {
+                            getCache(msg.cache).putIfAbsent(msg.key, msg.getVersionedValue());
+                        }
+
+                        // notify is syncEvent
+                        SyncEvent syncEvent = new SyncEvent();
+                        // todo add node
+                        cluster.getChannel().write(syncEvent);
+                        cluster.getCurrentNode().setSynchronized();
+                    }
+
+                } else if(o instanceof Command)
+                {
+                    final Command command = (Command)o;
+
+                    if(command.getEvent().equals(StoreEvent.HEARTBEAT))
+                    {
+                        if(!command.source.equals(cluster.getCurrentNode()))
+                        {
+                            logger.info("Cluster "+ cluster.getNodesOfCluster());
+                            cluster.addNode(command.getSourceNode());
+                        }
+                    } else  if(command.getEvent().equals(StoreEvent.REQUEST_SNAPSHOT))
+                    {
+
+                        logger.debug(" "+cluster.getCurrentNode()+" "+command);
+                        if(!command.source.equals(cluster.getCurrentNode()) && command.dest.equals(cluster.getCurrentNode()))
+                        {
+                            logger.info("Creating snapshot for "+ command.source);
+
+                            final List<Update> current_snapshot= new ArrayList<Update>();
+
+                            for(String namecache : store.keySet())
+                            {
+                                for( Object key: store.get(namecache).keySet()){
+
+                                    Update snapshot = new Update();
+                                    snapshot.event = StoreEvent.SNAPSHOT;
+                                    snapshot.dest = command.source;
+                                    snapshot.source = cluster.getCurrentNode();
+                                    snapshot.cache = namecache;
+                                    snapshot.key = key;
+                                    snapshot.setVersionedValue(store.get(namecache).get(key));
+                                    current_snapshot.add(snapshot);
+                                }
+                            }
+
+                            logger.info("Snapshot is created for "+ command.source);
+
+                            Snapshot storeSnapshot = new Snapshot();
+                            storeSnapshot.snapshot =   current_snapshot;
+                            storeSnapshot.source = cluster.getCurrentNode();
+                            storeSnapshot.dest =   command.source;
+                            cluster.getChannel().write(storeSnapshot);
+
+                            logger.info("Snapshot is sent for "+ cluster.getCurrentNode());
+                        }
                     }
                 }
             }
@@ -190,8 +212,9 @@ public class CacheManager implements ICacheManger
         NotifyUpdate notifyUpdate = new NotifyUpdate();
         notifyUpdate.setId(update.getKey());
         notifyUpdate.setCache(update.cache);
-        notifyUpdate.setEvent(update.getOp());
+        notifyUpdate.setEvent(update.getEvent());
         notifyUpdate.setNode(update.getSourceNode());
+
         cluster.getChannel().write(notifyUpdate);
     }
 

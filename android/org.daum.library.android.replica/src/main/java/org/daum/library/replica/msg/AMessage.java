@@ -4,6 +4,7 @@ import org.daum.library.replica.cache.StoreEvent;
 import org.daum.library.replica.cluster.Node;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Created by jed
@@ -12,17 +13,19 @@ import java.io.Serializable;
  * Time: 11:58
  */
 public abstract class AMessage implements Message,Serializable{
+
     private static final long serialVersionUID = 1516L;
-    public StoreEvent op;
+    public  String uuid = UUID.randomUUID().toString();
+    public StoreEvent event;
     public  Node source;
     public  Node dest;
 
-    public StoreEvent getOp() {
-        return op;
+    public StoreEvent getEvent() {
+        return event;
     }
 
-    public void setOp(StoreEvent op) {
-        this.op = op;
+    public void setEvent(StoreEvent event) {
+        this.event = event;
     }
 
     public Node getSourceNode() {
@@ -39,5 +42,14 @@ public abstract class AMessage implements Message,Serializable{
 
     public void setDestNode(Node dest) {
         this.dest = dest;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid)
+    {
+        this.uuid = uuid;
     }
 }

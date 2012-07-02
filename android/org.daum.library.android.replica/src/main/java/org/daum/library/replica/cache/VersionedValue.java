@@ -9,15 +9,8 @@ package org.daum.library.replica.cache;
 public class VersionedValue implements java.io.Serializable, java.lang.Cloneable {
 
     private static final long serialVersionUID = 1515L;
-
-    private volatile long version;
+    private long version = 0;
     private java.lang.Object value;
-
-    public VersionedValue(Object value)
-    {
-        version  =System.nanoTime();
-        this.value =value;
-    }
 
     public long getVersion() {
         return version;
@@ -27,34 +20,20 @@ public class VersionedValue implements java.io.Serializable, java.lang.Cloneable
         this.version = version;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if(o == this)
-            return true;
-        else if(!(o instanceof VersionedValue))
-            return false;
 
-        return  false;
+    public void updated(){
+          version++;
     }
 
-    public  boolean after(VersionedValue o)
-    {
-        if(version > o.getVersion())
-        {
-            return  true;
-        } else
-        {
-            return false;
-        }
-    }
-
-    public  boolean before(VersionedValue o)
-    {
-        if(version < o.getVersion())
-        {
-            return  true;
-        } else
-        {
+    public boolean compareV(Object o) {
+        if(o instanceof VersionedValue){
+            VersionedValue s = (VersionedValue)o;
+            if(s.getVersion() == this.getVersion()){
+                return true;
+            }  else {
+                return false;
+            }
+        } else {
             return false;
         }
     }

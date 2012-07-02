@@ -32,50 +32,73 @@ public class ReplicaStore  implements PersistenceSessionStore {
         }
     }
 
-    @Override
-    public void save(Orhm id, Object bean) throws PersistenceException {
 
-        logger.debug("Saving "+id.getCacheName()+" "+id.getId()+" "+id.getGeneratedType());
+    @Override
+    public void save(Orhm orhm, Object bean) throws PersistenceException {
         if(bean == null)
         {
             throw new PersistenceException("The bean  is null");
         } else  if(replicatingService == null){
             throw new PersistenceException("service is null");
+        } else if(orhm == null)
+        {
+            throw new PersistenceException("Orhm is null");
         }
-        Cache cache = replicatingService.getCache(id.getCacheName());
+        logger.debug("Saving "+orhm.getCacheName()+" "+orhm.getId()+" "+orhm.getGeneratedType());
+        Cache cache = replicatingService.getCache(orhm.getCacheName());
         if(cache == null)
         {
-            throw new PersistenceException("The cache "+id.getCacheName()+" is null ");
+            throw new PersistenceException("The cache "+orhm.getCacheName()+" is null ");
         }
-        cache.put(id.getId(),bean);
-    }
-
-    @Override
-    public void update(Orhm orhm, Object bean) throws PersistenceException {
-        if(replicatingService == null)
-        {
-            throw new PersistenceException("service is null");
-        }
-        Cache cache = replicatingService.getCache(orhm.getCacheName());
         cache.put(orhm.getId(),bean);
     }
 
     @Override
-    public void delete(Orhm id) throws PersistenceException {
-        if(replicatingService == null){
+    public void update(Orhm orhm, Object bean) throws PersistenceException {
+        if(bean == null)
+        {
+            throw new PersistenceException("The bean  is null");
+        } else  if(replicatingService == null){
             throw new PersistenceException("service is null");
+        } else if(orhm == null)
+        {
+            throw new PersistenceException("Orhm is null");
         }
-        Cache cache = replicatingService.getCache(id.getCacheName());
-        cache.remove(id.getId());
+        Cache cache = replicatingService.getCache(orhm.getCacheName());
+        if(cache == null)
+        {
+            throw new PersistenceException("The cache "+orhm.getCacheName()+" is null ");
+        }
+        cache.put(orhm.getId(),bean);
     }
 
     @Override
-    public Object get(Orhm id) throws PersistenceException {
+    public void delete(Orhm orhm) throws PersistenceException {
+        if(replicatingService == null){
+            throw new PersistenceException("service is null");
+        } else if(orhm == null)
+        {
+            throw new PersistenceException("Orhm is null");
+        }
+        Cache cache = replicatingService.getCache(orhm.getCacheName());
+        if(cache == null)
+        {
+            throw new PersistenceException("The cache "+orhm.getCacheName()+" is null ");
+        }
+        cache.remove(orhm.getId());
+    }
+
+    @Override
+    public Object get(Orhm orhm) throws PersistenceException {
         if(replicatingService == null){
             throw new PersistenceException("service is null");
         }
-        Cache cache = replicatingService.getCache(id.getCacheName());
-        return cache.get(id.getId()).getValue();
+        Cache cache = replicatingService.getCache(orhm.getCacheName());
+        if(cache == null)
+        {
+            throw new PersistenceException("The cache "+orhm.getCacheName()+" is null ");
+        }
+        return cache.get(orhm.getId()).getValue();
     }
 
     @Override
