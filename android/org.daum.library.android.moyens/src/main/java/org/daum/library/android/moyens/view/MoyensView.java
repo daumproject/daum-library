@@ -84,7 +84,6 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
     private void configUI() {
         // configuring quickActions bar
         qActionsBar.setId(ID_QA_BAR);
-        qActionsBar.setOnActionClickedListener(this);
         RelativeLayout.LayoutParams barParams = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         barParams.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
@@ -128,6 +127,8 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
     }
 
     private void defineCallbacks() {
+        qActionsBar.setOnActionClickedListener(this);
+
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -206,8 +207,7 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
     @Override
     public void onActionClicked(String tab, String action) {
         if (listener != null) {
-            Demand newDemand = new Demand(VehicleType.valueOf(action));
-            listener.onDemandAsked(newDemand);
+            listener.onDemandAsked(new Demand(VehicleType.valueOf(action)));
         }
     }
 

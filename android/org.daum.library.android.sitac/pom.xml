@@ -25,12 +25,6 @@
             <artifactId>org.daum.extra.android.osmdroid</artifactId>
             <version>1.0</version>
         </dependency>
-          <!--
-        <dependency>
-            <groupId>org.daum.library.android</groupId>
-            <artifactId>org.daum.library.android.replica</artifactId>
-            <version>1.8</version>
-        </dependency>           -->
 
         <dependency>
             <groupId>org.daum.library.android</groupId>

@@ -1,8 +1,11 @@
 package org.daum.library.android.moyens.view.quickactionbar;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
+import android.util.Log;
 import android.view.*;
+import android.widget.*;
 import org.daum.library.android.moyens.view.quickactionbar.listener.OnActionClickedListener;
 
 import android.content.Context;
@@ -13,15 +16,9 @@ import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
 import android.util.Pair;
-import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-import android.widget.TabHost;
-import android.widget.TabWidget;
-import android.widget.TextView;
 
-public class QuickActionsBar extends TabHost implements OnItemClickListener {
+public class QuickActionsBar extends TabHost implements View.OnClickListener {
 	
 	private static final String TAG = "QuickActionsBar";
 	
@@ -69,11 +66,27 @@ public class QuickActionsBar extends TabHost implements OnItemClickListener {
                     .setContent(new TabHost.TabContentFactory() {
                         @Override
                         public View createTabContent(String tag) {
-                            HorizontalListView actionsList = new HorizontalListView(ctx, null);
-                            actionsList.setOnItemClickListener(QuickActionsBar.this);
-                            ActionsAdapter adapter = new ActionsAdapter(ctx, pair.second);
-                            actionsList.setAdapter(adapter);
-                            return actionsList;
+                            LinearLayout viewContainer = new LinearLayout(ctx);
+                            viewContainer.setGravity(Gravity.CENTER_HORIZONTAL);
+
+                            HorizontalScrollView actionsView = new HorizontalScrollView(ctx);
+                            actionsView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_INSET);
+
+                            LinearLayout actionsList = new LinearLayout(ctx);
+                            actionsList.setOrientation(LinearLayout.HORIZONTAL);
+
+                            Button b;
+                            for (int i=0; i< pair.second.size(); i++) {
+                                b = new Button(ctx);
+                                b.setId(i);
+                                b.setText(pair.second.get(i));
+                                b.setOnClickListener(QuickActionsBar.this);
+                                actionsList.addView(b);
+                            }
+
+                            actionsView.addView(actionsList);
+                            viewContainer.addView(actionsView);
+                            return viewContainer;
                         }
                     });
             addTab(spec);
@@ -83,7 +96,7 @@ public class QuickActionsBar extends TabHost implements OnItemClickListener {
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         updateTabsUI();
-        super.onLayout(true, left, top, right, bottom);
+        super.onLayout(changed, left, top, right, bottom);
     }
 
     private void changeTabUIToSelected(final ViewGroup parent) {
@@ -122,16 +135,16 @@ public class QuickActionsBar extends TabHost implements OnItemClickListener {
         }
     }
 
-	@Override
-	public void onItemClick(AdapterView<?> listView, View v, int i, long l) {
-		if (listener != null) {
-            String tab = actions.get(getCurrentTab()).first;
-            String action = actions.get(getCurrentTab()).second.get(i);
-            listener.onActionClicked(tab, action);
-        }
-	}
-
     public void setOnActionClickedListener(OnActionClickedListener listener) {
         this.listener = listener;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (listener != null) {
+            String tab = actions.get(getCurrentTab()).first;
+            String action = actions.get(getCurrentTab()).second.get(view.getId());
+            listener.onActionClicked(tab, action);
+        }
     }
 }
