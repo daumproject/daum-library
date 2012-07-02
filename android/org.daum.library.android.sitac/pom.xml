@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.daum.library.android</groupId>
             <artifactId>org.daum.library.android.replica</artifactId>
-            <version>1.8</version>
+            <version>1.9</version>
         </dependency>           -->
 
         <dependency>
