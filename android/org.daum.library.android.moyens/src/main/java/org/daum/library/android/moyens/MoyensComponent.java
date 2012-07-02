@@ -118,13 +118,11 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
 
     @Override
     public void onDemandAsked(Demand newDemand) {
-        Log.d(TAG, "!!!!!!!!!!!!!!!!!!!!!!!!! onDemandAsked "+newDemand);
         engine.add(newDemand);
     }
 
     @Override
     public void onDemandUpdated(Demand demand) {
-        Log.d(TAG, "!!!!!!!!!!!!!!!!!!!!!!!!! onDemandUpdated "+demand);
         engine.update(demand);
     }
 
@@ -133,7 +131,6 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG, "?????????? onAdd event si si");
                 moyensView.addDemand(d);
             }
         });
@@ -144,7 +141,6 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG, "?????????? onUpdate event si si");
                 moyensView.updateDemand(d);
             }
         });
@@ -155,7 +151,6 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Log.d(TAG, "?????????? onReplicaSynced event si si");
                 moyensView.addDemands(new ArrayList<Demand>(data));
             }
         });
