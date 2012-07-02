@@ -22,6 +22,7 @@
         <module>../org.daum.common.message</module>
         <module>../org.daum.common.model</module>
         <module>../org.daum.common.util</module>
+        <module>../org.daum.common.gps</module>
     </modules>
 
 </project>
