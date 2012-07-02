@@ -5,7 +5,7 @@
     <groupId>org.daum.library.javase</groupId>
     <artifactId>org.daum.library.javase.replica</artifactId>
     <name>DAUM :: Library :: JavaSE :: replica</name>
-     <version>1.8</version>
+     <version>1.9</version>
 
     <parent>
         <artifactId>org.daum.library.javase.root</artifactId>

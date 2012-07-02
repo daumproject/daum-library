@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.daum.library.android.ormH</artifactId>
     <name>DAUM :: ormH :: Android</name>
-    <version>1.8</version>
+    <version>1.9</version>
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
@@ -20,7 +20,7 @@
         <dependency>
             <groupId>org.daum.library.android</groupId>
             <artifactId>org.daum.library.android.replica</artifactId>
-            <version>1.8</version>
+            <version>1.9</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>

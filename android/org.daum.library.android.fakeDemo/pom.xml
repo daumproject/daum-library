@@ -19,8 +19,8 @@
     <dependencies>
         <dependency>
             <groupId>org.daum.library.android</groupId>
-            <artifactId>org.daum.library.android.replica</artifactId>
-            <version>1.7</version>
+            <artifactId>org.daum.library.android.ormH</artifactId>
+            <version>1.9</version>
         </dependency>
     </dependencies>
 
