@@ -24,6 +24,7 @@
 
         <module>../org.daum.library.javase.web</module>
         <module>../org.daum.library.javase.moyensMonitor</module>
+        <module>../org.daum.library.javase.tila</module>
         <!--<module>../org.daum.library.javase.kestrelChannels</module>
                      <module>../org.daum.library.javase.fakeDemo</module>
         -->
