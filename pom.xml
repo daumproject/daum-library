@@ -18,6 +18,7 @@
     <modules>
         <module>./android/org.daum.library.android.root</module>
         <module>./javase/org.daum.library.javase.root</module>
+        <module>./common/org.daum.common.root</module>
     </modules>
 
     <repositories>

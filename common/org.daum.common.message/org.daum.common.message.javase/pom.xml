@@ -5,7 +5,7 @@
     <groupId>org.daum.common.message.javase</groupId>
     <artifactId>org.daum.common.message.javase.root</artifactId>
     <packaging>jar</packaging>
-    <name>Daum :: Common :: JavaSE </name>
+    <name>Daum :: Common :: JavaSE :: Message </name>
     <version>1.6</version>
 
     <parent>

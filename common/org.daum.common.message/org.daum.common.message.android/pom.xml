@@ -5,7 +5,7 @@
     <groupId>org.daum.common.message.android</groupId>
     <artifactId>org.daum.common.message.android.root</artifactId>
     <packaging>jar</packaging>
-    <name>Daum :: Common :: Android </name>
+    <name>Daum :: Common :: Android :: Message</name>
     <version>1.6</version>
 
     <parent>
