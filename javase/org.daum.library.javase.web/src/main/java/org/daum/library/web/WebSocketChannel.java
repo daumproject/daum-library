@@ -25,7 +25,6 @@ public class WebSocketChannel extends BaseWebSocketHandler {
         connections.add(connection);
     }
 
-
     public void broadcast(String msg) {
         for (WebSocketConnection connection : connections)
         {

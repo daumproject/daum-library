@@ -11,6 +11,7 @@
 
     <script type="text/javascript" language="javascript" src="media/js/jquery-1.7.2.js"></script>
     <script type="text/javascript" language="javascript" src="media/js/dataTables.js"></script>
+    <script type="text/javascript" language="javascript" src="media/js/dataTablesHelper.js"></script>
 
 </head>
 
@@ -52,41 +53,80 @@
 
 <script type="text/javascript" charset="utf-8">
 
-
     $(document).ready(function() {
-    $('#moyens').dataTable();
+    $('#moyens').dataTable( {
+    "aoColumns": [
+        { "bVisible":    false },
+                null,
+                null,
+                null
+    ] } );
+
     } );
-
-
 
     function showMessage(text)
     {
-    document.getElementById('text').innerHTML = text;
+         document.getElementById('text').innerHTML = text;
     }
+
     var ws = new WebSocket('ws://$ip$:8082/jed');
     showMessage('Connecting...');
-    ws.onopen = function() {
 
-    showMessage('Connected!');
-
-
-    };
-    ws.onclose = function() {
-
-    showMessage('Lost connection');
+    ws.onopen = function()
+    {
+      showMessage('Connected!');
 
     };
 
-    ws.onmessage = function(msg) {
-
-
-    var oTable =  $('#moyens').dataTable();
-
-    oTable.fnUpdate( ['a', 'b', 'c', 'd', 'e'], 1, 0 ); // Row
-
+    ws.onclose = function()
+    {
+        showMessage('Lost connection');
 
     };
 
+    ws.onmessage = function(evt)
+    {
+       var data = evt.data;
+       var oTable = $('#moyens').dataTable();
+       var request=data.split("$")
+       var cmd =  request[0];
+
+       if(cmd == 'ADD')
+       {
+            var obj = jQuery.parseJSON(request[1]);
+            oTable.fnAddData( [
+            obj.id,
+            obj.type,
+            obj.gh_crm,
+            obj.gh_engage]
+            );
+
+       }else if(cmd =='UPDATE')
+       {
+           var obj = jQuery.parseJSON(request[1]);
+           var rowID = findRowIndexUsingCol(obj.id,'#moyens',0);
+           oTable.fnUpdate([obj.id,obj.type,obj.gh_crm,obj.gh_engage],rowID);
+
+       }else if(cmd =='DELETE')
+       {
+           var rowID = findRowIndexUsingCol(request[1],'#moyens',0);
+           oTable.fnDeleteRow(rowID);
+       }
+    }
+
+
+
+
+
+
+    function fnClickAddRow() {
+    $('#example').dataTable().fnAddData( [
+    giCount+".1",
+    giCount+".2",
+    giCount+".3",
+    giCount+".4" ]
+    );
+    }
 
 </script>
 
