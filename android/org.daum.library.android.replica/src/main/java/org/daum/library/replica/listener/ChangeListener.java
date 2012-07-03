@@ -19,17 +19,39 @@ public class ChangeListener implements IChangeListener
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private  HashMap<String,EventListenerList> listHashMap = new HashMap<String,EventListenerList>();
     private  EventListenerList syncList = new EventListenerList();
+    private  static HashMap<String,ChangeListener> listenerHashMap = new HashMap<String, ChangeListener>();
+    private  static ChangeListener singleton=null;
 
 
-    private  static ChangeListener singleton = null;
 
+    /**
+     * @param id The id of the component
+     * @return  ChangeListener singleton
+     */
+    public static ChangeListener getInstance(String id)
+    {
+        if(listenerHashMap.containsKey(id))
+        {
+            return  listenerHashMap.get(id);
+        } else
+        {
+            ChangeListener   singleton = new ChangeListener();
+            listenerHashMap.put(id,singleton);
+            return  singleton;
+        }
+    }
+
+
+    @Deprecated
     public static ChangeListener getInstance()
     {
-        if(singleton == null){
-            singleton = new ChangeListener();
+        if(singleton == null)
+        {
+            singleton  = new ChangeListener();
         }
-        return  singleton;
+        return singleton;
     }
+
 
     public void addSyncListener(SyncListener syncListener)
     {

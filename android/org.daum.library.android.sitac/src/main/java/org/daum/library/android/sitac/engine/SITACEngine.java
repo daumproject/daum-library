@@ -62,7 +62,7 @@ public class SITACEngine {
         }
 
         // add a callback to populate engine when sync is ready
-        ChangeListener.getInstance().addSyncListener(new SyncListener() {
+        ChangeListener.getInstance("SITACDAUM").addSyncListener(new SyncListener() {
             @Override
             public void sync(SyncEvent e) {
                 if (listener != null) {
@@ -87,7 +87,7 @@ public class SITACEngine {
 
         // add callback to handle remote events on replica
         for (final Class c : classes) {
-            ChangeListener.getInstance().addEventListener(c, new PropertyChangeListener() {
+            ChangeListener.getInstance("SITACDAUM").addEventListener(c, new PropertyChangeListener() {
                 @Override
                 public void update(PropertyChangeEvent e) {
                     if (listener != null) {

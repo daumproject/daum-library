@@ -47,7 +47,7 @@ public class MoyensEngine {
             Log.e(TAG, "Error while initializing persistence in engine", ex);
         }
 
-        ChangeListener.getInstance().addEventListener(Demand.class, new PropertyChangeListener() {
+        ChangeListener.getInstance("MoyensDAUM").addEventListener(Demand.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent e) {
                 if (listener != null) {
@@ -76,7 +76,7 @@ public class MoyensEngine {
             }
         });
 
-        ChangeListener.getInstance().addSyncListener(new SyncListener() {
+        ChangeListener.getInstance("MoyensDAUM").addSyncListener(new SyncListener() {
             @Override
             public void sync(SyncEvent e) {
                 PersistenceSession session = null;

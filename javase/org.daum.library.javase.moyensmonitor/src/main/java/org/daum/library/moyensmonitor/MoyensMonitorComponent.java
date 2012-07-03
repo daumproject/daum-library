@@ -77,6 +77,6 @@ public class MoyensMonitorComponent extends AbstractComponentType {
 
     @Port(name = "notify")
     public void notifiedByReplica(Object m) {
-        ChangeListener.getInstance().receive(m);
+        ChangeListener.getInstance("MoyensMonitorDAUM").receive(m);
     }
 }

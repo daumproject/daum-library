@@ -48,7 +48,7 @@ public class MessagesEngine {
             Log.e(TAG, "Error while initializing persistence in engine", ex);
         }
 
-        ChangeListener.getInstance().addEventListener(Message.class, new PropertyChangeListener() {
+        ChangeListener.getInstance("MessageDAUM").addEventListener(Message.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent e) {
                 if (listener != null) {
@@ -79,7 +79,7 @@ public class MessagesEngine {
             }
         });
 
-        ChangeListener.getInstance().addSyncListener(new SyncListener() {
+        ChangeListener.getInstance("MessageDAUM").addSyncListener(new SyncListener() {
             @Override
             public void sync(SyncEvent e) {
                 PersistenceSession session = null;

@@ -17,6 +17,10 @@ import org.slf4j.LoggerFactory;
  * User: jedartois@gmail.com
  * Date: 22/05/12
  * Time: 18:00
+ *
+ * TODO : add power manangement of nodes
+ * TODO : add persistence (https://github.com/jankotek/JDBM3)
+ * TODO : add conflits manager
  */
 
 @Library(name = "JavaSE", names = {"Android"})
@@ -35,6 +39,7 @@ public class Replica extends AbstractComponentType implements ReplicaService {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private ICluster cluster;
+
     @Start
     public void start()
     {

@@ -113,7 +113,7 @@ public class MessagesComponent extends AbstractComponentType implements IMessage
 
     @Port(name="notify")
     public void notifiedByReplica(final Object m) {
-        ChangeListener.getInstance().receive(m);
+        ChangeListener.getInstance("MessageDAUM").receive(m);
     }
 
     @Override

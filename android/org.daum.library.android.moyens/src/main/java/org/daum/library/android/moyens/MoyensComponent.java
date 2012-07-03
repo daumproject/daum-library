@@ -113,7 +113,7 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
 
     @Port(name="notify")
     public void notifiedByReplica(final Object m) {
-        ChangeListener.getInstance().receive(m);
+        ChangeListener.getInstance("MoyensDAUM").receive(m);
     }
 
     @Override

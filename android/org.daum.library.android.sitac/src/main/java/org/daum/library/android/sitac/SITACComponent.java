@@ -92,7 +92,7 @@ public class SITACComponent extends AbstractComponentType {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ChangeListener.getInstance().receive(m);
+                ChangeListener.getInstance("SITACDAUM").receive(m);
             }
         });
     }
