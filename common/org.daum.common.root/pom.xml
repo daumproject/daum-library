@@ -23,6 +23,7 @@
         <module>../org.daum.common.model</module>
         <module>../org.daum.common.util</module>
         <module>../org.daum.common.gps</module>
+        <module>../org.daum.common.genmodel</module>
     </modules>
 
 </project>
