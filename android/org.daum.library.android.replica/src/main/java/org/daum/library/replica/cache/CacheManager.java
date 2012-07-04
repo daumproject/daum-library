@@ -131,18 +131,26 @@ public class CacheManager implements ICacheManger
 
                     if(storeSnapshot.dest.equals(cluster.getCurrentNode()))
                     {
-                        logger.debug(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest);
+                      if(cluster.getCurrentNode().isSynchronized())
+                      {
 
-                        for(Update msg:  storeSnapshot.snapshot)
-                        {
-                            getCache(msg.cache).putIfAbsent(msg.key, msg.getVersionedValue());
-                        }
+                          logger.debug(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest);
 
-                        // notify is syncEvent
-                        SyncEvent syncEvent = new SyncEvent();
-                        // todo add node
-                        cluster.getChannel().write(syncEvent);
-                        cluster.getCurrentNode().setSynchronized();
+                          for(Update msg:  storeSnapshot.snapshot)
+                          {
+                              getCache(msg.cache).putIfAbsent(msg.key, msg.getVersionedValue());
+                          }
+
+                          // notify is syncEvent
+                          SyncEvent syncEvent = new SyncEvent();
+                          // todo add node
+                          cluster.getChannel().write(syncEvent);
+                          cluster.getCurrentNode().setSynchronized();
+                      } else
+                      {
+                          logger.error(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest+" but is already Synchronized");
+                      }
+
                     }
 
                 } else if(o instanceof Command)

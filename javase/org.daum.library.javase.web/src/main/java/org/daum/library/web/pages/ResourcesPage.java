@@ -1,7 +1,9 @@
-package org.daum.library.web;
+package org.daum.library.web.pages;
 
-import org.webbitserver.WebServers;
-
+import org.kevoree.annotation.ComponentType;
+import org.kevoree.library.javase.webserver.AbstractPage;
+import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
+import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,13 +13,19 @@ import java.util.HashMap;
  * Created with IntelliJ IDEA.
  * User: jed
  * Date: 26/06/12
- * Time: 11:00
+ * Time: 09:17
  * To change this template use File | Settings | File Templates.
  */
-public class Tester {
+
+@ComponentType
+public class ResourcesPage extends AbstractPage {
+
     private HashMap<String,byte[]> cache = new HashMap<String, byte[]>();
+
     public byte[] load(String url)
     {
+        logger.debug("loading "+url);
+        // todo secure
         if(cache.containsKey(url))
         {
             return cache.get(url);
@@ -40,32 +48,17 @@ public class Tester {
                 }
 
             } catch (IOException e) {
-
+                logger.error("",e);
                 return "404".getBytes();
             }
             return buffer.toByteArray();
         }
 
     }
-
-    public static void  main(String argv[]){
-
-        final WebSocketChannel    webSocketChannel = new WebSocketChannel();
-        WebServers.createWebServer(8082)
-                .add("/jed", webSocketChannel).start();
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-             while(true){
-                 webSocketChannel.broadcast("update");
-                 try {
-                     Thread.sleep(1000);
-                 } catch (InterruptedException e) {
-                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                 }
-             }
-            }
-        })      .start();
+    @Override
+    public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse) {
+        String url = kevoreeHttpRequest.getUrl().replace(getDictionary().get("urlpattern").toString().replace("*",""),"");
+        kevoreeHttpResponse.setRawContent(      load(url));
+        return kevoreeHttpResponse;
     }
 }

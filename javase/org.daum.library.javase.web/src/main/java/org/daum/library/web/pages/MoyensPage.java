@@ -1,7 +1,6 @@
-package org.daum.library.web;
+package org.daum.library.web.pages;
 
 import org.daum.common.model.api.Demand;
-import org.daum.library.fakeDemo.pojos.TemperatureMonitor;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
@@ -32,7 +31,7 @@ import java.util.Map;
  * To change this template use File | Settings | File Templates.
  */
 @Requires({
-        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true) })
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = false) })
 @ComponentType
 public class MoyensPage extends AbstractPage {
 
@@ -147,6 +146,7 @@ public class MoyensPage extends AbstractPage {
         } catch (PersistenceException ex)
         {
             logger.error("",ex);
+            replicaService = null;
         }
         finally
         {
@@ -155,7 +155,7 @@ public class MoyensPage extends AbstractPage {
         }
 
 
-        kevoreeHttpResponse.setContent( template.replace("$contenu$",data).replace("$ip$",getAddress(getNodeName())));
+        kevoreeHttpResponse.setContent(template.replace("$contenu$", data).replace("$ip$", getAddress(getNodeName())));
         return kevoreeHttpResponse;
     }
 

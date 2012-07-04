@@ -5,7 +5,7 @@
     <groupId>org.daum.library.javase</groupId>
     <artifactId>org.daum.library.javase.ormH</artifactId>
     <name>DAUM :: Library :: JavaSE :: ormH</name>
-    <version>1.9</version>
+    <version>2.0</version>
 
     <parent>
         <artifactId>org.daum.library.javase.root</artifactId>
@@ -18,7 +18,7 @@
         <dependency>
             <groupId>org.daum.library.javase</groupId>
             <artifactId>org.daum.library.javase.replica</artifactId>
-            <version>1.9</version>
+            <version>2.0</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

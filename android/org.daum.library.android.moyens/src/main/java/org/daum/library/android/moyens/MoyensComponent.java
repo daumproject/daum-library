@@ -49,6 +49,15 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
     private MoyensView moyensView;
     private MoyensEngine engine;
 
+    private static ChangeListener singleton=null;
+
+    public static ChangeListener getChangeListenerInstance(){
+        if(singleton == null){
+            singleton = new ChangeListener();
+        }
+        return singleton;
+    }
+
 
     @Start
     public void start() {
@@ -114,7 +123,7 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
     @Port(name="notify")
     public void notifiedByReplica(final Object m) {
         try {
-            ChangeListener.getInstance().receive(m);
+            MoyensComponent.getChangeListenerInstance().receive(m);
         } catch (Exception e) {
             Log.w(TAG, "Something went wrong ... :/ ", e);
         }

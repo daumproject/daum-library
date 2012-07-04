@@ -51,7 +51,7 @@ public class MoyensEngine {
         }
 
         // add a callback to populate engine when sync is ready
-        ChangeListener.getInstance().addSyncListener(new SyncListener() {
+        ChangeListener.getInstance("MoyensMonitorDAUM").addSyncListener(new SyncListener() {
             @Override
             public void sync(SyncEvent e) {
                 if (listener != null) {
@@ -68,7 +68,7 @@ public class MoyensEngine {
         });
 
         // add callback to handle remote events on replica
-        ChangeListener.getInstance().addEventListener(Demand.class, new PropertyChangeListener() {
+        ChangeListener.getInstance("MoyensMonitorDAUM").addEventListener(Demand.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent e) {
                 if (listener != null) {

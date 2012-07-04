@@ -76,7 +76,7 @@ public class ReaderDaum extends AbstractComponentType {
 
         // listeners
 
-        ChangeListener.getInstance().addEventListener(TemperatureMonitor.class, new PropertyChangeListener() {
+        ChangeListener.getInstance("READERDAUM").addEventListener(TemperatureMonitor.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent e) {
 
@@ -97,7 +97,7 @@ public class ReaderDaum extends AbstractComponentType {
         });
 
 
-        ChangeListener.getInstance().addEventListener(HeartMonitor.class, new PropertyChangeListener() {
+        ChangeListener.getInstance("READERDAUM").addEventListener(HeartMonitor.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent e) {
                 switch (e.getEvent())
@@ -172,7 +172,7 @@ public class ReaderDaum extends AbstractComponentType {
     @Port(name = "notify")
     public void notifybyReplica(Object m)
     {
-        ChangeListener.getInstance().receive(m);
+        ChangeListener.getInstance("READERDAUM").receive(m);
     }
 
 
