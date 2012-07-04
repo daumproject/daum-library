@@ -111,8 +111,13 @@ public class SITACController implements ISITACController {
 	public void setModelFactory(IModelFactory factory) {
 		if (factory != null) this.modelFactory = factory;
 	}
-	
-	public UIHandler getUIHandler() {
+
+    @Override
+    public void setMapProvider(String url) {
+        mapView.setMapProvider(url);
+    }
+
+    public UIHandler getUIHandler() {
 		return uiHandler;
 	}
 }

@@ -9,7 +9,7 @@ import org.daum.library.android.sitac.view.entity.DemandEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.map.MapOverlay;
 import org.osmdroid.api.IGeoPoint;
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
@@ -44,7 +44,8 @@ public class SITACMapView extends RelativeLayout implements Observer {
 	private void configUI() {
 		RelativeLayout.LayoutParams params = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-		mapView.setTileSource(TileSourceFactory.MAPNIK);
+        XYTileSource mapSources = new XYTileSource("cacahuete", null, 0, 18, 256, ".png", "http://tile.openstreetmap.org/");
+		mapView.setTileSource(mapSources);
 		mapView.setBuiltInZoomControls(true);
 		mapView.setMultiTouchControls(true);
 		mapView.getOverlays().add(overlay);
@@ -95,4 +96,10 @@ public class SITACMapView extends RelativeLayout implements Observer {
         }
         mapView.postInvalidate();
 	}
+
+    public void setMapProvider(String url) {
+        XYTileSource mapSources = new XYTileSource("cacahuete", null, 0, 18, 256, ".png", url);
+        mapView.setTileSource(mapSources);
+        mapView.postInvalidate();
+    }
 }
