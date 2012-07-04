@@ -9,8 +9,8 @@ merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultCh
 merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}'
 merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}'
 
-merge 'mvn:org.daum.library.android/org.daum.library.android.replica/1.8'
-merge 'mvn:org.daum.library.javase/org.daum.library.javase.replica/1.8'
+merge 'mvn:org.daum.library.android/org.daum.library.android.replica/2.0'
+merge 'mvn:org.daum.library.javase/org.daum.library.javase.replica/2.0'
 
 merge 'mvn:org.daum.library.javase/org.daum.library.javase.moyensmonitor/1.2'
 merge 'mvn:org.daum.library.android/org.daum.library.android.sitac/1.8.2-SNAPSHOT'

@@ -25,6 +25,9 @@ import org.kevoree.framework.AbstractComponentType;
  * To change this template use File | Settings | File Templates.
  */
 
+// TODO
+// dico: - port:ip provider carte
+//       - filtre type intervention
 @Library(name = "Android")
 @Requires({
         @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)

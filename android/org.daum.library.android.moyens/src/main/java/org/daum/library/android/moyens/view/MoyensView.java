@@ -113,7 +113,7 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         listView.setAdapter(adapter);
         listView.setEmptyView(tv_emptyList);
         RelativeLayout.LayoutParams listParams = new LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         listParams.addRule(RelativeLayout.ABOVE, qActionsBar.getId());
         listParams.addRule(RelativeLayout.BELOW, headerView.getId());
 
