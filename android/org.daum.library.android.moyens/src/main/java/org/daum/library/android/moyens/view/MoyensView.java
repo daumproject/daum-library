@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
 import android.util.Pair;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
 import org.daum.common.model.api.*;
@@ -113,7 +114,7 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         listView.setAdapter(adapter);
         listView.setEmptyView(tv_emptyList);
         RelativeLayout.LayoutParams listParams = new LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         listParams.addRule(RelativeLayout.ABOVE, qActionsBar.getId());
         listParams.addRule(RelativeLayout.BELOW, headerView.getId());
 
@@ -149,6 +150,23 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
                     AlertDialog aDialog = builder.create();
                     aDialog.show();
                 }
+            }
+        });
+
+        listView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent e) {
+                // not sure if gusta
+                // this is an hack to ensure that listView answer properly to
+                // touch events even when tab was changed in Kevoree Runtime
+                switch (e.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        setLayoutParams(new LinearLayout.LayoutParams(
+                                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+                        break;
+                }
+
+                return false;
             }
         });
     }
