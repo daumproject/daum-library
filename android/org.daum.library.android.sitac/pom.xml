@@ -23,7 +23,7 @@
         <dependency>
             <groupId>org.daum.extra.android</groupId>
             <artifactId>org.daum.extra.android.osmdroid</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
         </dependency>
 
         <dependency>

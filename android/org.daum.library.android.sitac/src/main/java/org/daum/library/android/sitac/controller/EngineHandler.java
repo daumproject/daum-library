@@ -39,25 +39,25 @@ public class EngineHandler implements OnEngineStateChangeListener {
     @Override
     public void onAdd(IModel m) {
         Log.d(TAG, "onAdd(IModel)");
-        for (IModel model : modelMap.values()) {
-            if (model.getId().equals(m.getId()))  {
-                update(m);
-                return;
-            }
-        }
-        add(m);
+        processModel(m);
     }
 
     @Override
     public void onUpdate(IModel m) {
         Log.d(TAG, "onUpdate(IModel) "+m);
-        for (IModel model : modelMap.values()) {
-            if (model.getId().equals(m.getId()))  {
-                update(m);
-                return;
+        processModel(m);
+    }
+
+    private void processModel(IModel m) {
+        synchronized (this) {
+            for (IModel model : modelMap.values()) {
+                if (model.getId().equals(m.getId()))  {
+                    update(m);
+                    return;
+                }
             }
+            add(m);
         }
-        add(m);
     }
 
     @Override
@@ -78,28 +78,15 @@ public class EngineHandler implements OnEngineStateChangeListener {
     private void add(IModel m) {
         Log.d(TAG, "add(IModel) with brand new entity");
         IEntity e = factory.build(m);
-        add(m, e);
-    }
-
-    private void add(IModel m, IEntity e) {
-        Log.d(TAG, "add(IModel, IEntity) in modelMap + setState");
         modelMap.put(e, m);
         e.setState(IEntity.State.SAVED);
-        add(e);
-    }
 
-    private void add(IEntity e) {
-        Log.d(TAG, "add(IEntity) to the mapView (and menuView if necessary)");
+        Log.d(TAG, "add entity to the mapView (and menuView if necessary)");
         if (e.getGeoPoint() == null && e instanceof DemandEntity) {
             // in case its a DemandEntity that has no location on map, add it to the menu
             menuView.addEntityWithNoLocation((DemandEntity) e);
         }
         mapView.addEntity(e);
-
-        Log.d(TAG, ">>> entity >> "+e);
-        for (IModel model : modelMap.values()) {
-            Log.d(TAG, ">>> map >> "+model);
-        }
     }
 
     private void update(IModel m) {
@@ -110,6 +97,7 @@ public class EngineHandler implements OnEngineStateChangeListener {
 
         if (!mapView.hasEntity(e)) mapView.addEntity(e);
 
+        // update the entity according to the model given
         e.accept(visitor, m);
     }
 

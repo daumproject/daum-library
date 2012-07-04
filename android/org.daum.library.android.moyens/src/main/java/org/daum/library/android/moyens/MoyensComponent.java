@@ -113,7 +113,11 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
 
     @Port(name="notify")
     public void notifiedByReplica(final Object m) {
-        ChangeListener.getInstance().receive(m);
+        try {
+            ChangeListener.getInstance().receive(m);
+        } catch (Exception e) {
+            Log.w(TAG, "Something went wrong ... :/ ", e);
+        }
     }
 
     @Override

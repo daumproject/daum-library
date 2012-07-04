@@ -1,40 +1,22 @@
 package org.daum.library.android.sitac.view;
 
-import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Observable;
-import java.util.Observer;
-
-import android.util.Log;
-import android.view.MotionEvent;
-import org.daum.common.model.api.VehicleSector;
-import org.daum.common.model.api.VehicleType;
-import org.daum.library.android.sitac.listener.OnMenuViewEventListener;
-import org.daum.library.android.sitac.view.entity.ArrowEntity;
-import org.daum.library.android.sitac.view.entity.DangerEntity;
-import org.daum.library.android.sitac.view.entity.DemandEntity;
-import org.daum.library.android.sitac.view.entity.IEntity;
-import org.daum.library.android.sitac.view.entity.TargetEntity;
-import org.daum.library.android.sitac.view.entity.ZoneEntity;
-import org.daum.library.android.sitac.view.menu.ExpandableMenuAdapter;
-import org.daum.library.android.sitac.view.menu.ExpandableMenuItem;
-import org.daum.library.android.sitac.view.menu.ExpandableMenuList;
-import org.daum.library.android.sitac.view.menu.IExpandableMenuItem;
-import org.daum.library.android.sitac.view.menu.PopupSideMenu;
-
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
+import android.util.Log;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
-import android.widget.ExpandableListView;
+import android.widget.*;
 import android.widget.ExpandableListView.OnChildClickListener;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
+import org.daum.common.model.api.VehicleSector;
+import org.daum.common.model.api.VehicleType;
+import org.daum.library.android.sitac.listener.OnMenuViewEventListener;
+import org.daum.library.android.sitac.view.entity.*;
+import org.daum.library.android.sitac.view.menu.*;
+
+import java.util.*;
 
 public class SITACMenuView extends RelativeLayout implements Observer {
 	
@@ -72,7 +54,6 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	private ExpandableMenuList menuList;
 	private ExpandableMenuList noLocationMenuList;
 	private OnMenuViewEventListener listener;
-	private Button resizeButton;
 	private Button hideShowButton;
 	private RelativeLayout.LayoutParams params;
 	private Hashtable<DemandEntity, IExpandableMenuItem> noLocationDemands;
@@ -132,21 +113,21 @@ public class SITACMenuView extends RelativeLayout implements Observer {
         
         adapter = new ExpandableMenuAdapter(ctx, menuList);
         menu.setAdapter(adapter);
-        
-        resizeButton = new Button(ctx);
+
         hideShowButton = new Button(ctx);
 	}
 	
 	private void configUI() {
-		setBackgroundColor(Color.argb(180, 0, 0, 0));
-		params = new RelativeLayout.LayoutParams(MENU_WIDTH, LayoutParams.WRAP_CONTENT);
-		setLayoutParams(params);
+        setBackgroundColor(Color.argb(180, 0, 0, 0));
+        params = new RelativeLayout.LayoutParams(MENU_WIDTH, LayoutParams.WRAP_CONTENT);
+        setLayoutParams(params);
 
         noLocationMenu.setId(ID_NO_LOCATION_MENU);
         noLocationMenu.setChildDivider(new GradientDrawable(Orientation.LEFT_RIGHT, new int[] {0xB4D3D3D3, 0}));
         noLocationMenu.setDividerHeight(1);
         
-		RelativeLayout.LayoutParams noLocMenuParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams noLocMenuParams = new RelativeLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		noLocMenuParams.addRule(ALIGN_PARENT_TOP);
 		addView(noLocationMenu, noLocMenuParams);
 		noLocationMenu.setVisibility(View.GONE); // do not display this menu by default
@@ -165,14 +146,16 @@ public class SITACMenuView extends RelativeLayout implements Observer {
         menu.setChildDivider(new GradientDrawable(Orientation.LEFT_RIGHT, new int[] {0xB4D3D3D3, 0}));
         menu.setDividerHeight(1);
         
-		RelativeLayout.LayoutParams menuParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams menuParams = new RelativeLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		menuParams.addRule(BELOW, menuSeparation.getId());
 		addView(menu, menuParams);
 		
 		hideShowButton.setId(ID_HIDE_SHOW_BTN);
 		hideShowButton.setText(TEXT_HIDE_BTN);
         hideShowButton.setTextColor(Color.WHITE);
-		RelativeLayout.LayoutParams hideBtnParams = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+		RelativeLayout.LayoutParams hideBtnParams = new RelativeLayout.LayoutParams(
+                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		hideBtnParams.setMargins(2, 0, 2, 0);
 		hideBtnParams.addRule(ALIGN_PARENT_RIGHT);
 		hideBtnParams.addRule(ALIGN_PARENT_TOP);
@@ -284,31 +267,40 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	 * @param e a demand entity with no location set
 	 */
 	public void addEntityWithNoLocation(DemandEntity e) {
+        if (hideShowButton.getText().equals(TEXT_HIDE_BTN) && noLocationMenu.getVisibility() == View.GONE) {
+            noLocationMenu.setVisibility(View.VISIBLE);
+        }
         IExpandableMenuItem item = new ExpandableMenuItem(e.getIcon(), e.getType()+e.getMessage());
         noLocationMenuList.getItems(0).add(item);
 
         e.addObserver(this);
         noLocationDemands.put(e, item);
         noLocationAdapter.notifyDataSetChanged();
-        if (hideShowButton.getText().equals(TEXT_HIDE_BTN) && noLocationMenu.getVisibility() == View.GONE) {
-            noLocationMenu.setVisibility(View.VISIBLE);
-        }
 	}
 
 	@Override
-	public void update(Observable observable, Object data) {
-		// an entity of the NO_LOCATION group has its state changed
-		// If the entity now has a location, remove it from the menuGrp
-		IEntity entity = (IEntity) data;
-		if (entity.getGeoPoint() != null) {
-			IExpandableMenuItem item = noLocationDemands.get(entity);
-			noLocationDemands.remove(entity);
-			noLocationMenuList.removeItem(0, item);
-			noLocationAdapter.notifyDataSetChanged();
-			if (noLocationMenuList.getItems(0).size() == 0) {
-				noLocationMenu.setVisibility(View.GONE);
-			}
-		}
+	public void update(Observable observable, final Object data) {
+
+        try {
+            ((Activity) ctx).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    DemandEntity entity = (DemandEntity) data;
+                    if (entity.isDestroyable() || entity.getGeoPoint() != null) {
+                        IExpandableMenuItem item = noLocationDemands.get(entity);
+                        noLocationDemands.remove(entity);
+                        noLocationMenuList.removeItem(0, item);
+                        noLocationAdapter.notifyDataSetChanged();
+                        if (noLocationMenuList.getItems(0).size() == 0) {
+                            noLocationMenu.setVisibility(View.GONE);
+                        }
+
+                    }
+                }
+            });
+        } catch (Exception e) {
+             Log.e(TAG, "Something went bad... :/ ", e);
+        }
 	}
 	
 	private String[] getVehicleTypeValues(String menuItemText) {
@@ -343,4 +335,12 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	public void setOnMenuViewEventListener(OnMenuViewEventListener listener) {
 		this.listener = listener;
 	}
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        super.onDraw(canvas);
+        // not sure if gusta
+        // it could be REALLY CPU consuming, I have to check this out
+        setLayoutParams(params);
+    }
 }

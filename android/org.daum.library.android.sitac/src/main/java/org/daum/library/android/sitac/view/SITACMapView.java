@@ -5,6 +5,7 @@ import java.util.Observer;
 
 import org.daum.library.android.sitac.controller.SITACController;
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
+import org.daum.library.android.sitac.view.entity.DemandEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.map.MapOverlay;
 import org.osmdroid.api.IGeoPoint;
@@ -58,7 +59,7 @@ public class SITACMapView extends RelativeLayout implements Observer {
 	public void addEntity(IEntity entity) {
 		overlay.addEntity(entity);
 		entity.addObserver(this);
-		mapView.invalidate();
+		mapView.postInvalidate();
 	}
 
     public boolean hasEntity(IEntity entity) {
@@ -67,7 +68,7 @@ public class SITACMapView extends RelativeLayout implements Observer {
 	
 	public void deleteEntity(IEntity entity) {
 		overlay.deleteEntity(entity);
-		mapView.invalidate();
+		mapView.postInvalidate();
 	}
 	
 	/**
@@ -77,7 +78,7 @@ public class SITACMapView extends RelativeLayout implements Observer {
 	public void setCenter(IGeoPoint p) {
 		if (p != null) {
 			mapCtrl.setCenter(p);
-			mapView.invalidate();
+			mapView.postInvalidate();
 		}
 	}
 	
@@ -87,6 +88,10 @@ public class SITACMapView extends RelativeLayout implements Observer {
 
 	@Override
 	public void update(Observable observable, Object data) {
-		mapView.invalidate();
+        if (data instanceof DemandEntity) {
+            DemandEntity d = (DemandEntity) data;
+            if (d.isDestroyable()) deleteEntity(d);
+        }
+        mapView.postInvalidate();
 	}
 }

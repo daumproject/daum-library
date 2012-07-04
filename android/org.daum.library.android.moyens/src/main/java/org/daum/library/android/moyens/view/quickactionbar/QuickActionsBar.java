@@ -70,22 +70,31 @@ public class QuickActionsBar extends TabHost implements View.OnClickListener {
                             viewContainer.setGravity(Gravity.CENTER_HORIZONTAL);
 
                             HorizontalScrollView actionsView = new HorizontalScrollView(ctx);
+                            actionsView.setLayoutParams(new AbsListView.LayoutParams(
+                                    LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
                             actionsView.setScrollBarStyle(View.SCROLLBARS_OUTSIDE_INSET);
 
                             LinearLayout actionsList = new LinearLayout(ctx);
                             actionsList.setOrientation(LinearLayout.HORIZONTAL);
+                            actionsList.setLayoutParams(new LinearLayout.LayoutParams(
+                                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 
                             Button b;
+                            LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
+                                    LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT
+                            );
+
                             for (int i=0; i< pair.second.size(); i++) {
                                 b = new Button(ctx);
                                 b.setId(i);
                                 b.setText(pair.second.get(i));
                                 b.setOnClickListener(QuickActionsBar.this);
-                                actionsList.addView(b);
+                                b.setLayoutParams(btnParams);
+                                actionsList.addView(b, b.getLayoutParams());
                             }
 
-                            actionsView.addView(actionsList);
-                            viewContainer.addView(actionsView);
+                            actionsView.addView(actionsList, actionsList.getLayoutParams());
+                            viewContainer.addView(actionsView, actionsView.getLayoutParams());
                             return viewContainer;
                         }
                     });

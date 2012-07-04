@@ -1,11 +1,11 @@
 package org.daum.library.android.sitac;
 
+import android.os.Bundle;
 import android.util.Log;
-import org.daum.library.android.sitac.controller.ISITACController;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import org.daum.library.android.sitac.view.SITACView;
-import org.daum.library.ormH.persistence.Orhm;
-import org.daum.library.ormH.persistence.PersistenceConfiguration;
-import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
@@ -15,7 +15,6 @@ import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
-import org.daum.library.ormH.persistence.PersistenceSession;
 import org.kevoree.framework.AbstractComponentType;
 
 /**
@@ -39,6 +38,7 @@ public class SITACComponent extends AbstractComponentType {
     private static final String TAG = "SITACComponent";
 
     private KevoreeAndroidService uiService;
+    private ReplicaStore store;
 
     @Start
     public void start() {
@@ -62,9 +62,9 @@ public class SITACComponent extends AbstractComponentType {
                         public void run() {
                             try {
                                 ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
-                                ReplicaStore storeImpl = new ReplicaStore(replicatingService);
+                                store = new ReplicaStore(replicatingService);
 
-                                SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
+                                SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), store);
                                 uiService.addToGroup("SITAC", sitacView);
 
                             } catch (PersistenceException e) {
@@ -74,7 +74,6 @@ public class SITACComponent extends AbstractComponentType {
                     });
             }
         });
-
     }
 
     @Stop

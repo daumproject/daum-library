@@ -13,6 +13,8 @@ import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -42,6 +44,7 @@ public class MenuItemView extends LinearLayout {
 	
 	private void configUI() {
 		setOrientation(LinearLayout.HORIZONTAL);
+        setLayoutParams(new AbsListView.LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
 		setPadding(8, 8, 8, 8);
 		
 		// configuring the iconView
