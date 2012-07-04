@@ -7,4 +7,8 @@ public interface IExpandableMenuItem {
 	Drawable getIcon();
 	
 	String getText();
+
+    void setText(String text);
+
+    void setIcon(Drawable icon);
 }

@@ -294,6 +294,12 @@ public class SITACMenuView extends RelativeLayout implements Observer {
                             noLocationMenu.setVisibility(View.GONE);
                         }
 
+                    } else {
+                        // something happened on the entity that requires a graphical update
+                        IExpandableMenuItem item = noLocationDemands.get(entity);
+                        item.setIcon(entity.getIcon());
+                        item.setText(entity.getType()+entity.getMessage());
+                        noLocationAdapter.notifyDataSetChanged();
                     }
                 }
             });
