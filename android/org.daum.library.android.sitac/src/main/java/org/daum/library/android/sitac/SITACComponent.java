@@ -39,6 +39,15 @@ public class SITACComponent extends AbstractComponentType {
     private static final String TAG = "SITACComponent";
 
     private KevoreeAndroidService uiService;
+    private static ChangeListener singleton=null;
+
+    public static ChangeListener getChangeListenerInstance(){
+        if(singleton == null){
+            singleton = new ChangeListener();
+        }
+        return singleton;
+    }
+
 
     @Start
     public void start() {
@@ -57,21 +66,21 @@ public class SITACComponent extends AbstractComponentType {
 
             @Override
             public void modelUpdated() {
-                    uiService.getRootActivity().runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
-                                ReplicaStore storeImpl = new ReplicaStore(replicatingService);
+                uiService.getRootActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
+                            ReplicaStore storeImpl = new ReplicaStore(replicatingService);
 
-                                SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
-                                uiService.addToGroup("SITAC", sitacView);
+                            SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
+                            uiService.addToGroup("SITAC", sitacView);
 
-                            } catch (PersistenceException e) {
-                                Log.e(TAG, "Error while initializing ReplicaStore", e);
-                            }
+                        } catch (PersistenceException e) {
+                            Log.e(TAG, "Error while initializing ReplicaStore", e);
                         }
-                    });
+                    }
+                });
             }
         });
 
@@ -92,7 +101,7 @@ public class SITACComponent extends AbstractComponentType {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                ChangeListener.getInstance("SITACDAUM").receive(m);
+                SITACComponent.getChangeListenerInstance().receive(m);
             }
         });
     }

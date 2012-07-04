@@ -9,6 +9,7 @@ import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.IModel;
 import org.daum.common.model.api.Target;
 import org.daum.common.model.api.ZoneAction;
+import org.daum.library.android.sitac.SITACComponent;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
@@ -62,7 +63,7 @@ public class SITACEngine {
         }
 
         // add a callback to populate engine when sync is ready
-        ChangeListener.getInstance("SITACDAUM").addSyncListener(new SyncListener() {
+        SITACComponent.getChangeListenerInstance().addSyncListener(new SyncListener() {
             @Override
             public void sync(SyncEvent e) {
                 if (listener != null) {
@@ -87,7 +88,7 @@ public class SITACEngine {
 
         // add callback to handle remote events on replica
         for (final Class c : classes) {
-            ChangeListener.getInstance("SITACDAUM").addEventListener(c, new PropertyChangeListener() {
+            SITACComponent.getChangeListenerInstance().addEventListener(c, new PropertyChangeListener() {
                 @Override
                 public void update(PropertyChangeEvent e) {
                     if (listener != null) {

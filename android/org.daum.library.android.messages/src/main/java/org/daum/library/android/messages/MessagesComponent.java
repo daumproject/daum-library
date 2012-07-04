@@ -51,6 +51,16 @@ public class MessagesComponent extends AbstractComponentType implements IMessage
     private MessagesView messagesView;
     private MessagesEngine engine;
 
+    private static ChangeListener singleton=null;
+
+    public static ChangeListener getChangeListenerInstance(){
+        if(singleton == null){
+            singleton = new ChangeListener();
+        }
+        return singleton;
+    }
+
+
     @Start
     public void start() {
         this.uiService = UIServiceHandler.getUIService();
@@ -113,7 +123,7 @@ public class MessagesComponent extends AbstractComponentType implements IMessage
 
     @Port(name="notify")
     public void notifiedByReplica(final Object m) {
-        ChangeListener.getInstance("MessageDAUM").receive(m);
+        MessagesComponent.getChangeListenerInstance().receive(m);
     }
 
     @Override

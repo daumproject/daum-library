@@ -49,6 +49,15 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
     private MoyensView moyensView;
     private MoyensEngine engine;
 
+    private static ChangeListener singleton=null;
+
+    public static ChangeListener getChangeListenerInstance(){
+        if(singleton == null){
+            singleton = new ChangeListener();
+        }
+        return singleton;
+    }
+
 
     @Start
     public void start() {
@@ -113,7 +122,7 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
 
     @Port(name="notify")
     public void notifiedByReplica(final Object m) {
-        ChangeListener.getInstance("MoyensDAUM").receive(m);
+        MoyensComponent.getChangeListenerInstance().receive(m);
     }
 
     @Override
