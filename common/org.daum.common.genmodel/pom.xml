@@ -2,10 +2,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.daum.common</groupId>
-    <artifactId>org.daum.common.root</artifactId>
+    <groupId>org.daum.common.genmodel</groupId>
+    <artifactId>org.daum.common.genmodel</artifactId>
     <packaging>pom</packaging>
-    <name>DAUM :: Common :: Root :: Root</name>
+    <name>DAUM :: Common :: GenModel :: Root</name>
+    <version>1.0</version>
 
     <parent>
         <groupId>org.daum.library</groupId>
@@ -14,16 +15,9 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <modules>
-        <module>../org.daum.common.message</module>
-        <module>../org.daum.common.model</module>
-        <module>../org.daum.common.util</module>
-        <module>../org.daum.common.gps</module>
-        <module>../org.daum.common.genmodel</module>
+        <module>./org.daum.common.genmodel.android</module>
+        <module>./org.daum.common.genmodel.javase</module>
     </modules>
 
 </project>
