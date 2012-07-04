@@ -3,6 +3,8 @@ package org.daum.library.android.moyens.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.*;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.util.Log;
 import android.util.Pair;
@@ -32,8 +34,7 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
 
     // view ID constants
     private static final int ID_LIST_HEADER = 1;
-    private static final int ID_LIST_VIEW = 2;
-    private static final int ID_QA_BAR = 3;
+    private static final int ID_QA_BAR = 2;
 
     // String constants
     private static final String TEXT_EMPTY_LIST = "Aucune demande";
@@ -82,6 +83,8 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
     }
 
     private void configUI() {
+        setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+
         // configuring quickActions bar
         qActionsBar.setId(ID_QA_BAR);
         RelativeLayout.LayoutParams barParams = new LayoutParams(
@@ -107,7 +110,6 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         headerParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
 
         // configuring list view
-        listView.setId(ID_LIST_VIEW);
         listView.setAdapter(adapter);
         listView.setEmptyView(tv_emptyList);
         RelativeLayout.LayoutParams listParams = new LayoutParams(
@@ -152,16 +154,6 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
     }
 
     /**
-     * Change the actual content of the demandList to the one given
-     * in parameter
-     * @param dlist the new demandList of the view
-     */
-    public void setDemands(ArrayList<Demand> dlist) {
-        this.demands = dlist;
-        adapter.notifyDataSetChanged();
-    }
-
-    /**
      * Adds a resource to the demandList
      * @param d the resource to add
      */
@@ -190,18 +182,6 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         }
         demands.add(d);
         adapter.notifyDataSetChanged();
-    }
-
-    /**
-     * Removes a demand from the demandList
-     * @param d the demand to remove
-     * @return true if the demand has been removed; false otherwise
-     */
-    public boolean removeDemand(Demand d) {
-        boolean ret = this.demands.remove(d);
-        adapter.notifyDataSetChanged();
-        return ret;
-
     }
 
     @Override

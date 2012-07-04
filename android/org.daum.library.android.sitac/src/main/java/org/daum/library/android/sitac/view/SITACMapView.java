@@ -42,7 +42,8 @@ public class SITACMapView extends RelativeLayout implements Observer {
 	}
 	
 	private void configUI() {
-		mapView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
+		RelativeLayout.LayoutParams params = new LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
 		mapView.setTileSource(TileSourceFactory.MAPNIK);
 		mapView.setBuiltInZoomControls(true);
 		mapView.setMultiTouchControls(true);
@@ -53,7 +54,7 @@ public class SITACMapView extends RelativeLayout implements Observer {
         GeoPoint gPt = new GeoPoint(48.11534,-1.638336); // default location at IRISA
         mapCtrl.setCenter(gPt);
         
-		addView(mapView);
+		addView(mapView, params);
 	}
 	
 	public void addEntity(IEntity entity) {

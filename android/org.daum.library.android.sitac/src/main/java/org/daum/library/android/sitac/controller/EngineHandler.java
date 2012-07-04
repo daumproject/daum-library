@@ -70,9 +70,7 @@ public class EngineHandler implements OnEngineStateChangeListener {
     @Override
     public void onReplicaSynced(ArrayList<IModel> data) {
         Log.d(TAG, "onReplicaSynced(ArrayList<IModel>)");
-        for (IModel m : data) {
-            onUpdate(m);
-        }
+        for (IModel m : data) onUpdate(m);
     }
 
     private void add(IModel m) {

@@ -236,8 +236,8 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
 				return false;
 			}
 		});
-		
-		// prevent underlying views to get touchEvents 
+
+		// prevent underlying views to get touchEvents
 		setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {

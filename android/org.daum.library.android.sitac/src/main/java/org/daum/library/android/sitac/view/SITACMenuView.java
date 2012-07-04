@@ -280,7 +280,6 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 
 	@Override
 	public void update(Observable observable, final Object data) {
-
         try {
             ((Activity) ctx).runOnUiThread(new Runnable() {
                 @Override
