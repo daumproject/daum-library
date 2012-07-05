@@ -1,5 +1,6 @@
 package org.daum.library.web.pages;
 
+import org.daum.library.web.WebCache;
 import org.kevoree.annotation.ComponentType;
 import org.kevoree.library.javase.webserver.AbstractPage;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
@@ -20,45 +21,11 @@ import java.util.HashMap;
 @ComponentType
 public class ResourcesPage extends AbstractPage {
 
-    private HashMap<String,byte[]> cache = new HashMap<String, byte[]>();
-
-    public byte[] load(String url)
-    {
-        logger.debug("loading "+url);
-        // todo secure
-        if(cache.containsKey(url))
-        {
-            return cache.get(url);
-        } else {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            try
-            {
-                InputStream res =    getClass().getClassLoader().getResourceAsStream(url);
-                if(res != null){
-                    int nRead;
-                    byte[] data = new byte[16384];
-                    while ((nRead = res.read(data, 0, data.length)) != -1) {
-                        buffer.write(data, 0, nRead);
-                    }
-                    buffer.flush();
-                    cache.put(url,buffer.toByteArray());
-                } else
-                {
-                    return "404".getBytes();
-                }
-
-            } catch (IOException e) {
-                logger.error("",e);
-                return "404".getBytes();
-            }
-            return buffer.toByteArray();
-        }
-
-    }
     @Override
-    public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse) {
+    public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse)
+    {
         String url = kevoreeHttpRequest.getUrl().replace(getDictionary().get("urlpattern").toString().replace("*",""),"");
-        kevoreeHttpResponse.setRawContent(      load(url));
+        kevoreeHttpResponse.setRawContent(WebCache.load(url));
         return kevoreeHttpResponse;
     }
 }

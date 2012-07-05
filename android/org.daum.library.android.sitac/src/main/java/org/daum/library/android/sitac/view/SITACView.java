@@ -1,5 +1,6 @@
 package org.daum.library.android.sitac.view;
 
+import android.view.ViewGroup;
 import org.daum.library.android.sitac.controller.ISITACController;
 import org.daum.library.android.sitac.controller.SITACController;
 
@@ -25,7 +26,7 @@ public class SITACView extends RelativeLayout {
 	}
 	
 	private void initUI() {
-		mapView = new SITACMapView(ctx, sitacCtrl);
+		mapView = new SITACMapView(ctx);
 		sitacCtrl.registerMapView(mapView);
 		menuView = new SITACMenuView(ctx);
 		sitacCtrl.registerMenuView(menuView);
@@ -35,8 +36,8 @@ public class SITACView extends RelativeLayout {
 	
 	private void configUI() {
 		setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-		
-		addView(mapView);
+
+		addView(mapView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		addView(menuView);
 		
 		RelativeLayout.LayoutParams entityParams = new RelativeLayout.LayoutParams(

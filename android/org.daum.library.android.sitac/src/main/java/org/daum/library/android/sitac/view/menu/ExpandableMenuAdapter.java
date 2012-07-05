@@ -1,6 +1,7 @@
 package org.daum.library.android.sitac.view.menu;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
@@ -8,6 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ExpandableMenuAdapter extends BaseExpandableListAdapter {
+
+    private static final String TAG = "ExpandableMenuAdapter";
 
 	private Context ctx;
 	private ExpandableMenuList data;

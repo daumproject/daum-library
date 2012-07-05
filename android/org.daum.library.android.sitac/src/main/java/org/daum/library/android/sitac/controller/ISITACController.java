@@ -55,4 +55,11 @@ public interface ISITACController {
      * @param factory
      */
     public void setModelFactory(IModelFactory factory);
+
+    /**
+     * Set the map provider that will use the map
+     *
+     * @param url a map provider
+     */
+    public void setMapProvider(String url);
 }

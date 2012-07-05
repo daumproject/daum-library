@@ -1,6 +1,5 @@
 package org.daum.library.android.sitac.visitor;
 
-import android.util.Log;
 import org.daum.common.gps.api.IGpsPoint;
 import org.daum.common.model.api.IModel;
 import org.daum.common.model.api.Demand;
@@ -16,7 +15,7 @@ import org.osmdroid.util.GeoPoint;
  * The purpose of this class is to gather every entity update work
  * in one and only location to make life easier for developers.
  *
- * By adding a visit method with a specific XXEntity related class you
+ * By adding a visit method with a specific XXXEntity related class you
  * will be able to make specific processes for that very entity update work.
  *
  * Created with IntelliJ IDEA.
@@ -31,6 +30,15 @@ public class EntityUpdateVisitor implements IVisitor {
 
     @Override
     public void visit(DemandEntity e, IModel m) {
+        Demand d = (Demand) m;
+
+        // get rid of the entity if gh_desengagement is set
+        if (d.getGh_desengagement() != null) {
+            // the vehicle left the intervention
+            e.destroy();
+            return;
+        }
+
         // update the location
         if (m.getLocation() != null) {
             IGpsPoint p = m.getLocation();
@@ -38,8 +46,7 @@ public class EntityUpdateVisitor implements IVisitor {
             e.setGeoPoint(geoP);
         }
 
-        // make some special process for DemandEntity
-        Demand d = (Demand) m;
+        // change the demand icon from dotted to normal if gh_Engage is set
         if (d.getGh_engage() == null) {
             // we should use dotted icons
             e.setIcon(EntityFactory.getIcon(VehicleType.getSector(d.getType()), true));
@@ -48,9 +55,9 @@ public class EntityUpdateVisitor implements IVisitor {
             e.setIcon(EntityFactory.getIcon(VehicleType.getSector(d.getType()), false));
         }
 
-        if (d.getGh_desengagement() != null) {
-            // the vehicle left the intervention
-            e.setGeoPoint(null);
+        // add the number if any is set
+        if (d.getNumber() != null) {
+            e.setMessage(d.getNumber());
         }
     }
 

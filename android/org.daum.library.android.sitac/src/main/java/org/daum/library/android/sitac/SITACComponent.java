@@ -1,11 +1,12 @@
 package org.daum.library.android.sitac;
 
+import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import org.daum.library.android.sitac.controller.ISITACController;
 import org.daum.library.android.sitac.view.SITACView;
-import org.daum.library.ormH.persistence.Orhm;
-import org.daum.library.ormH.persistence.PersistenceConfiguration;
-import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
@@ -15,7 +16,6 @@ import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
-import org.daum.library.ormH.persistence.PersistenceSession;
 import org.kevoree.framework.AbstractComponentType;
 
 /**
@@ -26,6 +26,9 @@ import org.kevoree.framework.AbstractComponentType;
  * To change this template use File | Settings | File Templates.
  */
 
+// TODO
+// dico: - port:ip provider carte
+//       - filtre type intervention
 @Library(name = "Android")
 @Requires({
         @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
@@ -33,6 +36,10 @@ import org.kevoree.framework.AbstractComponentType;
 @Provides({
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
 })
+@DictionaryType({
+        @DictionaryAttribute(name = "mapProvider", defaultValue = "http://tile.openstreetmap.org/", optional = false)
+}
+)
 @ComponentType
 public class SITACComponent extends AbstractComponentType {
 
@@ -41,10 +48,8 @@ public class SITACComponent extends AbstractComponentType {
     private KevoreeAndroidService uiService;
     private static ChangeListener singleton=null;
 
-    public static ChangeListener getChangeListenerInstance(){
-        if(singleton == null){
-            singleton = new ChangeListener();
-        }
+    public static ChangeListener getChangeListenerInstance() {
+        if (singleton == null) singleton = new ChangeListener();
         return singleton;
     }
 
@@ -52,6 +57,7 @@ public class SITACComponent extends AbstractComponentType {
     @Start
     public void start() {
         uiService = UIServiceHandler.getUIService();
+        final String mapProvider = getDictionary().get("mapProvider").toString();
 
         getModelService().registerModelListener(new ModelListener() {
             @Override
@@ -74,16 +80,17 @@ public class SITACComponent extends AbstractComponentType {
                             ReplicaStore storeImpl = new ReplicaStore(replicatingService);
 
                             SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
+                            ISITACController ctrl = sitacView.getController();
+                            ctrl.setMapProvider(mapProvider);
                             uiService.addToGroup("SITAC", sitacView);
 
                         } catch (PersistenceException e) {
-                            Log.e(TAG, "Error while initializing ReplicaStore", e);
+                            Log.e(TAG, "Error on component startup", e);
                         }
                     }
                 });
             }
         });
-
     }
 
     @Stop

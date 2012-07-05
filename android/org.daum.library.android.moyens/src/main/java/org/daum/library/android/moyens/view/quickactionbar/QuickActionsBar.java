@@ -76,11 +76,16 @@ public class QuickActionsBar extends TabHost implements View.OnClickListener {
                             actionsList.setOrientation(LinearLayout.HORIZONTAL);
 
                             Button b;
+                            LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
+                                    LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+                            btnParams.weight = 1;
+
                             for (int i=0; i< pair.second.size(); i++) {
                                 b = new Button(ctx);
                                 b.setId(i);
                                 b.setText(pair.second.get(i));
                                 b.setOnClickListener(QuickActionsBar.this);
+                                b.setLayoutParams(btnParams);
                                 actionsList.addView(b);
                             }
 

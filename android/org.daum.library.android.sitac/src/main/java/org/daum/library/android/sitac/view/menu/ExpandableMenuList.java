@@ -119,11 +119,13 @@ public class ExpandableMenuList {
 	}
 
 	public IExpandableMenuItem getGroup(int position) {
-		return list.get(position).first;
+        if (list.get(position) != null) return list.get(position).first;
+        else return null;
 	}
 
 	public List<IExpandableMenuItem> getItems(int grpIndex) {
-		return list.get(grpIndex).second;
+        if (list.get(grpIndex) != null) return list.get(grpIndex).second;
+        else return null;
 	}
 
 	public List<IExpandableMenuItem> getItems(IExpandableMenuItem grpItem) {

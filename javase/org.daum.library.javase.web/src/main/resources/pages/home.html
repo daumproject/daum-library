@@ -1,10 +1,47 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title></title>
-</head>
-<body>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 
-</body>
-</html>
+    <title>Authentification DAUM</title>
+
+    <script type="text/javascript" language="javascript" src="media/js/jquery-1.7.2.js"></script>
+    <script type="text/javascript" language="javascript" src="media/js/home.js"></script>
+    <style type="text/css" title="currentStyle">
+        @import "media/css/daum.css";
+    </style>
+</head>
+
+<script type="text/javascript" charset="utf-8">
+
+</script>
+
+
+<body>
+<div id="root">
+    <form id="auth" method="post" name="auth" action="">
+        <fieldset>
+            <legend>Authentification</legend>
+
+            <label>Identifiant:</label>
+            <br />
+            <input type="text" name="login" id="login" class="text" size="20" />
+           <!-- <label class="error" for="login" id="login_error">This field is required.</label>   -->
+            <br />
+            <label for="mdp">Mot de Passe:</label>
+            <br />
+            <input type="password" name="mdp" id="mdp" class="text" size="20" />
+            <!-- <label class="error" for="mdp" id="mdp_error">This field is required.</label>  -->
+                        <br /><br />
+
+
+                    </fieldset>
+                </form>
+                            <!-- todo -->
+    <button type="submit" class="button positive" onclick="window.location='admin.html'">&nbsp;Connexion</button>
+
+
+                <div id="success" class="success" style="display:none;"></div>
+            </div>
+            </body>
+            </html>

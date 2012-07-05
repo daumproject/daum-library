@@ -131,8 +131,8 @@ public class CacheManager implements ICacheManger
 
                     if(storeSnapshot.dest.equals(cluster.getCurrentNode()))
                     {
-                      if(cluster.getCurrentNode().isSynchronized())
-                      {
+                     // if(cluster.getCurrentNode().isSynchronized())
+                     // {
 
                           logger.debug(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest);
 
@@ -146,10 +146,12 @@ public class CacheManager implements ICacheManger
                           // todo add node
                           cluster.getChannel().write(syncEvent);
                           cluster.getCurrentNode().setSynchronized();
+
+                        /*
                       } else
                       {
                           logger.error(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest+" but is already Synchronized");
-                      }
+                      }    */
 
                     }
 

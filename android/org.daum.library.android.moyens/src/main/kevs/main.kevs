@@ -1,33 +1,63 @@
-// core
-merge "mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}"
-merge "mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}"
+ {
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.defaultChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.socketChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}'
 
-// lib
-merge "mvn:org.kevoree.library.android/org.kevoree.library.android.bluetooth/{kevoree.version}"
+merge 'mvn:org.daum.library.android/org.daum.library.android.replica/1.8'
 
-// daum
-merge "mvn:http://maven.kevoree.org/daum/snapshot!org.daum.library.android/org.daum.library.android.moyens/1.7.6-SNAPSHOT"
+merge 'mvn:org.daum.library.android/org.daum.library.android.moyens/1.8.2-SNAPSHOT'
+merge 'mvn:org.daum.library.android/org.daum.library.android.sitac/1.8.2-SNAPSHOT'
 
-addNode node0: AndroidNode
-addNode node1: AndroidNode
+addNode node0:AndroidNode
+addNode node3:AndroidNode
+ {
+  addComponent SITACComp265@node0 : SITACComponent {}
+  addComponent Replica994@node0 : Replica {}
+  addComponent MoyensCom559@node0 : MoyensComponent {}
+addChannel defSERVIC177 : defSERVICE {}
+addChannel SocketCha52 : SocketChannel {port='9001',replay='false',maximum_size_messaging='50',timer='2000'}
+addChannel defMSG327 : defMSG {}
+bind SITACComp265.service@node0 => defSERVIC177
+bind Replica994.service@node0 => defSERVIC177
+bind Replica994.remote@node0 => SocketCha52
+bind Replica994.broadcast@node0 => SocketCha52
+bind MoyensCom559.service@node0 => defSERVIC177
+bind Replica994.notification@node0 => defMSG327
+bind MoyensCom559.notify@node0 => defMSG327
+bind SITACComp265.notify@node0 => defMSG327
+updateDictionary defSERVIC177 
+updateDictionary SocketCha52 {port='9000'}@node0,{port='9001'}@node3
+updateDictionary defMSG327 
+updateDictionary SITACComp265@node0 
+updateDictionary Replica994@node0 
+updateDictionary MoyensCom559@node0 
+}
 
-addGroup nanoRestGrp: NanoRestGroup
+ {
+  addComponent SITACComp177@node3 : SITACComponent {}
+  addComponent Replica404@node3 : Replica {}
+  addComponent MoyensCom795@node3 : MoyensComponent {}
+addChannel defSERVIC782 : defSERVICE {}
+addChannel SocketCha52 : SocketChannel {port='9001',replay='false',maximum_size_messaging='50',timer='2000'}
+addChannel defMSG830 : defMSG {}
+bind SITACComp177.service@node3 => defSERVIC782
+bind Replica404.service@node3 => defSERVIC782
+bind Replica404.remote@node3 => SocketCha52
+bind Replica404.broadcast@node3 => SocketCha52
+bind MoyensCom795.service@node3 => defSERVIC782
+bind Replica404.notification@node3 => defMSG830
+bind SITACComp177.notify@node3 => defMSG830
+bind MoyensCom795.notify@node3 => defMSG830
+updateDictionary defSERVIC782
+updateDictionary SocketCha52 {port='9000'}@node0,{port='9001'}@node3
+updateDictionary defMSG830
+updateDictionary SITACComp177@node3
+updateDictionary Replica404@node3
+updateDictionary MoyensCom795@node3
+}
 
-addChannel bluetooth: BluetoothChannel
-
-addToGroup nanoRestGrp *
-
-addComponent moyComp0@node0: MoyensComponent
-addComponent moyComp1@node1: MoyensComponent
-
-// bind node0
-//bind moyComp0.inDemand@node0 => bluetooth
-//bind moyComp0.outDemand@node0 => bluetooth
-
-// bind node1
-//bind moyComp1.inDemand@node1 => bluetooth
-//bind moyComp1.outDemand@node1 => bluetooth
-
-// network addresses
-network node0 { "KEVOREE.remote.node.ip"= "192.168.1.147" }
-network node1 { "KEVOREE.remote.node.ip"= "192.168.1.121" }
+}

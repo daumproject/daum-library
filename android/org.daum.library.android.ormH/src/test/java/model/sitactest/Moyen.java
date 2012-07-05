@@ -1,7 +1,9 @@
-package model.sitac;
+package model.sitactest;
 
 import org.daum.library.ormH.annotations.Generated;
 import org.daum.library.ormH.annotations.Id;
+import org.daum.library.ormH.annotations.ManyToOne;
+import org.daum.library.ormH.annotations.OneToMany;
 import org.daum.library.ormH.persistence.GeneratedType;
 
 import java.io.Serializable;
@@ -14,9 +16,12 @@ public class Moyen  implements Serializable {
     @Generated(strategy = GeneratedType.UUID)
     private String id = new String();
 
+    @ManyToOne
 	private MoyenType type;
+
 	private String name;
 
+    @OneToMany
 	private List<Moyen> children = new ArrayList<Moyen>();
 	
 	public Moyen(MoyenType type)
@@ -66,7 +71,8 @@ public class Moyen  implements Serializable {
 	{
 		return id;
 	}
-	
+
+
 	public List<Moyen> getChildren()
 	{
 		return children;

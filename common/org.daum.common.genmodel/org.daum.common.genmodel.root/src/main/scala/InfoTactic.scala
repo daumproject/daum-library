@@ -4,11 +4,20 @@ package org.sitac;
  * Created by Ecore Model Generator.
  * @authors: Gregory NAIN, Fouquet Francois
  * Date: 04 juil. 12 Time: 09:48
- * Meta-Model:NS_URI=http://sitac/1.0
+ * Meta-Model:NS_URI=http://sitactest/1.0
  */
-trait InfoTactic extends org.sitac.SitacContainer {
-		private var categorie : Option[org.sitac.Categorie] = None
 
+import org.daum.library.ormH.annotations.Generated
+import org.daum.library.ormH.annotations.Id
+import org.daum.library.ormH.persistence.GeneratedType
+
+
+trait InfoTactic extends org.sitac.SitacContainer {
+
+  @Id
+  @Generated(strategy = GeneratedType.UUID)
+  var id : java.lang.String = ""
+		private var categorie : Option[org.sitac.Categorie] = None
 
 		def getCategorie : Option[org.sitac.Categorie] = {
 				categorie
