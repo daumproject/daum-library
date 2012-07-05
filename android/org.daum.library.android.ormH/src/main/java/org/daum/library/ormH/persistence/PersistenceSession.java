@@ -1,12 +1,16 @@
 package org.daum.library.ormH.persistence;
 
 
+import org.daum.library.ormH.HelperList;
 import org.daum.library.ormH.api.IPersistenceSession;
 import org.daum.library.ormH.api.PersistenceSessionStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.collection.mutable.ListBuffer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -44,11 +48,14 @@ public class PersistenceSession implements IPersistenceSession {
                 PersistentClass pc = null;
                 pc=factory.getPersistenceConfiguration().getPersistentClass(bean);
                 PersistentProperty pp = pc.getPersistentPropertyID();
-                Object id =  pp.getValue(bean);
-                if(id != null)
-                {
-                    Orhm ormh = new Orhm(pp.getCacheName(),pp.getGeneratedType(),id);
 
+                if(pp != null)
+                {
+                    Object id =  pp.getValue(bean);
+                    Orhm ormh = new Orhm(pp.getCacheName(),pp.getGeneratedType(),id);
+                    //  System.out.println(ormh);
+
+                    // Generate ID  and set
                     if(ormh.getGeneratedType() == GeneratedType.UUID)
                     {
                         if(ormh.getId().getClass() !=  String.class && ormh.getId() != null)
@@ -56,32 +63,70 @@ public class PersistenceSession implements IPersistenceSession {
                             throw new PersistenceException("GeneratedType : "+ GeneratedType.UUID+" need to be  : String id = new String()");
                         }else
                         {
-                            ormh.setId(conf.getNodeID()+"+"+UUID.randomUUID().toString());
-
-                           pp.getFieldID().set(bean, ormh.getId());
-                           // Object valueConverted = ConvertUtils.convert(ormh.getId(), ormh.getId().getClass());
-                            // update id in bean
-                            //PropertyUtils.setProperty(bean, ormh.getIdName(), valueConverted);
+                           if(ormh.getId().toString().length() == 0)
+                           {
+                               ormh.setId(conf.getNodeID()+"+"+UUID.randomUUID().toString());
+                               logger.debug("Creating id "+ormh.getId());
+                               pp.getField().set(bean, ormh.getId());
+                           }
                         }
                     }
+
+                    // Manage OneToMany and ManyToOne
+                    for(PersistentProperty p : pc.getPersistentProperties())
+                    {
+                        if(p.getF_ManyToOne() != null)
+                        {
+                            Object _bean =  p.getF_ManyToOne().get(bean);
+                            // save it
+                            save(_bean);
+                        }
+
+                        if(p.getF_OneToMany() != null)
+                        {
+                            Object _bean =  p.getF_OneToMany().get(bean);
+                            if(_bean instanceof ArrayList)
+                            {
+                                for(Object o: ((ArrayList)_bean))
+                                {
+                                    save(o);
+                                }
+                            }   else if(_bean instanceof  scala.collection.mutable.ListBuffer)
+                            {
+                                HelperList t = new HelperList();
+
+                                for(Object o: t.convert((scala.collection.mutable.ListBuffer)_bean))
+                                {
+                                    save(o);
+                                }
+                            }
+                        }
+
+                    }
+
+
                     store.save(ormh, bean);
+
+
                 }
                 else
                 {
                     logger.error("the id is null the bean cannot be saved");
-                    throw new PersistenceException("the annotation id is not define");
+                    throw new PersistenceException("the id is null the bean cannot be saved");
                 }
 
 
 
-            }   catch (Exception e){
+            }   catch (Exception e)
+            {
                 logger.error("The persistence class "+bean.getClass()+" is not added in addPersistentClass ",e);
-
+                System.out.println("The persistence class "+bean.getClass()+" is not added in addPersistentClass "+e);
             }
         }else {
             logger.error(" Fail to save bean is null");
         }
     }
+
 
     @Override
     public void update(Object bean) throws PersistenceException {

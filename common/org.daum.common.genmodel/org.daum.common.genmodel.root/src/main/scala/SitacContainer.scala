@@ -1,13 +1,15 @@
-package org.sitac;
+package org.sitac
+
+import java.io.Serializable;
 
 
 /**
  * Created by Ecore Model Generator.
  * @authors: Gregory NAIN, Fouquet Francois
  * Date: 04 juil. 12 Time: 09:48
- * Meta-Model:NS_URI=http://sitac/1.0
+ * Meta-Model:NS_URI=http://sitactest/1.0
  */
-trait SitacContainer {
+trait SitacContainer extends Serializable {
 
 	 private var internal_eContainer : SitacContainer = null
 	 private var internal_unsetCmd : Option[()=>Any] = None 

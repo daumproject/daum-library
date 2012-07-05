@@ -45,4 +45,8 @@ public class Orhm implements Serializable {
     public void setGeneratedType(int generatedType) {
         this.generatedType = generatedType;
     }
+
+    public String toString(){
+        return "ID="+id+" cacheName="+cacheName+" "+getGeneratedType();
+    }
 }

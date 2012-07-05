@@ -72,11 +72,10 @@ public class PersistentClass
         this.persistentPropertyID = persistentPropertyID;
     }
 
-    public void parse() throws PersistenceException {
+    public void parse() throws PersistenceException
+    {
         try
         {
-
-            //  clazz = Class.forName(getName());
             clazz = getClass().getClassLoader().loadClass(getName());
         }
         catch(ClassNotFoundException e)
@@ -87,35 +86,14 @@ public class PersistentClass
         setTablename(clazz.getSimpleName().toLowerCase());
         Method[] methods = clazz.getMethods();
         Field[]       fields =       clazz.getDeclaredFields();
-
         for(int i=0;i<fields.length;i++)
         {
             Field field = fields[i];
             property = new PersistentProperty(this, field);
-            if(property.isId())
-            {
-                setPersistentPropertyID(property);
-                break;
-            } else
-            {
-                /*
-           for(int i=0;i < methods.length;i++)
-           {
-               Method method = methods[i];
-               String methodName = method.getName();
-               Class[] types = method.getParameterTypes();
-               if(methodName.startsWith("get") && types.length == 0 && method.getDeclaringClass().equals(clazz))
-               {
-                   property = new PersistentProperty(this, method);
-                   String propertyName = methodName.substring(3,4).toLowerCase() + methodName.substring(4);
-                   if(property.getType() != null)
-                   {
-                       persistantProperties.add(property);
-                   }
-               }
-           }     */
-            }
+            persistantProperties.add(property);
         }
+
+
 
 
     }

@@ -7,6 +7,7 @@ import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
+import org.daum.library.web.WebCache;
 import org.kevoree.annotation.ComponentType;
 import org.kevoree.annotation.PortType;
 import org.kevoree.annotation.RequiredPort;
@@ -14,13 +15,10 @@ import org.kevoree.annotation.Requires;
 import org.kevoree.framework.KevoreePropertyHelper;
 import org.kevoree.framework.NetworkHelper;
 import org.kevoree.library.javase.webserver.AbstractPage;
-import org.kevoree.library.javase.webserver.FileServiceHelper;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
 import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
 import scala.Option;
 
-import java.io.*;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -39,7 +37,7 @@ public class MoyensPage extends AbstractPage {
     private PersistenceSessionFactoryImpl factory=null;
     private ReplicaService replicaService =  null;
     private PersistenceSession s=null;
-    private HashMap<String,byte[]> cache = new HashMap<String, byte[]>();
+
 
     public void init()
     {
@@ -62,49 +60,7 @@ public class MoyensPage extends AbstractPage {
         }
     }
 
-    public String getAddress (String remoteNodeName)
-    {
-        String ip = "127.0.0.1";
-        Option<String> ipOption = NetworkHelper.getAccessibleIP(KevoreePropertyHelper
-                .getStringNetworkProperties(this.getModelService().getLastModel(), remoteNodeName, org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP()));
-        if (ipOption.isDefined()) {
-            ip = ipOption.get();
-        }
-        return ip;
-    }
 
-
-    public byte[] load(String url)
-    {
-        if(cache.containsKey(url))
-        {
-            return cache.get(url);
-        } else {
-            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
-            try
-            {
-                InputStream res =    getClass().getClassLoader().getResourceAsStream(url);
-                if(res != null){
-                    int nRead;
-                    byte[] data = new byte[16384];
-                    while ((nRead = res.read(data, 0, data.length)) != -1) {
-                        buffer.write(data, 0, nRead);
-                    }
-                    buffer.flush();
-                    cache.put(url,buffer.toByteArray());
-                } else
-                {
-                    return "404".getBytes();
-                }
-
-            } catch (IOException e) {
-                logger.error("",e);
-                return "404".getBytes();
-            }
-            return buffer.toByteArray();
-        }
-
-    }
 
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse)
@@ -115,7 +71,8 @@ public class MoyensPage extends AbstractPage {
         StringBuilder data = new StringBuilder();
         init();
 
-        String template =   new String(load("pages/moyens.html"));
+        String page = "pages/moyens.html";
+        String template = new String(WebCache.load(page));
 
         PersistenceSession session = null;
         try
@@ -155,7 +112,7 @@ public class MoyensPage extends AbstractPage {
         }
 
 
-        kevoreeHttpResponse.setContent(template.replace("$contenu$", data).replace("$ip$", getAddress(getNodeName())));
+        kevoreeHttpResponse.setContent(template.replace("$contenu$", data).replace("$ip$", WebCache.getAddress(getModelService().getLastModel(),getNodeName())));
         return kevoreeHttpResponse;
     }
 
