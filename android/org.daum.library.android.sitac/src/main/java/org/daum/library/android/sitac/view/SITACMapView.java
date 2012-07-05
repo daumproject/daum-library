@@ -9,7 +9,6 @@ import org.daum.library.android.sitac.listener.OnOverlayEventListener;
 import org.daum.library.android.sitac.view.entity.DemandEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.map.MapOverlay;
-import org.daum.library.android.sitac.view.map.MyMapView;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
@@ -27,7 +26,7 @@ public class SITACMapView extends RelativeLayout implements Observer {
 	private static final String TAG = "SITACView";
 	
 	private Context ctx;
-	private MyMapView mapView;
+	private MapView mapView;
 	private MapController mapCtrl;
 	private MapOverlay overlay;
 
@@ -40,7 +39,7 @@ public class SITACMapView extends RelativeLayout implements Observer {
 	}
 	
 	private void initUI() {
-		mapView = new MyMapView(ctx, null);
+		mapView = new MapView(ctx, null);
 		mapCtrl = mapView.getController();
 		overlay = new MapOverlay(ctx);
 	}

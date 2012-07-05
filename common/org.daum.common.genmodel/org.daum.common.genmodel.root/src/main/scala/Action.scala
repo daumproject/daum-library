@@ -11,7 +11,7 @@ trait Action extends org.sitac.SitacContainer with org.sitac.InfoLignePos with o
 
 		private var enLigne : java.lang.Boolean = false
 
-		private var `type` : Option[org.sitac.ActionType] = None
+		private var `type` : Option[org.sitac.ActionType] = null
 
 
 		def getNoria : java.lang.Boolean = {

@@ -15,6 +15,9 @@ import org.daum.library.ormH.annotations.ManyToOne
 
 trait SitacModel extends org.sitac.SitacContainer {
 
+  @Id
+  @Generated(strategy = GeneratedType.UUID)
+  private var id : java.lang.String = ""
   @OneToMany
   private lazy val interventionTypes : scala.collection.mutable.ListBuffer[org.sitac.InterventionType] = new scala.collection.mutable.ListBuffer[org.sitac.InterventionType]()
   @OneToMany
@@ -43,6 +46,12 @@ trait SitacModel extends org.sitac.SitacContainer {
     }
 
   }
+
+
+  def getId() : java.lang.String = {
+    id
+  }
+
 
   def addInterventionTypes(interventionTypes : org.sitac.InterventionType) {
     interventionTypes.setEContainer(this,Some(()=>{this.removeInterventionTypes(interventionTypes)}))

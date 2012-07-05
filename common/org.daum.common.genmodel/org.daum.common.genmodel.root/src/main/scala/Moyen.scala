@@ -18,14 +18,17 @@ trait Moyen extends org.sitac.SitacContainer with org.sitac.Detachement {
 
   private var numero : java.lang.String = ""
 
-  private var `type` : Option[org.sitac.MoyenType] = None
-
   @OneToMany
   private lazy val personnels : scala.collection.mutable.ListBuffer[org.sitac.Agent] = new scala.collection.mutable.ListBuffer[org.sitac.Agent]()
 
-  private var posRef : Option[org.sitac.Position] = None
 
-  private var posTarget : Option[org.sitac.Position] = None
+  @OneToMany
+  private lazy val materiels : scala.collection.mutable.ListBuffer[org.sitac.Materiel] = new scala.collection.mutable.ListBuffer[org.sitac.Materiel]()
+
+
+  private var posRef : Option[org.sitac.Position] = null
+
+  private var posTarget : Option[org.sitac.Position] = null
 
 
   def getPrecision : java.lang.String = {
@@ -44,14 +47,18 @@ trait Moyen extends org.sitac.SitacContainer with org.sitac.Detachement {
     this.numero = numero
   }
 
-  def getType : Option[org.sitac.MoyenType] = {
-    `type`
+
+
+  def getMaterielForJ : java.util.List[org.sitac.Materiel] = {
+    import scala.collection.JavaConversions._
+    materiels
   }
 
-  def setType(`type` : Option[org.sitac.MoyenType] ) {
-    this.`type` = (`type`)
 
+  def addMateriel(materiel : org.sitac.Materiel) {
+    this.materiels.append(materiel)
   }
+
 
   def getPersonnels : List[org.sitac.Agent] = {
     personnels.toList
@@ -92,7 +99,7 @@ trait Moyen extends org.sitac.SitacContainer with org.sitac.Detachement {
   def setPosRef(posRef : Option[org.sitac.Position] ) {
     if(this.posRef!= posRef){
       this.posRef = (posRef)
-      posRef.map{ dic=>				dic.setEContainer(this, Some(() => { this.posRef= None }) )
+      posRef.map{ dic=>				dic.setEContainer(this, Some(() => { this.posRef= null }) )
       }}
 
   }
@@ -104,7 +111,7 @@ trait Moyen extends org.sitac.SitacContainer with org.sitac.Detachement {
   def setPosTarget(posTarget : Option[org.sitac.Position] ) {
     if(this.posTarget!= posTarget){
       this.posTarget = (posTarget)
-      posTarget.map{ dic=>				dic.setEContainer(this, Some(() => { this.posTarget= None }) )
+      posTarget.map{ dic=>				dic.setEContainer(this, Some(() => { this.posTarget= null }) )
       }}
 
   }
@@ -136,9 +143,6 @@ trait Moyen extends org.sitac.SitacContainer with org.sitac.Detachement {
       clonedSelfObject.setChef(Some(addrs.get(sub).asInstanceOf[org.sitac.Agent]))
     }
 
-    this.getType.map{sub =>
-      clonedSelfObject.setType(Some(addrs.get(sub).asInstanceOf[org.sitac.MoyenType]))
-    }
 
     this.getPersonnels.foreach{sub =>
       clonedSelfObject.addPersonnels(addrs.get(sub).asInstanceOf[org.sitac.Agent])

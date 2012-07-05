@@ -12,13 +12,9 @@ import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
 import org.sitac.*;
-import org.sitac.impl.AgentImpl;
-import org.sitac.impl.InterventionImpl;
-import org.sitac.impl.MoyenImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-
+import scala.Option;
 
 
 /**
@@ -41,6 +37,7 @@ public class PopulateReplica extends AbstractComponentType {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
+
     public void init()
     {
         if(replicaService == null )
@@ -52,9 +49,9 @@ public class PopulateReplica extends AbstractComponentType {
                 ReplicaStore store = new ReplicaStore(replicaService);
                 configuration.setStore(store);
                 configuration.addPersistentClass(Demand.class);
-                configuration.addPersistentClass(AgentImpl.class);
-                configuration.addPersistentClass(InterventionImpl.class);
-                configuration.addPersistentClass(MoyenImpl.class);
+
+                for (Class c : SitacFactory.classes()) configuration.addPersistentClass(c);
+
                 factory = configuration.getPersistenceSessionFactory();
 
 
@@ -86,12 +83,12 @@ public class PopulateReplica extends AbstractComponentType {
         getModelService().registerModelListener(new ModelListener() {
             @Override
             public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;  //To change body of implemented methods use File | Settings | File Templates.
+                return false;
             }
 
             @Override
             public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;  //To change body of implemented methods use File | Settings | File Templates.
+                return false;
             }
 
             @Override
@@ -106,8 +103,7 @@ public class PopulateReplica extends AbstractComponentType {
                     if(session != null)
                     {
 
-                        SitacModel sitacModel = new SitacModel();
-
+                        SitacModel sitacModel = SitacFactory.createSitacModel();
 
 
                         Agent agentnoel =SitacFactory.createAgent();
@@ -133,12 +129,64 @@ public class PopulateReplica extends AbstractComponentType {
                         agentjed.setPrenom("JEAN-EMILE");
                         agentjed.setMatricule("monmatricule");
 
+                        Personne requerant = SitacFactory.createPersonne();
+                        requerant.setNom("Nom requerant");
+                        requerant.setPrenom("Prenom requerant");
+
+                        Personne vitc1 = SitacFactory.createPersonne();
+                        vitc1.setNom("Nom victime1");
+                        vitc1.setPrenom("Prenom victime1");
+
+                        Personne vitc2 = SitacFactory.createPersonne();
+                        vitc2.setNom("Nom victime2");
+                        vitc2.setPrenom("Prenom victime2");
 
                         sitacModel.addPersonnes(agentjed);
 
+                        Intervention interventionfake =SitacFactory.createIntervention();
+
+                        GpsPoint position = SitacFactory.createGpsPoint();
+                        position.setLong(4811534);
+                        position.setLat(-1638336);
 
 
-                      session.save(sitacModel);
+                        interventionfake.setPosition(Option.apply((Position)position));
+
+                        interventionfake.setRequerant(Option.apply(requerant));
+
+                        interventionfake.addVictimes(vitc1);
+                        interventionfake.addVictimes(vitc2);
+
+
+
+                        Moyen   moyen1 = SitacFactory.createMoyen();
+                        moyen1.setChef(Option.apply(agentnoel));
+                        moyen1.addPersonnels(agentERWAN);
+                        moyen1.addPersonnels(agentjed);
+                        moyen1.addPersonnels(agentMaxime);
+
+
+                        Vehicule fpt =SitacFactory.createVehicule();
+                        fpt.setVehiculeType(VehiculeType.FPT);
+                        moyen1.addMateriel(fpt);
+
+                        Vehicule fpt2 =SitacFactory.createVehicule();
+                        fpt2.setVehiculeType(VehiculeType.FPT);
+                        moyen1.addMateriel(fpt2);
+
+
+
+                        Detachement detachement = SitacFactory.createDetachement();
+
+                        Affectation affectation = SitacFactory.createAffectation();
+                        affectation.setMoyen(Option.apply(moyen1));
+                        detachement.addAffectation(affectation);
+
+
+                        interventionfake.addDetachements(detachement);
+                        sitacModel.addInterventions(interventionfake);
+
+                        session.save(sitacModel);
 
 
 

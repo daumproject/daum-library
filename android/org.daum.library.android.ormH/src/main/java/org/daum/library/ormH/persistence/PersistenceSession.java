@@ -7,6 +7,8 @@ import org.daum.library.ormH.api.PersistenceSessionStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.None;
+import scala.Some;
 import scala.collection.mutable.ListBuffer;
 
 import java.util.ArrayList;
@@ -63,12 +65,12 @@ public class PersistenceSession implements IPersistenceSession {
                             throw new PersistenceException("GeneratedType : "+ GeneratedType.UUID+" need to be  : String id = new String()");
                         }else
                         {
-                           if(ormh.getId().toString().length() == 0)
-                           {
-                               ormh.setId(conf.getNodeID()+"+"+UUID.randomUUID().toString());
-                               logger.debug("Creating id "+ormh.getId());
-                               pp.getField().set(bean, ormh.getId());
-                           }
+                            if(ormh.getId().toString().length() == 0)
+                            {
+                                ormh.setId(conf.getNodeID()+"+"+UUID.randomUUID().toString());
+                                logger.debug("Creating id "+ormh.getId()+" "+pp.getCacheName());
+                                pp.getField().set(bean, ormh.getId());
+                            }
                         }
                     }
 
@@ -79,7 +81,17 @@ public class PersistenceSession implements IPersistenceSession {
                         {
                             Object _bean =  p.getF_ManyToOne().get(bean);
                             // save it
-                            save(_bean);
+                            if(_bean instanceof  scala.Some)
+                            {
+                                if(((Some)_bean).get() != null)
+                                {
+                                    save(((Some)_bean).get());
+                                }
+
+                            }else
+                            {
+                                save(_bean);
+                            }
                         }
 
                         if(p.getF_OneToMany() != null)
@@ -89,7 +101,16 @@ public class PersistenceSession implements IPersistenceSession {
                             {
                                 for(Object o: ((ArrayList)_bean))
                                 {
-                                    save(o);
+                                    if(o instanceof  scala.Some)
+                                    {
+                                        if(((Some)o).get() != null)
+                                        {
+                                            save(((Some)o).get());
+                                        }
+
+                                    }else {
+                                        save(o);
+                                    }
                                 }
                             }   else if(_bean instanceof  scala.collection.mutable.ListBuffer)
                             {
@@ -97,7 +118,16 @@ public class PersistenceSession implements IPersistenceSession {
 
                                 for(Object o: t.convert((scala.collection.mutable.ListBuffer)_bean))
                                 {
-                                    save(o);
+                                    if(o instanceof  scala.Some){
+                                        if(((Some)o).get() != null)
+                                        {
+                                            save(((Some)o).get());
+                                        }
+
+                                    }else {
+                                        save(o);
+                                    }
+
                                 }
                             }
                         }
