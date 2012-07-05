@@ -29,9 +29,10 @@
             <thead>
             <tr>
                 <th>ID</th>
-                <th>TYPE</th>
-                <th>Position</th>
-                <th>Requerant</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>matricule</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -44,7 +45,7 @@
 
 </div>
 
-<button type="submit" class="button positive" onclick="'">&nbsp;Creer une intervention</button>
+<button type="submit" class="button positive" onclick="'">&nbsp;Creer un Agent</button>
 
 <script type="text/javascript" charset="utf-8">
 
@@ -61,7 +62,7 @@
 
     function showMessage(text)
     {
-     document.getElementById('text').innerHTML = text;
+    document.getElementById('text').innerHTML = text;
     }
 
     var ws = new WebSocket('ws://$ip$:8082/jed');

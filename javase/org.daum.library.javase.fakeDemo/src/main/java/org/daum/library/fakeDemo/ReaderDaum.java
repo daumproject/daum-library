@@ -16,6 +16,10 @@ import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
 //import org.kevoree.library.ui.layout.KevoreeLayout;
+import org.sitac.Agent;
+import org.sitac.impl.AgentImpl;
+import org.sitac.impl.InterventionImpl;
+import org.sitac.impl.MoyenImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +44,7 @@ import java.util.Set;
 })
 
 @DictionaryType({
-        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature", "moyens","heart"})
+        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature", "moyens","heart","sitac"})
 }
 )
 @ComponentType
@@ -63,6 +67,9 @@ public class ReaderDaum extends AbstractComponentType {
             configuration.addPersistentClass(TemperatureMonitor.class);
             configuration.addPersistentClass(Moyen.class);
             configuration.addPersistentClass(HeartMonitor.class);
+            configuration.addPersistentClass(AgentImpl.class);
+            configuration.addPersistentClass(InterventionImpl.class);
+            configuration.addPersistentClass(MoyenImpl.class);
 
             replicatingService =   this.getPortByName("service", ReplicaService.class);
             StoreImpl storeImpl = new StoreImpl(replicatingService);
@@ -114,6 +121,27 @@ public class ReaderDaum extends AbstractComponentType {
             }
         });
 
+        ChangeListener.getInstance("READERDAUM").addEventListener(AgentImpl.class, new PropertyChangeListener() {
+            @Override
+            public void update(PropertyChangeEvent e) {
+
+                processAgent(e.getId());
+
+
+            }
+        });
+
+
+        ChangeListener.getInstance("READERDAUM").addEventListener(MoyenImpl.class, new PropertyChangeListener() {
+            @Override
+            public void update(PropertyChangeEvent e) {
+
+
+                processMoyenImpl(e.getId());
+
+            }
+        });
+
     }
 
 
@@ -127,6 +155,73 @@ public class ReaderDaum extends AbstractComponentType {
         stop();
     }
 
+
+
+
+
+    public void processAgent(Object key){
+        Agent temp = null;
+        try
+        {
+            s  = factory.getSession();
+            if(s != null)
+            {
+
+                temp = (Agent) s.get(AgentImpl.class,key);
+                s.close();
+               logger.warn(temp.getNom()+" "+temp.getPrenom());
+                logger.warn("------------------------------------");
+
+             for(Object key2:  s.getAll(MoyenImpl.class).keySet()){
+
+                 for(Agent a: ((MoyenImpl)s.get(MoyenImpl.class,key2)).getPersonnelsForJ()){
+
+                     logger.warn(a.getNom()+" "+a.getPrenom());
+                 }
+             }
+            }
+
+
+        } catch (PersistenceException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        finally {
+            if( s != null){
+                s.close();
+            }
+        }
+    }
+
+
+
+    public void processMoyenImpl(Object key){
+        MoyenImpl temp = null;
+        try
+        {
+            s  = factory.getSession();
+            if(s != null)
+            {
+                temp = (MoyenImpl) s.get(MoyenImpl.class,key);
+                s.close();
+
+
+
+                for(Agent a: temp.getPersonnelsForJ()){
+
+                    logger.warn(a.getNom()+" "+a.getPrenom());
+                }
+            }
+
+
+        } catch (PersistenceException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        finally {
+            if( s != null){
+                s.close();
+            }
+        }
+    }
 
     public void processTemperature(Object key){
         TemperatureMonitor temp = null;
@@ -148,6 +243,11 @@ public class ReaderDaum extends AbstractComponentType {
         } catch (PersistenceException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
+        finally {
+            if( s != null){
+                s.close();
+            }
+        }
     }
 
     public void processHeartMonitor(Object key){
@@ -166,6 +266,10 @@ public class ReaderDaum extends AbstractComponentType {
 
         } catch (PersistenceException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }   finally {
+            if( s != null){
+                s.close();
+            }
         }
     }
 

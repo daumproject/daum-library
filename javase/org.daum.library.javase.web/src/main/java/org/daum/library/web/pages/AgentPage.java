@@ -9,19 +9,19 @@ import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
 /**
  * Created with IntelliJ IDEA.
  * User: jed
- * Date: 03/07/12
- * Time: 12:33
+ * Date: 04/07/12
+ * Time: 13:36
  * To change this template use File | Settings | File Templates.
  */
-@ComponentType
-public class HomePage extends AbstractPage
-{
 
+@ComponentType
+public class AgentPage extends AbstractPage
+{
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse) {
         logger.debug(""+kevoreeHttpRequest.getResolvedParams());
-        String template = new String(WebCache.load("pages/home.html"));
-        kevoreeHttpResponse.setContent(template);
+        String template = new String(WebCache.load("pages/agent.html"));
+        kevoreeHttpResponse.setContent(template.replace("$ip$", WebCache.getAddress(getModelService().getLastModel(),getNodeName())));
         return kevoreeHttpResponse;
     }
 }

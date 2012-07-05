@@ -136,6 +136,8 @@ public class WsServer extends AbstractComponentType {
             }
         });
     }
+
+
     @Stop
     public void stopServer() {
         logger.debug("Stoping");
