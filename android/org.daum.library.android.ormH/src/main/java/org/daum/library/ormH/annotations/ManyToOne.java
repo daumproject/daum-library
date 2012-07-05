@@ -7,5 +7,9 @@ package org.daum.library.ormH.annotations;
  * Time: 14:29
  * To change this template use File | Settings | File Templates.
  */
-public interface ManyToOne {
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ManyToOne {
 }
