@@ -38,8 +38,6 @@ public class SITACMapView extends RelativeLayout implements Observer {
 	private MapView mapView;
 	private MapController mapCtrl;
 	private MapOverlay overlay;
-    private String providerUrl;
-    private boolean hasAlreadyBeenDetached = false;
 
 	public SITACMapView(Context context) {
 		super(context);
@@ -116,8 +114,7 @@ public class SITACMapView extends RelativeLayout implements Observer {
 	}
 
     public void setMapProvider(String url) {
-        providerUrl = url;
-        XYTileSource mapSources = new XYTileSource("MapProvider", null, 0, 18, 256, ".png", providerUrl);
+        XYTileSource mapSources = new XYTileSource("MapProvider", null, 0, 18, 256, ".png", url);
         mapView.setTileSource(mapSources);
     }
 }

@@ -280,32 +280,29 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 
 	@Override
 	public void update(Observable observable, final Object data) {
-        try {
-            ((Activity) ctx).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    DemandEntity entity = (DemandEntity) data;
-                    if (entity.isDestroyable() || entity.getGeoPoint() != null) {
-                        IExpandableMenuItem item = noLocationDemands.get(entity);
-                        noLocationDemands.remove(entity);
-                        noLocationMenuList.removeItem(0, item);
-                        noLocationAdapter.notifyDataSetChanged();
-                        if (noLocationMenuList.getItems(0).size() == 0) {
-                            noLocationMenu.setVisibility(View.GONE);
-                        }
-
-                    } else {
-                        // something happened on the entity that requires a graphical update
-                        IExpandableMenuItem item = noLocationDemands.get(entity);
-                        item.setIcon(entity.getIcon());
-                        item.setText(entity.getType()+entity.getMessage());
-                        noLocationAdapter.notifyDataSetChanged();
+        // TODO maybe find something cleaner than ((Activity) ctx) casting ?
+        ((Activity) ctx).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                DemandEntity entity = (DemandEntity) data;
+                if (entity.isDestroyable() || entity.getGeoPoint() != null) {
+                    IExpandableMenuItem item = noLocationDemands.get(entity);
+                    noLocationDemands.remove(entity);
+                    noLocationMenuList.removeItem(0, item);
+                    noLocationAdapter.notifyDataSetChanged();
+                    if (noLocationMenuList.getItems(0).size() == 0) {
+                        noLocationMenu.setVisibility(View.GONE);
                     }
+
+                } else {
+                    // something happened on the entity that requires a graphical update
+                    IExpandableMenuItem item = noLocationDemands.get(entity);
+                    item.setIcon(entity.getIcon());
+                    item.setText(entity.getType()+entity.getMessage());
+                    noLocationAdapter.notifyDataSetChanged();
                 }
-            });
-        } catch (Exception e) {
-             Log.e(TAG, "Something went bad... :/ ", e);
-        }
+            }
+        });
 	}
 	
 	private String[] getVehicleTypeValues(String menuItemText) {
@@ -340,13 +337,4 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	public void setOnMenuViewEventListener(OnMenuViewEventListener listener) {
 		this.listener = listener;
 	}
-
-/*    @Override
-    protected void onAttachedToWindow() {
-        super.onAttachedToWindow();
-        // this is a little hack to ensure that
-        // touch events on the menu will be caught
-        setLayoutParams(params);
-    }
-*/
 }
