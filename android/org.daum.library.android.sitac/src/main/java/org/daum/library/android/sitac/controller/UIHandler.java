@@ -113,6 +113,10 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 			switch (selectedEntity.getState()) {
 				case NEW:
 					if (selectedEntity instanceof IShapedEntity) {
+                        // set the entity state to ON_MAP to ensure that it
+                        // will be added only once to the mapView
+                        selectedEntity.setState(IEntity.State.ON_MAP);
+
 						// add the singleTap point to the IShapedEntity
 						UICmdManager.getInstance(undoRedoEngine).execute(AddPointCommand.class, selectedEntity, geoP);
 						// but do not add it to the engine until the user
@@ -120,9 +124,6 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 						// it on the mapView to ensure that the user sees
 						// what he is doing
 						mapView.addEntity(selectedEntity);
-						// set the entity state to ON_MAP to ensure that it 
-						// will be added only once to the mapView
-						selectedEntity.setState(IEntity.State.ON_MAP);
 						
 					} else {
 						m = factory.build(selectedEntity);
