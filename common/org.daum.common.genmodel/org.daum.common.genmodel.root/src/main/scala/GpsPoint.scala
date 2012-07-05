@@ -7,68 +7,69 @@ package org.sitac;
  * Meta-Model:NS_URI=http://sitac/1.0
  */
 trait GpsPoint extends org.sitac.SitacContainer with org.sitac.Position {
-		private var lat : java.lang.Integer = 0
+  private var lat : java.lang.Integer = 0
 
-		private var long : java.lang.Integer = 0
+  private var long : java.lang.Integer = 0
 
-		private var satellites_used : java.lang.Integer = 0
+  private var satellites_used : java.lang.Integer = 0
 
-		private var mode : java.lang.Integer = 0
+  private var mode : java.lang.Integer = 0
 
-		private var altitude : java.lang.Integer = 0
+  private var altitude : java.lang.Integer = 0
 
 
-		def getLat : java.lang.Integer = {
-			lat
-		}
+  def getLat : java.lang.Integer = {
+    lat
+  }
 
-		def setLat(lat : java.lang.Integer) {
-			this.lat = lat
-		}
+  def setLat(lat : java.lang.Integer) {
+    this.lat = lat
+  }
 
-		def getLong : java.lang.Integer = {
-			long
-		}
 
-		def setLong(long : java.lang.Integer) {
-			this.long = long
-		}
+  def setLong(long : java.lang.Integer) {
+    this.long = long
+  }
 
-		def getSatellites_used : java.lang.Integer = {
-			satellites_used
-		}
+  def getLong : java.lang.Integer = {
+    long
+  }
 
-		def setSatellites_used(satellites_used : java.lang.Integer) {
-			this.satellites_used = satellites_used
-		}
+  def getSatellites_used : java.lang.Integer = {
+    satellites_used
+  }
 
-		def getMode : java.lang.Integer = {
-			mode
-		}
+  def setSatellites_used(satellites_used : java.lang.Integer) {
+    this.satellites_used = satellites_used
+  }
 
-		def setMode(mode : java.lang.Integer) {
-			this.mode = mode
-		}
+  def getMode : java.lang.Integer = {
+    mode
+  }
 
-		def getAltitude : java.lang.Integer = {
-			altitude
-		}
+  def setMode(mode : java.lang.Integer) {
+    this.mode = mode
+  }
 
-		def setAltitude(altitude : java.lang.Integer) {
-			this.altitude = altitude
-		}
-	override def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
-		val selfObjectClone = SitacFactory.createGpsPoint
-		selfObjectClone.setLat(this.getLat)
-		selfObjectClone.setLong(this.getLong)
-		selfObjectClone.setSatellites_used(this.getSatellites_used)
-		selfObjectClone.setMode(this.getMode)
-		selfObjectClone.setAltitude(this.getAltitude)
-		subResult.put(this,selfObjectClone)
-	}
-	override def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : GpsPoint = {
-		val clonedSelfObject = addrs.get(this).asInstanceOf[org.sitac.GpsPoint]
-		clonedSelfObject
-	}
+  def getAltitude : java.lang.Integer = {
+    altitude
+  }
+
+  def setAltitude(altitude : java.lang.Integer) {
+    this.altitude = altitude
+  }
+  override def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
+    val selfObjectClone = SitacFactory.createGpsPoint
+    selfObjectClone.setLat(this.getLat)
+    selfObjectClone.setLong(this.getLong)
+    selfObjectClone.setSatellites_used(this.getSatellites_used)
+    selfObjectClone.setMode(this.getMode)
+    selfObjectClone.setAltitude(this.getAltitude)
+    subResult.put(this,selfObjectClone)
+  }
+  override def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : GpsPoint = {
+    val clonedSelfObject = addrs.get(this).asInstanceOf[org.sitac.GpsPoint]
+    clonedSelfObject
+  }
 
 }

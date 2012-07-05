@@ -1,4 +1,7 @@
-package org.sitac;
+package org.sitac
+
+import java.io.Serializable
+;
 
 /**
  * Created by Ecore Model Generator.
@@ -6,7 +9,7 @@ package org.sitac;
  * Date: 04 juil. 12 Time: 09:48
  * Meta-Model:NS_URI=http://sitac/1.0
  */
-trait Agent extends org.sitac.SitacContainer with org.sitac.Personne {
+trait Agent extends org.sitac.SitacContainer with org.sitac.Personne with Serializable{
 		private var matricule : java.lang.String = ""
 
 

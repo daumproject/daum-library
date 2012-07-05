@@ -4,7 +4,6 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.daum.common.genmodel.javase</groupId>
     <artifactId>org.daum.common.genmodel.javase.root</artifactId>
-    <packaging>jar</packaging>
     <name>Daum :: Common :: JavaSE :: GenModel </name>
     <version>1.0</version>
 
@@ -14,6 +13,8 @@
         <version>1.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
+
+
 
     <build>
         <sourceDirectory>../org.daum.common.genmodel.root/src/main/scala</sourceDirectory>
@@ -53,12 +54,6 @@
     </build>
 
     <dependencies>
-        <dependency>
-            <groupId>org.daum.common.gps.javase</groupId>
-            <artifactId>org.daum.common.gps.javase.root</artifactId>
-            <version>1.0</version>
-        </dependency>
-
         <dependency>
             <groupId>org.daum.library.javase</groupId>
             <artifactId>org.daum.library.javase.ormH</artifactId>

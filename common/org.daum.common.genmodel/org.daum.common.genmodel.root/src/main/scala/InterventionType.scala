@@ -6,8 +6,17 @@ package org.sitac;
  * Date: 04 juil. 12 Time: 09:48
  * Meta-Model:NS_URI=http://sitac/1.0
  */
+
+import org.daum.library.ormH.annotations.Generated
+import org.daum.library.ormH.annotations.Id
+import org.daum.library.ormH.persistence.GeneratedType
+import org.daum.library.ormH.annotations.OneToMany
+
 trait InterventionType extends org.sitac.SitacContainer {
-		private var code : java.lang.String = ""
+
+  @Id
+  @Generated(strategy = GeneratedType.UUID)
+  private var code : java.lang.String = ""
 
 
 		def getCode : java.lang.String = {
