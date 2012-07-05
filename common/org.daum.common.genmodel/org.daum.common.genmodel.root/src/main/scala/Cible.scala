@@ -4,7 +4,7 @@ package org.sitac;
  * Created by Ecore Model Generator.
  * @authors: Gregory NAIN, Fouquet Francois
  * Date: 04 juil. 12 Time: 09:48
- * Meta-Model:NS_URI=http://sitac/1.0
+ * Meta-Model:NS_URI=http://sitactest/1.0
  */
 trait Cible extends org.sitac.SitacContainer with org.sitac.InfoPos {
 	override def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {

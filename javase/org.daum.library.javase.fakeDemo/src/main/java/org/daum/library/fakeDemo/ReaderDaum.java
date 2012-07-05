@@ -44,7 +44,7 @@ import java.util.Set;
 })
 
 @DictionaryType({
-        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature", "moyens","heart","sitac"})
+        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature", "moyens","heart","sitactest"})
 }
 )
 @ComponentType

@@ -1,35 +1,19 @@
-/*
-import org.daum.library.ormHM.persistence.PersistenceConfiguration;
-import org.daum.library.ormHM.persistence.PersistenceSession;
-import org.daum.library.ormHM.persistence.PersistenceSessionFactoryImpl;
-import org.daum.library.ormHM.store.EhcacheStore;
-import org.daum.library.ormHM.utils.PersistenceException;
 import org.junit.Before;
 import org.junit.Test;
-*/
-    /*
-import model.sitac.Moyen;
-import model.sitac.MoyenType;
-import model.sitac.TestModel;
+
+import model.sitactest.Moyen;
+import model.sitactest.MoyenType;
+import model.sitactest.TestModel;
 import org.daum.library.ormH.api.IPersistenceConfiguration;
 import org.daum.library.ormH.api.IPersistenceSessionFactory;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.store.LocalStore;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.junit.Before;
-import org.junit.Test;
-import org.sitac.*;
-import org.sitac.impl.AgentImpl;
-import org.sitac.impl.InterventionImpl;
-import org.sitac.impl.MoyenImpl;
-import scala.Option;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;    */
+import static org.junit.Assert.assertEquals;
 
 /**
  * Created by jed
@@ -38,7 +22,7 @@ import static org.junit.Assert.assertEquals;    */
  * Time: 10:45
  */
 public class TestSession {
-     /*
+
     private LocalStore localStore = new LocalStore();
     IPersistenceConfiguration configuration=null;
 
@@ -52,12 +36,9 @@ public class TestSession {
         configuration.addPersistentClass(MoyenType.class);
         configuration.addPersistentClass(TestModel.class);
 
-        configuration.addPersistentClass(AgentImpl.class);
-        configuration.addPersistentClass(InterventionImpl.class);
-        configuration.addPersistentClass(MoyenImpl.class);
     }
 
-
+    /*
     @Test
     public void test_manyTone ()  throws PersistenceException {
         IPersistenceSessionFactory factory=null;
@@ -114,7 +95,7 @@ public class TestSession {
 
         s.close();
     }
-
+     */
 
     @Test
     public void test_save() throws PersistenceException {
@@ -253,5 +234,5 @@ public class TestSession {
 
     }
 
-       */
+
 }

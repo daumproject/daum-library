@@ -1,4 +1,4 @@
-package model.sitac;
+package model.sitactest;
 
 import org.daum.library.ormH.annotations.Id;
 
