@@ -35,12 +35,6 @@ public class MapOverlay extends Overlay {
 	}
 
     @Override
-    public void onDetach(MapView mapView) {
-        super.onDetach(mapView);
-        Log.w(TAG, "On detach in overlay dude");
-    }
-
-    @Override
 	public boolean onSingleTapConfirmed(MotionEvent e, MapView mapView) {
 		if (listener != null) return listener.onSingleTapConfirmed(e, mapView);
 		return super.onSingleTapConfirmed(e, mapView);
