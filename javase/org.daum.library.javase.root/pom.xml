@@ -25,9 +25,10 @@
         <module>../org.daum.library.javase.web</module>
         <module>../org.daum.library.javase.moyensmonitor</module>
         <module>../org.daum.library.javase.fakeDemo</module>
+        <module>../org.daum.library.javase.osm</module>
         <!--<module>../org.daum.library.javase.kestrelChannels</module>
 
-        -->
+-->
     </modules>
 
     <dependencies>
