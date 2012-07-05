@@ -12,7 +12,7 @@ import java.io.Serializable;
 trait SitacContainer extends Serializable {
 
 	 private var internal_eContainer : SitacContainer = null
-	 private var internal_unsetCmd : Option[()=>Any] = None 
+	 private var internal_unsetCmd : Option[()=>Any] = None
 	def eContainer = internal_eContainer
 
 	def setEContainer( container : SitacContainer, unsetCmd : Option[()=>Any] ) {

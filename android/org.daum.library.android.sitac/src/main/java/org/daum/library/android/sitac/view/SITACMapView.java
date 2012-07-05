@@ -3,24 +3,15 @@ package org.daum.library.android.sitac.view;
 import java.util.Observable;
 import java.util.Observer;
 
-import android.content.BroadcastReceiver;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.util.Log;
+import android.app.Activity;
+import org.daum.library.android.sitac.controller.SITACController;
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
 import org.daum.library.android.sitac.view.entity.DemandEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.map.MapOverlay;
-import org.daum.library.android.sitac.view.map.MyMapTileProvider;
-import org.osmdroid.DefaultResourceProxyImpl;
-import org.osmdroid.ResourceProxy;
 import org.osmdroid.api.IGeoPoint;
-import org.osmdroid.tileprovider.IRegisterReceiver;
-import org.osmdroid.tileprovider.modules.INetworkAvailablityCheck;
-import org.osmdroid.tileprovider.modules.NetworkAvailabliltyCheck;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
-import org.osmdroid.tileprovider.util.SimpleRegisterReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
@@ -30,50 +21,49 @@ import android.content.Context;
 import android.widget.RelativeLayout;
 
 public class SITACMapView extends RelativeLayout implements Observer {
-
+	
 	// Debugging
 	private static final String TAG = "SITACView";
-
+	
 	private Context ctx;
 	private MapView mapView;
 	private MapController mapCtrl;
 	private MapOverlay overlay;
 
-	public SITACMapView(Context context) {
+	public SITACMapView(Context context, SITACController controller) {
 		super(context);
 		this.ctx = context;
 		initUI();
 		configUI();
+        defineCallbacks();
 	}
-
+	
 	private void initUI() {
-        IRegisterReceiver receiver = new SimpleRegisterReceiver(ctx);
-        INetworkAvailablityCheck networkAvailablityCheck = new NetworkAvailabliltyCheck(ctx);
-        ResourceProxy resProxy = new DefaultResourceProxyImpl(ctx);
-        MyMapTileProvider tileProvider = new MyMapTileProvider(
-                receiver, networkAvailablityCheck, TileSourceFactory.DEFAULT_TILE_SOURCE);
-
-		mapView = new MapView(ctx, 256, resProxy, tileProvider);
-
+		mapView = new MapView(ctx, null);
 		mapCtrl = mapView.getController();
 		overlay = new MapOverlay(ctx);
 	}
-
+	
 	private void configUI() {
 		RelativeLayout.LayoutParams params = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+		mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 		mapView.setBuiltInZoomControls(true);
 		mapView.setMultiTouchControls(true);
 		mapView.getOverlays().add(overlay);
-
-		mapCtrl.setZoom(18);
-
+		
+		mapCtrl.setZoom(MapViewConstants.MAXIMUM_ZOOMLEVEL);
+		
         GeoPoint gPt = new GeoPoint(48.11534,-1.638336); // default location at IRISA
         mapCtrl.setCenter(gPt);
-
+        
 		addView(mapView, params);
 	}
 
+    private void defineCallbacks() {
+
+    }
+	
 	public void addEntity(IEntity entity) {
 		overlay.addEntity(entity);
 		entity.addObserver(this);
@@ -83,12 +73,12 @@ public class SITACMapView extends RelativeLayout implements Observer {
     public boolean hasEntity(IEntity entity) {
         return overlay.hasEntity(entity);
     }
-
+	
 	public void deleteEntity(IEntity entity) {
 		overlay.deleteEntity(entity);
 		mapView.postInvalidate();
 	}
-
+	
 	/**
 	 * Moves the center of the map to the one given in parameter
 	 * @param p where the map will be centered on
@@ -99,7 +89,7 @@ public class SITACMapView extends RelativeLayout implements Observer {
 			mapView.postInvalidate();
 		}
 	}
-
+	
 	public void setOnOverlayEventListener(OnOverlayEventListener listener) {
 		overlay.setOnOverlayEventListener(listener);
 	}
@@ -116,5 +106,6 @@ public class SITACMapView extends RelativeLayout implements Observer {
     public void setMapProvider(String url) {
         XYTileSource mapSources = new XYTileSource("MapProvider", null, 0, 18, 256, ".png", url);
         mapView.setTileSource(mapSources);
+        mapView.postInvalidate();
     }
 }

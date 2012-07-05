@@ -21,6 +21,19 @@ trait Personne extends org.sitac.SitacContainer {
   private var prenom : java.lang.String = ""
 
 
+  private var posRef : Option[org.sitac.Position] = null
+
+  private var posTarget : Option[org.sitac.Position] = null
+
+  def getPosRef : Option[org.sitac.Position] = {
+    posRef
+  }
+
+  def getPosTarget : Option[org.sitac.Position] = {
+    posTarget
+  }
+
+
   def getNom : java.lang.String = {
     nom
   }

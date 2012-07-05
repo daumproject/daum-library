@@ -17,8 +17,6 @@ import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
 @ComponentType
 public class InterventionPage extends AbstractPage {
 
-
-
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse) {
         String page = "pages/intervention.html";

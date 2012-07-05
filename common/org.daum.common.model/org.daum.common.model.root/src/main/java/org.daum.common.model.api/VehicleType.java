@@ -36,27 +36,27 @@ public enum VehicleType {
 		switch (sector) {
 			case ALIM:
 				return new VehicleType[] {CCGC, DA, MPR};
-				
+
 			case INC:
 				return new VehicleType[] {BEA, CAEM, CCFM, CCGCLC, EPS, FMOGP, FPT, VPRO, VAR};
-				
+
 			case COM:
 				return new VehicleType[] {VL, VLHR, VPL, VPHV, VTP, VTU, VCYNO};
-				
+
 			case SAP:
 				return new VehicleType[] {SAC_PS, VLSV, VLOS, VLS, VSAV, VSM, VSR};
-				
+
 			case RTN:
 				return new VehicleType[] {VRCB, VICB, VNRBC, VRAD};
-				
+
 			case CHEM:
 				return new VehicleType[] {PCM, VLCC, VLCGD, VLCS, VLCG};
-			
+
 			default:
 				return null;
 		}
 	}
-	
+
 	public static VehicleSector getSector(VehicleType type) {
 		switch (type) {
 			case SAC_PS:
