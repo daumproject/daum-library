@@ -2,6 +2,7 @@ package org.daum.library.android.sitac.view.map;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
 import org.daum.library.android.sitac.view.entity.AbstractShapedEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
@@ -32,8 +33,8 @@ public class MapOverlay extends Overlay {
 		
 		this.entities = new ArrayList<IEntity>();
 	}
-	
-	@Override
+
+    @Override
 	public boolean onSingleTapConfirmed(MotionEvent e, MapView mapView) {
 		if (listener != null) return listener.onSingleTapConfirmed(e, mapView);
 		return super.onSingleTapConfirmed(e, mapView);

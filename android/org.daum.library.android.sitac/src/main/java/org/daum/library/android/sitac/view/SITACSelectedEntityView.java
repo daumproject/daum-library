@@ -35,11 +35,16 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
 		CONFIRM,
 		DELETION
 	}
-	
+
+    private static final int OPAQUE = 255;
+    private static final int TRANSLUCENT = 60;
+    private static final int BACKGROUND_COLOR = Color.argb(180, 0, 0, 0);
+
 	private static final String TEXT_DELETE = "Supprimer";
 	private static final String TEXT_TITLE = "Sélection:";
 	private static final String TEXT_CONFIRM = "Terminer";
-    private static final String TEXT_SELECT_ENT_WHEN_DRAWING = "Impossible de sélectionner une autre entité pendant un tracé. Veuillez terminer l'action en cours.";
+    private static final String TEXT_SELECT_ENT_WHEN_DRAWING = "Impossible de sélectionner une autre entité pendant" +
+            " un tracé. Veuillez terminer l'action en cours.";
 	
 	private Context ctx;
     private IEntity entity;
@@ -141,7 +146,7 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
 	private void updateUI() {
 		iconView.setImageDrawable(icon);
 		msgView.setText(msg);
-		
+
 		switch (state) {
 			case SELECTION:
 				actionBtn.setVisibility(View.GONE);
@@ -166,13 +171,16 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
 		ShapeDrawable roundedBackground = new ShapeDrawable(new Shape() {
 			@Override
 			public void draw(Canvas canvas, Paint paint) {
-				paint.setColor(Color.argb(180, 0, 0, 0));
+				paint.setColor(BACKGROUND_COLOR);
 				paint.setStyle(Style.FILL);
 				paint.setPathEffect(new CornerPathEffect(7));
 				canvas.drawRect(r, paint);
 			}
 		});
 		setBackgroundDrawable(roundedBackground);
+
+        // update layout
+        requestLayout();
 	}
 	
 	/**
@@ -282,6 +290,7 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
                         state = State.CONFIRM;
                         break;
                 }
+                updateUI();
                 show();
                 return entity;
         }
@@ -292,8 +301,6 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
 	}
 
 	public void show() {
-		updateUI();
-		requestLayout();
 		setVisibility(View.VISIBLE);
 	}
 
@@ -309,14 +316,17 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
                 case ON_MAP:
                     if (e instanceof IShapedEntity) {
                         IShapedEntity sEnt = (IShapedEntity) e;
+
                         if (sEnt.isPersistable()) {
                             actionBtn.setEnabled(true);
                             actionBtn.setTextColor(Color.WHITE);
+
                         } else {
                             actionBtn.setEnabled(false);
                             actionBtn.setTextColor(Color.GRAY);
                         }
                         state = State.CONFIRM;
+                        updateUI();
                         show();
                     }
                     break;
@@ -324,26 +334,27 @@ public class SITACSelectedEntityView extends LinearLayout implements Observer {
 
         } else if (arg instanceof IUndoRedoEngine) {
             IUndoRedoEngine engine = (IUndoRedoEngine) arg;
+
             if (engine.canRedo()) {
                 redoView.setEnabled(true);
-                redoView.setAlpha(255);
+                redoView.setAlpha(OPAQUE);
             }
             else {
                 redoView.setEnabled(false);
-                redoView.setAlpha(60);
+                redoView.setAlpha(TRANSLUCENT);
             }
 
             if (engine.canUndo()) {
                 undoView.setEnabled(true);
-                undoView.setAlpha(255);
+                undoView.setAlpha(OPAQUE);
             }
             else {
                 undoView.setEnabled(false);
-                undoView.setAlpha(60);
+                undoView.setAlpha(TRANSLUCENT);
             }
 
         } else {
-            Log.w(TAG, "I don't know how to update myself with this object " + arg + ". Just know how with IEntity");
+            Log.w(TAG, "I don't know how to update myself with this object " + arg + " !");
         }
     }
 	
