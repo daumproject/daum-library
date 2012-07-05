@@ -6,6 +6,7 @@
     <artifactId>org.daum.library.javase.root</artifactId>
     <packaging>pom</packaging>
     <name>DAUM :: Library :: JavaSE :: Root</name>
+
     <parent>
         <groupId>org.daum.library</groupId>
         <artifactId>org.daum.library</artifactId>

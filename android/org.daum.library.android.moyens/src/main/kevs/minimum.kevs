@@ -1,0 +1,32 @@
+ {
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.socketChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.defaultChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}'
+merge 'mvn:org.daum.library.android/org.daum.library.android.moyens/1.8.2-SNAPSHOT'
+merge 'mvn:org.daum.library.android/org.daum.library.android.replica/2.0'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}'
+merge 'mvn:org.daum.library.android/org.daum.library.android.sitac/1.8.2-SNAPSHOT'
+addNode node0:AndroidNode
+ {
+  addComponent Replica994@node0 : Replica {}
+  addComponent MoyensCom559@node0 : MoyensComponent {}
+addChannel defSERVIC177 : defSERVICE {}
+addChannel SocketCha52 : SocketChannel {port='9000',replay='false',maximum_size_messaging='50',timer='2000'}
+addChannel defMSG327 : defMSG {}
+bind Replica994.service@node0 => defSERVIC177
+bind Replica994.remote@node0 => SocketCha52
+bind Replica994.broadcast@node0 => SocketCha52
+bind MoyensCom559.service@node0 => defSERVIC177
+bind Replica994.notification@node0 => defMSG327
+bind MoyensCom559.notify@node0 => defMSG327
+updateDictionary defSERVIC177 
+updateDictionary SocketCha52 {port='9000'}@node0
+updateDictionary defMSG327 
+updateDictionary Replica994@node0 
+updateDictionary MoyensCom559@node0 
+}
+
+}

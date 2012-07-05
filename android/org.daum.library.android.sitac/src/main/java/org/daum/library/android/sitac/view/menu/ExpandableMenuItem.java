@@ -35,7 +35,17 @@ public class ExpandableMenuItem implements IExpandableMenuItem {
 		return text;
 	}
 
-	@Override
+    @Override
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    @Override
+    public void setIcon(Drawable icon) {
+        this.icon = icon;
+    }
+
+    @Override
 	public String toString() {
 		return text;
 	}

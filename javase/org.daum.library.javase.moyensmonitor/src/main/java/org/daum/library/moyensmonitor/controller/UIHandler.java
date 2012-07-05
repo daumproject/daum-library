@@ -19,6 +19,8 @@ public class UIHandler implements OnMoyensMonitorEventListener {
 
 	@Override
 	public void onValidateButtonClicked(Demand d, String cis) {
+        Random r = new Random();
+        d.setNumber("0"+(r.nextInt(9)+1));
 		d.setGh_depart(new Date());
 		d.setCis(cis);
 		engine.update(d);
@@ -39,16 +41,22 @@ public class UIHandler implements OnMoyensMonitorEventListener {
 
     @Override
     public void onEditDemand(Demand d, String[] values) {
-        if (values[4] != null && !values[4].isEmpty()) {
-            d.setGh_crm(new Date());
-        }
+        for (int i=0; i<values.length; i++) {
+            if (values[i] != null && !values[i].isEmpty()) {
+                switch (i) {
+                    case 4:
+                        if (d.getGh_crm() == null) d.setGh_crm(new Date());
+                        break;
 
-        if (values[5] != null && !values[5].isEmpty()) {
-            d.setGh_engage(new Date());
-        }
+                    case 5:
+                        if (d.getGh_engage() == null) d.setGh_engage(new Date());
+                        break;
 
-        if (values[6] != null && !values[6].isEmpty()) {
-            d.setGh_desengagement(new Date());
+                    case 6:
+                        if (d.getGh_desengagement() == null) d.setGh_desengagement(new Date());
+                        break;
+                }
+            }
         }
         engine.update(d);
     }

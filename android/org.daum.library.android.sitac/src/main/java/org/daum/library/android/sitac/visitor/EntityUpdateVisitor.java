@@ -54,6 +54,11 @@ public class EntityUpdateVisitor implements IVisitor {
         } else {
             e.setIcon(EntityFactory.getIcon(VehicleType.getSector(d.getType()), false));
         }
+
+        // add the number if any is set
+        if (d.getNumber() != null) {
+            e.setMessage(d.getNumber());
+        }
     }
 
     @Override
