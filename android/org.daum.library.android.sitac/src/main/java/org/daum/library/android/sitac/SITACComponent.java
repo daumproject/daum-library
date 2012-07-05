@@ -85,7 +85,7 @@ public class SITACComponent extends AbstractComponentType {
                             uiService.addToGroup("SITAC", sitacView);
 
                         } catch (PersistenceException e) {
-                            Log.e(TAG, "Error while initializing ReplicaStore", e);
+                            Log.e(TAG, "Error on component startup", e);
                         }
                     }
                 });

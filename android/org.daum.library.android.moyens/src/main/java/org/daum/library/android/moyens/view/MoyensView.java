@@ -152,23 +152,6 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
                 }
             }
         });
-
-        listView.setOnTouchListener(new OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent e) {
-                // not sure if gusta
-                // this is an hack to ensure that listView answer properly to
-                // touch events even when tab was changed in Kevoree Runtime
-                switch (e.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        setLayoutParams(new LinearLayout.LayoutParams(
-                                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-                        break;
-                }
-
-                return false;
-            }
-        });
     }
 
     /**

@@ -3,12 +3,15 @@ package org.daum.library.android.sitac.view;
 import java.util.Observable;
 import java.util.Observer;
 
+import android.app.Activity;
 import org.daum.library.android.sitac.controller.SITACController;
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
 import org.daum.library.android.sitac.view.entity.DemandEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.map.MapOverlay;
+import org.daum.library.android.sitac.view.map.MyMapView;
 import org.osmdroid.api.IGeoPoint;
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.tileprovider.tilesource.XYTileSource;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
@@ -24,7 +27,7 @@ public class SITACMapView extends RelativeLayout implements Observer {
 	private static final String TAG = "SITACView";
 	
 	private Context ctx;
-	private MapView mapView;
+	private MyMapView mapView;
 	private MapController mapCtrl;
 	private MapOverlay overlay;
 
@@ -33,10 +36,11 @@ public class SITACMapView extends RelativeLayout implements Observer {
 		this.ctx = context;
 		initUI();
 		configUI();
+        defineCallbacks();
 	}
 	
 	private void initUI() {
-		mapView = new MapView(ctx, null);
+		mapView = new MyMapView(ctx, null);
 		mapCtrl = mapView.getController();
 		overlay = new MapOverlay(ctx);
 	}
@@ -44,8 +48,7 @@ public class SITACMapView extends RelativeLayout implements Observer {
 	private void configUI() {
 		RelativeLayout.LayoutParams params = new LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
-        XYTileSource mapSources = new XYTileSource("cacahuete", null, 0, 18, 256, ".png", "http://tile.openstreetmap.org/");
-		mapView.setTileSource(mapSources);
+		mapView.setTileSource(TileSourceFactory.DEFAULT_TILE_SOURCE);
 		mapView.setBuiltInZoomControls(true);
 		mapView.setMultiTouchControls(true);
 		mapView.getOverlays().add(overlay);
@@ -57,6 +60,10 @@ public class SITACMapView extends RelativeLayout implements Observer {
         
 		addView(mapView, params);
 	}
+
+    private void defineCallbacks() {
+
+    }
 	
 	public void addEntity(IEntity entity) {
 		overlay.addEntity(entity);
@@ -98,7 +105,7 @@ public class SITACMapView extends RelativeLayout implements Observer {
 	}
 
     public void setMapProvider(String url) {
-        XYTileSource mapSources = new XYTileSource("cacahuete", null, 0, 18, 256, ".png", url);
+        XYTileSource mapSources = new XYTileSource("MapProvider", null, 0, 18, 256, ".png", url);
         mapView.setTileSource(mapSources);
         mapView.postInvalidate();
     }

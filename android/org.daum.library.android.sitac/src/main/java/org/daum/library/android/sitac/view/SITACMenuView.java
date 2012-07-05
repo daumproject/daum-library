@@ -341,11 +341,12 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 		this.listener = listener;
 	}
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        // not sure if gusta
-        // it could be REALLY CPU consuming, I have to check this out
+/*    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        // this is a little hack to ensure that
+        // touch events on the menu will be caught
         setLayoutParams(params);
     }
+*/
 }

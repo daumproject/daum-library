@@ -29,7 +29,8 @@ public class MessagesView extends TabHost implements IMessagesListener, TabHost.
 
     private enum ViewState {
         DISPLAYING_LIST,
-        DISPLAYING_NEW_MSG
+        DISPLAYING_NEW_MSG,
+        DETACHED_FROM_WINDOW
     }
 
     private Context ctx;
@@ -39,6 +40,7 @@ public class MessagesView extends TabHost implements IMessagesListener, TabHost.
     private MessagesListView msgListView;
     private LinearLayout newMsgTabLayout, msgListTabLayout;
     private ViewState state = ViewState.DISPLAYING_NEW_MSG;
+    private ViewState oldState;
     private Toast newMsgToast;
 
     public MessagesView(Context context, String senderName) {
@@ -140,8 +142,13 @@ public class MessagesView extends TabHost implements IMessagesListener, TabHost.
     public void addMessage(Message msg, MessageType type) {
         msgListView.addMessage(msg, type);
 
-        if (state == ViewState.DISPLAYING_NEW_MSG && type == MessageType.IN) {
-            Toast.makeText(ctx, TEXT_NEW_MSG, Toast.LENGTH_SHORT).show();
+        switch (state) {
+            case DETACHED_FROM_WINDOW:
+            case DISPLAYING_NEW_MSG:
+                if (type == MessageType.IN) {
+                    Toast.makeText(ctx, TEXT_NEW_MSG, Toast.LENGTH_SHORT).show();
+                }
+                break;
         }
     }
 
@@ -181,6 +188,23 @@ public class MessagesView extends TabHost implements IMessagesListener, TabHost.
             LinearLayout layout = (LinearLayout) tw.getChildTabViewAt(i);
             if (i == getCurrentTab()) changeTabUIToSelected(layout);
             else changeTabUIToUnselected(layout);
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        // we want Toast message to be displayed when this view
+        // is not currently displayed
+        oldState = state;
+        state = ViewState.DETACHED_FROM_WINDOW;
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (oldState != null) {
+            state = oldState;
         }
     }
 }
