@@ -26,7 +26,7 @@ public class SITACView extends RelativeLayout {
 	}
 	
 	private void initUI() {
-		mapView = new SITACMapView(ctx, sitacCtrl);
+		mapView = new SITACMapView(ctx);
 		sitacCtrl.registerMapView(mapView);
 		menuView = new SITACMenuView(ctx);
 		sitacCtrl.registerMenuView(menuView);
