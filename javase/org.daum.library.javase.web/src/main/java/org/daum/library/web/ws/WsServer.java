@@ -72,6 +72,13 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
             if(webServer != null)
             {
                 webServer.stop();
+                try
+                {
+                    // todo improve
+                    Thread.sleep(4000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
             }
                // todo check is stopped
             webServer = null;

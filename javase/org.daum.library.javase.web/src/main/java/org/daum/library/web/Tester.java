@@ -1,5 +1,7 @@
 package org.daum.library.web;
 
+import org.daum.common.model.api.Demand;
+import org.daum.common.model.api.VehicleType;
 import org.kevoree.extra.marshalling.RichJSONObject;
 import org.sitac.Intervention;
 import org.sitac.Personne;
@@ -35,7 +37,7 @@ public class Tester {
 
 
         intervention.setRequerant(Option.apply(requerant));
-        RichJSONObject c = new RichJSONObject(intervention);
+        RichJSONObject c = new RichJSONObject(new Demand(VehicleType.CAEM));
 
         System.out.println(c.toJSON());
     }
