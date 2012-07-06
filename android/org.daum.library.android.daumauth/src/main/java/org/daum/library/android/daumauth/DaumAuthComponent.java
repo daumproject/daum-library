@@ -133,19 +133,19 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
         connTask.setOnEventListener(new ConnectionTask.OnEventListener() {
             @Override
             public void onConnectionTimedOut() {
-                Log.d(TAG, "onConnectionTimedOut");
+                Log.w(TAG, "onConnectionTimedOut");
                 dismissDialog(pDialog);
             }
 
             @Override
             public void onConnectionSucceeded(String matricule) {
-                Log.d(TAG, "onConnectionSucceeded");
+                Log.w(TAG, "onConnectionSucceeded");
                 dismissDialog(pDialog);
             }
 
             @Override
             public void onConnectionFailed(String matricule) {
-                Log.d(TAG, "onConnectionFailed");
+                Log.w(TAG, "onConnectionFailed");
                 dismissDialog(pDialog);
             }
         });

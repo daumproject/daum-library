@@ -44,6 +44,7 @@ public class DaumAuthEngine {
         DaumAuthComponent.getChangeListener().addSyncListener(new SyncListener() {
             @Override
             public void sync(SyncEvent e) {
+                Log.w(TAG, "sync called in engine by listener so now synced is true");
                 synced = true;
             }
         });
