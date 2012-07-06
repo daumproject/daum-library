@@ -1,6 +1,6 @@
 package org.daum.library.web.pages;
 
-import org.daum.library.web.WebCache;
+import org.daum.library.web.utils.WebCache;
 import org.kevoree.annotation.ComponentType;
 import org.kevoree.library.javase.webserver.AbstractPage;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
@@ -19,9 +19,9 @@ public class AdminPage extends AbstractPage
 {
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse) {
-        logger.debug(""+kevoreeHttpRequest.getResolvedParams());
-        String template = new String(WebCache.load("pages/admin.html"));
-        kevoreeHttpResponse.setContent(template);
+        logger.debug("" + kevoreeHttpRequest.getResolvedParams());
+        String page = new String(WebCache.load("pages/admin.html"));
+        kevoreeHttpResponse.setContent(WebCache.apply(getModelService().getLastModel(),getNodeName(),page));
         return kevoreeHttpResponse;
     }
 }

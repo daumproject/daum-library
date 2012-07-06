@@ -24,7 +24,7 @@ trait Agent extends org.sitac.SitacContainer with org.sitac.Personne with Serial
    * MD5 password
    * @param password
    */
-  def setPassaword(password : java.lang.String){
+  def setPassword(password : java.lang.String){
     this.password = password
   }
 

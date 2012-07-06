@@ -19,9 +19,7 @@ import org.kevoree.extra.marshalling.RichJSONObject;
 import org.kevoree.library.javase.webserver.AbstractPage;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
 import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
-import org.sitac.Intervention;
 import org.sitac.SitacFactory;
-import org.sitac.impl.InterventionImpl;
 import org.webbitserver.WebSocketConnection;
 
 import java.util.Map;
@@ -31,12 +29,10 @@ import java.util.Observer;
 /**
  * Created with IntelliJ IDEA.
  * User: jed
- * Date: 03/07/12
- * Time: 12:34
+ * Date: 22/06/12
+ * Time: 16:06
  * To change this template use File | Settings | File Templates.
  */
-
-
 @Requires({
         @RequiredPort(name = "replica", type = PortType.SERVICE, className = ReplicaService.class, optional = false),
         @RequiredPort(name = "ws", type = PortType.SERVICE, className = WsHandler.class, optional = false)
@@ -45,10 +41,10 @@ import java.util.Observer;
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
 })
 @ComponentType
-public class InterventionPage extends AbstractPage implements Observer {
+public class DemandPage extends AbstractPage implements Observer {
 
     private WebSocketChannel webSocketChannel = new WebSocketChannel();
-    private ChangeListener changeListener = new ChangeListener();
+    private  ChangeListener changeListener = new ChangeListener();
 
     public PersistenceConfiguration configuration=null;
     private PersistenceSessionFactoryImpl factory=null;
@@ -58,7 +54,7 @@ public class InterventionPage extends AbstractPage implements Observer {
     public void  start()
     {
         super.startPage();
-
+        listeners();
         getModelService().registerModelListener(new ModelListener() {
             @Override
             public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
@@ -74,16 +70,38 @@ public class InterventionPage extends AbstractPage implements Observer {
             public void modelUpdated()
             {
                 logger.debug("Request Ws Demand");
-                getPortByName("ws", WsHandler.class).addHandler("/intervention",webSocketChannel);
+                getPortByName("ws", WsHandler.class).addHandler("/demand",webSocketChannel);
             }
         });
 
         webSocketChannel.getNotifyConnection().addObserver(this);
 
+    }
 
-        changeListener.addEventListener(InterventionImpl.class,new PropertyChangeListener() {
+
+    @Override
+    public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse)
+    {
+        String page = new String(WebCache.load("pages/demand.html"));
+        kevoreeHttpResponse.setContent(WebCache.apply(getModelService().getLastModel(),getNodeName(),page));
+        return kevoreeHttpResponse;
+    }
+
+
+    @Port(name = "notify")
+    public void notifiedByReplica(Object m)
+    {
+        changeListener.receive(m);
+    }
+
+
+
+    public  void listeners()
+    {
+        changeListener.addEventListener(Demand.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent propertyChangeEvent) {
+
                 try
                 {
                     init();
@@ -94,7 +112,7 @@ public class InterventionPage extends AbstractPage implements Observer {
                         session = factory.getSession();
                         if(session != null)
                         {
-                            Intervention updateD = (Intervention) session.get(InterventionImpl.class,propertyChangeEvent.getId());
+                            Demand updateD = (Demand) session.get(Demand.class,propertyChangeEvent.getId());
 
                             switch (propertyChangeEvent.getEvent())
                             {
@@ -143,6 +161,7 @@ public class InterventionPage extends AbstractPage implements Observer {
                 } catch (Exception e) {
                     logger.error("", e);
                 }
+
             }
         });
 
@@ -156,30 +175,6 @@ public class InterventionPage extends AbstractPage implements Observer {
                 }
             }
         });
-
-    }
-
-
-    @Override
-    public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse)
-    {
-        String page = new String(WebCache.load("pages/intervention.html"));
-        kevoreeHttpResponse.setContent(WebCache.apply(getModelService().getLastModel(),getNodeName(),page));
-        return kevoreeHttpResponse;
-    }
-
-
-
-    @Port(name = "notify")
-    public void notifiedByReplica(Object m)
-    {
-        changeListener.receive(m);
-    }
-
-    @Override
-    public void update(Observable observable, Object connection) {
-        loadAll((WebSocketConnection) connection);
-
     }
 
     public void init()
@@ -207,6 +202,14 @@ public class InterventionPage extends AbstractPage implements Observer {
     }
 
 
+    @Override
+    public void update(Observable observable, Object connection) {
+
+        loadAll((WebSocketConnection) connection);
+
+    }
+
+
     public void loadAll(WebSocketConnection connection){
 
         try
@@ -219,7 +222,7 @@ public class InterventionPage extends AbstractPage implements Observer {
                 session = factory.getSession();
                 if(session != null)
                 {
-                    Map<String,Intervention> demands = (Map<String, Intervention>) session.getAll(InterventionImpl.class);
+                    Map<String,Demand> demands = (Map<String, Demand>) session.getAll(Demand.class);
 
                     for(String key : demands.keySet())
                     {

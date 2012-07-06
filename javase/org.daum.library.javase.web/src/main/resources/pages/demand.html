@@ -35,7 +35,6 @@
             </tr>
             </thead>
             <tbody>
-            $contenu$
             </tbody>
             <tfoot>
             <tr>
@@ -69,12 +68,13 @@
          document.getElementById('text').innerHTML = text;
     }
 
-    var ws = new WebSocket('ws://$ip$:8082/jed');
+    var ws = new WebSocket('ws://$ip$:8082/demand');
     showMessage('Connecting...');
 
     ws.onopen = function()
     {
       showMessage('Connected!');
+
 
     };
 
@@ -114,18 +114,6 @@
        }
     }
 
-
-
-
-
-
-    function fnClickAddRow() {
-    $('#example').dataTable().fnAddData( [
-    giCount+".1",
-    giCount+".2",
-    giCount+".3",
-    giCount+".4" ]
-    );
     }
 
 </script>
