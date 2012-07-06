@@ -1,14 +1,10 @@
 package org.daum.library.web.pages;
 
-import org.daum.library.web.WebCache;
+import org.daum.library.web.utils.WebCache;
 import org.kevoree.annotation.ComponentType;
 import org.kevoree.library.javase.webserver.AbstractPage;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
 import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 
 /**
  * Created with IntelliJ IDEA.
