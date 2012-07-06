@@ -24,6 +24,8 @@ import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
 import org.daum.library.replica.listener.SyncListener;
 import org.daum.library.replica.msg.SyncEvent;
+import org.sitac.Agent;
+import org.sitac.SitacFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,13 +45,11 @@ public class SITACEngine {
             ArrowAction.class,
             ZoneAction.class
     };
-    private final String nodeName;
 
     private PersistenceSessionFactoryImpl factory;
 	private OnEngineStateChangeListener listener;
 	
 	public SITACEngine(final String nodeName, ReplicaStore store, OnEngineStateChangeListener engineHandler) {
-        this.nodeName = nodeName;
         listener = engineHandler;
 
         try {

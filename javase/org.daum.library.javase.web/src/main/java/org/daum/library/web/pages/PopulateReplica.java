@@ -107,27 +107,32 @@ public class PopulateReplica extends AbstractComponentType {
 
 
                         Agent agentnoel =SitacFactory.createAgent();
-
                         agentnoel.setNom("PLOUZEAU");
                         agentnoel.setPrenom("NOEL");
+                        agentnoel.setMatricule("nplouzeau");
+                        agentnoel.setPassword("nplouzeau");
                         sitacModel.addPersonnes(agentnoel);
 
                         Agent agentERWAN =  SitacFactory.createAgent();
                         agentERWAN.setNom("DAUBERT");
                         agentERWAN.setPrenom("Erwan");
-
+                        agentERWAN.setMatricule("edaubert");
+                        agentERWAN.setPassword("edaubert");
                         sitacModel.addPersonnes(agentERWAN);
 
                         Agent agentMaxime = SitacFactory.createAgent();
                         agentMaxime.setNom("TRICOIRE");
                         agentMaxime.setPrenom("Maxime");
-
+                        agentMaxime.setMatricule("mtricoire");
+                        agentMaxime.setPassword("mtricoire");
                         sitacModel.addPersonnes(agentMaxime);
 
                         Agent agentjed = SitacFactory.createAgent();
                         agentjed.setNom("DARTOIS");
                         agentjed.setPrenom("JEAN-EMILE");
-                        agentjed.setMatricule("monmatricule");
+                        agentjed.setMatricule("jedartois");
+                        agentjed.setPassword("jedartois");
+                        sitacModel.addPersonnes(agentjed);
 
                         Personne requerant = SitacFactory.createPersonne();
                         requerant.setNom("Nom requerant");
@@ -140,8 +145,6 @@ public class PopulateReplica extends AbstractComponentType {
                         Personne vitc2 = SitacFactory.createPersonne();
                         vitc2.setNom("Nom victime2");
                         vitc2.setPrenom("Prenom victime2");
-
-                        sitacModel.addPersonnes(agentjed);
 
                         Intervention interventionfake =SitacFactory.createIntervention();
 
