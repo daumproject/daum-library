@@ -1,9 +1,9 @@
-package org.daum.library.android.launcher;
+package org.daum.library.android.daumauth;
 
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import org.daum.library.android.launcher.view.LauncherView;
+import org.daum.library.android.daumauth.view.DaumAuthView;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
@@ -31,13 +31,13 @@ import org.kevoree.framework.AbstractComponentType;
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
 })
 @ComponentType
-public class LauncherComponent extends AbstractComponentType {
+public class DaumAuthComponent extends AbstractComponentType {
 
-    private static final String TAG = "LauncherComponent";
+    private static final String TAG = "DaumAuthComponent";
     private static final String TAB_NAME = "Connexion";
 
     private KevoreeAndroidService uiService;
-    private LauncherEngine engine;
+    private DaumAuthEngine engine;
     private static ChangeListener listener = new ChangeListener();
 
     @Start
@@ -65,7 +65,7 @@ public class LauncherComponent extends AbstractComponentType {
                         try {
                             ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
                             ReplicaStore store = new ReplicaStore(replicatingService);
-                            engine = new LauncherEngine(getNodeName(), store);
+                            engine = new DaumAuthEngine(getNodeName(), store);
 
                         } catch (PersistenceException e) {
                             Log.e(TAG, "Error on component startup", e);
@@ -85,7 +85,7 @@ public class LauncherComponent extends AbstractComponentType {
             }
         });
 
-        LauncherView launcherView = new LauncherView(uiService.getRootActivity());
+        DaumAuthView launcherView = new DaumAuthView(uiService.getRootActivity());
         uiService.addToGroup(TAB_NAME, launcherView);
     }
 
@@ -105,7 +105,7 @@ public class LauncherComponent extends AbstractComponentType {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LauncherComponent.getChangeListener().receive(m);
+                DaumAuthComponent.getChangeListener().receive(m);
             }
         });
     }

@@ -1,16 +1,13 @@
-package org.daum.library.android.launcher.view;
+package org.daum.library.android.daumauth.view;
 
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
@@ -22,9 +19,9 @@ import android.widget.*;
  * Time: 11:42
  * To change this template use File | Settings | File Templates.
  */
-public class LauncherView extends RelativeLayout {
+public class DaumAuthView extends RelativeLayout {
 
-    private static final String TAG = "LauncherView";
+    private static final String TAG = "DaumAuthView";
 
     private static final String TEXT_MATRICULE = "Matricule";
     private static final String TEXT_PASSWORD = "Mot de passe";
@@ -35,7 +32,7 @@ public class LauncherView extends RelativeLayout {
     private EditText et_password;
     private Button btn_connect;
 
-    public LauncherView(Context context) {
+    public DaumAuthView(Context context) {
         super(context);
         this.ctx = context;
         initUI();

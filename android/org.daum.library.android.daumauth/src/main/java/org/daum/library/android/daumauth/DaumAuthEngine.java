@@ -1,18 +1,10 @@
-package org.daum.library.android.launcher;
+package org.daum.library.android.daumauth;
 
 import android.util.Log;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
-import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.daum.library.replica.listener.PropertyChangeEvent;
-import org.daum.library.replica.listener.PropertyChangeListener;
-import org.daum.library.replica.listener.SyncListener;
-import org.daum.library.replica.msg.SyncEvent;
-
-import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,13 +13,13 @@ import java.util.Collection;
  * Time: 11:35
  * To change this template use File | Settings | File Templates.
  */
-public class LauncherEngine {
+public class DaumAuthEngine {
 
-    private static final String TAG = "LauncherEngine";
+    private static final String TAG = "DaumAuthEngine";
 
     private PersistenceSessionFactoryImpl factory;
 
-    public LauncherEngine(final String nodeName, ReplicaStore store) {
+    public DaumAuthEngine(final String nodeName, ReplicaStore store) {
         try {
             // configuring persistence
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
@@ -42,7 +34,7 @@ public class LauncherEngine {
 
         // add a callback to populate engine when sync is ready
         /*
-        LauncherComponent.getChangeListener().addSyncListener(new SyncListener() {
+        DaumAuthComponent.getChangeListener().addSyncListener(new SyncListener() {
             @Override
             public void sync(SyncEvent e) {
                 if (listener != null) {

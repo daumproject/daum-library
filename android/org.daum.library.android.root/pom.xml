@@ -31,7 +31,7 @@
         <module>../org.daum.library.android.bluetooth</module>
         <module>../org.daum.library.android.moyens</module>
         <module>../org.daum.library.android.messages</module>
-        <module>../org.daum.library.android.launcher</module>
+        <module>../org.daum.library.android.daumauth</module>
     </modules>
 
     <dependencies>
