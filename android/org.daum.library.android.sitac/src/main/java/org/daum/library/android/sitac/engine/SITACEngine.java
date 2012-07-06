@@ -24,6 +24,8 @@ import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
 import org.daum.library.replica.listener.SyncListener;
 import org.daum.library.replica.msg.SyncEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * SITACEngine save/update/delete data from/to the Replica/Persistence system
@@ -31,6 +33,7 @@ import org.daum.library.replica.msg.SyncEvent;
 public class SITACEngine {
 	
 	private static final String TAG = "SITACEngine";
+    private static final Logger logger = LoggerFactory.getLogger(SITACEngine.class);
 
     /** Persisted classes in replica */
     private final Class[] classes = {
@@ -99,18 +102,18 @@ public class SITACEngine {
                             switch (e.getEvent()) {
                                 case ADD:
                                     m = (IModel) session.get(c, e.getId());
-                                    Log.d(TAG, "Replica Event: ADD "+m);
+                                    logger.debug(TAG, "Replica Event: ADD "+m);
                                     listener.onAdd(m);
                                     break;
 
                                 case DELETE:
-                                    Log.d(TAG, "Replica Event: DELETE "+e.getId());
+                                    logger.debug(TAG, "Replica Event: DELETE "+e.getId());
                                     listener.onDelete((String) e.getId());
                                     break;
 
                                 case UPDATE:
                                     m = (IModel) session.get(c, e.getId());
-                                    Log.d(TAG, "Replica Event: UPDATE "+m);
+                                    logger.debug(TAG, "Replica Event: UPDATE "+m);
                                     listener.onUpdate(m);
                                     break;
                             }
