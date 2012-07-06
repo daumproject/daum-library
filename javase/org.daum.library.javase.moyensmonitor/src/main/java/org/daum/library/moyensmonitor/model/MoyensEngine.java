@@ -57,7 +57,7 @@ public class MoyensEngine {
                 if (listener != null) {
                     try {
                         PersistenceSession session = factory.getSession();
-                        Map<Object, Demand> demands = (Map<Object, Demand>) session.getAll(Demand.class);
+                        Map<Object, Demand> demands = session.getAll(Demand.class);
                         listener.doUpdate(demands.values());
 
                     } catch (PersistenceException ex) {
@@ -79,7 +79,7 @@ public class MoyensEngine {
                             case ADD:
                             case UPDATE:
                             case DELETE:
-                                Map<Object, Demand> map = (Map<Object, Demand>) session.getAll(Demand.class);
+                                Map<Object, Demand> map = session.getAll(Demand.class);
                                 listener.doUpdate(map.values());
                         }
 

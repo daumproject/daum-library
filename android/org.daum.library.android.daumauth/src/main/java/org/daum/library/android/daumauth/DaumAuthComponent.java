@@ -1,9 +1,11 @@
-package org.daum.library.android.launcher;
+package org.daum.library.android.daumauth;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import org.daum.library.android.launcher.view.LauncherView;
+import org.daum.library.android.daumauth.view.DaumAuthView;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
@@ -14,6 +16,7 @@ import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,13 +34,14 @@ import org.kevoree.framework.AbstractComponentType;
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
 })
 @ComponentType
-public class LauncherComponent extends AbstractComponentType {
+public class DaumAuthComponent extends AbstractComponentType implements DaumAuthView.OnClickListener {
 
-    private static final String TAG = "LauncherComponent";
+    private static final String TAG = "DaumAuthComponent";
     private static final String TAB_NAME = "Connexion";
+    private static final int CONNECTION_TIMEOUT = 1000*60; // one minute
 
     private KevoreeAndroidService uiService;
-    private LauncherEngine engine;
+    private DaumAuthEngine engine;
     private static ChangeListener listener = new ChangeListener();
 
     @Start
@@ -65,7 +69,7 @@ public class LauncherComponent extends AbstractComponentType {
                         try {
                             ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
                             ReplicaStore store = new ReplicaStore(replicatingService);
-                            engine = new LauncherEngine(getNodeName(), store);
+                            engine = new DaumAuthEngine(getNodeName(), store);
 
                         } catch (PersistenceException e) {
                             Log.e(TAG, "Error on component startup", e);
@@ -85,7 +89,8 @@ public class LauncherComponent extends AbstractComponentType {
             }
         });
 
-        LauncherView launcherView = new LauncherView(uiService.getRootActivity());
+        DaumAuthView launcherView = new DaumAuthView(uiService.getRootActivity());
+        launcherView.setOnClickListener(this);
         uiService.addToGroup(TAB_NAME, launcherView);
     }
 
@@ -105,12 +110,44 @@ public class LauncherComponent extends AbstractComponentType {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                LauncherComponent.getChangeListener().receive(m);
+                DaumAuthComponent.getChangeListener().receive(m);
             }
         });
     }
 
     public static ChangeListener getChangeListener() {
         return listener;
+    }
+
+    @Override
+    public void onConnectionButtonClicked(String matricule, String password) {
+        ProgressDialog pDialog = new ProgressDialog(uiService.getRootActivity());
+        pDialog.setIndeterminate(true);
+        pDialog.setCancelable(false);
+
+        new Thread(new ConnectionTask(matricule, password)).start();
+    }
+
+    private class ConnectionTask implements Runnable {
+
+        private String matricule;
+        private String password;
+
+        public ConnectionTask(String matricule, String password) {
+            this.matricule = matricule;
+            this.password = password;
+        }
+
+        @Override
+        public void run() {
+            while (!engine.isSynced()) {} // wait until replica is synced
+            if (engine.check(matricule, password)) {
+                // matricule & password are ok
+
+            } else {
+                // wrong matricule and/or password
+
+            }
+        }
     }
 }
