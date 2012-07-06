@@ -2,7 +2,6 @@ package org.sitac;
 
 
 public enum VehiculeType {
-
     // SAP
     SAC_PS, VLSV, VLOS, VLS, VSAV, VSM, VSR,
 

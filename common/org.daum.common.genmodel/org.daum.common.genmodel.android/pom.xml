@@ -6,7 +6,7 @@
     <artifactId>org.daum.common.genmodel.android.root</artifactId>
     <packaging>jar</packaging>
     <name>Daum :: Common :: Android :: GenModel</name>
-    <version>1.0</version>
+    <version>1.1-SNAPSHOT</version>
 
     <parent>
         <artifactId>org.daum.common.genmodel</artifactId>
