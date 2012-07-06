@@ -1,5 +1,7 @@
 package org.daum.library.android.daumauth;
 
+import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -14,6 +16,7 @@ import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,10 +34,11 @@ import org.kevoree.framework.AbstractComponentType;
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
 })
 @ComponentType
-public class DaumAuthComponent extends AbstractComponentType {
+public class DaumAuthComponent extends AbstractComponentType implements DaumAuthView.OnClickListener {
 
     private static final String TAG = "DaumAuthComponent";
     private static final String TAB_NAME = "Connexion";
+    private static final int CONNECTION_TIMEOUT = 1000*60; // one minute
 
     private KevoreeAndroidService uiService;
     private DaumAuthEngine engine;
@@ -86,6 +90,7 @@ public class DaumAuthComponent extends AbstractComponentType {
         });
 
         DaumAuthView launcherView = new DaumAuthView(uiService.getRootActivity());
+        launcherView.setOnClickListener(this);
         uiService.addToGroup(TAB_NAME, launcherView);
     }
 
@@ -112,5 +117,37 @@ public class DaumAuthComponent extends AbstractComponentType {
 
     public static ChangeListener getChangeListener() {
         return listener;
+    }
+
+    @Override
+    public void onConnectionButtonClicked(String matricule, String password) {
+        ProgressDialog pDialog = new ProgressDialog(uiService.getRootActivity());
+        pDialog.setIndeterminate(true);
+        pDialog.setCancelable(false);
+
+        new Thread(new ConnectionTask(matricule, password)).start();
+    }
+
+    private class ConnectionTask implements Runnable {
+
+        private String matricule;
+        private String password;
+
+        public ConnectionTask(String matricule, String password) {
+            this.matricule = matricule;
+            this.password = password;
+        }
+
+        @Override
+        public void run() {
+            while (!engine.isSynced()) {} // wait until replica is synced
+            if (engine.check(matricule, password)) {
+                // matricule & password are ok
+
+            } else {
+                // wrong matricule and/or password
+
+            }
+        }
     }
 }

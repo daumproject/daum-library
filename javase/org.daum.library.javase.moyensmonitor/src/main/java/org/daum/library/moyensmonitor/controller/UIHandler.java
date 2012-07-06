@@ -5,7 +5,6 @@ import java.util.Random;
 
 import org.daum.common.model.api.Demand;
 import org.daum.common.model.api.VehicleType;
-import org.daum.common.util.api.TimeFormatter;
 import org.daum.library.moyensmonitor.listener.OnMoyensMonitorEventListener;
 import org.daum.library.moyensmonitor.model.MoyensEngine;
 

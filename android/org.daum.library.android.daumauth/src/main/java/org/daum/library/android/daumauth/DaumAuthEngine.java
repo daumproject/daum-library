@@ -3,8 +3,14 @@ package org.daum.library.android.daumauth;
 import android.util.Log;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
+import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
+import org.daum.library.replica.listener.SyncListener;
+import org.daum.library.replica.msg.SyncEvent;
+import org.sitac.Agent;
+
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,12 +24,14 @@ public class DaumAuthEngine {
     private static final String TAG = "DaumAuthEngine";
 
     private PersistenceSessionFactoryImpl factory;
+    private boolean synced = false;
 
     public DaumAuthEngine(final String nodeName, ReplicaStore store) {
         try {
             // configuring persistence
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
             configuration.setStore(store);
+            configuration.addPersistentClass(Agent.class);
 
             // retrieve the persistence factory
             this.factory = configuration.getPersistenceSessionFactory();
@@ -33,29 +41,33 @@ public class DaumAuthEngine {
         }
 
         // add a callback to populate engine when sync is ready
-        /*
         DaumAuthComponent.getChangeListener().addSyncListener(new SyncListener() {
             @Override
             public void sync(SyncEvent e) {
-                if (listener != null) {
-                    PersistenceSession session = null;
-                    try {
-                        session = factory.getSession();
-                        ArrayList<IModel> data = new ArrayList<IModel>();
-                        for (Class c : classes) {
-                            data.addAll((Collection<IModel>) session.getAll(c).values());
-                        }
-                        listener.onReplicaSynced(data);
-
-                    } catch (PersistenceException ex) {
-                        Log.e(TAG, "Error while retrieving data on sync", ex);
-
-                    } finally {
-                        if (session != null) session.close();
-                    }
-                }
+                synced = true;
             }
         });
-        */
+
+    }
+
+    public boolean check(String matricule, String password) {
+        boolean exists = false;
+        PersistenceSession session = null;
+        try {
+            session = factory.getSession();
+            Map<Object, Agent> agents = (Map<Object, Agent>) session.getAll(Agent.class);
+
+        } catch (PersistenceException e) {
+            Log.e(TAG, "Error while trying to authenticate user", e);
+        } finally {
+            if (session != null) session.close();
+        }
+
+        return exists;
+    }
+
+
+    public boolean isSynced() {
+        return synced;
     }
 }

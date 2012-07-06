@@ -154,6 +154,7 @@ public class PersistenceSession implements IPersistenceSession {
             }
         }else {
             logger.error(" Fail to save bean is null");
+
         }
     }
 
@@ -218,7 +219,7 @@ public class PersistenceSession implements IPersistenceSession {
         }
     }
 
-    public Object get(Class clazz,Object _id) throws PersistenceException
+    public <T> T get(Class<T> clazz,Object _id) throws PersistenceException
     {
         Object bean = null;
         PersistentClass pc= null;
@@ -228,7 +229,7 @@ public class PersistenceSession implements IPersistenceSession {
             pc = factory.getPersistenceConfiguration().getPersistentClass(clazz);
             ormh = new Orhm(pc.getPersistentPropertyID().getCacheName(),GeneratedType.NONE,_id);
             bean = store.get(ormh);
-            return bean;
+            return (T) bean;
         } catch (Exception e)
         {
             logger.error("Persistence Session get "+ormh.getCacheName()+" ",e);
@@ -238,7 +239,7 @@ public class PersistenceSession implements IPersistenceSession {
 
 
 
-    public Map<?,?> getAll(Class clazz) throws PersistenceException
+    public <T> Map<Object, T> getAll(Class<T> clazz) throws PersistenceException
     {
         PersistentClass pc= null;
         Orhm id=null;
@@ -247,7 +248,7 @@ public class PersistenceSession implements IPersistenceSession {
             pc = factory.getPersistenceConfiguration().getPersistentClass(clazz);
             //String cacheName,GeneratedType generationType, Object id
             id = new Orhm(pc.getPersistentPropertyID().getCacheName(),GeneratedType.NONE,null);
-            return store.getAll(id);
+            return (Map<Object, T>) store.getAll(id);
 
         } catch (Exception e)
         {

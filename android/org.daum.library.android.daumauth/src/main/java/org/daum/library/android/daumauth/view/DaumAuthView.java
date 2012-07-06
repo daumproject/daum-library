@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -31,6 +30,7 @@ public class DaumAuthView extends RelativeLayout {
     private EditText et_matricule;
     private EditText et_password;
     private Button btn_connect;
+    private OnClickListener listener;
 
     public DaumAuthView(Context context) {
         super(context);
@@ -112,11 +112,23 @@ public class DaumAuthView extends RelativeLayout {
             }
         });
 
-        btn_connect.setOnClickListener(new OnClickListener() {
+        btn_connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d(TAG, "button clicked");
+                if (listener != null) {
+                    String matricule = et_matricule.getText().toString().trim();
+                    String password = et_password.getText().toString().trim();
+                    listener.onConnectionButtonClicked(matricule, password);
+                }
             }
         });
+    }
+
+    public void setOnClickListener(DaumAuthView.OnClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface OnClickListener {
+        void onConnectionButtonClicked(String matricule, String password);
     }
 }
