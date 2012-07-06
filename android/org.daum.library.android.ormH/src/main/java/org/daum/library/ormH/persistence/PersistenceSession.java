@@ -131,7 +131,6 @@ public class PersistenceSession implements IPersistenceSession {
                                 }
                             }
                         }
-
                     }
 
 
@@ -172,6 +171,66 @@ public class PersistenceSession implements IPersistenceSession {
                 Object id =  pp.getValue(bean);
                 if(id != null)
                 {
+
+                    // Manage OneToMany and ManyToOne
+                    for(PersistentProperty p : pc.getPersistentProperties())
+                    {
+                        if(p.getF_ManyToOne() != null)
+                        {
+                            Object _bean =  p.getF_ManyToOne().get(bean);
+                            // save it
+                            if(_bean instanceof  scala.Some)
+                            {
+                                if(((Some)_bean).get() != null)
+                                {
+                                    update(((Some)_bean).get());
+                                }
+                            }else
+                            {
+                                update(_bean);
+                            }
+                        }
+
+                        if(p.getF_OneToMany() != null)
+                        {
+                            Object _bean =  p.getF_OneToMany().get(bean);
+                            if(_bean instanceof ArrayList)
+                            {
+                                for(Object o: ((ArrayList)_bean))
+                                {
+                                    if(o instanceof  scala.Some)
+                                    {
+                                        if(((Some)o).get() != null)
+                                        {
+                                            update(((Some)o).get());
+                                        }
+
+                                    }else {
+                                        update(o);
+                                    }
+                                }
+                            }   else if(_bean instanceof  scala.collection.mutable.ListBuffer)
+                            {
+                                HelperList t = new HelperList();
+
+                                for(Object o: t.convert((scala.collection.mutable.ListBuffer)_bean))
+                                {
+                                    if(o instanceof  scala.Some){
+                                        if(((Some)o).get() != null)
+                                        {
+                                            update(((Some)o).get());
+                                        }
+
+                                    }else
+                                    {
+                                        update(o);
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+
                     Orhm ormh = new Orhm(pp.getCacheName(),pp.getGeneratedType(),id);
                     store.update(ormh, bean);
                 }
