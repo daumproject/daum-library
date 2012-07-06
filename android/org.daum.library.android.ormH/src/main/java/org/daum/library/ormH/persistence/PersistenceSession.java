@@ -90,7 +90,10 @@ public class PersistenceSession implements IPersistenceSession {
 
                             }else
                             {
-                                save(_bean);
+                                if(_bean != null)
+                                {
+                                    save(_bean);
+                                }
                             }
                         }
 
@@ -109,7 +112,10 @@ public class PersistenceSession implements IPersistenceSession {
                                         }
 
                                     }else {
-                                        save(o);
+                                        if(_bean != null)
+                                        {
+                                            save(o);
+                                        }
                                     }
                                 }
                             }   else if(_bean instanceof  scala.collection.mutable.ListBuffer)
@@ -125,7 +131,10 @@ public class PersistenceSession implements IPersistenceSession {
                                         }
 
                                     }else {
-                                        save(o);
+                                        if(_bean != null)
+                                        {
+                                            save(o);
+                                        }
                                     }
 
                                 }
@@ -188,6 +197,9 @@ public class PersistenceSession implements IPersistenceSession {
                                 }
                             }else
                             {
+                                if(_bean != null){
+                                    update(_bean);
+                                }
                                 update(_bean);
                             }
                         }
@@ -207,7 +219,10 @@ public class PersistenceSession implements IPersistenceSession {
                                         }
 
                                     }else {
-                                        update(o);
+                                        if(o != null)
+                                        {
+                                            update(o);
+                                        }
                                     }
                                 }
                             }   else if(_bean instanceof  scala.collection.mutable.ListBuffer)
@@ -216,7 +231,8 @@ public class PersistenceSession implements IPersistenceSession {
 
                                 for(Object o: t.convert((scala.collection.mutable.ListBuffer)_bean))
                                 {
-                                    if(o instanceof  scala.Some){
+                                    if(o instanceof  scala.Some)
+                                    {
                                         if(((Some)o).get() != null)
                                         {
                                             update(((Some)o).get());
@@ -224,7 +240,11 @@ public class PersistenceSession implements IPersistenceSession {
 
                                     }else
                                     {
-                                        update(o);
+                                        if(o != null)
+                                        {
+                                            update(o);
+                                        }
+
                                     }
                                 }
                             }
