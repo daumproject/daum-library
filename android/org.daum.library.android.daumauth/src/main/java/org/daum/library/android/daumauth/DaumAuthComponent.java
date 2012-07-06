@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
+import org.daum.library.android.daumauth.util.ConnectionTask;
 import org.daum.library.android.daumauth.view.DaumAuthView;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
@@ -38,7 +39,8 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
 
     private static final String TAG = "DaumAuthComponent";
     private static final String TAB_NAME = "Connexion";
-    private static final int CONNECTION_TIMEOUT = 1000*60; // one minute
+    private static final String TEXT_LOADING = "Tentative de connexion...";
+    private static final int CONNECTION_TIMEOUT = 1000*15; // 15 seconds
 
     private KevoreeAndroidService uiService;
     private DaumAuthEngine engine;
@@ -121,33 +123,50 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
 
     @Override
     public void onConnectionButtonClicked(String matricule, String password) {
-        ProgressDialog pDialog = new ProgressDialog(uiService.getRootActivity());
+        final ProgressDialog pDialog = new ProgressDialog(uiService.getRootActivity());
         pDialog.setIndeterminate(true);
         pDialog.setCancelable(false);
+        pDialog.setMessage(TEXT_LOADING);
+        showDialog(pDialog);
 
-        new Thread(new ConnectionTask(matricule, password)).start();
+        ConnectionTask connTask = new ConnectionTask(engine, matricule, password, CONNECTION_TIMEOUT);
+        connTask.setOnEventListener(new ConnectionTask.OnEventListener() {
+            @Override
+            public void onConnectionTimedOut() {
+                Log.d(TAG, "onConnectionTimedOut");
+                dismissDialog(pDialog);
+            }
+
+            @Override
+            public void onConnectionSucceeded(String matricule) {
+                Log.d(TAG, "onConnectionSucceeded");
+                dismissDialog(pDialog);
+            }
+
+            @Override
+            public void onConnectionFailed(String matricule) {
+                Log.d(TAG, "onConnectionFailed");
+                dismissDialog(pDialog);
+            }
+        });
+        connTask.start();
     }
 
-    private class ConnectionTask implements Runnable {
-
-        private String matricule;
-        private String password;
-
-        public ConnectionTask(String matricule, String password) {
-            this.matricule = matricule;
-            this.password = password;
-        }
-
-        @Override
-        public void run() {
-            while (!engine.isSynced()) {} // wait until replica is synced
-            if (engine.check(matricule, password)) {
-                // matricule & password are ok
-
-            } else {
-                // wrong matricule and/or password
-
+    private void showDialog(final ProgressDialog dialog) {
+        uiService.getRootActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog.show();
             }
-        }
+        });
+    }
+
+    private void dismissDialog(final ProgressDialog dialog) {
+        uiService.getRootActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dialog.dismiss();
+            }
+        });
     }
 }

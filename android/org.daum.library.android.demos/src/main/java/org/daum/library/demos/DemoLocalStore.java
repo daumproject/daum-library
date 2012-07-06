@@ -73,7 +73,7 @@ public class DemoLocalStore  extends AbstractComponentType implements  Runnable 
                     s.save(test);
 
 
-                    Map<Object,Object> result =  s.getAll(TestDemo.class);
+                    Map<Object,TestDemo> result =  s.getAll(TestDemo.class);
                     int count =      result.size();
 
                     logger.debug("Number of Test Demo "+count);

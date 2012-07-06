@@ -51,11 +51,15 @@ public class DaumAuthEngine {
     }
 
     public boolean check(String matricule, String password) {
-        boolean exists = false;
         PersistenceSession session = null;
         try {
             session = factory.getSession();
-            Map<Object, Agent> agents = (Map<Object, Agent>) session.getAll(Agent.class);
+            Map<Object, Agent> agents = session.getAll(Agent.class);
+            for (Agent a : agents.values()) {
+                if (a.getMatricule().equals(matricule) && a.getPassword().equals(password)) {
+                    return true;
+                }
+            }
 
         } catch (PersistenceException e) {
             Log.e(TAG, "Error while trying to authenticate user", e);
@@ -63,7 +67,7 @@ public class DaumAuthEngine {
             if (session != null) session.close();
         }
 
-        return exists;
+        return false;
     }
 
 

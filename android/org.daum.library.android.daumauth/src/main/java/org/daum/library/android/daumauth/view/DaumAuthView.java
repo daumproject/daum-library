@@ -103,9 +103,6 @@ public class DaumAuthView extends RelativeLayout {
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_GO) {
                     btn_connect.performClick();
-                    InputMethodManager imm = (InputMethodManager) ctx.getSystemService(
-                            Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(et_password.getWindowToken(), 0);
                     return true;
                 }
                 return false;
@@ -115,6 +112,10 @@ public class DaumAuthView extends RelativeLayout {
         btn_connect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                InputMethodManager imm = (InputMethodManager) ctx.getSystemService(
+                        Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(et_password.getWindowToken(), 0);
+
                 if (listener != null) {
                     String matricule = et_matricule.getText().toString().trim();
                     String password = et_password.getText().toString().trim();

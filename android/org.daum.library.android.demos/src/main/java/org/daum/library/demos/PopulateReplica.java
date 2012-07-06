@@ -1,4 +1,4 @@
-package org.daum.library.web.pages;
+package org.daum.library.demos;
 
 import org.daum.common.model.api.Demand;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
@@ -25,7 +25,7 @@ import scala.Option;
  * To change this template use File | Settings | File Templates.
  */
 
-@Library(name = "JavaSE")
+@Library(name = "JavaSE", names = {"Android"})
 @ComponentType
 @Requires({
         @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = false) })
