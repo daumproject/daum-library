@@ -30,10 +30,13 @@ trait Intervention extends org.sitac.SitacContainer {
 
   @ManyToOne
   private var requerant : Option[org.sitac.Personne] = null
+
   @OneToMany
   private lazy val detachements : scala.collection.mutable.ListBuffer[org.sitac.Detachement] = new scala.collection.mutable.ListBuffer[org.sitac.Detachement]()
+
   @OneToMany
   private lazy val victimes : scala.collection.mutable.ListBuffer[org.sitac.Personne] = new scala.collection.mutable.ListBuffer[org.sitac.Personne]()
+
   @OneToMany
   private lazy val infoTactics : scala.collection.mutable.ListBuffer[org.sitac.InfoTactic] = new scala.collection.mutable.ListBuffer[org.sitac.InfoTactic]()
 

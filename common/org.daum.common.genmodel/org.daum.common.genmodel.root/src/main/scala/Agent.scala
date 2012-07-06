@@ -10,8 +10,23 @@ import java.io.Serializable
  * Meta-Model:NS_URI=http://sitactest/1.0
  */
 trait Agent extends org.sitac.SitacContainer with org.sitac.Personne with Serializable{
+
   private var matricule : java.lang.String = ""
 
+  private var password : java.lang.String = ""
+
+
+  def getPassword : java.lang.String = {
+    password
+  }
+
+  /**
+   * MD5 password
+   * @param password
+   */
+  def setPassaword(password : java.lang.String){
+    this.password = password
+  }
 
   def getMatricule : java.lang.String = {
     matricule
