@@ -151,8 +151,7 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
             @Override
             public void onConnectionTimedOut() {
                 Log.w(TAG, "onConnectionTimedOut");
-                Toast t = Toast.makeText(uiService.getRootActivity(), TEXT_CONN_TIMEDOUT, Toast.LENGTH_SHORT);
-                dismissDialog(pDialog, t);
+                dismissDialog(pDialog, TEXT_CONN_TIMEDOUT);
             }
 
             @Override
@@ -166,8 +165,7 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
             @Override
             public void onConnectionFailed(String matricule) {
                 Log.w(TAG, "onConnectionFailed");
-                Toast t = Toast.makeText(uiService.getRootActivity(), TEXT_CONN_FAILED, Toast.LENGTH_SHORT);
-                dismissDialog(pDialog, t);
+                dismissDialog(pDialog, TEXT_CONN_FAILED);
             }
         });
         connTask.start();
@@ -211,12 +209,14 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
         });
     }
 
-    private void dismissDialog(final ProgressDialog dialog, final Toast toastMsg) {
+    private void dismissDialog(final ProgressDialog dialog, final String msg) {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 dialog.dismiss();
-                if (toastMsg != null) toastMsg.show();
+                if (msg != null) {
+                    Toast.makeText(uiService.getRootActivity(), TEXT_CONN_FAILED, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
