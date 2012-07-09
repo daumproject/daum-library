@@ -68,12 +68,12 @@ public class MessagesComponent extends AbstractComponentType implements IMessage
         getModelService().registerModelListener(new ModelListener() {
             @Override
             public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;
+                return true;
             }
 
             @Override
             public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;
+                return true;
             }
 
             @Override
@@ -118,7 +118,8 @@ public class MessagesComponent extends AbstractComponentType implements IMessage
 
     @Update
     public void update() {
-
+        stop();
+        start();
     }
 
     @Port(name="notify")

@@ -5,10 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 
 import org.daum.common.model.api.Demand;
 import org.daum.library.moyensmonitor.controller.MoyensMonitorController;
@@ -39,6 +36,9 @@ public class MoyensMonitorFrame extends JFrame {
 	
 	public MoyensMonitorFrame(String nodeName, ReplicaStore storeImpl) {
 		super(FRAME_TITLE);
+
+        // disable default close
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
 		setSize(800, 600);
 		setLocationRelativeTo(null); // center frame

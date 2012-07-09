@@ -45,6 +45,7 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
     private KevoreeAndroidService uiService;
     private DaumAuthEngine engine;
     private static ChangeListener listener = new ChangeListener();
+    private DaumAuthView authView;
 
     @Start
     public void start() {
@@ -55,12 +56,12 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
         getModelService().registerModelListener(new ModelListener() {
             @Override
             public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;
+                return true;
             }
 
             @Override
             public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;
+                return true;
             }
 
             @Override
@@ -91,20 +92,20 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
             }
         });
 
-        DaumAuthView launcherView = new DaumAuthView(uiService.getRootActivity());
-        launcherView.setOnClickListener(this);
-        uiService.addToGroup(TAB_NAME, launcherView);
+        authView = new DaumAuthView(uiService.getRootActivity());
+        authView.setOnClickListener(this);
+        uiService.addToGroup(TAB_NAME, authView);
     }
 
     @Stop
     public void stop() {
-
+        uiService.remove(authView);
     }
 
     @Update
     public void update() {
-        initUI();
-        Log.d(TAG, "component updated !!!!");
+        stop();
+        start();
     }
 
     @Port(name = "notify")

@@ -7,13 +7,13 @@ merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultCh
 merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}'
 merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}'
 
-merge 'mvn:org.daum.library.android/org.daum.library.android.replica/1.8'
+merge 'mvn:org.daum.library.android/org.daum.library.android.replica/2.0'
 
 merge 'mvn:org.daum.library.android/org.daum.library.android.moyens/1.8.2-SNAPSHOT'
-merge 'mvn:org.daum.library.android/org.daum.library.android.sitac/1.8.2-SNAPSHOT'
+merge 'mvn:org.daum.library.android/org.daum.library.android.sitac/1.8.3-SNAPSHOT'
 
 addNode node0:AndroidNode
-addNode node3:AndroidNode
+addNode node1:AndroidNode
  {
   addComponent SITACComp265@node0 : SITACComponent {}
   addComponent Replica994@node0 : Replica {}
@@ -30,7 +30,7 @@ bind Replica994.notification@node0 => defMSG327
 bind MoyensCom559.notify@node0 => defMSG327
 bind SITACComp265.notify@node0 => defMSG327
 updateDictionary defSERVIC177 
-updateDictionary SocketCha52 {port='9000'}@node0,{port='9001'}@node3
+updateDictionary SocketCha52 {port='9000'}@node0,{port='9001'}@node1
 updateDictionary defMSG327 
 updateDictionary SITACComp265@node0 
 updateDictionary Replica994@node0 
@@ -38,26 +38,26 @@ updateDictionary MoyensCom559@node0
 }
 
  {
-  addComponent SITACComp177@node3 : SITACComponent {}
-  addComponent Replica404@node3 : Replica {}
-  addComponent MoyensCom795@node3 : MoyensComponent {}
+  addComponent SITACComp177@node1 : SITACComponent {}
+  addComponent Replica404@node1 : Replica {}
+  addComponent MoyensCom795@node1 : MoyensComponent {}
 addChannel defSERVIC782 : defSERVICE {}
 addChannel SocketCha52 : SocketChannel {port='9001',replay='false',maximum_size_messaging='50',timer='2000'}
 addChannel defMSG830 : defMSG {}
-bind SITACComp177.service@node3 => defSERVIC782
-bind Replica404.service@node3 => defSERVIC782
-bind Replica404.remote@node3 => SocketCha52
-bind Replica404.broadcast@node3 => SocketCha52
-bind MoyensCom795.service@node3 => defSERVIC782
-bind Replica404.notification@node3 => defMSG830
-bind SITACComp177.notify@node3 => defMSG830
-bind MoyensCom795.notify@node3 => defMSG830
+bind SITACComp177.service@node1 => defSERVIC782
+bind Replica404.service@node1 => defSERVIC782
+bind Replica404.remote@node1 => SocketCha52
+bind Replica404.broadcast@node1 => SocketCha52
+bind MoyensCom795.service@node1 => defSERVIC782
+bind Replica404.notification@node1 => defMSG830
+bind SITACComp177.notify@node1 => defMSG830
+bind MoyensCom795.notify@node1 => defMSG830
 updateDictionary defSERVIC782
-updateDictionary SocketCha52 {port='9000'}@node0,{port='9001'}@node3
+updateDictionary SocketCha52 {port='9000'}@node0,{port='9001'}@node1
 updateDictionary defMSG830
-updateDictionary SITACComp177@node3
-updateDictionary Replica404@node3
-updateDictionary MoyensCom795@node3
+updateDictionary SITACComp177@node1
+updateDictionary Replica404@node1
+updateDictionary MoyensCom795@node1
 }
 
 }

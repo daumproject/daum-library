@@ -62,12 +62,12 @@ public class InterventionPage extends AbstractPage implements Observer {
         getModelService().registerModelListener(new ModelListener() {
             @Override
             public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;
+                return true;
             }
 
             @Override
             public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;
+                return true;
             }
 
             @Override
@@ -219,12 +219,12 @@ public class InterventionPage extends AbstractPage implements Observer {
                 session = factory.getSession();
                 if(session != null)
                 {
-                    Map<String,Intervention> demands = (Map<String, Intervention>) session.getAll(InterventionImpl.class);
+                    Map<Object, InterventionImpl> demands = session.getAll(InterventionImpl.class);
 
-                    for(String key : demands.keySet())
+                    for(Object key : demands.keySet())
                     {
 
-                        RichJSONObject c = new RichJSONObject(demands.get(key));
+                        RichJSONObject c = new RichJSONObject(demands.get((String) key));
                         ((WebSocketConnection)connection).send(Event.ADD + "$" + c.toJSON());
                     }
 

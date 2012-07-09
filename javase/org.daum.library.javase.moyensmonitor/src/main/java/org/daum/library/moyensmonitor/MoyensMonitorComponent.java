@@ -39,12 +39,12 @@ public class MoyensMonitorComponent extends AbstractComponentType {
         getModelService().registerModelListener(new ModelListener() {
             @Override
             public boolean preUpdate(ContainerRoot c1, ContainerRoot c2) {
-                return false;
+                return true;
             }
 
             @Override
             public boolean initUpdate(ContainerRoot c1, ContainerRoot c2) {
-                return false;
+                return true;
             }
 
             @Override
@@ -72,6 +72,8 @@ public class MoyensMonitorComponent extends AbstractComponentType {
 
     @Update
     public void update() {
+        stop();
+        start();
         logger.debug(">>>>>>> update()");
     }
 
