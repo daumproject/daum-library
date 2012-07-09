@@ -38,8 +38,7 @@ import org.kevoree.framework.AbstractComponentType;
 })
 @DictionaryType({
         @DictionaryAttribute(name = "mapProvider", defaultValue = "http://tile.openstreetmap.org/", optional = false)
-}
-)
+})
 @ComponentType
 public class SITACComponent extends AbstractComponentType {
 

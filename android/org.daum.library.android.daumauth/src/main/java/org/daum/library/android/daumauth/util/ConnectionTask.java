@@ -22,26 +22,27 @@ public class ConnectionTask extends Thread implements Timer.OnTimeExpiredListene
     private String password;
     private OnEventListener listener;
     private boolean stop = false;
+    private boolean synced;
 
-    public ConnectionTask(DaumAuthEngine engine, String matricule, String password, int delay) {
+    public ConnectionTask(DaumAuthEngine engine, String matricule, String password, int delay, boolean isSynced) {
         this.engine = engine;
         this.matricule = matricule;
         this.password = password;
         this.delay = delay;
+        this.synced = isSynced;
     }
 
     @Override
     public void run() {
         Timer timer = new Timer(delay, this);
         timer.start();
-        Log.d("ConnectionTask", "ConnectionTask started its timer and wait for replica to be synced");
 
         // wait until replica is synced
-        while (!engine.isSynced()) {
+        while (!synced) {
             if (stop) return;
         }
 
-        if (engine.check(matricule, password)) {
+        if (engine.authenticate(matricule, password)) {
             // matricule & password are ok
             if (listener != null) listener.onConnectionSucceeded(matricule);
 
@@ -59,6 +60,10 @@ public class ConnectionTask extends Thread implements Timer.OnTimeExpiredListene
         // connection timeout
         if (listener != null) listener.onConnectionTimedOut();
         stop = true;
+    }
+
+    public void setSynced(boolean isSynced) {
+        this.synced = isSynced;
     }
 
     public void setOnEventListener(OnEventListener listener) {

@@ -97,8 +97,8 @@ public class EngineHandler implements OnEngineStateChangeListener {
         e.setState(IEntity.State.SAVED);
 
         // TODO problem if remote node0 deletes entity0 and this node1
-        // TODO moves entity0 from x,y to x1,y1
-        // TODO then the entity is destroyed on node0 but moved on node1
+        // moves entity0 from x,y to x1,y1
+        // then the entity is destroyed on node0 but moved on node1
         if (!mapView.hasEntity(e)) mapView.addEntity(e);
 
         // update the entity according to the model given

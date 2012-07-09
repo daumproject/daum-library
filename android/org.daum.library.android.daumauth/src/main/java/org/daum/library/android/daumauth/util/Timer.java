@@ -47,7 +47,9 @@ public class Timer extends Thread {
      */
     public void discard() {
         shutUp = true;
-        notify();
+        synchronized (this) {
+            notify();
+        }
     }
 
     public interface OnTimeExpiredListener {

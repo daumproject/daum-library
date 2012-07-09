@@ -24,6 +24,12 @@
             <artifactId>org.daum.common.genmodel.android.root</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.kevoree.corelibrary.android</groupId>
+            <artifactId>org.kevoree.library.android.authentication</artifactId>
+            <version>${kevoree.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

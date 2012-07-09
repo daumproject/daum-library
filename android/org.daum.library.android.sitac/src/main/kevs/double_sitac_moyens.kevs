@@ -10,6 +10,7 @@ merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/
 merge 'mvn:org.daum.library.android/org.daum.library.android.replica/2.0'
 
 merge 'mvn:org.daum.library.android/org.daum.library.android.moyens/1.8.2-SNAPSHOT'
+merge 'mvn:org.daum.library.android/org.daum.library.android.messages/1.8.2-SNAPSHOT'
 merge 'mvn:org.daum.library.android/org.daum.library.android.sitac/1.8.3-SNAPSHOT'
 
 addNode node0:AndroidNode

@@ -153,9 +153,9 @@ public class PopulateReplica extends AbstractComponentType {
                         position.setLat(-1638336);
 
 
-                        interventionfake.setPosition(Option.apply((Position)position));
+                        //interventionfake.setPosition(Option.apply((Position)position));
 
-                        interventionfake.setRequerant(Option.apply(requerant));
+                        //interventionfake.setRequerant(Option.apply(requerant));
 
                         interventionfake.addVictimes(vitc1);
                         interventionfake.addVictimes(vitc2);
