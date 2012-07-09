@@ -215,7 +215,7 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
             public void run() {
                 dialog.dismiss();
                 if (msg != null) {
-                    Toast.makeText(uiService.getRootActivity(), TEXT_CONN_FAILED, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(uiService.getRootActivity(), msg, Toast.LENGTH_SHORT).show();
                 }
             }
         });
