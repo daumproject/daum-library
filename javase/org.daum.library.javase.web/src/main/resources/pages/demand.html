@@ -30,8 +30,12 @@
             <tr>
                 <th>ID</th>
                 <th>TYPE</th>
-                <th>CRM</th>
-                <th>HD</th>
+                <th>CIS</th>
+                <th>gh_demande</th>
+                <th>gh_depart</th>
+                <th>gh_crm</th>
+                <th>gh_engage</th>
+                <th>gh_desengagement</th>
             </tr>
             </thead>
             <tbody>
@@ -40,8 +44,12 @@
             <tr>
                 <th>ID</th>
                 <th>TYPE</th>
-                <th>CRM</th>
-                <th>HD</th>
+                <th>CIS</th>
+                <th>gh_demande</th>
+                <th>gh_depart</th>
+                <th>gh_crm</th>
+                <th>gh_engage</th>
+                <th>gh_desengagement</th>
             </tr>
             </tfoot>
         </table>
@@ -56,6 +64,10 @@
     $('#moyens').dataTable( {
     "aoColumns": [
         { "bVisible":    false },
+                null,
+                null,
+                null,
+                null,
                 null,
                 null,
                 null
@@ -74,6 +86,8 @@
     ws.onopen = function()
     {
       showMessage('Connected!');
+
+
 
 
     };
@@ -97,15 +111,26 @@
             oTable.fnAddData( [
             obj.id,
             obj.type,
+            obj.cis,
+            obj.gh_demande,
+            obj.gh_depart,
             obj.gh_crm,
-            obj.gh_engage]
+            obj.gh_engage,
+            obj.gh_desengagement]
             );
 
        }else if(cmd =='UPDATE')
        {
            var obj = jQuery.parseJSON(request[1]);
            var rowID = findRowIndexUsingCol(obj.id,'#moyens',0);
-           oTable.fnUpdate([obj.id,obj.type,obj.gh_crm,obj.gh_engage],rowID);
+           oTable.fnUpdate([obj.id,
+    obj.type,
+    obj.cis,
+    obj.gh_demande,
+    obj.gh_depart,
+    obj.gh_crm,
+    obj.gh_engage,
+    obj.gh_desengagement],rowID);
 
        }else if(cmd =='DELETE')
        {
@@ -114,6 +139,18 @@
        }
     }
 
+
+
+
+
+
+    function fnClickAddRow() {
+    $('#example').dataTable().fnAddData( [
+    giCount+".1",
+    giCount+".2",
+    giCount+".3",
+    giCount+".4" ]
+    );
     }
 
 </script>
