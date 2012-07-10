@@ -1,6 +1,8 @@
 package org.daum.library.android.daumauth;
 
 import android.util.Log;
+import org.daum.library.android.daumauth.controller.IConnectionEngine;
+import org.daum.library.android.daumauth.controller.IInterventionEngine;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.persistence.PersistenceSession;
@@ -8,11 +10,13 @@ import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.listener.SyncListener;
 import org.daum.library.replica.msg.SyncEvent;
-import org.kevoree.library.javase.authentication.Authentication;
 import org.sitac.Agent;
 import org.sitac.SitacFactory;
 import org.sitac.impl.AgentImpl;
+import org.sitac.impl.InterventionImpl;
+import org.sitac.Intervention;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -22,21 +26,24 @@ import java.util.Map;
  * Time: 11:35
  * To change this template use File | Settings | File Templates.
  */
-public class DaumAuthEngine implements Authentication {
+public class DaumAuthEngine implements IConnectionEngine, IInterventionEngine {
 
     private static final String TAG = "DaumAuthEngine";
 
     private PersistenceSessionFactoryImpl factory;
     private OnStoreSyncedListener listener;
+    private boolean synced;
 
-    public DaumAuthEngine(final String nodeName, ReplicaStore store) {
+    public DaumAuthEngine(final String nodeName, ReplicaStore store, boolean storeSynced) {
+        this.synced = storeSynced;
+
         PersistenceSession session = null;
         try {
             // configuring persistence
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
             configuration.setStore(store);
-            configuration.addPersistentClass(Agent.class);
             configuration.addPersistentClass(AgentImpl.class);
+            configuration.addPersistentClass(InterventionImpl.class);
 
             // retrieve the persistence factory
             this.factory = configuration.getPersistenceSessionFactory();
@@ -57,6 +64,7 @@ public class DaumAuthEngine implements Authentication {
         DaumAuthComponent.getChangeListener().addSyncListener(new SyncListener() {
             @Override
             public void sync(SyncEvent e) {
+                synced = true;
                 if (listener != null) listener.onStoreSynced();
             }
         });
@@ -70,8 +78,6 @@ public class DaumAuthEngine implements Authentication {
             session = factory.getSession();
             Map<Object, AgentImpl> agents = session.getAll(AgentImpl.class);
             for (Agent a : agents.values()) {
-                Log.w(TAG, "authenticate loop: "+a.getMatricule()+":"+a.getPassword());
-                Log.w(TAG, "params: "+matricule+":"+password);
                 if (a.getMatricule().equals(matricule) && a.getPassword().equals(password)) {
                     return true;
                 }
@@ -86,8 +92,34 @@ public class DaumAuthEngine implements Authentication {
         return false;
     }
 
+    public ArrayList<Intervention> getInterventions() {
+        ArrayList<Intervention> interventions = new ArrayList<Intervention>();
+        PersistenceSession session = null;
+        try {
+            session = factory.getSession();
+            Map<Object, InterventionImpl> map = session.getAll(InterventionImpl.class);
+            interventions.addAll(map.values());
+
+        } catch (PersistenceException e) {
+            Log.e(TAG, "Error while retrieving interventions", e);
+        } finally {
+            if (session != null) session.close();
+        }
+
+        return interventions;
+    }
+
     public void setOnStoreSyncedListener(OnStoreSyncedListener listener) {
         this.listener = listener;
+    }
+
+    public void setSynced(boolean isSynced) {
+        this.synced = isSynced;
+    }
+
+    @Override
+    public boolean isSynced() {
+        return synced;
     }
 
     public interface OnStoreSyncedListener {

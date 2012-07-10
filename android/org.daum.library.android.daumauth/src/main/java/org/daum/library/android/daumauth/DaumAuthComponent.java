@@ -1,18 +1,22 @@
 package org.daum.library.android.daumauth;
 
 import android.app.ProgressDialog;
-import android.os.AsyncTask;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
-import org.daum.library.android.daumauth.util.ConnectionTask;
+
+import org.daum.library.android.daumauth.controller.IController;
+import org.daum.library.android.daumauth.listener.OnConnectionListener;
+import org.daum.library.android.daumauth.listener.OnInterventionSelectedListener;
 import org.daum.library.android.daumauth.view.DaumAuthView;
+
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
 import org.daum.library.replica.listener.ChangeListener;
-import org.kevoree.ContainerNode;
+import org.daum.library.android.daumauth.DaumAuthEngine.OnStoreSyncedListener;
+
 import org.kevoree.ContainerRoot;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
@@ -20,6 +24,8 @@ import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.api.service.core.script.KevScriptEngine;
 import org.kevoree.framework.AbstractComponentType;
+
+import org.sitac.Intervention;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -43,24 +49,27 @@ import org.slf4j.Logger;
         @DictionaryAttribute(name = "connTimeout", defaultValue = "15000", optional = false)
 })
 @ComponentType
-public class DaumAuthComponent extends AbstractComponentType implements DaumAuthView.OnClickListener, DaumAuthEngine.OnStoreSyncedListener {
+public class DaumAuthComponent extends AbstractComponentType
+        implements OnStoreSyncedListener, OnConnectionListener, OnInterventionSelectedListener {
 
     private static final String TAG = "DaumAuthComponent";
     private static final Logger logger = LoggerFactory.getLogger(DaumAuthComponent.class);
+
+    // Text string constants
     private static final String TAB_NAME = "Connexion";
-    private static final String TEXT_LOADING = "Tentative de connexion...";
     private static final String TEXT_CONN_FAILED = "Mauvais matricule et/ou mot de passe";
     private static final String TEXT_CONN_TIMEDOUT = "Impossible de se connecter, réessayez plus tard.";
 
     private static final int CONNECTION_TIMEOUT = 1000*15; // 15 seconds
 
     private KevoreeAndroidService uiService;
+    private DaumAuthView view;
     private DaumAuthEngine engine;
-    private DaumAuthView authView;
-    private ConnectionTask connTask;
+    private IController controller;
     private int connTimeout = CONNECTION_TIMEOUT;
     private static ChangeListener listener = new ChangeListener();
     private boolean storeSynced = false;
+    private DaumAuthView.State viewState = DaumAuthView.State.NOT_CONNECTED;
 
     @Start
     public void start() {
@@ -90,7 +99,7 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
                         try {
                             ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
                             ReplicaStore store = new ReplicaStore(replicatingService);
-                            engine = new DaumAuthEngine(getNodeName(), store);
+                            engine = new DaumAuthEngine(getNodeName(), store, storeSynced);
                             engine.setOnStoreSyncedListener(DaumAuthComponent.this);
 
                         } catch (PersistenceException e) {
@@ -112,63 +121,94 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
             }
         });
 
-        authView = new DaumAuthView(uiService.getRootActivity());
-        authView.setOnClickListener(this);
-        uiService.addToGroup(TAB_NAME, authView);
+        view = new DaumAuthView(uiService.getRootActivity(), viewState);
+        view.setOnConnectionListener(this);
+        view.setOnInterventionSelectedListener(this);
+        controller = view.getController();
+        controller.setConnectionEngine(engine);
+        controller.setInterventionEngine(engine);
+        controller.setTimeout(connTimeout);
+
+        uiService.addToGroup(TAB_NAME, view);
     }
 
     @Stop
     public void stop() {
-        uiService.remove(authView);
+        Log.w(TAG, "COMP method: stop()");
+        uiService.remove(view);
     }
 
     @Update
     public void update() {
+        Log.w(TAG, "COMP method: update()");
+        viewState = view.getState();
         stop();
         start();
     }
 
-    @Port(name = "notify")
-    public void notifiedByReplica(final Object m) {
+    private void showDialog(final ProgressDialog dialog) {
+//        // DialogFragment.show() will take care of adding the fragment
+//        // in a transaction.  We also want to remove any currently showing
+//        // dialog, so make our own transaction and take care of that here.
+//        FragmentActivity fAct = (FragmentActivity) uiService.getRootActivity();
+//        FragmentTransaction ft = fAct.getSupportFragmentManager().beginTransaction();
+//        Fragment prev = fAct.getSupportFragmentManager().findFragmentByTag(PROGRESS_DIALOG);
+//        if (prev != null) ft.remove(prev);
+//        ft.addToBackStack(null);
+//
+//        // Create and show the dialog.
+//        DialogFragment dialogFragment = new ProgressDialogFragment();
+//
+//        dialogFragment.show(ft, PROGRESS_DIALOG);
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                DaumAuthComponent.getChangeListener().receive(m);
+                dialog.show();
+            }
+        });
+    }
+
+    /**
+     * Close the given progress dialog and display "msg" in a Toast
+     *
+     * @param msg
+     */
+    private void showToast(final String msg) {
+//        // hide dialog
+//        FragmentActivity fAct = (FragmentActivity) uiService.getRootActivity();
+//        FragmentTransaction ft = fAct.getSupportFragmentManager().beginTransaction();
+//        Fragment prev = fAct.getSupportFragmentManager().findFragmentByTag(PROGRESS_DIALOG);
+//        if (prev != null) ft.remove(prev);
+
+        uiService.getRootActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (msg != null) {
+                    Toast.makeText(uiService.getRootActivity(), msg, Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
 
     @Override
-    public void onConnectionButtonClicked(String matricule, String password) {
-        final ProgressDialog pDialog = new ProgressDialog(uiService.getRootActivity());
-        pDialog.setIndeterminate(true);
-        pDialog.setCancelable(false);
-        pDialog.setMessage(TEXT_LOADING);
-        showDialog(pDialog);
+    public void onConnected() {
+        showToast("Ouech ouech connected!");
+    }
 
-        this.connTask = new ConnectionTask(engine, matricule, password, connTimeout, storeSynced);
-        connTask.setOnEventListener(new ConnectionTask.OnEventListener() {
-            @Override
-            public void onConnectionTimedOut() {
-                Log.w(TAG, "onConnectionTimedOut");
-                dismissDialog(pDialog, TEXT_CONN_TIMEDOUT);
-            }
+    @Override
+    public void onConnectionRefused() {
+        showToast(TEXT_CONN_FAILED);
+    }
 
-            @Override
-            public void onConnectionSucceeded(String matricule) {
-                Log.w(TAG, "onConnectionSucceeded");
-                dismissDialog(pDialog, null);
-                generateModel();
+    @Override
+    public void onConnectionTimedout() {
+        showToast(TEXT_CONN_TIMEDOUT);
+    }
 
-            }
-
-            @Override
-            public void onConnectionFailed(String matricule) {
-                Log.w(TAG, "onConnectionFailed");
-                dismissDialog(pDialog, TEXT_CONN_FAILED);
-            }
-        });
-        connTask.start();
+    @Override
+    public void onInterventionSelected(Intervention inter) {
+        // TODO  give parameters to components for the right intervention
+        generateModel();
     }
 
     private void generateModel() {
@@ -200,35 +240,22 @@ public class DaumAuthComponent extends AbstractComponentType implements DaumAuth
         engine.interpretDeploy();
     }
 
-    private void showDialog(final ProgressDialog dialog) {
+    @Port(name = "notify")
+    public void notifiedByReplica(final Object m) {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                dialog.show();
+                DaumAuthComponent.getChangeListener().receive(m);
             }
         });
-    }
-
-    private void dismissDialog(final ProgressDialog dialog, final String msg) {
-        uiService.getRootActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                dialog.dismiss();
-                if (msg != null) {
-                    Toast.makeText(uiService.getRootActivity(), msg, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-    }
-
-    public static ChangeListener getChangeListener() {
-        return listener;
     }
 
     @Override
     public void onStoreSynced() {
-        Log.w(TAG, ">>>>> onStoreSynced called");
         this.storeSynced = true;
-        if (connTask != null) connTask.setSynced(storeSynced);
+    }
+
+    public static ChangeListener getChangeListener() {
+        return listener;
     }
 }

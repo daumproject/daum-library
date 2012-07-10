@@ -1,10 +1,6 @@
 package org.daum.library.android.daumauth.util;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.util.Log;
-import org.daum.library.android.daumauth.DaumAuthEngine;
+import org.daum.library.android.daumauth.controller.IConnectionEngine;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,23 +9,20 @@ import org.daum.library.android.daumauth.DaumAuthEngine;
  * Time: 15:51
  * To change this template use File | Settings | File Templates.
  */
-public class ConnectionTask extends Thread implements Timer.OnTimeExpiredListener {
+public class ConnectionTask implements Runnable, Timer.OnTimeExpiredListener {
 
-    private Context ctx;
-    private DaumAuthEngine engine;
+    private IConnectionEngine engine;
     private String matricule;
     private int delay;
     private String password;
     private OnEventListener listener;
     private boolean stop = false;
-    private boolean synced;
 
-    public ConnectionTask(DaumAuthEngine engine, String matricule, String password, int delay, boolean isSynced) {
+    public ConnectionTask(IConnectionEngine engine, String matricule, String password, int delay) {
         this.engine = engine;
         this.matricule = matricule;
         this.password = password;
         this.delay = delay;
-        this.synced = isSynced;
     }
 
     @Override
@@ -38,17 +31,17 @@ public class ConnectionTask extends Thread implements Timer.OnTimeExpiredListene
         timer.start();
 
         // wait until replica is synced
-        while (!synced) {
+        while (!engine.isSynced()) {
             if (stop) return;
         }
 
         if (engine.authenticate(matricule, password)) {
             // matricule & password are ok
-            if (listener != null) listener.onConnectionSucceeded(matricule);
+            if (listener != null) listener.onConnectionSucceeded();
 
         } else {
             // wrong matricule and/or password
-            if (listener != null) listener.onConnectionFailed(matricule);
+            if (listener != null) listener.onConnectionFailed();
         }
 
         // discard timer because we don't need it anymore
@@ -62,10 +55,6 @@ public class ConnectionTask extends Thread implements Timer.OnTimeExpiredListene
         stop = true;
     }
 
-    public void setSynced(boolean isSynced) {
-        this.synced = isSynced;
-    }
-
     public void setOnEventListener(OnEventListener listener) {
         this.listener = listener;
     }
@@ -73,8 +62,8 @@ public class ConnectionTask extends Thread implements Timer.OnTimeExpiredListene
     public interface OnEventListener {
         void onConnectionTimedOut();
 
-        void onConnectionSucceeded(String matricule);
+        void onConnectionSucceeded();
 
-        void onConnectionFailed(String matricule);
+        void onConnectionFailed();
     }
 }
