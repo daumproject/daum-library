@@ -28,4 +28,16 @@ public abstract class AbstractDaumAuthView extends RelativeLayout {
     public void setOnInterventionSelectedListener(OnInterventionSelectedListener listener) {
         controller.setInterventionUICallback(listener);
     }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        controller.discardDialog();
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        controller.reattachDialog();
+    }
 }

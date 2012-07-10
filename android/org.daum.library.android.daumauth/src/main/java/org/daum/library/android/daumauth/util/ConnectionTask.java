@@ -16,7 +16,8 @@ public class ConnectionTask implements Runnable, Timer.OnTimeExpiredListener {
     private int delay;
     private String password;
     private OnEventListener listener;
-    private boolean stop = false;
+    private boolean timedOut = false;
+    private boolean cancel = false;
 
     public ConnectionTask(IConnectionEngine engine, String matricule, String password, int delay) {
         this.engine = engine;
@@ -31,8 +32,12 @@ public class ConnectionTask implements Runnable, Timer.OnTimeExpiredListener {
         timer.start();
 
         // wait until replica is synced
-        while (!engine.isSynced()) {
-            if (stop) return;
+        while (engine == null || !engine.isSynced()) {
+            if (timedOut) return;
+            if (cancel) {
+                timer.discard();
+                return;
+            }
         }
 
         if (engine.authenticate(matricule, password)) {
@@ -52,11 +57,15 @@ public class ConnectionTask implements Runnable, Timer.OnTimeExpiredListener {
     public void onTimeExpired() {
         // connection timeout
         if (listener != null) listener.onConnectionTimedOut();
-        stop = true;
+        timedOut = true;
     }
 
     public void setOnEventListener(OnEventListener listener) {
         this.listener = listener;
+    }
+
+    public void cancel() {
+        cancel = true;
     }
 
     public interface OnEventListener {

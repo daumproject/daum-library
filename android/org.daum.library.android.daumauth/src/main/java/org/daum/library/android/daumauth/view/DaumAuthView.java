@@ -4,6 +4,9 @@ import android.content.Context;
 import android.view.View;
 import android.util.Log;
 
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import org.daum.library.android.daumauth.controller.Controller;
 import org.daum.library.android.daumauth.controller.IController;
 
@@ -46,10 +49,10 @@ public class DaumAuthView extends AbstractDaumAuthView {
     }
 
     private void configUI(State state) {
-        setLayoutParams(new LayoutParams(
+        setLayoutParams(new LinearLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        View contentView = null;
+        ViewGroup contentView = null;
 
         switch (state) {
             case NOT_CONNECTED:
@@ -61,7 +64,8 @@ public class DaumAuthView extends AbstractDaumAuthView {
                 break;
         }
 
-        addView(contentView);
+        addView(contentView, new LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
 
     private void defineCallbacks() {
@@ -73,17 +77,11 @@ public class DaumAuthView extends AbstractDaumAuthView {
         return controller;
     }
 
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        Log.d(TAG, "onDetachedFromWindow !");
-    }
-
     public void showInterventions(ArrayList<String> items) {
         removeAllViews();
-        interventionsView.addItems(items);
         configUI(State.AUTHENTICATED);
         requestLayout();
+        interventionsView.addItems(items);
     }
 
     public void showAuthentication() {

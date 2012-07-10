@@ -1,6 +1,8 @@
 package org.daum.library.android.daumauth;
 
 import android.app.ProgressDialog;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -101,6 +103,8 @@ public class DaumAuthComponent extends AbstractComponentType
                             ReplicaStore store = new ReplicaStore(replicatingService);
                             engine = new DaumAuthEngine(getNodeName(), store, storeSynced);
                             engine.setOnStoreSyncedListener(DaumAuthComponent.this);
+                            controller.setConnectionEngine(engine);
+                            controller.setInterventionEngine(engine);
 
                         } catch (PersistenceException e) {
                             Log.e(TAG, "Error on component startup", e);
@@ -118,18 +122,16 @@ public class DaumAuthComponent extends AbstractComponentType
             public void run() {
                 Window window = uiService.getRootActivity().getWindow();
                 window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+
+                view = new DaumAuthView(uiService.getRootActivity(), viewState);
+                view.setOnConnectionListener(DaumAuthComponent.this);
+                view.setOnInterventionSelectedListener(DaumAuthComponent.this);
+                controller = view.getController();
+                controller.setTimeout(connTimeout);
+
+                uiService.addToGroup(TAB_NAME, view);
             }
         });
-
-        view = new DaumAuthView(uiService.getRootActivity(), viewState);
-        view.setOnConnectionListener(this);
-        view.setOnInterventionSelectedListener(this);
-        controller = view.getController();
-        controller.setConnectionEngine(engine);
-        controller.setInterventionEngine(engine);
-        controller.setTimeout(connTimeout);
-
-        uiService.addToGroup(TAB_NAME, view);
     }
 
     @Stop
@@ -147,19 +149,6 @@ public class DaumAuthComponent extends AbstractComponentType
     }
 
     private void showDialog(final ProgressDialog dialog) {
-//        // DialogFragment.show() will take care of adding the fragment
-//        // in a transaction.  We also want to remove any currently showing
-//        // dialog, so make our own transaction and take care of that here.
-//        FragmentActivity fAct = (FragmentActivity) uiService.getRootActivity();
-//        FragmentTransaction ft = fAct.getSupportFragmentManager().beginTransaction();
-//        Fragment prev = fAct.getSupportFragmentManager().findFragmentByTag(PROGRESS_DIALOG);
-//        if (prev != null) ft.remove(prev);
-//        ft.addToBackStack(null);
-//
-//        // Create and show the dialog.
-//        DialogFragment dialogFragment = new ProgressDialogFragment();
-//
-//        dialogFragment.show(ft, PROGRESS_DIALOG);
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -174,12 +163,6 @@ public class DaumAuthComponent extends AbstractComponentType
      * @param msg
      */
     private void showToast(final String msg) {
-//        // hide dialog
-//        FragmentActivity fAct = (FragmentActivity) uiService.getRootActivity();
-//        FragmentTransaction ft = fAct.getSupportFragmentManager().beginTransaction();
-//        Fragment prev = fAct.getSupportFragmentManager().findFragmentByTag(PROGRESS_DIALOG);
-//        if (prev != null) ft.remove(prev);
-
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -192,7 +175,7 @@ public class DaumAuthComponent extends AbstractComponentType
 
     @Override
     public void onConnected() {
-        showToast("Ouech ouech connected!");
+        Log.w(TAG, "Authentication succeeded !");
     }
 
     @Override
