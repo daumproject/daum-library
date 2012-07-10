@@ -130,11 +130,11 @@ public class Controller implements IController, IControllerListener {
     }
 
     private void dismissDialog() {
-        // hide dialog
-        FragmentActivity fAct = (FragmentActivity) ctx;
-        FragmentTransaction ft = fAct.getSupportFragmentManager().beginTransaction();
-        Fragment prev = fAct.getSupportFragmentManager().findFragmentByTag(PROGRESS_DIALOG);
-        if (prev != null) ft.remove(prev);
+//        // hide dialog
+//        FragmentActivity fAct = (FragmentActivity) ctx;
+//        FragmentTransaction ft = fAct.getSupportFragmentManager().beginTransaction();
+//        Fragment prev = fAct.getSupportFragmentManager().findFragmentByTag(PROGRESS_DIALOG);
+//        if (prev != null) ft.remove(prev);
 
 
         pDialog.dismiss();
