@@ -36,7 +36,7 @@ public class PopulateReplica extends AbstractComponentType {
     private PersistenceSessionFactoryImpl factory=null;
     private ReplicaService replicaService =  null;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    private boolean  called= false;
 
 
     public void init()
@@ -96,6 +96,8 @@ public class PopulateReplica extends AbstractComponentType {
             public void modelUpdated() {
                 init();
 
+                if(called == false)
+                {
                 PersistenceSession session = null;
                 try
                 {
@@ -209,7 +211,12 @@ public class PopulateReplica extends AbstractComponentType {
                     if (session != null) session.close();
 
                 }
+                    called = true;
+            }
             }
         });
+
+
+
     }
 }
