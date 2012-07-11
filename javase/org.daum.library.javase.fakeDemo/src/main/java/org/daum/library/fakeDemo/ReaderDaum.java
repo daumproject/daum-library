@@ -202,6 +202,8 @@ public class ReaderDaum extends AbstractComponentType {
             if(s != null)
             {
                 temp = (MoyenImpl) s.get(MoyenImpl.class,key);
+
+
                 s.close();
 
 

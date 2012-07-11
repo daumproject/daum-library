@@ -219,7 +219,9 @@ public class InterventionPage extends AbstractPage implements Observer {
                 session = factory.getSession();
                 if(session != null)
                 {
+
                     Map<Object, InterventionImpl> demands = session.getAll(InterventionImpl.class);
+
 
                     for(Object key : demands.keySet())
                     {
