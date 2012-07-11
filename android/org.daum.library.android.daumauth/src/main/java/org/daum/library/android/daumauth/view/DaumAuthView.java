@@ -84,6 +84,10 @@ public class DaumAuthView extends AbstractDaumAuthView {
         interventionsView.addItems(items);
     }
 
+    public void updateInterventions(ArrayList<String> items) {
+        interventionsView.addItems(items);
+    }
+
     public void showAuthentication() {
         removeAllViews();
         configUI(State.NOT_CONNECTED);

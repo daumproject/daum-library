@@ -31,7 +31,10 @@ public class Controller implements IController, IControllerListener {
     private static final String TAG = "DaumAuthController";
 
     private static final String TEXT_LOADING = "Tentative de connexion, veuillez patienter...";
+
     private static final int SHOW_INTERVENTION = 0;
+    private static final int UPDATE_INTERVENTION = 1;
+
     private static final String PROGRESS_DIALOG = "progress_dialog";
 
     private Context ctx;
@@ -82,8 +85,7 @@ public class Controller implements IController, IControllerListener {
                 ArrayList<String> items = new ArrayList<String>();
                 interventions = interventionEngine.getInterventions();
                 for (Intervention i : interventions) {
-                    Personne req = i.getRequerant().get();
-                    items.add("["+i.getNumeroIntervention()+"] "+req.getNom()+" - "+req.getPrenom());
+                    items.add(i.getNumeroIntervention());
                 }
                 // update UI
                 uiHandler.obtainMessage(SHOW_INTERVENTION, items).sendToTarget();
@@ -169,12 +171,28 @@ public class Controller implements IController, IControllerListener {
         this.interListener = listener;
     }
 
+    @Override
+    public void updateUI() {
+        // retrieve interventions from replica
+        ArrayList<String> items = new ArrayList<String>();
+        interventions = interventionEngine.getInterventions();
+        for (Intervention i : interventions) {
+            items.add(i.getNumeroIntervention());
+        }
+        // update UI
+        uiHandler.obtainMessage(UPDATE_INTERVENTION, items).sendToTarget();
+    }
+
     private final Handler.Callback callback = new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case SHOW_INTERVENTION:
                     authView.showInterventions((ArrayList<String>) msg.obj);
+                    return true;
+
+                case UPDATE_INTERVENTION:
+                    authView.updateInterventions((ArrayList<String>) msg.obj);
                     return true;
             }
             return false;

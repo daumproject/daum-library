@@ -18,4 +18,6 @@ public interface IController {
     void setInterventionEngine(IInterventionEngine engine);
 
     void setTimeout(int delay);
+
+    void updateUI();
 }
