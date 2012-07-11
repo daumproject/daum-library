@@ -222,9 +222,9 @@ public class DemandPage extends AbstractPage implements Observer {
                 session = factory.getSession();
                 if(session != null)
                 {
-                    Map<String,Demand> demands = (Map<String, Demand>) session.getAll(Demand.class);
+                    Map<Object,Demand> demands = session.getAll(Demand.class);
 
-                    for(String key : demands.keySet())
+                    for(Object key : demands.keySet())
                     {
 
                         RichJSONObject c = new RichJSONObject(demands.get(key));

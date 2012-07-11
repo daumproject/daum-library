@@ -210,6 +210,7 @@ public class PersistenceSession implements IPersistenceSession {
                             if(_bean instanceof ArrayList)
                             {
                                 for(Object o: ((ArrayList)_bean))
+                                {                                       if(o != null)
                                 {
                                     if(o instanceof  scala.Some)
                                     {
@@ -225,26 +226,30 @@ public class PersistenceSession implements IPersistenceSession {
                                         }
                                     }
                                 }
+                                }
                             }   else if(_bean instanceof  scala.collection.mutable.ListBuffer)
                             {
                                 HelperList t = new HelperList();
 
                                 for(Object o: t.convert((scala.collection.mutable.ListBuffer)_bean))
                                 {
-                                    if(o instanceof  scala.Some)
+                                    if(o != null)
                                     {
-                                        if(((Some)o).get() != null)
+                                        if(o instanceof  scala.Some)
                                         {
-                                            update(((Some)o).get());
-                                        }
+                                            if(((Some)o).get() != null)
+                                            {
+                                                update(((Some)o).get());
+                                            }
 
-                                    }else
-                                    {
-                                        if(o != null)
+                                        }else
                                         {
-                                            update(o);
-                                        }
+                                            if(o != null)
+                                            {
+                                                update(o);
+                                            }
 
+                                        }
                                     }
                                 }
                             }
