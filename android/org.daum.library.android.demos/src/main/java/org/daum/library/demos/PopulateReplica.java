@@ -12,9 +12,10 @@ import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
 import org.sitac.*;
+import org.sitac.impl.InterventionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.Option;
+import scala.Some;
 
 
 /**
@@ -153,9 +154,9 @@ public class PopulateReplica extends AbstractComponentType {
                         position.setLat(-1638336);
 
 
-                        //interventionfake.setPosition(Option.apply((Position)position));
+                        interventionfake.setPosition(new Some((Position)position));
 
-                        //interventionfake.setRequerant(Option.apply(requerant));
+                        interventionfake.setRequerant(new Some(requerant));
 
                         interventionfake.addVictimes(vitc1);
                         interventionfake.addVictimes(vitc2);
@@ -163,7 +164,7 @@ public class PopulateReplica extends AbstractComponentType {
 
 
                         Moyen   moyen1 = SitacFactory.createMoyen();
-                        moyen1.setChef(Option.apply(agentnoel));
+                        moyen1.setChef(new Some((agentnoel)));
                         moyen1.addPersonnels(agentERWAN);
                         moyen1.addPersonnels(agentjed);
                         moyen1.addPersonnels(agentMaxime);
@@ -182,7 +183,7 @@ public class PopulateReplica extends AbstractComponentType {
                         Detachement detachement = SitacFactory.createDetachement();
 
                         Affectation affectation = SitacFactory.createAffectation();
-                        affectation.setMoyen(Option.apply(moyen1));
+                        affectation.setMoyen(new Some(moyen1));
                         detachement.addAffectation(affectation);
 
 
@@ -190,6 +191,10 @@ public class PopulateReplica extends AbstractComponentType {
                         sitacModel.addInterventions(interventionfake);
 
                         session.save(sitacModel);
+
+
+                        logger.warn(""+session.getAll(InterventionImpl.class).size());
+
 
 
 

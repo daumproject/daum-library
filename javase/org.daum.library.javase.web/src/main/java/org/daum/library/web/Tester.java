@@ -36,7 +36,7 @@ public class Tester {
         vitc2.setPrenom("Prenom victime2");
 
 
-        intervention.setRequerant(Option.apply(requerant));
+        intervention.setRequerant(new Some(requerant));
         RichJSONObject c = new RichJSONObject(new Demand(VehicleType.CAEM));
 
         System.out.println(c.toJSON());

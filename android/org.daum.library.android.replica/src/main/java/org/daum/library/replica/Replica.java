@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
  * TODO : add power manangement of nodes
  * TODO : add persistence (https://github.com/jankotek/JDBM3)
  * TODO : add conflits manager
+ * TODO : merge dependencies
  */
 
 @Library(name = "JavaSE", names = {"Android"})
