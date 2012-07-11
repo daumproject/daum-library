@@ -303,7 +303,7 @@ public class PersistenceSession implements IPersistenceSession {
         }
     }
 
-    public <T> T get(Class<T> clazz,Object _id) throws PersistenceException
+    public <T> T get(Class<T> clazz, Object _id) throws PersistenceException
     {
         Object bean = null;
         PersistentClass pc= null;
@@ -323,7 +323,7 @@ public class PersistenceSession implements IPersistenceSession {
 
 
 
-    public <T> Map<Object, T> getAll(Class<T> clazz) throws PersistenceException
+    public <K extends Object, T> Map<K, T> getAll(Class<T> clazz) throws PersistenceException
     {
         PersistentClass pc= null;
         Orhm id=null;
@@ -332,7 +332,7 @@ public class PersistenceSession implements IPersistenceSession {
             pc = factory.getPersistenceConfiguration().getPersistentClass(clazz);
             //String cacheName,GeneratedType generationType, Object id
             id = new Orhm(pc.getPersistentPropertyID().getCacheName(),GeneratedType.NONE,null);
-            return (Map<Object, T>) store.getAll(id);
+            return (Map<K, T>) store.getAll(id);
 
         } catch (Exception e)
         {

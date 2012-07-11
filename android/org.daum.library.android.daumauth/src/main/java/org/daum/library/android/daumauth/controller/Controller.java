@@ -5,18 +5,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import org.daum.library.android.daumauth.listener.OnConnectionListener;
 import org.daum.library.android.daumauth.listener.OnInterventionSelectedListener;
 import org.daum.library.android.daumauth.util.ConnectionTask;
 import org.daum.library.android.daumauth.view.DaumAuthView;
-import org.daum.library.android.daumauth.view.ProgressDialogFragment;
 import org.sitac.Intervention;
-import org.sitac.Personne;
 
 import java.util.ArrayList;
 
@@ -113,33 +106,11 @@ public class Controller implements IController, IControllerListener {
     }
 
     private void showDialog() {
-//        // DialogFragment.show() will take care of adding the fragment
-//        // in a transaction.  We also want to remove any currently showing
-//        // dialog, so make our own transaction and take care of that here.
-//        FragmentActivity fAct = (FragmentActivity) ctx;
-//        FragmentTransaction ft = fAct.getSupportFragmentManager().beginTransaction();
-//        Fragment prev = fAct.getSupportFragmentManager().findFragmentByTag(PROGRESS_DIALOG);
-//        if (prev != null) ft.remove(prev);
-//        ft.addToBackStack(null);
-//
-//        // Create and show the dialog.
-//        DialogFragment dialogFragment = new ProgressDialogFragment();
-//
-//        dialogFragment.show(ft, PROGRESS_DIALOG);
-
-
         pDialog.show();
         dialogWasDisplayed = true;
     }
 
     private void dismissDialog() {
-//        // hide dialog
-//        FragmentActivity fAct = (FragmentActivity) ctx;
-//        FragmentTransaction ft = fAct.getSupportFragmentManager().beginTransaction();
-//        Fragment prev = fAct.getSupportFragmentManager().findFragmentByTag(PROGRESS_DIALOG);
-//        if (prev != null) ft.remove(prev);
-
-
         pDialog.dismiss();
         dialogWasDisplayed = false;
     }
