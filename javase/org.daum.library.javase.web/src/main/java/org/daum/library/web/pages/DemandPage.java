@@ -58,12 +58,12 @@ public class DemandPage extends AbstractPage implements Observer {
         getModelService().registerModelListener(new ModelListener() {
             @Override
             public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;
+                return true;
             }
 
             @Override
             public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;
+                return true;
             }
 
             @Override
@@ -227,7 +227,7 @@ public class DemandPage extends AbstractPage implements Observer {
                     for(Object key : demands.keySet())
                     {
 
-                        RichJSONObject c = new RichJSONObject(demands.get(key));
+                        RichJSONObject c = new RichJSONObject(demands.get((String) key));
                         ((WebSocketConnection)connection).send(Event.ADD + "$" + c.toJSON());
                     }
 

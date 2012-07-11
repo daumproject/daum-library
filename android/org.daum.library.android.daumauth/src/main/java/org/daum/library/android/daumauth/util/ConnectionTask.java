@@ -1,10 +1,6 @@
 package org.daum.library.android.daumauth.util;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.util.Log;
-import org.daum.library.android.daumauth.DaumAuthEngine;
+import org.daum.library.android.daumauth.controller.IConnectionEngine;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,17 +9,17 @@ import org.daum.library.android.daumauth.DaumAuthEngine;
  * Time: 15:51
  * To change this template use File | Settings | File Templates.
  */
-public class ConnectionTask extends Thread implements Timer.OnTimeExpiredListener {
+public class ConnectionTask implements Runnable {
 
-    private Context ctx;
-    private DaumAuthEngine engine;
+    private IConnectionEngine engine;
     private String matricule;
     private int delay;
     private String password;
     private OnEventListener listener;
-    private boolean stop = false;
+    private boolean timedOut = false;
+    private boolean cancel = false;
 
-    public ConnectionTask(DaumAuthEngine engine, String matricule, String password, int delay) {
+    public ConnectionTask(IConnectionEngine engine, String matricule, String password, int delay) {
         this.engine = engine;
         this.matricule = matricule;
         this.password = password;
@@ -32,44 +28,57 @@ public class ConnectionTask extends Thread implements Timer.OnTimeExpiredListene
 
     @Override
     public void run() {
-        Timer timer = new Timer(delay, this);
+        // create & start timeout thread
+        Timer timer = new Timer(delay, timerCallback);
         timer.start();
-        Log.d("ConnectionTask", "ConnectionTask started its timer and wait for replica to be synced");
 
         // wait until replica is synced
-        while (!engine.isSynced()) {
-            if (stop) return;
+        while (engine == null || !engine.isSynced()) {
+            if (timedOut) return;
+            if (cancel) {
+                timer.discard();
+                return;
+            }
         }
 
-        if (engine.check(matricule, password)) {
+        if (engine.authenticate(matricule, password)) {
             // matricule & password are ok
-            if (listener != null) listener.onConnectionSucceeded(matricule);
+            if (listener != null) listener.onConnectionSucceeded();
 
         } else {
             // wrong matricule and/or password
-            if (listener != null) listener.onConnectionFailed(matricule);
+            if (listener != null) listener.onConnectionFailed();
         }
 
         // discard timer because we don't need it anymore
         timer.discard();
     }
 
-    @Override
-    public void onTimeExpired() {
-        // connection timeout
-        if (listener != null) listener.onConnectionTimedOut();
-        stop = true;
-    }
-
     public void setOnEventListener(OnEventListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Ends task immediately.
+     */
+    public void cancel() {
+        cancel = true;
+    }
+
+    private final Timer.OnTimeExpiredListener timerCallback = new Timer.OnTimeExpiredListener() {
+        @Override
+        public void onTimeExpired() {
+            // connection timeout
+            if (listener != null) listener.onConnectionTimedOut();
+            timedOut = true;
+        }
+    };
+
     public interface OnEventListener {
         void onConnectionTimedOut();
 
-        void onConnectionSucceeded(String matricule);
+        void onConnectionSucceeded();
 
-        void onConnectionFailed(String matricule);
+        void onConnectionFailed();
     }
 }

@@ -1,15 +1,16 @@
 package org.daum.library.android.daumauth.view;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.text.InputFilter;
-import android.text.InputType;
-import android.util.TypedValue;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.util.Log;
+
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import org.daum.library.android.daumauth.controller.Controller;
+import org.daum.library.android.daumauth.controller.IController;
+
+import java.util.ArrayList;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,118 +19,78 @@ import android.widget.*;
  * Time: 11:42
  * To change this template use File | Settings | File Templates.
  */
-public class DaumAuthView extends RelativeLayout {
+public class DaumAuthView extends AbstractDaumAuthView {
 
     private static final String TAG = "DaumAuthView";
 
-    private static final String TEXT_MATRICULE = "Matricule";
-    private static final String TEXT_PASSWORD = "Mot de passe";
-    private static final String TEXT_CONNECTION = "Connexion";
+    public enum State {
+        NOT_CONNECTED,
+        AUTHENTICATED
+    }
 
     private Context ctx;
-    private EditText et_matricule;
-    private EditText et_password;
-    private Button btn_connect;
-    private OnClickListener listener;
+    private AuthenticationView authView;
+    private InterventionListView interventionsView;
+    private State state;
 
-    public DaumAuthView(Context context) {
+    public DaumAuthView(Context context, State state) {
         super(context);
         this.ctx = context;
+        this.state = state;
+        this.controller = new Controller(ctx, this);
         initUI();
-        configUI();
+        configUI(state);
         defineCallbacks();
     }
 
     private void initUI() {
-        et_matricule = new EditText(ctx);
-        et_password = new EditText(ctx);
-        btn_connect = new Button(ctx);
+        authView = new AuthenticationView(ctx);
+        interventionsView = new InterventionListView(ctx);
     }
 
-    private void configUI() {
-        setLayoutParams(new LayoutParams(
+    private void configUI(State state) {
+        setLayoutParams(new LinearLayout.LayoutParams(
                 LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 
-        // creating a new filter for edittext
-        InputFilter[] filters = new InputFilter[] {
-                new InputFilter.LengthFilter(15)
-        };
+        ViewGroup contentView = null;
 
-        // getting new min width in dips
-        Resources r = getResources();
-        int width = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 285, r.getDisplayMetrics());
+        switch (state) {
+            case NOT_CONNECTED:
+                contentView = authView;
+                break;
 
-        // configuring et_matricule
-        LinearLayout.LayoutParams matriculeParams = new LinearLayout.LayoutParams(
-                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        et_matricule.setHint(TEXT_MATRICULE);
-        et_matricule.setLines(1);
-        et_matricule.setWidth(width);
-        et_matricule.setFilters(filters);
-        et_matricule.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS); // no spell checking
+            case AUTHENTICATED:
+                contentView = interventionsView;
+                break;
+        }
 
-        // configuring et_password
-        LinearLayout.LayoutParams passwordParams = new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-        et_password.setHint(TEXT_PASSWORD);
-        et_password.setLines(1);
-        et_password.setFilters(filters);
-        et_password.setImeOptions(EditorInfo.IME_ACTION_GO);
-        et_password.setInputType(
-                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD); // do not display characters
-
-        // configuring btn_connect
-        btn_connect.setText(TEXT_CONNECTION);
-        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(
-                LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
-
-        // configuring connectionLayout that contains every sub layouts
-        LinearLayout connectionLayout = new LinearLayout(ctx);
-        connectionLayout.setOrientation(LinearLayout.VERTICAL);
-        RelativeLayout.LayoutParams connectionParams = new RelativeLayout.LayoutParams(
-                LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-        connectionParams.addRule(CENTER_IN_PARENT);
-
-        // add views to their layouts
-        connectionLayout.addView(et_matricule, matriculeParams);
-        connectionLayout.addView(et_password, passwordParams);
-        connectionLayout.addView(btn_connect, btnParams);
-        addView(connectionLayout, connectionParams);
+        addView(contentView, new LayoutParams(
+                LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
     }
 
     private void defineCallbacks() {
-        et_password.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_GO) {
-                    btn_connect.performClick();
-                    return true;
-                }
-                return false;
-            }
-        });
-
-        btn_connect.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                InputMethodManager imm = (InputMethodManager) ctx.getSystemService(
-                        Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(et_password.getWindowToken(), 0);
-
-                if (listener != null) {
-                    String matricule = et_matricule.getText().toString().trim();
-                    String password = et_password.getText().toString().trim();
-                    listener.onConnectionButtonClicked(matricule, password);
-                }
-            }
-        });
+        authView.setOnClickListener(controller);
+        interventionsView.setOnItemSelectedListener(controller);
     }
 
-    public void setOnClickListener(DaumAuthView.OnClickListener listener) {
-        this.listener = listener;
+    public IController getController() {
+        return controller;
     }
 
-    public interface OnClickListener {
-        void onConnectionButtonClicked(String matricule, String password);
+    public void showInterventions(ArrayList<String> items) {
+        removeAllViews();
+        configUI(State.AUTHENTICATED);
+        requestLayout();
+        interventionsView.addItems(items);
+    }
+
+    public void showAuthentication() {
+        removeAllViews();
+        configUI(State.NOT_CONNECTED);
+        requestLayout();
+    }
+
+    public State getState() {
+        return state;
     }
 }

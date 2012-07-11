@@ -83,12 +83,12 @@ public class PopulateReplica extends AbstractComponentType {
         getModelService().registerModelListener(new ModelListener() {
             @Override
             public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;
+                return true;
             }
 
             @Override
             public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;
+                return true;
             }
 
             @Override
@@ -153,9 +153,9 @@ public class PopulateReplica extends AbstractComponentType {
                         position.setLat(-1638336);
 
 
-                        interventionfake.setPosition(Option.apply((Position)position));
+                        //interventionfake.setPosition(Option.apply((Position)position));
 
-                        interventionfake.setRequerant(Option.apply(requerant));
+                        //interventionfake.setRequerant(Option.apply(requerant));
 
                         interventionfake.addVictimes(vitc1);
                         interventionfake.addVictimes(vitc2);
