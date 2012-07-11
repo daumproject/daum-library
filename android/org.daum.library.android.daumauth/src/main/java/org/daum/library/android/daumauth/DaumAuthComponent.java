@@ -35,6 +35,7 @@ import org.sitac.Intervention;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import scala.Option;
+import scala.Some;
 
 import java.util.List;
 
@@ -183,6 +184,9 @@ public class DaumAuthComponent extends AbstractComponentType
 
     @Override
     public void onConnectionTimedout() {
+        // TODO kick this stupid line onInterventionSelected(null); it's just for debug
+        onInterventionSelected(null);
+
         showToast(TEXT_CONN_TIMEDOUT, Toast.LENGTH_SHORT);
     }
 
@@ -192,8 +196,10 @@ public class DaumAuthComponent extends AbstractComponentType
             @Override
             public void run() {
                 try {
-                    generateModel(inter.getNumeroIntervention());
+                    // TODO show a ProgressDialog here
+                    generateModel(inter);
                     uiService.remove(view);
+                    // TODO dismiss the progressDialog here
 
                 } catch (Exception e) {
                     logger.error("Error while generating model", e);
@@ -202,29 +208,29 @@ public class DaumAuthComponent extends AbstractComponentType
         }).start();
     }
 
-    private void generateModel(String interNum) throws Exception {
+    private void generateModel(Intervention inter) throws Exception {
         KevScriptEngine engine = getKevScriptEngineFactory().createKevScriptEngine();
 
         // retrieving binded chans for replica's ports
-        String replicaNotifyChanName = "";
+        String replicaNotifChanName = "";
         String replicaServiceChanName = "";
         ContainerRoot currentModel = getModelService().getLastModel();
         ContainerNode contNode = ((ContainerNode) getModelElement().eContainer());
 
         for (ComponentInstance component : contNode.getComponentsForJ()) {
             // TODO maybe find a better way to do this ?
-            if (component.getTypeDefinition().equals("Replica")) {
+            if (component.getTypeDefinition().getName().equals("Replica")) {
                 GenerateModelHelper gmHelper = new GenerateModelHelper();
-                Option<String> serviceOption = gmHelper.findChannel(component.getName(), "service", getNodeName(), currentModel);
-                replicaServiceChanName = serviceOption.get();
-                Option<String> notifyOption = gmHelper.findChannel(component.getName(), "notify", getNodeName(), currentModel);
-                replicaNotifyChanName = notifyOption.get();
+                Option<String> optionService = gmHelper.findChannel(component.getName(), "service", getNodeName(), currentModel);
+                replicaServiceChanName = optionService.get();
+                Option<String> optionNotify = gmHelper.findChannel(component.getName(), "notification", getNodeName(), currentModel);
+                replicaNotifChanName = optionNotify.get();
             }
         }
 
         // variables
         engine.addVariable("nodeName", getNodeName());
-        engine.addVariable("replicaNotifyChanName", replicaNotifyChanName);
+        engine.addVariable("replicaNotifChanName", replicaNotifChanName);
         engine.addVariable("replicaServiceChanName", replicaServiceChanName);
 //        engine.addVariable("interNum", interNum);
 
@@ -241,11 +247,11 @@ public class DaumAuthComponent extends AbstractComponentType
         engine.append("addComponent msgComp@{nodeName} : MessagesComponent {}");
 
         engine.append("bind sitacComp.service@{nodeName} => {replicaServiceChanName}");
-        engine.append("bind sitacComp.notify@{nodeName} => {replicaNotifyChanName}");
+        engine.append("bind sitacComp.notify@{nodeName} => {replicaNotifChanName}");
         engine.append("bind moyensComp.service@{nodeName} => {replicaServiceChanName}");
-        engine.append("bind moyensComp.notify@{nodeName} => {replicaNotifyChanName}");
+        engine.append("bind moyensComp.notify@{nodeName} => {replicaNotifChanName}");
         engine.append("bind msgComp.service@{nodeName} => {replicaServiceChanName}");
-        engine.append("bind msgComp.notify@{nodeName} => {replicaNotifyChanName}");
+        engine.append("bind msgComp.notify@{nodeName} => {replicaNotifChanName}");
 
         engine.append("updateDictionary socketChan {port='9001'}@{nodeName}");
 //        engine.append("updateDictionary sitacComp {interNum='{interNum}'}@{nodeName}");
