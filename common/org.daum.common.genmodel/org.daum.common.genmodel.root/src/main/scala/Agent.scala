@@ -15,7 +15,7 @@ trait Agent extends org.sitac.SitacContainer with org.sitac.Personne with Serial
 
   private var password : java.lang.String = ""
 
-  private lazy val capteurs : scala.collection.mutable.ListBuffer[org.sitac.Capteurs] = new scala.collection.mutable.ListBuffer[org.sitac.Capteurs]()
+  private lazy val capteurs : java.util.HashMap[String,org.sitac.Capteurs] = new java.util.HashMap[String,org.sitac.Capteurs]()
 
   def getPassword : java.lang.String = {
     password
@@ -49,8 +49,7 @@ trait Agent extends org.sitac.SitacContainer with org.sitac.Personne with Serial
   }
 
 
-  def getCapteursForJ : java.util.List[org.sitac.Capteurs] = {
-    import scala.collection.JavaConversions._
+  def getCapteurs :java.util.HashMap[String,org.sitac.Capteurs] = {
     capteurs
   }
 

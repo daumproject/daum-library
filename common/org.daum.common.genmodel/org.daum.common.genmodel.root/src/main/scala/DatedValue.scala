@@ -11,17 +11,16 @@ package org.sitac
 import java.util.Date
 
 
-trait Temperature extends org.sitac.SitacContainer with Capteurs{
-
+trait DatedValue extends org.sitac.SitacContainer with Capteurs
+{
  var values :  java.util.HashMap[Date,Double] = new java.util.HashMap[Date,Double]
 
   def addValue(value : Double) {
     values.put(new Date(),value)
   }
 
-  def getTemperatures() : java.util.HashMap[Date,Double] = {
+  def getValues() : java.util.HashMap[Date,Double] = {
     values
   }
-
 
 }
