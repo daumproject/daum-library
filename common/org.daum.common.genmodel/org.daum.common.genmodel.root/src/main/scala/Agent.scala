@@ -15,6 +15,7 @@ trait Agent extends org.sitac.SitacContainer with org.sitac.Personne with Serial
 
   private var password : java.lang.String = ""
 
+  private lazy val capteurs : scala.collection.mutable.ListBuffer[org.sitac.Capteurs] = new scala.collection.mutable.ListBuffer[org.sitac.Capteurs]()
 
   def getPassword : java.lang.String = {
     password
@@ -46,5 +47,14 @@ trait Agent extends org.sitac.SitacContainer with org.sitac.Personne with Serial
     val clonedSelfObject = addrs.get(this).asInstanceOf[org.sitac.Agent]
     clonedSelfObject
   }
+
+
+  def getCapteursForJ : java.util.List[org.sitac.Capteurs] = {
+    import scala.collection.JavaConversions._
+    capteurs
+  }
+
+
+
 
 }
