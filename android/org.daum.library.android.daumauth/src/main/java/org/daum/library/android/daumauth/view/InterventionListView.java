@@ -2,12 +2,9 @@ package org.daum.library.android.daumauth.view;
 
 import android.R;
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.*;
-import org.omg.IOP.TAG_ALTERNATE_IIOP_ADDRESS;
 
 import java.util.ArrayList;
 

@@ -15,5 +15,5 @@ public interface IPersistenceSession {
     public void update(Object bean) throws PersistenceException;
     public void delete(Object bean) throws PersistenceException;
     public <T> T get(Class<T> clazz,Object _id) throws PersistenceException;
-    public <T> Map<Object, T> getAll(Class<T> clazz) throws PersistenceException;
+    public <K extends Object, T> Map<K, T> getAll(Class<T> clazz) throws PersistenceException;
 }

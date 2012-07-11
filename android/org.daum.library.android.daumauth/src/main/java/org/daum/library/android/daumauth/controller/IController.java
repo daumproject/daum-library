@@ -1,9 +1,5 @@
 package org.daum.library.android.daumauth.controller;
 
-
-import android.content.Context;
-import android.os.Handler;
-
 /**
  * Created with IntelliJ IDEA.
  * User: max
