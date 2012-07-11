@@ -190,15 +190,15 @@ public class DaumAuthComponent extends AbstractComponentType
 
     @Override
     public void onInterventionSelected(Intervention inter) {
-        // TODO  give parameters to components for the right intervention
-        generateModel();
+        generateModel(inter.getNumeroIntervention());
     }
 
-    private void generateModel() {
+    private void generateModel(String interNum) {
         KevScriptEngine engine = getKevScriptEngineFactory().createKevScriptEngine();
 
-        // node name variable
+        // node variables
         engine.addVariable("nodeName", getNodeName());
+        engine.addVariable("interNum", interNum);
 
         // kevScript model for SITAC, Moyens & Messages
         engine.append("merge 'mvn:org.daum.library.android/org.daum.library.android.sitac/1.8.3-SNAPSHOT'");
@@ -208,29 +208,33 @@ public class DaumAuthComponent extends AbstractComponentType
         engine.append("addComponent sitacComp@{nodeName} : SITACComponent {}");
         engine.append("addComponent replicaComp@{nodeName} : Replica {}");
         engine.append("addComponent moyensComp@{nodeName} : MoyensComponent {}");
+        engine.append("addComponent msgComp@{nodeName} : MessagesComponent {}");
+
         engine.append("addChannel defServ0 : defSERVICE {}");
         engine.append("addChannel socketChan : SocketChannel {port='9001',replay='false',maximum_size_messaging='50',timer='2000'}");
         engine.append("addChannel defMsg0 : defMSG {}");
+
         engine.append("bind sitacComp.service@{nodeName} => defServ0");
+        engine.append("bind sitacComp.notify@{nodeName} => defMsg0");
         engine.append("bind replicaComp.service@{nodeName} => defServ0");
         engine.append("bind replicaComp.remote@{nodeName} => socketChan");
         engine.append("bind replicaComp.broadcast@{nodeName} => socketChan");
-        engine.append("bind moyensComp.service@{nodeName} => defServ0");
         engine.append("bind replicaComp.notification@{nodeName} => defMsg0");
+        engine.append("bind moyensComp.service@{nodeName} => defServ0");
         engine.append("bind moyensComp.notify@{nodeName} => defMsg0");
-        engine.append("bind sitacComp.notify@{nodeName} => defMsg0");
+        engine.append("bind msgComp.service@{nodeName} => defServ0");
+        engine.append("bind msgComp.notify@{nodeName} => defMsg0");
+
+        engine.append("updateDictionary sitacComp {interNum='{interNum}'}@{nodeName}");
+        engine.append("updateDictionary moyensComp {interNum='{interNum}'}@{nodeName}");
+        engine.append("updateDictionary msgComp {interNum='{interNum}'}@{nodeName}");
 
         engine.interpretDeploy();
     }
 
     @Port(name = "notify")
     public void notifiedByReplica(final Object m) {
-        uiService.getRootActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                DaumAuthComponent.getChangeListener().receive(m);
-            }
-        });
+        DaumAuthComponent.getChangeListener().receive(m);
     }
 
     @Override

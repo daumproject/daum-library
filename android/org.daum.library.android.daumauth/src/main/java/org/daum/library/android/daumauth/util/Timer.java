@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
  * User: max
  * Date: 06/07/12
  * Time: 15:51
- * To change this template use File | Settings | File Templates.
+ *
  */
 public class Timer extends Thread {
 

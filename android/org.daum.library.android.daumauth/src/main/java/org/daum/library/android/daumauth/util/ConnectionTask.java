@@ -9,7 +9,7 @@ import org.daum.library.android.daumauth.controller.IConnectionEngine;
  * Time: 15:51
  * To change this template use File | Settings | File Templates.
  */
-public class ConnectionTask implements Runnable, Timer.OnTimeExpiredListener {
+public class ConnectionTask implements Runnable {
 
     private IConnectionEngine engine;
     private String matricule;
@@ -28,7 +28,8 @@ public class ConnectionTask implements Runnable, Timer.OnTimeExpiredListener {
 
     @Override
     public void run() {
-        Timer timer = new Timer(delay, this);
+        // create & start timeout thread
+        Timer timer = new Timer(delay, timerCallback);
         timer.start();
 
         // wait until replica is synced
@@ -53,20 +54,25 @@ public class ConnectionTask implements Runnable, Timer.OnTimeExpiredListener {
         timer.discard();
     }
 
-    @Override
-    public void onTimeExpired() {
-        // connection timeout
-        if (listener != null) listener.onConnectionTimedOut();
-        timedOut = true;
-    }
-
     public void setOnEventListener(OnEventListener listener) {
         this.listener = listener;
     }
 
+    /**
+     * Ends task immediately.
+     */
     public void cancel() {
         cancel = true;
     }
+
+    private final Timer.OnTimeExpiredListener timerCallback = new Timer.OnTimeExpiredListener() {
+        @Override
+        public void onTimeExpired() {
+            // connection timeout
+            if (listener != null) listener.onConnectionTimedOut();
+            timedOut = true;
+        }
+    };
 
     public interface OnEventListener {
         void onConnectionTimedOut();
