@@ -1,12 +1,9 @@
 package org.daum.library.android.daumauth.view;
 
 import android.content.Context;
-import android.view.View;
-import android.util.Log;
 
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import org.daum.library.android.daumauth.controller.Controller;
 import org.daum.library.android.daumauth.controller.IController;
 
@@ -81,11 +78,11 @@ public class DaumAuthView extends AbstractDaumAuthView {
         removeAllViews();
         configUI(State.AUTHENTICATED);
         requestLayout();
-        interventionsView.addItems(items);
+        interventionsView.setListItems(items);
     }
 
     public void updateInterventions(ArrayList<String> items) {
-        interventionsView.addItems(items);
+        interventionsView.setListItems(items);
     }
 
     public void showAuthentication() {

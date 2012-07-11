@@ -38,25 +38,18 @@ public class DaumAuthEngine implements IConnectionEngine, IInterventionEngine {
     public DaumAuthEngine(final String nodeName, ReplicaStore store, boolean storeSynced) {
         this.synced = storeSynced;
 
-        PersistenceSession session = null;
         try {
             // configuring persistence
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
             configuration.setStore(store);
-//          configuration.addPersistentClass(AgentImpl.class);
-//          configuration.addPersistentClass(InterventionImpl.class);
-
+            // TODO fix that
             for (Class c : SitacFactory.classes()) configuration.addPersistentClass(c);
 
             // retrieve the persistence factory
             this.factory = configuration.getPersistenceSessionFactory();
 
-            dummyPopulate();
-
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while initializing persistence in engine", ex);
-        } finally {
-            if (session != null) session.close();
         }
 
         // add a callback to populate engine when sync is ready
@@ -65,6 +58,7 @@ public class DaumAuthEngine implements IConnectionEngine, IInterventionEngine {
             public void sync(SyncEvent e) {
                 synced = true;
                 if (listener != null) listener.onStoreSynced();
+                Log.w(TAG, "DaumAuthComponent.getChangeListener().addSyncListener");
             }
         });
 
@@ -104,6 +98,7 @@ public class DaumAuthEngine implements IConnectionEngine, IInterventionEngine {
         try {
             session = factory.getSession();
             Map<Object, InterventionImpl> map = session.getAll(InterventionImpl.class);
+            Log.w(TAG, "getInterventions.size = "+map.size());
             interventions.addAll(map.values());
 
         } catch (PersistenceException e) {
@@ -134,19 +129,6 @@ public class DaumAuthEngine implements IConnectionEngine, IInterventionEngine {
          * Called when the interventions changed in the replica
          */
         void onInterventionsUpdated();
-    }
-
-    private void dummyPopulate() throws PersistenceException {
-        Intervention inter = SitacFactory.createIntervention();
-        Agent max = SitacFactory.createAgent();
-        max.setMatricule("mtricoire");
-        max.setPassword("mtricoire");
-
-        SitacModel model = SitacFactory.createSitacModel();
-        model.addPersonnes(max);
-        model.addInterventions(inter);
-
-        factory.getSession().save(model);
     }
 }
 

@@ -105,7 +105,6 @@ public class PopulateReplica extends AbstractComponentType {
 
                         SitacModel sitacModel = SitacFactory.createSitacModel();
 
-
                         Agent agentnoel =SitacFactory.createAgent();
                         agentnoel.setNom("PLOUZEAU");
                         agentnoel.setPrenom("NOEL");
@@ -163,7 +162,7 @@ public class PopulateReplica extends AbstractComponentType {
 
 
                         Moyen   moyen1 = SitacFactory.createMoyen();
-                        moyen1.setChef(Option.apply(agentnoel));
+//                        moyen1.setChef(Option.apply(agentnoel));
                         moyen1.addPersonnels(agentERWAN);
                         moyen1.addPersonnels(agentjed);
                         moyen1.addPersonnels(agentMaxime);
@@ -182,7 +181,7 @@ public class PopulateReplica extends AbstractComponentType {
                         Detachement detachement = SitacFactory.createDetachement();
 
                         Affectation affectation = SitacFactory.createAffectation();
-                        affectation.setMoyen(Option.apply(moyen1));
+//                        affectation.setMoyen(Option.apply(moyen1));
                         detachement.addAffectation(affectation);
 
 

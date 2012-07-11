@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import org.daum.library.android.daumauth.listener.OnConnectionListener;
 import org.daum.library.android.daumauth.listener.OnInterventionSelectedListener;
 import org.daum.library.android.daumauth.util.ConnectionTask;
@@ -188,7 +189,8 @@ public class Controller implements IController, IControllerListener {
         public boolean handleMessage(Message msg) {
             switch (msg.what) {
                 case SHOW_INTERVENTION:
-                    authView.showInterventions((ArrayList<String>) msg.obj);
+                    ArrayList<String> items = (ArrayList<String>) msg.obj;
+                    authView.showInterventions(items);
                     return true;
 
                 case UPDATE_INTERVENTION:
@@ -202,8 +204,7 @@ public class Controller implements IController, IControllerListener {
     private final DialogInterface.OnCancelListener cancelListener = new DialogInterface.OnCancelListener() {
         @Override
         public void onCancel(DialogInterface dialog) {
-            dialog.dismiss();
-            dialogWasDisplayed = false;
+            dismissDialog();
             if (connTask != null) connTask.cancel();
         }
     };

@@ -77,10 +77,11 @@ public class InterventionListView extends RelativeLayout {
 
     /**
      * This method must be called on UI Thread
-     * @param items
+     * @param data
      */
-    public void addItems(ArrayList<String> items) {
-        items.addAll(items);
+    public void setListItems(ArrayList<String> data) {
+        items.clear();
+        items.addAll(data);
         adapter.notifyDataSetChanged();
     }
 

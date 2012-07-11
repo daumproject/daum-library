@@ -20,6 +20,7 @@ import org.daum.library.replica.listener.ChangeListener;
 import org.daum.library.android.daumauth.DaumAuthEngine.OnStoreSyncedListener;
 
 import org.kevoree.ContainerRoot;
+import org.kevoree.DeployUnit;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
@@ -30,6 +31,8 @@ import org.kevoree.framework.AbstractComponentType;
 import org.sitac.Intervention;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+
+import java.util.List;
 
 
 /**
@@ -148,26 +151,17 @@ public class DaumAuthComponent extends AbstractComponentType
         start();
     }
 
-    private void showDialog(final ProgressDialog dialog) {
-        uiService.getRootActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                dialog.show();
-            }
-        });
-    }
-
     /**
-     * Close the given progress dialog and display "msg" in a Toast
+     * Display "msg" in a Toast
      *
      * @param msg
      */
-    private void showToast(final String msg) {
+    private void showToast(final String msg, final int duration) {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (msg != null) {
-                    Toast.makeText(uiService.getRootActivity(), msg, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(uiService.getRootActivity(), msg, duration).show();
                 }
             }
         });
@@ -180,17 +174,28 @@ public class DaumAuthComponent extends AbstractComponentType
 
     @Override
     public void onConnectionRefused() {
-        showToast(TEXT_CONN_FAILED);
+        showToast(TEXT_CONN_FAILED, Toast.LENGTH_SHORT);
     }
 
     @Override
     public void onConnectionTimedout() {
-        showToast(TEXT_CONN_TIMEDOUT);
+        showToast(TEXT_CONN_TIMEDOUT, Toast.LENGTH_SHORT);
     }
 
     @Override
-    public void onInterventionSelected(Intervention inter) {
-        generateModel(inter.getNumeroIntervention());
+    public void onInterventionSelected(final Intervention inter) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    generateModel(inter.getNumeroIntervention());
+                    uiService.remove(view);
+
+                } catch (Exception e) {
+                    logger.error(TAG, "Error while generating model", e);
+                }
+            }
+        }).start();
     }
 
     private void generateModel(String interNum) {
@@ -209,9 +214,15 @@ public class DaumAuthComponent extends AbstractComponentType
                 "org.daum.library.android/org.daum.library.android.moyens/1.8.2-SNAPSHOT'");
 
         engine.append("addComponent sitacComp@{nodeName} : SITACComponent {}");
-        engine.append("addComponent replicaComp@{nodeName} : Replica {}");
         engine.append("addComponent moyensComp@{nodeName} : MoyensComponent {}");
         engine.append("addComponent msgComp@{nodeName} : MessagesComponent {}");
+
+//        List<DeployUnit> deployUnits = getModelService().getLastModel().getDeployUnitsForJ();
+//        for (DeployUnit du : deployUnits) {
+//            if (du.getName().equals(getNodeName())) {
+//
+//            }
+//        }
 
         engine.append("addChannel defServ0 : defSERVICE {}");
         engine.append("addChannel socketChan : SocketChannel {port='9001',replay='false',maximum_size_messaging='50',timer='2000'}");
