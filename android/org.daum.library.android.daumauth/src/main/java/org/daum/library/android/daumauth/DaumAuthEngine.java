@@ -8,13 +8,14 @@ import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
+import org.daum.library.replica.listener.PropertyChangeEvent;
+import org.daum.library.replica.listener.PropertyChangeListener;
 import org.daum.library.replica.listener.SyncListener;
 import org.daum.library.replica.msg.SyncEvent;
-import org.sitac.Agent;
-import org.sitac.SitacFactory;
+import org.sitac.*;
 import org.sitac.impl.AgentImpl;
 import org.sitac.impl.InterventionImpl;
-import org.sitac.Intervention;
+import scala.Option;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -42,17 +43,15 @@ public class DaumAuthEngine implements IConnectionEngine, IInterventionEngine {
             // configuring persistence
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
             configuration.setStore(store);
-            configuration.addPersistentClass(AgentImpl.class);
-            configuration.addPersistentClass(InterventionImpl.class);
+//          configuration.addPersistentClass(AgentImpl.class);
+//          configuration.addPersistentClass(InterventionImpl.class);
+
+            for (Class c : SitacFactory.classes()) configuration.addPersistentClass(c);
 
             // retrieve the persistence factory
             this.factory = configuration.getPersistenceSessionFactory();
 
-            session = factory.getSession();
-            Agent a = SitacFactory.createAgent();
-            a.setMatricule("mtricoire");
-            a.setPassword("mtricoire");
-            session.save(a);
+            dummyPopulate();
 
         } catch (PersistenceException ex) {
             Log.e(TAG, "Error while initializing persistence in engine", ex);
@@ -69,6 +68,13 @@ public class DaumAuthEngine implements IConnectionEngine, IInterventionEngine {
             }
         });
 
+
+        DaumAuthComponent.getChangeListener().addEventListener(InterventionImpl.class, new PropertyChangeListener() {
+            @Override
+            public void update(PropertyChangeEvent e) {
+                if (listener != null) listener.onInterventionsUpdated();
+            }
+        });
     }
 
     @Override
@@ -113,10 +119,6 @@ public class DaumAuthEngine implements IConnectionEngine, IInterventionEngine {
         this.listener = listener;
     }
 
-    public void setSynced(boolean isSynced) {
-        this.synced = isSynced;
-    }
-
     @Override
     public boolean isSynced() {
         return synced;
@@ -127,6 +129,24 @@ public class DaumAuthEngine implements IConnectionEngine, IInterventionEngine {
          * Called when the store is synced
          */
         void onStoreSynced();
+
+        /**
+         * Called when the interventions changed in the replica
+         */
+        void onInterventionsUpdated();
+    }
+
+    private void dummyPopulate() throws PersistenceException {
+        Intervention inter = SitacFactory.createIntervention();
+        Agent max = SitacFactory.createAgent();
+        max.setMatricule("mtricoire");
+        max.setPassword("mtricoire");
+
+        SitacModel model = SitacFactory.createSitacModel();
+        model.addPersonnes(max);
+        model.addInterventions(inter);
+
+        factory.getSession().save(model);
     }
 }
 

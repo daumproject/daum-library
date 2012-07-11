@@ -198,12 +198,15 @@ public class DaumAuthComponent extends AbstractComponentType
 
         // node variables
         engine.addVariable("nodeName", getNodeName());
-        engine.addVariable("interNum", interNum);
+//        engine.addVariable("interNum", interNum);
 
         // kevScript model for SITAC, Moyens & Messages
-        engine.append("merge 'mvn:org.daum.library.android/org.daum.library.android.sitac/1.8.3-SNAPSHOT'");
-        engine.append("merge 'mvn:org.daum.library.android/org.daum.library.android.messages/1.8.2-SNAPSHOT'");
-        engine.append("merge 'mvn:org.daum.library.android/org.daum.library.android.moyens/1.8.2-SNAPSHOT'");
+        engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
+                "org.daum.library.android/org.daum.library.android.sitac/1.8.3-SNAPSHOT'");
+        engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
+                "org.daum.library.android/org.daum.library.android.messages/1.8.2-SNAPSHOT'");
+        engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
+                "org.daum.library.android/org.daum.library.android.moyens/1.8.2-SNAPSHOT'");
 
         engine.append("addComponent sitacComp@{nodeName} : SITACComponent {}");
         engine.append("addComponent replicaComp@{nodeName} : Replica {}");
@@ -225,9 +228,10 @@ public class DaumAuthComponent extends AbstractComponentType
         engine.append("bind msgComp.service@{nodeName} => defServ0");
         engine.append("bind msgComp.notify@{nodeName} => defMsg0");
 
-        engine.append("updateDictionary sitacComp {interNum='{interNum}'}@{nodeName}");
-        engine.append("updateDictionary moyensComp {interNum='{interNum}'}@{nodeName}");
-        engine.append("updateDictionary msgComp {interNum='{interNum}'}@{nodeName}");
+        engine.append("updateDictionary socketChan {port='9001'}@{nodeName}");
+//        engine.append("updateDictionary sitacComp {interNum='{interNum}'}@{nodeName}");
+//        engine.append("updateDictionary moyensComp {interNum='{interNum}'}@{nodeName}");
+//        engine.append("updateDictionary msgComp {interNum='{interNum}'}@{nodeName}");
 
         engine.interpretDeploy();
     }
@@ -240,6 +244,10 @@ public class DaumAuthComponent extends AbstractComponentType
     @Override
     public void onStoreSynced() {
         this.storeSynced = true;
+    }
+
+    public void onInterventionsUpdated() {
+        controller.updateUI();
     }
 
     public static ChangeListener getChangeListener() {
