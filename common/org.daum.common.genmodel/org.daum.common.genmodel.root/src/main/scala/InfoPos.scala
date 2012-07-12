@@ -15,7 +15,7 @@ trait InfoPos extends org.sitac.SitacContainer with org.sitac.InfoTactic {
 		}
 
 		def setPositions(positions : org.sitac.Position ) {
-if(this.positions!= positions){
+      if(this.positions!= positions) {
 				this.positions = (positions)
 				positions.setEContainer(this, Some(() => { this.positions= _:org.sitac.Position }) )
 }

@@ -5,8 +5,9 @@ import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import org.daum.common.message.api.Message;
+//import org.daum.common.message.api.Message;
 import org.daum.library.android.messages.view.ListItemView.MessageType;
+import org.sitac.MessageAmbiance;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,9 +25,9 @@ public class MessagesAdapter extends BaseAdapter {
     private static boolean D = true;
 
     private Context ctx;
-    private ArrayList<Pair<MessageType, Message>> messages;
+    private ArrayList<Pair<MessageType, MessageAmbiance>> messages;
 
-    public MessagesAdapter(Context context, ArrayList<Pair<MessageType, Message>> messages) {
+    public MessagesAdapter(Context context, ArrayList<Pair<MessageType, MessageAmbiance>> messages) {
         super();
         this.ctx = context;
         this.messages = messages;

@@ -1,18 +1,19 @@
 package org.daum.library.android.messages;
 
 import android.util.Log;
-import org.daum.common.message.api.Message;
+//import org.daum.common.message.api.Message;
 import org.daum.library.android.messages.view.ListItemView.MessageType;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.daum.library.replica.listener.ChangeListener;
 import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
 import org.daum.library.replica.listener.SyncListener;
 import org.daum.library.replica.msg.SyncEvent;
+import org.sitac.MessageAmbiance;
+import org.sitac.impl.MessageAmbianceImpl;
 
 import java.util.Collection;
 import java.util.Map;
@@ -39,7 +40,8 @@ public class MessagesEngine {
             // configuring persistence
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
             configuration.setStore(store);
-            configuration.addPersistentClass(Message.class);
+            configuration.addPersistentClass(MessageAmbiance.class);
+            configuration.addPersistentClass(MessageAmbianceImpl.class);
 
             // retrieve the persistence factory
             this.factory = configuration.getPersistenceSessionFactory();
@@ -48,14 +50,14 @@ public class MessagesEngine {
             Log.e(TAG, "Error while initializing persistence in engine", ex);
         }
 
-        MessagesComponent.getChangeListenerInstance().addEventListener(Message.class, new PropertyChangeListener() {
+        MessagesComponent.getChangeListenerInstance().addEventListener(MessageAmbiance.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent e) {
                 if (listener != null) {
                     PersistenceSession session = null;
                     try {
                         session = factory.getSession();
-                        Message m = (Message) session.get(Message.class, e.getId());
+                        MessageAmbiance m = (MessageAmbiance) session.get(MessageAmbiance.class, e.getId());
 
                         switch (e.getEvent()) {
                             case ADD:
@@ -85,7 +87,7 @@ public class MessagesEngine {
                 PersistenceSession session = null;
                 try {
                     session = factory.getSession();
-                    Map<Object, Message> map = (Map<Object, Message>) session.getAll(Message.class);
+                    Map<Object, MessageAmbiance> map = session.getAll(MessageAmbiance.class);
                     if (listener != null) listener.onReplicaSynced(map.values());
 
                 } catch (PersistenceException ex) {
@@ -98,7 +100,7 @@ public class MessagesEngine {
         });
     }
 
-    public void add(Message m) {
+    public void add(MessageAmbiance m) {
         PersistenceSession session = null;
         try {
             session = factory.getSession();
@@ -123,13 +125,13 @@ public class MessagesEngine {
          * @param msg the new message
          * @param type the type of the message
          */
-        public void onAdd(Message msg, MessageType type);
+        public void onAdd(MessageAmbiance msg, MessageType type);
 
         /**
          * Called when the data in the replica are synced with other
          *
          * @param messages the complete list of messages
          */
-        public void onReplicaSynced(Collection<Message> messages);
+        public void onReplicaSynced(Collection<MessageAmbiance> messages);
     }
 }

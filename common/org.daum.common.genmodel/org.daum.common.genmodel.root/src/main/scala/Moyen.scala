@@ -11,6 +11,7 @@ import org.daum.library.ormH.annotations.Generated
 import org.daum.library.ormH.annotations.Id
 import org.daum.library.ormH.persistence.GeneratedType
 import org.daum.library.ormH.annotations.OneToMany
+import scala.collection.mutable.ListBuffer
 
 
 trait Moyen extends org.sitac.SitacContainer with org.sitac.Detachement {
@@ -19,11 +20,11 @@ trait Moyen extends org.sitac.SitacContainer with org.sitac.Detachement {
   private var numero : java.lang.String = ""
 
   @OneToMany
-  private lazy val personnels : scala.collection.mutable.ListBuffer[org.sitac.Agent] = new scala.collection.mutable.ListBuffer[org.sitac.Agent]()
+  private lazy val personnels : ListBuffer[org.sitac.Agent] = new ListBuffer[org.sitac.Agent]()
 
 
   @OneToMany
-  private lazy val materiels : scala.collection.mutable.ListBuffer[org.sitac.Materiel] = new scala.collection.mutable.ListBuffer[org.sitac.Materiel]()
+  private lazy val materiels : ListBuffer[org.sitac.Materiel] = new ListBuffer[org.sitac.Materiel]()
 
 
   private var posRef : Option[org.sitac.Position] = null

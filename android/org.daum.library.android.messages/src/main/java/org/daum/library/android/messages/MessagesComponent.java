@@ -3,9 +3,6 @@ package org.daum.library.android.messages;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.TabHost;
-import android.widget.Toast;
-import org.daum.common.message.api.Message;
 import org.daum.library.android.messages.view.MessagesView;
 import org.daum.library.android.messages.view.ListItemView.MessageType;
 import org.daum.library.ormH.store.ReplicaStore;
@@ -18,8 +15,8 @@ import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
-import org.kevoree.framework.MessagePort;
 import org.daum.library.android.messages.listener.IMessagesListener;
+import org.sitac.MessageAmbiance;
 
 import java.util.Collection;
 
@@ -132,12 +129,12 @@ public class MessagesComponent extends AbstractComponentType
     }
 
     @Override
-    public void onSend(Message msg) {
+    public void onSend(MessageAmbiance msg) {
         engine.add(msg);
     }
 
     @Override
-    public void onAdd(final Message msg, final MessageType type) {
+    public void onAdd(final MessageAmbiance msg, final MessageType type) {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -147,15 +144,13 @@ public class MessagesComponent extends AbstractComponentType
     }
 
     @Override
-    public void onReplicaSynced(final Collection<Message> messages) {
+    public void onReplicaSynced(final Collection<MessageAmbiance> messages) {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                for (Message m : messages) {
-                    // FIXME maybe change the way IN/OUT are determined because if the replica's id change..
-                    // this is going to crash pretty surely
+                for (MessageAmbiance m : messages) {
+                    // TODO not sure if gusta => m.getId().split("\\+")[0]
                     String id = m.getId().split("\\+")[0];
-                    Log.d(TAG, "replica synced: id >> "+id);
                     if (id.equals(getNodeName())) {
                         messagesView.addMessage(m, MessageType.OUT);
 

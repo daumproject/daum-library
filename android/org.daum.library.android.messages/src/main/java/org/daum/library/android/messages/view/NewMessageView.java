@@ -1,15 +1,16 @@
 package org.daum.library.android.messages.view;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.*;
-import org.daum.common.message.api.Message;
 import org.daum.library.android.messages.listener.MessagesEvent;
 import org.daum.library.android.messages.listener.MessagesEvent.MessagesEventType;
+import org.sitac.MessageAmbiance;
+import org.sitac.SitacFactory;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,6 +41,8 @@ public class NewMessageView extends AbstractMessagesView {
                      et_jeDemande;
     private Button btn_send, btn_clear;
     private String senderName;
+    private Dialog clearContentDialog;
+    private boolean dialogWasShown = false;
 
     public NewMessageView(Context context, String senderName) {
         super(context);
@@ -60,6 +63,23 @@ public class NewMessageView extends AbstractMessagesView {
         // Buttons
         btn_send = new Button(ctx);
         btn_clear = new Button(ctx);
+
+        // clearContentDialog
+        AlertDialog.Builder diagBuilder = new AlertDialog.Builder(ctx);
+        diagBuilder.setTitle(TEXT_CONFIRM_TITLE);
+        diagBuilder.setMessage(TEXT_CONFIRM_MSG);
+        diagBuilder.setPositiveButton(TEXT_OK, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                et_jeDemande.setText("");
+                et_jeFais.setText("");
+                et_jePrevois.setText("");
+                et_jeSuis.setText("");
+                et_jeVois.setText("");
+            }
+        });
+        diagBuilder.setNegativeButton(TEXT_CANCEL, null);
+        clearContentDialog = diagBuilder.create();
     }
 
     private void configUI() {
@@ -118,7 +138,7 @@ public class NewMessageView extends AbstractMessagesView {
         btn_send.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Message msg = processEditText();
+                MessageAmbiance msg = processEditText();
                 if (msg != null) {
                     fireEventToListener(new MessagesEvent(msg,
                             MessagesEventType.SEND));
@@ -129,21 +149,7 @@ public class NewMessageView extends AbstractMessagesView {
         btn_clear.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder diagBuilder = new AlertDialog.Builder(ctx);
-                diagBuilder.setTitle(TEXT_CONFIRM_TITLE);
-                diagBuilder.setMessage(TEXT_CONFIRM_MSG);
-                diagBuilder.setPositiveButton(TEXT_OK, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        et_jeDemande.setText("");
-                        et_jeFais.setText("");
-                        et_jePrevois.setText("");
-                        et_jeSuis.setText("");
-                        et_jeVois.setText("");
-                    }
-                });
-                diagBuilder.setNegativeButton(TEXT_CANCEL, null);
-                diagBuilder.create().show();
+                clearContentDialog.show();
             }
         });
     }
@@ -163,24 +169,45 @@ public class NewMessageView extends AbstractMessagesView {
      * of the given Message
      * @param msg the message to display into the EditText
      */
-    public void setMessage(Message msg) {
-        et_jeDemande.setText(msg.jeDemande);
-        et_jePrevois.setText(msg.jePrevois);
-        et_jeFais.setText(msg.jeFais);
-        et_jeSuis.setText(msg.jeSuis);
-        et_jeVois.setText(msg.jeVois);
+    public void setMessage(MessageAmbiance msg) {
+        et_jeDemande.setText(msg.getJeDemande());
+        et_jePrevois.setText(msg.getJePrevois());
+        et_jeFais.setText(msg.getJeFais());
+        et_jeSuis.setText(msg.getJeSuis());
+        et_jeVois.setText(msg.getJeVois());
     }
 
-    private Message processEditText() {
-        Message msg = null;
+    private MessageAmbiance processEditText() {
+        MessageAmbiance msg = null;
         String jeSuis = et_jeSuis.getText().toString().trim();
         String jeVois = et_jeVois.getText().toString().trim();
         String jePrevois = et_jePrevois.getText().toString().trim();
         String jeFais = et_jeFais.getText().toString().trim();
         String jeDemande = et_jeDemande.getText().toString().trim();
 
-        msg = new Message(senderName, jeSuis, jeVois, jePrevois, jeFais, jeDemande);
+        msg = SitacFactory.createMessageAmbiance();
+        msg.setSender(senderName);
+        msg.setJeSuis(jeSuis);
+        msg.setJeVois(jeVois);
+        msg.setJePrevois(jePrevois);
+        msg.setJeFais(jeFais);
+        msg.setJeDemande(jeDemande);
         if (!msg.isEmpty()) return msg;
         return null;
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (clearContentDialog.isShowing()) dialogWasShown = true;
+        else dialogWasShown = false;
+        clearContentDialog.dismiss();
+
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (dialogWasShown) clearContentDialog.show();
     }
 }
