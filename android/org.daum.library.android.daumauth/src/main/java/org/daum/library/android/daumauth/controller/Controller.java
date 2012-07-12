@@ -10,6 +10,7 @@ import org.daum.library.android.daumauth.listener.OnInterventionSelectedListener
 import org.daum.library.android.daumauth.util.ConnectionTask;
 import org.daum.library.android.daumauth.view.DaumAuthView;
 import org.sitac.Intervention;
+import org.sitac.Personne;
 
 import java.util.ArrayList;
 
@@ -96,7 +97,8 @@ public class Controller implements IController, IControllerListener {
         ArrayList<String> items = new ArrayList<String>();
         interventions = interventionEngine.getInterventions();
         for (Intervention i : interventions) {
-            items.add(i.getRequerant().get().getNom()+" - "+i.getRequerant().get().getPrenom());
+            Personne req = i.getRequerant().get();
+            items.add(i.getPosition().get().toString()+" "+req.getNom()+" - "+req.getPrenom());
         }
         return items;
     }
