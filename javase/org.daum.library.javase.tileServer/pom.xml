@@ -47,10 +47,4 @@
 
     </dependencies>
 
-    <repositories>
-        <repository>
-            <id>jdal</id>
-            <url>http://www.jdal.org/repo</url>
-        </repository>
-    </repositories>
 </project>
