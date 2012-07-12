@@ -1,4 +1,4 @@
-package org.daum.library.web;
+package org.daum.library.web.utils;
 
 import org.kevoree.ContainerRoot;
 import org.kevoree.framework.KevoreePropertyHelper;
@@ -57,5 +57,11 @@ public class WebCache {
             ip = ipOption.get();
         }
         return ip;
+    }
+
+
+    public static  String apply(ContainerRoot model,String nodename,String page)
+    {
+        return   page.replace("$ip$",WebCache.getAddress(model,nodename));
     }
 }

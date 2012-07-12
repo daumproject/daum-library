@@ -153,7 +153,6 @@ public class BluetoothChannel extends AbstractChannelFragment implements Bluetoo
 								// construct a string from the valid bytes in the buffer
 								try {
 									ByteArrayInputStream bis = new ByteArrayInputStream(readBuf);
-									Log.i(TAG, "DRE DRE DRE DRE ?");
 									ObjectInputStream ois = new ObjectInputStream(bis) {
 										@Override
 										protected Class<?> resolveClass (ObjectStreamClass objectStreamClass) throws IOException, ClassNotFoundException {

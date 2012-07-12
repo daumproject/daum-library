@@ -23,7 +23,7 @@ trait Detachement extends org.sitac.SitacContainer {
   private lazy val affectation : scala.collection.mutable.ListBuffer[org.sitac.Affectation] = new scala.collection.mutable.ListBuffer[org.sitac.Affectation]()
 
   @ManyToOne
-  private var chef : Option[org.sitac.Agent] = None
+  private var chef : Option[org.sitac.Agent] = null
 
 
   def getId() : java.lang.String = {

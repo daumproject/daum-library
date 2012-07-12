@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.daum.library.android.sitac</artifactId>
     <name>Daum :: Library :: Android :: Sitac</name>
-    <version>1.8.2-SNAPSHOT</version>
+    <version>1.8.3-SNAPSHOT</version>
 
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
         <groupId>org.daum.library.android</groupId>
-        <version>1.8.1</version>
+        <version>1.8.2-SNAPSHOT</version>
         <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
 
@@ -36,6 +36,12 @@
             <groupId>org.daum.extra.android</groupId>
             <artifactId>org.daum.extra.android.pythagoras</artifactId>
             <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.daum.common.genmodel.android</groupId>
+            <artifactId>org.daum.common.genmodel.android.root</artifactId>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

@@ -22,20 +22,21 @@ trait Intervention extends org.sitac.SitacContainer {
   @Generated(strategy = GeneratedType.UUID)
   private var numeroIntervention : java.lang.String = ""
 
-  private var precision : java.lang.String = ""
-
   private var `type` : org.sitac.InterventionType = _
 
-  private var historique : Option[org.sitac.Historique] = None
+  private var historique : Option[org.sitac.Historique] = null
 
-  private var position : Option[org.sitac.Position] = None
+  private var position : Option[org.sitac.Position] = null
 
   @ManyToOne
-  private var requerant : Option[org.sitac.Personne] = None
+  private var requerant : Option[org.sitac.Personne] = null
+
   @OneToMany
   private lazy val detachements : scala.collection.mutable.ListBuffer[org.sitac.Detachement] = new scala.collection.mutable.ListBuffer[org.sitac.Detachement]()
+
   @OneToMany
   private lazy val victimes : scala.collection.mutable.ListBuffer[org.sitac.Personne] = new scala.collection.mutable.ListBuffer[org.sitac.Personne]()
+
   @OneToMany
   private lazy val infoTactics : scala.collection.mutable.ListBuffer[org.sitac.InfoTactic] = new scala.collection.mutable.ListBuffer[org.sitac.InfoTactic]()
 
@@ -48,13 +49,6 @@ trait Intervention extends org.sitac.SitacContainer {
     this.numeroIntervention = numeroIntervention
   }
 
-  def getPrecision : java.lang.String = {
-    precision
-  }
-
-  def setPrecision(precision : java.lang.String) {
-    this.precision = precision
-  }
 
   def getType : org.sitac.InterventionType = {
     `type`
@@ -72,7 +66,7 @@ trait Intervention extends org.sitac.SitacContainer {
   def setHistorique(historique : Option[org.sitac.Historique] ) {
     if(this.historique!= historique){
       this.historique = (historique)
-      historique.map{ dic=>				dic.setEContainer(this, Some(() => { this.historique= None }) )
+      historique.map{ dic=>				dic.setEContainer(this, Some(() => { this.historique= null }) )
       }}
 
   }
@@ -84,7 +78,7 @@ trait Intervention extends org.sitac.SitacContainer {
   def setPosition(position : Option[org.sitac.Position] ) {
     if(this.position!= position){
       this.position = (position)
-      position.map{ dic=>				dic.setEContainer(this, Some(() => { this.position= None }) )
+      position.map{ dic=>				dic.setEContainer(this, Some(() => { this.position= null }) )
       }}
 
   }
@@ -210,7 +204,6 @@ trait Intervention extends org.sitac.SitacContainer {
   def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
     val selfObjectClone = SitacFactory.createIntervention
     selfObjectClone.setNumeroIntervention(this.getNumeroIntervention)
-    selfObjectClone.setPrecision(this.getPrecision)
     subResult.put(this,selfObjectClone)
     this.getHistorique.map{ sub =>
       sub.getClonelazy(subResult)

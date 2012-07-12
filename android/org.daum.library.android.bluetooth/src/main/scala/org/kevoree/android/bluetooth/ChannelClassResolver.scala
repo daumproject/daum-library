@@ -13,21 +13,21 @@ import scala.collection.JavaConversions._
 import org.kevoree.framework.aspects.KevoreeAspects._
 import org.slf4j.LoggerFactory
 
-class ChannelClassResolver (nioChannel: AbstractChannelFragment) {
+class ChannelClassResolver (asbChannelFrag: AbstractChannelFragment) {
   def resolve (className: String): Class[_] = {
     println("tryRoResolveClass=" + className)
 
-    val model = nioChannel.getModelService.getLastModel
-    val currentNode = model.getNodes.find(n => n.getName == nioChannel.getNodeName).get
+    val model = asbChannelFrag.getModelService.getLastModel
+    val currentNode = model.getNodes.find(n => n.getName == asbChannelFrag.getNodeName).get
     var resolvedClass: Class[_] = null
-    nioChannel.getBindedPorts.foreach {
+    asbChannelFrag.getBindedPorts.foreach {
       bport =>
         if (resolvedClass == null) {
           currentNode.getComponents.find(c => c.getName == bport.getComponentName) match {
             case Some(component) => {
               val du = component.getTypeDefinition.foundRelevantDeployUnit(currentNode)
               if (du != null) {
-                val kcl = nioChannel.getBootStrapperService.getKevoreeClassLoaderHandler.getKevoreeClassLoader(du)
+                val kcl = asbChannelFrag.getBootStrapperService.getKevoreeClassLoaderHandler.getKevoreeClassLoader(du)
                 try {
                   resolvedClass = kcl.loadClass(className)
                   return resolvedClass
@@ -41,7 +41,7 @@ class ChannelClassResolver (nioChannel: AbstractChannelFragment) {
         }
     }
     if (resolvedClass == null) {
-      resolvedClass = nioChannel.getClass.getClassLoader.loadClass(className)
+      resolvedClass = asbChannelFrag.getClass.getClassLoader.loadClass(className)
     }
     if (resolvedClass == null) {
       LoggerFactory.getLogger(this.getClass).error("Fail to resolve class=" + className)

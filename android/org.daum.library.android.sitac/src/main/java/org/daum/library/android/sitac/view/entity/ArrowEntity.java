@@ -2,6 +2,7 @@ package org.daum.library.android.sitac.view.entity;
 
 import java.util.ArrayList;
 
+import android.util.Log;
 import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.visitor.IVisitor;
 import org.osmdroid.api.IGeoPoint;
@@ -16,6 +17,8 @@ import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 
 public class ArrowEntity extends AbstractShapedEntity {
+
+    private static final String TAG = "ArrowEntity";
 
     public static final String SAP = "Secours à personnes";
     public static final String CHEM = "Risques particuliers";
@@ -33,8 +36,10 @@ public class ArrowEntity extends AbstractShapedEntity {
 	 **/
 	private static final int TOLERANCE_HEIGHT = 15;
     
-    private ArrayList<Line> lines; 
-	
+    private ArrayList<Line> lines;
+    private float[] arrowHead = new float[8];
+    private double xa, ya, xb, yb, xc, yc, adj, hyp, rotateHeadAngle;
+
 	public ArrowEntity(Drawable icon, String type, int arrowColor) {
 		this(icon, type, "", arrowColor);
 	}
@@ -65,7 +70,51 @@ public class ArrowEntity extends AbstractShapedEntity {
 				}
 				
 				// draw the head of the arrow
-				// TODO
+                arrowHead[0] = pts[pts.length-1].x-10;
+                arrowHead[1] = pts[pts.length-1].y+20;
+
+                arrowHead[2] = pts[pts.length-1].x;
+                arrowHead[3] = pts[pts.length-1].y;
+
+                arrowHead[4] = pts[pts.length-1].x;
+                arrowHead[5] = pts[pts.length-1].y;
+
+                arrowHead[6] = pts[pts.length-1].x+10;
+                arrowHead[7] = pts[pts.length-1].y+20;
+
+                xa = pts[pts.length-2].x;
+                ya = pts[pts.length-2].y;
+                xb = pts[pts.length-1].x;
+                yb = pts[pts.length-1].y;
+                xc = xa;
+                yc = yb;
+
+                adj= Math.sqrt(Math.pow(xc - xa, 2) + Math.pow(yc - ya, 2));
+                hyp = Math.sqrt(Math.pow(xb - xa, 2) + Math.pow(yb - ya, 2));
+
+                if (xb >= xa && yb <= ya) {
+                    // top right direction
+                    rotateHeadAngle = (Math.acos(adj/hyp)*(180/Math.PI));
+
+                } else if (xb >= xa && yb >= ya) {
+                    // bottom right direction
+                    arrowHead[1] = pts[pts.length-1].y-20;
+                    arrowHead[7] = pts[pts.length-1].y-20;
+                    rotateHeadAngle = -(Math.acos(adj/hyp)*(180/Math.PI));
+
+                } else if (xb <= xa && yb >= ya) {
+                    // bottom left direction
+                    rotateHeadAngle = (Math.acos(adj/hyp)*(180/Math.PI)+180);
+
+                } else if (xb <= xa && yb <= ya) {
+                    // top left direction
+                    rotateHeadAngle = -(Math.acos(adj/hyp)*(180/Math.PI));
+                }
+
+                canvas.save();
+                canvas.rotate((float) rotateHeadAngle, pts[pts.length-1].x, pts[pts.length-1].y);
+                canvas.drawLines(arrowHead, paint);
+                canvas.restore();
 			}
 		}
 	}

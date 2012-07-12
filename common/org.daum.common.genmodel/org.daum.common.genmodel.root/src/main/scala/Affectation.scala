@@ -23,7 +23,7 @@ trait Affectation extends org.sitac.SitacContainer {
   private var horodatageDemande : java.util.Date=_
   private var horodatageEngagement : java.util.Date=_
   private var horodatageDesengagement : java.util.Date=_
-  private var moyen : Option[org.sitac.Moyen] = None
+  private var moyen : Option[org.sitac.Moyen] = null
 
 
   def getHorodatageDemande : java.util.Date = {

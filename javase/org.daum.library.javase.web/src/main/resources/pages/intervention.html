@@ -64,7 +64,7 @@
      document.getElementById('text').innerHTML = text;
     }
 
-    var ws = new WebSocket('ws://$ip$:8082/jed');
+    var ws = new WebSocket('ws://$ip$:8082/intervention');
     showMessage('Connecting...');
 
     ws.onopen = function()
@@ -81,7 +81,31 @@
 
     ws.onmessage = function(evt)
     {
+        var data = evt.data;
+        var oTable = $('#interventions').dataTable();
+        var request=data.split("$")
+        var cmd =  request[0];
 
+        if(cmd == 'ADD')
+        {
+            var obj = jQuery.parseJSON(request[1]);
+            oTable.fnAddData( [
+            obj.numeroIntervention,
+            obj.type,
+            obj.requerant.nom]
+        );
+
+        }else if(cmd =='UPDATE')
+        {
+            var obj = jQuery.parseJSON(request[1]);
+            var rowID = findRowIndexUsingCol(obj.numeroIntervention,'#moyens',0);
+            oTable.fnUpdate([obj.numeroIntervention,obj.type,obj.gh_crm,obj.gh_engage],rowID);
+
+        }else if(cmd =='DELETE')
+        {
+            var rowID = findRowIndexUsingCol(request[1],'#moyens',0);
+            oTable.fnDeleteRow(rowID);
+        }
     }
 
 </script>

@@ -30,19 +30,26 @@
             <tr>
                 <th>ID</th>
                 <th>TYPE</th>
-                <th>CRM</th>
-                <th>HD</th>
+                <th>CIS</th>
+                <th>gh_demande</th>
+                <th>gh_depart</th>
+                <th>gh_crm</th>
+                <th>gh_engage</th>
+                <th>gh_desengagement</th>
             </tr>
             </thead>
             <tbody>
-            $contenu$
             </tbody>
             <tfoot>
             <tr>
                 <th>ID</th>
                 <th>TYPE</th>
-                <th>CRM</th>
-                <th>HD</th>
+                <th>CIS</th>
+                <th>gh_demande</th>
+                <th>gh_depart</th>
+                <th>gh_crm</th>
+                <th>gh_engage</th>
+                <th>gh_desengagement</th>
             </tr>
             </tfoot>
         </table>
@@ -59,6 +66,10 @@
         { "bVisible":    false },
                 null,
                 null,
+                null,
+                null,
+                null,
+                null,
                 null
     ] } );
 
@@ -69,12 +80,15 @@
          document.getElementById('text').innerHTML = text;
     }
 
-    var ws = new WebSocket('ws://$ip$:8082/jed');
+    var ws = new WebSocket('ws://$ip$:8082/demand');
     showMessage('Connecting...');
 
     ws.onopen = function()
     {
       showMessage('Connected!');
+
+
+
 
     };
 
@@ -97,15 +111,26 @@
             oTable.fnAddData( [
             obj.id,
             obj.type,
+            obj.cis,
+            obj.gh_demande,
+            obj.gh_depart,
             obj.gh_crm,
-            obj.gh_engage]
+            obj.gh_engage,
+            obj.gh_desengagement]
             );
 
        }else if(cmd =='UPDATE')
        {
            var obj = jQuery.parseJSON(request[1]);
            var rowID = findRowIndexUsingCol(obj.id,'#moyens',0);
-           oTable.fnUpdate([obj.id,obj.type,obj.gh_crm,obj.gh_engage],rowID);
+           oTable.fnUpdate([obj.id,
+    obj.type,
+    obj.cis,
+    obj.gh_demande,
+    obj.gh_depart,
+    obj.gh_crm,
+    obj.gh_engage,
+    obj.gh_desengagement],rowID);
 
        }else if(cmd =='DELETE')
        {

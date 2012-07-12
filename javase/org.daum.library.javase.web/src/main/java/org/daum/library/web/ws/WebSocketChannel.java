@@ -1,4 +1,4 @@
-package org.daum.library.web;
+package org.daum.library.web.ws;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,25 +15,35 @@ import java.util.Set;
  * Time: 13:15
  * To change this template use File | Settings | File Templates.
  */
-public class WebSocketChannel extends BaseWebSocketHandler {
+public class WebSocketChannel extends BaseWebSocketHandler implements IWebSocketChannel {
     private Set<WebSocketConnection> connections = new HashSet<WebSocketConnection>();
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-
+    private NotifyConnection notifyConnection = new NotifyConnection();
     @Override
-    public void onOpen(WebSocketConnection connection) throws Exception {
+    public void onOpen(WebSocketConnection connection)
+    {
         logger.debug("WebSocketConnection "+connection.toString());
         connections.add(connection);
+        notifyConnection.notifyConnection(connection);
     }
 
-    public void broadcast(String msg) {
+
+    public NotifyConnection getNotifyConnection() {
+        return notifyConnection;
+    }
+
+    public void broadcast(String msg)
+    {
+
         for (WebSocketConnection connection : connections)
         {
             connection.send(msg);
         }
+
     }
 
     @Override
-    public void onClose(WebSocketConnection connection) throws Exception {
+    public void onClose(WebSocketConnection connection)  {
         connections.remove(connection);
     }
 
@@ -43,4 +53,11 @@ public class WebSocketChannel extends BaseWebSocketHandler {
     }
 
 
+    public Set<WebSocketConnection> getConnections() {
+        return connections;
+    }
+
+    public void setConnections(Set<WebSocketConnection> connections) {
+        this.connections = connections;
+    }
 }

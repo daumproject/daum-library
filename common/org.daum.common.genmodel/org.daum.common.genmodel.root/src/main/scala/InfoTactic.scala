@@ -17,27 +17,27 @@ trait InfoTactic extends org.sitac.SitacContainer {
   @Id
   @Generated(strategy = GeneratedType.UUID)
   var id : java.lang.String = ""
-		private var categorie : Option[org.sitac.Categorie] = None
+  private var categorie : Option[org.sitac.Categorie] = null
 
-		def getCategorie : Option[org.sitac.Categorie] = {
-				categorie
-		}
+  def getCategorie : Option[org.sitac.Categorie] = {
+    categorie
+  }
 
-		def setCategorie(categorie : Option[org.sitac.Categorie] ) {
-				this.categorie = (categorie)
+  def setCategorie(categorie : Option[org.sitac.Categorie] ) {
+    this.categorie = (categorie)
 
-		}
-def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
-		val selfObjectClone = SitacFactory.createInfoTactic
-		subResult.put(this,selfObjectClone)
-	}
-def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : InfoTactic = {
-		val clonedSelfObject = addrs.get(this).asInstanceOf[org.sitac.InfoTactic]
-		this.getCategorie.map{sub =>
-			clonedSelfObject.setCategorie(Some(addrs.get(sub).asInstanceOf[org.sitac.Categorie]))
-		}
+  }
+  def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
+    val selfObjectClone = SitacFactory.createInfoTactic
+    subResult.put(this,selfObjectClone)
+  }
+  def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : InfoTactic = {
+    val clonedSelfObject = addrs.get(this).asInstanceOf[org.sitac.InfoTactic]
+    this.getCategorie.map{sub =>
+      clonedSelfObject.setCategorie(Some(addrs.get(sub).asInstanceOf[org.sitac.Categorie]))
+    }
 
-		clonedSelfObject
-	}
+    clonedSelfObject
+  }
 
 }

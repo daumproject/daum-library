@@ -38,8 +38,7 @@ import org.kevoree.framework.AbstractComponentType;
 })
 @DictionaryType({
         @DictionaryAttribute(name = "mapProvider", defaultValue = "http://tile.openstreetmap.org/", optional = false)
-}
-)
+})
 @ComponentType
 public class SITACComponent extends AbstractComponentType {
 
@@ -47,6 +46,7 @@ public class SITACComponent extends AbstractComponentType {
 
     private KevoreeAndroidService uiService;
     private static ChangeListener singleton=null;
+    private SITACView sitacView;
 
     public static ChangeListener getChangeListenerInstance() {
         if (singleton == null) singleton = new ChangeListener();
@@ -62,12 +62,12 @@ public class SITACComponent extends AbstractComponentType {
         getModelService().registerModelListener(new ModelListener() {
             @Override
             public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;
+                return true;
             }
 
             @Override
             public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                return false;
+                return true;
             }
 
             @Override
@@ -79,7 +79,7 @@ public class SITACComponent extends AbstractComponentType {
                             ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
                             ReplicaStore storeImpl = new ReplicaStore(replicatingService);
 
-                            SITACView sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
+                            sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
                             ISITACController ctrl = sitacView.getController();
                             ctrl.setMapProvider(mapProvider);
                             uiService.addToGroup("SITAC", sitacView);
@@ -95,12 +95,13 @@ public class SITACComponent extends AbstractComponentType {
 
     @Stop
     public void stop() {
-
+        uiService.remove(sitacView);
     }
 
     @Update
     public void update() {
-
+        stop();
+        start();
     }
 
     @Port(name = "notify")

@@ -2,6 +2,8 @@ package org.daum.library.ormH.api;
 
 import org.daum.library.ormH.utils.PersistenceException;
 
+import java.util.Map;
+
 /**
  * Created by jed
  * User: jedartois@gmail.com
@@ -12,6 +14,6 @@ public interface IPersistenceSession {
     public void save(Object bean) throws PersistenceException;
     public void update(Object bean) throws PersistenceException;
     public void delete(Object bean) throws PersistenceException;
-    public Object get(Class clazz,Object _id) throws PersistenceException;
-    public Object getAll(Class clazz) throws PersistenceException;
+    public <T> T get(Class<T> clazz,Object _id) throws PersistenceException;
+    public <K extends Object, T> Map<K, T> getAll(Class<T> clazz) throws PersistenceException;
 }
