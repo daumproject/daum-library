@@ -18,12 +18,12 @@ import java.io.IOException;
 import java.io.InputStream;
 
 /**
- *  TileCache interface. Implement to create new tile caches. 
+ *  ITileCache interface. Implement to create new tile caches.
  *  
  * @author Jose Luis Martin
  */
 
-public interface TileCache {
+public interface ITileCache {
 	/**
 	 * Create a Tile from URI
 	 * @param uri the URI to get the tile
@@ -50,11 +50,5 @@ public interface TileCache {
 	 */
 	String getServerUrl(String query);
 
-	/**
-	 * Let caches to modify response from remote server.
-	 * @param serverStream remote server inputStream
-	 * @return response InputStream
-	 * @throws java.io.IOException
-	 */
-	InputStream parseResponse(InputStream serverStream, String remoteUri, String localUri) throws IOException;
+    void setPathCache(String pathCache);
 }

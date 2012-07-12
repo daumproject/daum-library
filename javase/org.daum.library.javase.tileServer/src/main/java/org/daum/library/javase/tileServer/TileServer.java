@@ -1,9 +1,10 @@
 package org.daum.library.javase.tileServer;
-import org.kevoree.annotation.ComponentType;
-import org.kevoree.annotation.Library;
+import org.kevoree.annotation.*;
 import org.kevoree.library.javase.webserver.AbstractPage;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
 import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,18 +14,52 @@ import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
  * To change this template use File | Settings | File Templates.
  */
 
-
+@DictionaryType({
+        @DictionaryAttribute(name = "pathCache",defaultValue = "/tmp/tila", optional =false)   ,
+        @DictionaryAttribute(name = "provider", defaultValue = "Openstreetmap", optional = true,vals={"Openstreetmap","Google"})
+})
 @Library(name = "JavaSE")
 @ComponentType
 public class TileServer extends AbstractPage {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private ITileCache tileCacheImpl = null;
+
+    @Start
+    public void start(){
+        super.startPage();
+        logger.debug("Tile Server starting...");
+        tileCacheImpl   = new MapnikCache(getpathCache());
+    }
+
+    @Stop
+    public void stop()
+    {
+        logger.debug("Tile Server stoping...");
+        super.stopPage();
+        tileCacheImpl= null;
+    }
+
+
+    @Update
+    public void update()
+    {
+        tileCacheImpl.setPathCache(getpathCache());
+    }
+
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse)
     {
-        AbstractTileCache abstractTileCache = new AbstractTileCache();
-        //System.err.print("URL DONNE ===============>"+ transformeUrlIntoTileUrl(kevoreeHttpRequest.getUrl()) );
-        Tile tile = abstractTileCache.getTile(transformeUrlIntoTileUrl(kevoreeHttpRequest.getUrl()));
-        kevoreeHttpResponse.setRawContent(tile.getImage());
+        Tile tile = tileCacheImpl.getTile(transformeUrlIntoTileUrl(kevoreeHttpRequest.getUrl()));
+        if(tile != null && tile.getImage() != null)
+        {
+            kevoreeHttpResponse.setRawContent(tile.getImage());
+        }else
+        {
+            // todo
+            logger.error("WTF");
+            kevoreeHttpResponse.setRawContent("404".getBytes());
+        }
         return kevoreeHttpResponse;
     }
 
@@ -37,5 +72,17 @@ public class TileServer extends AbstractPage {
             compteurSlash = compteurSlash+1;
         }
         return null;
+    }
+
+
+    public String  getpathCache()
+    {
+        String path = getDictionary().get("pathCache").toString();
+        if(path == null)
+        {
+            logger.debug("Getting temporary directory");
+            path = System.getProperty("java.io.tmpdir")+"/tila";
+        }
+        return  path;
     }
 }

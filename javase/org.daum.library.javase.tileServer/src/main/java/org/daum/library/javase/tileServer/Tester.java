@@ -19,23 +19,23 @@ import java.net.URLConnection;
 public class Tester {
 
     private static MapnikCache mapnikCache;
-    private static AbstractTileCache tileCache;
+    private static TileCacheImpl tileCacheImpl;
     private static String tileServer = "http://tile.openstreetmap.org";
     private static String USER_AGENT = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2";
 
     public static void main(String[] args) {
         /*    String url = "/13/4159/2833.png";
-       AbstractTileCache abstractTileCache = new AbstractTileCache();
+       TileCacheImpl abstractTileCache = new TileCacheImpl();
        Tile tile = abstractTileCache.getTile(url);
        System.out.print(tile.getImage().length); */
 
         /*mapnikCache = new MapnikCache();
-        tileCache = new AbstractTileCache();
+        tileCacheImpl = new TileCacheImpl();
         Tile tile = mapnikCache.parseTile("13/4159/2831.png");
         System.out.println("URL img = > "+getTileUrl(tile));
         try {
             downloadTile(tile,new URL(getTileUrl(tile)));
-            tileCache.storeTile(tile);
+            tileCacheImpl.storeTile(tile);
         } catch (Exception e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }     */

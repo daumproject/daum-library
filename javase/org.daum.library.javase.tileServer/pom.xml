@@ -4,7 +4,7 @@
     <groupId>org.daum.library.javase</groupId>
     <artifactId>org.daum.library.javase.tileServer</artifactId>
     <name>DAUM :: Library :: JavaSE :: tileServer</name>
-    <version>0.1</version>
+    <version>1.1</version>
     <description>Tile Server</description>
 
     <parent>
@@ -14,37 +14,25 @@
         <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
     </parent>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
-                <configuration>
-                    <source>1.5</source>
-                    <target>1.5</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
     <dependencies>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.0</version>
-        </dependency>
         <dependency>
             <groupId>org.kevoree.corelibrary.javase</groupId>
             <artifactId>org.kevoree.library.javase.webserver.api</artifactId>
             <version>${kevoree.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>commons-collections</groupId>
-            <artifactId>commons-collections</artifactId>
-            <version>3.0</version>
+            <groupId>org.daum.extra.javase</groupId>
+            <artifactId>org.daum.extra.javase.commonsio</artifactId>
+            <version>2.4</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.6.4</version>
+        </dependency>
     </dependencies>
 
 </project>
