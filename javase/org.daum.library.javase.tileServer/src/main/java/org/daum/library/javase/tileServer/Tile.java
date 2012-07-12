@@ -81,8 +81,8 @@ public class Tile {
 	
 	public String getFileExension()
     {
-           ///StringUtils.substringAfter(mimeType, "/");
-		return  mimeType.substring(mimeType.indexOf("/"));
+           //StringUtils.substringAfter(mimeType, "/");
+		return  mimeType.substring(mimeType.indexOf("/")+1);
     }
 	
 	// Getters and Setters
