@@ -31,12 +31,13 @@ import org.kevoree.framework.AbstractComponentType;
 //       - filtre type intervention
 @Library(name = "Android")
 @Requires({
-        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = false)
 })
 @Provides({
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
 })
 @DictionaryType({
+        @DictionaryAttribute(name = "interNum", optional = false),
         @DictionaryAttribute(name = "mapProvider", defaultValue = "http://tile.openstreetmap.org/", optional = false)
 })
 @ComponentType
@@ -58,6 +59,7 @@ public class SITACComponent extends AbstractComponentType {
     public void start() {
         uiService = UIServiceHandler.getUIService();
         final String mapProvider = getDictionary().get("mapProvider").toString();
+        final String interNum = getDictionary().get("interNum").toString();
 
         getModelService().registerModelListener(new ModelListener() {
             @Override

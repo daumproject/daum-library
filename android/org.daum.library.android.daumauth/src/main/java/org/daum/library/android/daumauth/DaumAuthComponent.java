@@ -231,7 +231,7 @@ public class DaumAuthComponent extends AbstractComponentType
         engine.addVariable("nodeName", getNodeName());
         engine.addVariable("replicaNotifChanName", replicaNotifChanName);
         engine.addVariable("replicaServiceChanName", replicaServiceChanName);
-//        engine.addVariable("interNum", interNum);
+        engine.addVariable("interNum", inter.getNumeroIntervention());
 
         // kevScript model for SITAC, Moyens & Messages
         engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
@@ -241,9 +241,9 @@ public class DaumAuthComponent extends AbstractComponentType
         engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
                 "org.daum.library.android/org.daum.library.android.moyens/1.8.2-SNAPSHOT'");
 
-        engine.append("addComponent sitacComp@{nodeName} : SITACComponent {}");
-        engine.append("addComponent moyensComp@{nodeName} : MoyensComponent {}");
-        engine.append("addComponent msgComp@{nodeName} : MessagesComponent {}");
+        engine.append("addComponent sitacComp@{nodeName} : SITACComponent {interNum='{interNum}'}");
+        engine.append("addComponent moyensComp@{nodeName} : MoyensComponent {interNum='{interNum}'}");
+        engine.append("addComponent msgComp@{nodeName} : MessagesComponent {interNum='{interNum}'}");
 
         engine.append("bind sitacComp.service@{nodeName} => {replicaServiceChanName}");
         engine.append("bind sitacComp.notify@{nodeName} => {replicaNotifChanName}");
@@ -251,11 +251,6 @@ public class DaumAuthComponent extends AbstractComponentType
         engine.append("bind moyensComp.notify@{nodeName} => {replicaNotifChanName}");
         engine.append("bind msgComp.service@{nodeName} => {replicaServiceChanName}");
         engine.append("bind msgComp.notify@{nodeName} => {replicaNotifChanName}");
-
-        engine.append("updateDictionary socketChan {port='9001'}@{nodeName}");
-//        engine.append("updateDictionary sitacComp {interNum='{interNum}'}@{nodeName}");
-//        engine.append("updateDictionary moyensComp {interNum='{interNum}'}@{nodeName}");
-//        engine.append("updateDictionary msgComp {interNum='{interNum}'}@{nodeName}");
 
         // remove daumAuthComp
         engine.append("removeComponent {compName}@{nodeName}");

@@ -31,10 +31,13 @@ import java.util.Collection;
 
 @Library(name = "Android")
 @Requires({
-        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = false)
 })
 @Provides({
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
+})
+@DictionaryType({
+        @DictionaryAttribute(name = "interNum", optional = false)
 })
 @ComponentType
 public class MoyensComponent extends AbstractComponentType implements IMoyensListener, MoyensEngine.OnEventListener {
