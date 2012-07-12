@@ -17,7 +17,6 @@ package org.daum.library.javase.tileServer;
 import org.apache.commons.collections.map.LRUMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.StringUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -28,6 +27,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -37,8 +37,8 @@ import java.util.Map;
  */
 @SuppressWarnings("unchecked")
 public class AbstractTileCache {
-	
-	private Map<Integer, Tile> tileMap = Collections.synchronizedMap(new LRUMap(10000));
+	//Collections.synchronizedMap(new LRUMap(10000));
+	private Map<Integer, Tile> tileMap = new HashMap<Integer, Tile>();
 //	private static final Log log = LogFactory.getLog(AbstractTileCache.class);
     private final String USER_AGENT = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2";
     private int age;
@@ -140,11 +140,11 @@ public class AbstractTileCache {
 	    String layer = tile.getLayer();
 
 	    String path = "/udd/pdespagn/Desktop/imageTila";
-	    if (!StringUtils.isBlank(type)) {
+	    if (!type.isEmpty()) {
 	    	path += File.separator + type;
 	    }
 
-	    if (!StringUtils.isBlank(layer)) {
+	    if (!layer.isEmpty()) {
 	    	path += File.separator + Integer.toHexString(layer.hashCode());
 	    }
 
