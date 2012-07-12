@@ -1,6 +1,8 @@
 package org.daum.library.android.messages.listener;
 
-import org.daum.common.message.api.Message;
+//import org.daum.common.message.api.Message;
+
+import org.sitac.MessageAmbiance;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,5 +18,5 @@ public interface IMessagesListener {
      * Called when the send message button is clicked
      * @param msg the message
      */
-    void onSend(Message msg);
+    void onSend(MessageAmbiance msg);
 }

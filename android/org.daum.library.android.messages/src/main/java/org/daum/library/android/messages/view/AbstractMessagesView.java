@@ -2,11 +2,9 @@ package org.daum.library.android.messages.view;
 
 import android.content.Context;
 import android.view.View;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import org.daum.library.android.messages.listener.IMessagesListener;
-import org.daum.library.android.messages.listener.MessagesEvent;
 
 /**
  * Created with IntelliJ IDEA.

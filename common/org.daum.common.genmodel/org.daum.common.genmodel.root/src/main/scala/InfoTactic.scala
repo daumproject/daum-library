@@ -25,8 +25,8 @@ trait InfoTactic extends org.sitac.SitacContainer {
 
   def setCategorie(categorie : Option[org.sitac.Categorie] ) {
     this.categorie = (categorie)
-
   }
+
   def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
     val selfObjectClone = SitacFactory.createInfoTactic
     subResult.put(this,selfObjectClone)

@@ -5,12 +5,11 @@ import android.app.Activity;
 import android.app.LocalActivityManager;
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
-import org.daum.common.message.api.Message;
 import org.daum.library.android.messages.listener.IMessagesListener;
 import org.daum.library.android.messages.view.ListItemView.MessageType;
+import org.sitac.MessageAmbiance;
 
 /**
  * Created with IntelliJ IDEA.
@@ -139,7 +138,7 @@ public class MessagesView extends TabHost implements IMessagesListener, TabHost.
      * @param msg the message to add
      * @param type either MessageType.IN (received) or MessageType.OUT (emitted)
      */
-    public void addMessage(Message msg, MessageType type) {
+    public void addMessage(MessageAmbiance msg, MessageType type) {
         msgListView.addMessage(msg, type);
 
         switch (state) {
@@ -165,7 +164,7 @@ public class MessagesView extends TabHost implements IMessagesListener, TabHost.
     }
 
     @Override
-    public void onSend(Message msg) {
+    public void onSend(MessageAmbiance msg) {
         if (listener != null) listener.onSend(msg);
     }
 

@@ -1,16 +1,12 @@
 package org.daum.library.android.messages.view;
 
-import android.R;
 import android.content.Context;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.style.RelativeSizeSpan;
-import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.*;
-import org.daum.common.message.api.Message;
+//import org.daum.common.message.api.Message;
 import org.daum.library.android.messages.view.ListItemView.MessageType;
+import org.sitac.MessageAmbiance;
 
 import java.util.*;
 
@@ -29,7 +25,7 @@ public class MessagesListView extends AbstractMessagesView {
     private static final String TEXT_GO_UP = "Remonter";
     private static final String TEXT_GO_DOWN = "Descendre";
 
-    private ArrayList<Pair<MessageType, Message>> messages = new ArrayList<Pair<MessageType, Message>>();
+    private ArrayList<Pair<MessageType, MessageAmbiance>> messages = new ArrayList<Pair<MessageType, MessageAmbiance>>();
     private ListView listView;
     private MessagesAdapter adapter;
     private Button btn_goUp, btn_goDown;
@@ -87,15 +83,15 @@ public class MessagesListView extends AbstractMessagesView {
      * @param msg the message to add
      * @param type either MessageType.IN (received) or MessageType.OUT (emitted)
      */
-    public void addMessage(Message msg, MessageType type) {
-        for (Pair<MessageType, Message> pair : messages) {
+    public void addMessage(MessageAmbiance msg, MessageType type) {
+        for (Pair<MessageType, MessageAmbiance> pair : messages) {
             if (pair.second.getId().equals(msg.getId())) {
                 // message is already in the list, do not add it
                 return;
             }
         }
         // the message wasn't in the list, so add it
-        messages.add(new Pair<MessageType, Message>(type, msg));
+        messages.add(new Pair<MessageType, MessageAmbiance>(type, msg));
 
         adapter.notifyDataSetChanged();
 

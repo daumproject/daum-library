@@ -3,9 +3,9 @@ package org.daum.library.android.messages.view;
 import android.graphics.Color;
 import android.util.Pair;
 import android.widget.TextView;
-import org.daum.common.message.api.Message;
 import android.content.Context;
 import android.widget.LinearLayout;
+import org.sitac.MessageAmbiance;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,11 +22,11 @@ public class ListItemView extends LinearLayout {
     }
 
     private Context ctx;
-    private Message msg;
+    private MessageAmbiance msg;
     private MessageType type;
     private TextView tv_header, tv_message;
 
-    public ListItemView(Context context, Message message, MessageType type) {
+    public ListItemView(Context context, MessageAmbiance message, MessageType type) {
         super(context);
         this.ctx = context;
         this.msg = message;
@@ -56,7 +56,7 @@ public class ListItemView extends LinearLayout {
                 break;
         }
 
-        tv_header.setText(msg.groupeHoraire+" - "+msg.sender);
+        tv_header.setText(msg.getGroupeHoraire()+" - "+msg.getSender());
         tv_header.setTextSize(25f);
         tv_header.setTextColor(Color.RED);
 
@@ -67,7 +67,7 @@ public class ListItemView extends LinearLayout {
         addView(tv_message);
     }
 
-    public void updateData(Pair<MessageType, Message> pair) {
+    public void updateData(Pair<MessageType, MessageAmbiance> pair) {
         this.type = pair.first;
         this.msg = pair.second;
 
