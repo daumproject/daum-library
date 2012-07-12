@@ -16,4 +16,13 @@ public interface IController {
     void setTimeout(int delay);
 
     void updateUI();
+
+    /**
+     * Convenient method to show progressDialog without handling
+     * its lifecycle
+     * @param msg displayed message in dialog
+     */
+    void showDialog(final String msg, boolean cancelable);
+
+    void dismissDialog();
 }

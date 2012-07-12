@@ -28,6 +28,7 @@ public class Controller implements IController, IControllerListener {
 
     private static final int SHOW_INTERVENTION = 0;
     private static final int UPDATE_INTERVENTION = 1;
+    private static final int SHOW_DIALOG = 2;
 
     private static final String PROGRESS_DIALOG = "progress_dialog";
 
@@ -61,7 +62,7 @@ public class Controller implements IController, IControllerListener {
 
     @Override
     public void onConnectionButtonClicked(String matricule, String password) {
-        showDialog();
+        showDialog(TEXT_LOADING, true);
         this.connTask = new ConnectionTask(connEngine, matricule, password, connTimeout);
         connTask.setOnEventListener(new ConnectionTask.OnEventListener() {
             @Override
@@ -75,14 +76,9 @@ public class Controller implements IController, IControllerListener {
                 dismissDialog();
                 if (connListener != null) connListener.onConnected();
 
-                // retrieve interventions from replica
-                ArrayList<String> items = new ArrayList<String>();
-                interventions = interventionEngine.getInterventions();
-                for (Intervention i : interventions) {
-                    items.add(i.getNumeroIntervention());
-                }
                 // update UI
-                uiHandler.obtainMessage(SHOW_INTERVENTION, items).sendToTarget();
+                uiHandler.obtainMessage(
+                        SHOW_INTERVENTION, retrieveInterventionsItemized()).sendToTarget();
             }
 
             @Override
@@ -96,6 +92,15 @@ public class Controller implements IController, IControllerListener {
         connThread.start();
     }
 
+    private ArrayList<String> retrieveInterventionsItemized() {
+        ArrayList<String> items = new ArrayList<String>();
+        interventions = interventionEngine.getInterventions();
+        for (Intervention i : interventions) {
+            items.add(i.getRequerant().get().getNom()+" - "+i.getRequerant().get().getPrenom());
+        }
+        return items;
+    }
+
     public void discardDialog() {
         dialogWasDisplayed = pDialog.isShowing();
         pDialog.dismiss();
@@ -105,14 +110,22 @@ public class Controller implements IController, IControllerListener {
         if (dialogWasDisplayed) pDialog.show();
     }
 
-    private void showDialog() {
-        pDialog.show();
+    @Override
+    public void dismissDialog() {
+        pDialog.dismiss();
+        dialogWasDisplayed = false;
+    }
+
+    @Override
+    public void showDialog(final String msg, final boolean cancelable) {
+        pDialog.setCancelable(cancelable);
+        pDialog.setMessage(msg);
+        uiHandler.obtainMessage(SHOW_DIALOG).sendToTarget();
         dialogWasDisplayed = true;
     }
 
-    private void dismissDialog() {
-        pDialog.dismiss();
-        dialogWasDisplayed = false;
+    private void showDialog() {
+        pDialog.show();
     }
 
     @Override
@@ -145,16 +158,14 @@ public class Controller implements IController, IControllerListener {
 
     @Override
     public void updateUI() {
-        // retrieve interventions from replica
-        ArrayList<String> items = new ArrayList<String>();
-        interventions = interventionEngine.getInterventions();
-        for (Intervention i : interventions) {
-            items.add(i.getNumeroIntervention());
-        }
         // update UI
-        uiHandler.obtainMessage(UPDATE_INTERVENTION, items).sendToTarget();
+        uiHandler.obtainMessage(
+                UPDATE_INTERVENTION, retrieveInterventionsItemized()).sendToTarget();
     }
 
+    /*
+     * Will process things on UI Thread, pretty convenient for UI managing
+     */
     private final Handler.Callback callback = new Handler.Callback() {
         @Override
         public boolean handleMessage(Message msg) {
@@ -166,6 +177,10 @@ public class Controller implements IController, IControllerListener {
 
                 case UPDATE_INTERVENTION:
                     authView.updateInterventions((ArrayList<String>) msg.obj);
+                    return true;
+
+                case SHOW_DIALOG:
+                    showDialog();
                     return true;
             }
             return false;
