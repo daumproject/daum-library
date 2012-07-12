@@ -1,5 +1,8 @@
 package org.daum.library.replica.cluster;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 
 /**
@@ -10,6 +13,7 @@ import java.io.Serializable;
  */
 public class Node implements INode,Serializable {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
     private String nodeID= "";
     private boolean isSynchronized = false;
     private volatile long lastTickTime;
@@ -46,7 +50,8 @@ public class Node implements INode,Serializable {
 
     public Boolean equals(Node node)
     {
-        if(this.getNodeID().equals(node.getNodeID())){
+        if(this.getNodeID().equals(node.getNodeID()))
+        {
             return  true;
         }
         else
@@ -54,6 +59,7 @@ public class Node implements INode,Serializable {
             return false;
         }
     }
+
 
     public long getLastTickTime() {
         return lastTickTime;

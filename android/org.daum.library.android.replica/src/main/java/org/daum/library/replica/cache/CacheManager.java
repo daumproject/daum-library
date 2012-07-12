@@ -68,19 +68,20 @@ public class CacheManager implements ICacheManger
     {
         try
         {
-            // break cycle
+            /* break cycle    */
             if(history.containsKey(((AMessage)o).getUuid()))
             {
                 Integer counter = history.get(((AMessage)o).getUuid());
                 counter++;
                 if(counter > cluster.getNodesOfCluster().size())
                 {
-                   history.remove(((AMessage)o).getUuid());
+
+                    history.remove(((AMessage)o).getUuid());
                 }else
                 {
-                  history.put(((AMessage)o).getUuid(),counter);
+                    history.put(((AMessage)o).getUuid(),counter);
                 }
-                logger.debug("counter "+counter);
+
 
             } else
             {
@@ -131,21 +132,21 @@ public class CacheManager implements ICacheManger
 
                     if(storeSnapshot.dest.equals(cluster.getCurrentNode()))
                     {
-                     // if(cluster.getCurrentNode().isSynchronized())
-                     // {
+                        // if(cluster.getCurrentNode().isSynchronized())
+                        // {
 
-                          logger.debug(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest);
+                        logger.debug(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest);
 
-                          for(Update msg:  storeSnapshot.snapshot)
-                          {
-                              getCache(msg.cache).putIfAbsent(msg.key, msg.getVersionedValue());
-                          }
+                        for(Update msg:  storeSnapshot.snapshot)
+                        {
+                            getCache(msg.cache).putIfAbsent(msg.key, msg.getVersionedValue());
+                        }
 
-                          // notify is syncEvent
-                          SyncEvent syncEvent = new SyncEvent();
-                          // todo add node
-                          cluster.getChannel().write(syncEvent);
-                          cluster.getCurrentNode().setSynchronized();
+                        // notify is syncEvent
+                        SyncEvent syncEvent = new SyncEvent();
+                        // todo add node
+                        cluster.getChannel().write(syncEvent);
+                        cluster.getCurrentNode().setSynchronized();
 
                         /*
                       } else
@@ -159,51 +160,54 @@ public class CacheManager implements ICacheManger
                 {
                     final Command command = (Command)o;
 
-                    if(command.getEvent().equals(StoreEvent.HEARTBEAT))
+                    logger.debug("Command from : "+command.getSourceNode().getNodeID());
+
+                    if(!command.getSourceNode().equals(cluster.getCurrentNode()))
                     {
-                        if(!command.source.equals(cluster.getCurrentNode()))
+                        if(command.getEvent().equals(StoreEvent.HEARTBEAT))
                         {
-                            logger.info("Cluster "+ cluster.getNodesOfCluster());
                             cluster.addNode(command.getSourceNode());
-                        }
-                    } else  if(command.getEvent().equals(StoreEvent.REQUEST_SNAPSHOT))
-                    {
 
-                        logger.debug(" "+cluster.getCurrentNode()+" "+command);
-                        if(!command.source.equals(cluster.getCurrentNode()) && command.dest.equals(cluster.getCurrentNode()))
+                        } else  if(command.getEvent().equals(StoreEvent.REQUEST_SNAPSHOT))
                         {
-                            logger.info("Creating snapshot for "+ command.source);
-
-                            final List<Update> current_snapshot= new ArrayList<Update>();
-
-                            for(String namecache : store.keySet())
+                            if(command.dest.equals(cluster.getCurrentNode()))
                             {
-                                for( Object key: store.get(namecache).keySet()){
+                                logger.info("Creating snapshot for "+ command.source);
 
-                                    Update snapshot = new Update();
-                                    snapshot.event = StoreEvent.SNAPSHOT;
-                                    snapshot.dest = command.source;
-                                    snapshot.source = cluster.getCurrentNode();
-                                    snapshot.cache = namecache;
-                                    snapshot.key = key;
-                                    snapshot.setVersionedValue(store.get(namecache).get(key));
-                                    current_snapshot.add(snapshot);
+                                final List<Update> current_snapshot= new ArrayList<Update>();
+
+                                for(String namecache : store.keySet())
+                                {
+                                    for( Object key: store.get(namecache).keySet()){
+
+                                        Update snapshot = new Update();
+                                        snapshot.event = StoreEvent.SNAPSHOT;
+                                        snapshot.dest = command.source;
+                                        snapshot.source = cluster.getCurrentNode();
+                                        snapshot.cache = namecache;
+                                        snapshot.key = key;
+                                        snapshot.setVersionedValue(store.get(namecache).get(key));
+                                        current_snapshot.add(snapshot);
+                                    }
                                 }
+
+                                logger.info("Snapshot is created for "+ command.source);
+
+                                Snapshot storeSnapshot = new Snapshot();
+                                storeSnapshot.snapshot =   current_snapshot;
+                                storeSnapshot.source = cluster.getCurrentNode();
+                                storeSnapshot.dest =   command.source;
+                                cluster.getChannel().write(storeSnapshot);
+
+                                logger.info("Snapshot is sent for "+ command.source);
+                            } else
+                            {
+                                // ignore it's not for me
                             }
-
-                            logger.info("Snapshot is created for "+ command.source);
-
-                            Snapshot storeSnapshot = new Snapshot();
-                            storeSnapshot.snapshot =   current_snapshot;
-                            storeSnapshot.source = cluster.getCurrentNode();
-                            storeSnapshot.dest =   command.source;
-                            cluster.getChannel().write(storeSnapshot);
-
-                            logger.info("Snapshot is sent for "+ cluster.getCurrentNode());
                         }
                     }
                 }
-            }
+          }
         }catch (Exception e){
             logger.error("processing MSG fail : ",e);
         }
