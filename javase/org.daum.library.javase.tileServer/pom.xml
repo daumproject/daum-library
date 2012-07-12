@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.daum.library.javase</groupId>
     <artifactId>org.daum.library.javase.tileServer</artifactId>
-    <name>tileServer</name>
+    <name>DAUM :: Library :: JavaSE :: tileServer</name>
     <version>0.1</version>
     <description>Tile Server</description>
 
     <parent>
         <groupId>org.daum.library.javase</groupId>
         <artifactId>org.daum.library.javase.root</artifactId>
-        <version>1.8.1</version>
+        <version>1.8.2-SNAPSHOT</version>
         <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
     </parent>
 
@@ -38,21 +38,6 @@
             <groupId>org.kevoree.corelibrary.javase</groupId>
             <artifactId>org.kevoree.library.javase.webserver.api</artifactId>
             <version>${kevoree.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.jdal</groupId>
-            <artifactId>jdal-vaadin</artifactId>
-            <version>1.1-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>jasperreports</artifactId>
-                    <groupId>net.sf.jasperreports</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jdtcore</artifactId>
-                    <groupId>eclipse</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>commons-collections</groupId>

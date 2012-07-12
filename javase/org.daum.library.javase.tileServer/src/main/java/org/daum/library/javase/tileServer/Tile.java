@@ -15,7 +15,7 @@
  */
 package org.daum.library.javase.tileServer;
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -79,9 +79,11 @@ public class Tile {
 		return result;
 	}
 	
-	public String getFileExension() {
-		return StringUtils.substringAfter(mimeType, "/"); 
-	}
+	public String getFileExension()
+    {
+           ///StringUtils.substringAfter(mimeType, "/");
+		return  mimeType.substring(mimeType.indexOf("/"));
+    }
 	
 	// Getters and Setters
 	
