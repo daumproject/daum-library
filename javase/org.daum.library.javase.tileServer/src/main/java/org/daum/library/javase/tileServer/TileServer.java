@@ -22,12 +22,20 @@ public class TileServer extends AbstractPage {
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse)
     {
         AbstractTileCache abstractTileCache = new AbstractTileCache();
+        //System.err.print("URL DONNE ===============>"+ transformeUrlIntoTileUrl(kevoreeHttpRequest.getUrl()) );
         Tile tile = abstractTileCache.getTile(transformeUrlIntoTileUrl(kevoreeHttpRequest.getUrl()));
         kevoreeHttpResponse.setRawContent(tile.getImage());
         return kevoreeHttpResponse;
     }
 
     private String transformeUrlIntoTileUrl(String url){
-       return  url.substring("http://tile.opentreetmap.org/".length());
+        int compteurSlash = 0;
+        for (int i = url.length(); (i = url.lastIndexOf("/", i - 1)) != -1;) {
+            if(compteurSlash == 2){
+                return (url.substring(i));
+            }
+            compteurSlash = compteurSlash+1;
+        }
+        return null;
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 package org.daum.library.javase.tileServer;
-import org.apache.commons.collections.map.LRUMap;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
@@ -26,7 +26,6 @@ import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -67,7 +66,8 @@ public class AbstractTileCache {
 				tileMap.put(tile.getKey(), tile);
 			}else{
                 try {
-                    downloadTile(tile,new URL(getTileUrl(tile)));
+                    System.out.print("passage dans get tile else else cachedTile");
+                    downloadTile(tile, new URL(getTileUrl(tile)));
                     storeTile(tile);
                 } catch (Exception e) {
                     e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -113,6 +113,7 @@ public class AbstractTileCache {
 	 * @throws java.io.IOException on write faliure
 	 */
 	public void storeTile(Tile tile) throws IOException {
+        System.out.print("PATH ==== > "+getCachePath(tile));
 		File file = new File(getCachePath(tile));
 		FileUtils.writeByteArrayToFile(file, tile.getImage());
 		tileMap.put(tile.getKey(), tile);
@@ -137,15 +138,10 @@ public class AbstractTileCache {
 	    int y = tile.getY();
 	    int zoom = tile.getZoom() + 2;
 	    String type = tile.getType();
-	    String layer = tile.getLayer();
 
 	    String path = "/udd/pdespagn/Desktop/imageTila";
 	    if (!type.isEmpty()) {
 	    	path += File.separator + type;
-	    }
-
-	    if (!layer.isEmpty()) {
-	    	path += File.separator + Integer.toHexString(layer.hashCode());
 	    }
 
 	    path += File.separator + zoom + File.separator + x / 1024 +
