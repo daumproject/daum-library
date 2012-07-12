@@ -69,6 +69,7 @@ public class DaumAuthComponent extends AbstractComponentType
     private static final String TAB_NAME = "Connexion";
     private static final String TEXT_CONN_FAILED = "Mauvais matricule et/ou mot de passe";
     private static final String TEXT_CONN_TIMEDOUT = "Impossible de se connecter, réessayez plus tard.";
+    private static final String TEXT_MODEL_GEN = "Chargement du modèle de données...";
 
     private static final int CONNECTION_TIMEOUT = 1000*15; // 15 seconds
 
@@ -174,7 +175,6 @@ public class DaumAuthComponent extends AbstractComponentType
 
     @Override
     public void onConnected() {
-        Log.w(TAG, "Authentication succeeded !");
     }
 
     @Override
@@ -184,9 +184,6 @@ public class DaumAuthComponent extends AbstractComponentType
 
     @Override
     public void onConnectionTimedout() {
-        // TODO kick this stupid line onInterventionSelected(null); it's just for debug
-        onInterventionSelected(null);
-
         showToast(TEXT_CONN_TIMEDOUT, Toast.LENGTH_SHORT);
     }
 
@@ -196,13 +193,14 @@ public class DaumAuthComponent extends AbstractComponentType
             @Override
             public void run() {
                 try {
-                    // TODO show a ProgressDialog here
+                    controller.showDialog(TEXT_MODEL_GEN, false);
                     generateModel(inter);
                     uiService.remove(view);
-                    // TODO dismiss the progressDialog here
 
                 } catch (Exception e) {
                     logger.error("Error while generating model", e);
+                } finally {
+                    controller.dismissDialog();
                 }
             }
         }).start();
@@ -229,6 +227,7 @@ public class DaumAuthComponent extends AbstractComponentType
         }
 
         // variables
+        engine.addVariable("compName", getName());
         engine.addVariable("nodeName", getNodeName());
         engine.addVariable("replicaNotifChanName", replicaNotifChanName);
         engine.addVariable("replicaServiceChanName", replicaServiceChanName);
@@ -257,6 +256,9 @@ public class DaumAuthComponent extends AbstractComponentType
 //        engine.append("updateDictionary sitacComp {interNum='{interNum}'}@{nodeName}");
 //        engine.append("updateDictionary moyensComp {interNum='{interNum}'}@{nodeName}");
 //        engine.append("updateDictionary msgComp {interNum='{interNum}'}@{nodeName}");
+
+        // remove daumAuthComp
+        engine.append("removeComponent {compName}@{nodeName}");
 
         engine.interpretDeploy();
     }

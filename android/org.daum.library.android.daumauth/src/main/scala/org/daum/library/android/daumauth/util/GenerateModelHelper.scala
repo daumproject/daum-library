@@ -3,7 +3,7 @@ package org.daum.library.android.daumauth.util
 import org.kevoree.{ContainerNode, ComponentInstance, ContainerRoot}
 
 
-class GenerateModelHelper {
+class GenerateModelHelper() {
 
   def findChannel (componentName: String, portName: String, nodeName: String, currentModel: ContainerRoot): Option[String] = {
     currentModel.getMBindings.find(b => b.getPort.getPortTypeRef.getName == portName && b.getPort.eContainer.asInstanceOf[ComponentInstance].getName == componentName &&
