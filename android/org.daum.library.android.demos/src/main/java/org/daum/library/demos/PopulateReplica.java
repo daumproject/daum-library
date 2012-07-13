@@ -11,11 +11,11 @@ import org.kevoree.ContainerRoot;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
-import org.sitac.*;
 import org.sitac.impl.InterventionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.Some;
+import sun.management.Agent;
 
 
 /**
@@ -103,6 +103,9 @@ public class PopulateReplica extends AbstractComponentType {
                 {
                     session = factory.getSession();
 
+
+
+
                     if(session != null)
                     {
 
@@ -147,6 +150,10 @@ public class PopulateReplica extends AbstractComponentType {
                         Personne vitc2 = SitacFactory.createPersonne();
                         vitc2.setNom("Nom victime2");
                         vitc2.setPrenom("Prenom victime2");
+
+                        session.save(vitc1);
+
+
 
                         Intervention interventionfake =SitacFactory.createIntervention();
 

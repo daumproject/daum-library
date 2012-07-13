@@ -1,5 +1,7 @@
 package org.daum.javase.webportal.client;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
+
 /**
  * Created with IntelliJ IDEA.
  * User: pdespagn
@@ -8,4 +10,6 @@ package org.daum.javase.webportal.client;
  * To change this template use File | Settings | File Templates.
  */
 public interface AuthentificationServiceAsync {
+      void initHibernate(AsyncCallback<Void> callback);
+      void authenticateAgent(String name, String password, AsyncCallback<Boolean> callback);
 }

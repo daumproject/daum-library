@@ -49,9 +49,6 @@ public class webPortalComponent extends AbstractPage {
             }
         };
         super.startPage();
-        servletRepository.registerServlet("/ihmcodemirror/htmleditor", new RepositoryToolsServicesImpl(this.getDictionary().get("directoryPath").toString()));
-        servletRepository.registerServlet("/ihmcodemirror/systemFileServices",new StructureServiceImpl());
-        servletRepository.registerServlet("/ihmcodemirror/upload",new UploadFileServer());
     }
 
     @Override
@@ -64,9 +61,7 @@ public class webPortalComponent extends AbstractPage {
 
         Thread.currentThread().setContextClassLoader(l);
         if ( res ){
-
             return response;
-
         }
 
 
