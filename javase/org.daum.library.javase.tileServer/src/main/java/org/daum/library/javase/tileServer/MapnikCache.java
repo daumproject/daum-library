@@ -19,45 +19,56 @@ import java.net.URL;
 
 /**
  * WMS Tile Cache implementation.
- * 
+ *
  * @author Jose Luis Martin
  */
-public class MapnikCache  {
-	
-//	private static final Log log = LogFactory.getLog(MapnikCache.class);
-	@SuppressWarnings("unused")
-        private String tileServer = "http://tile.openstreetmap.org";
+public class MapnikCache extends  TileCacheImpl
+{
+    private String tileServer = "http://tile.openstreetmap.org";
 
-	/**
-	 * {@inheritDoc}
-	 */
+    /**
+     * @param pathCache
+     */
+    public  MapnikCache(String pathCache)
+    {
+        super(pathCache);
+    }
 
     protected Tile parseTile(String uri) {
-		Tile tile = null;
-		try  {
-			String[] splited = uri.split("/");
-			int length = splited.length;
-		
-			int x = Integer.parseInt(splited[length - 2]);
-			int y = Integer.parseInt(splited[length - 1].substring(0, splited[length - 1].lastIndexOf('.')));
-			int zoom = Integer.parseInt(splited[length - 3]);
-		
-			tile = new Tile(x, y, zoom);
-			tile.setMimeType("image/png");
-		} 
-		catch (Exception e) {
-			System.out.println(""+e);
-		}
-		return tile;
-	}
+        Tile tile = null;
+        try  {
+            String[] splited = uri.split("/");
+            int length = splited.length;
 
-	public URL getTileUrl(Tile tile) {
-		String url = tileServer + "/" + tile.getZoom() + "/" + tile.getX() +"/" + tile.getY() + ".png";
-		try {
-			return new URL (url);
-		} catch (MalformedURLException e) {
-			return null;
-		}
-	}
-	
+            int x = Integer.parseInt(splited[length - 2]);
+            int y = Integer.parseInt(splited[length - 1].substring(0, splited[length - 1].lastIndexOf('.')));
+            int zoom = Integer.parseInt(splited[length - 3]);
+
+            tile = new Tile(x, y, zoom);
+            tile.setMimeType("image/png");
+        }
+        catch (Exception e) {
+            System.out.println(""+e);
+        }
+        return tile;
+    }
+
+    public URL getTileUrl(Tile tile) {
+        String url = tileServer + "/" + tile.getZoom() + "/" + tile.getX() +"/" + tile.getY() + ".png";
+        try {
+            return new URL (url);
+        } catch (MalformedURLException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public String getServerUrl() {
+        return tileServer;
+    }
+
+    @Override
+    public String getServerUrl(String query) {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }
