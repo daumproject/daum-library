@@ -1,0 +1,58 @@
+body{
+    font-family:AlternateGothicFSNo3,"Arial Narrow";
+    margin:auto;
+
+}
+
+#buttonBar {
+    width: 915px;
+    height: 100px;
+    background-color: whitesmoke;
+}
+
+#fileSystem {
+    float: left;
+    min-width: 300px;
+    min-height: 800px;
+
+    background:#252525;
+    color:white;
+    border: solid 1px
+    padding: 20px;
+}
+
+#editor {
+    float:left;
+    min-width: 500px;
+    min-height: 700px;
+}
+
+.buttonBarGrid table{
+    margin:auto;
+}
+
+.popup
+{
+    background-color       :   whitesmoke;
+    border                 :    3px solid black;
+}
+
+.textAreaCodeShow
+{
+    border: solid 1px;
+    width: 300px;
+    min-height: 800px;
+}
+
+.systemFileScrollPanel{
+    min-height:800px;
+}
+
+.gwt-Tree .gwt-TreeItem-selected {
+         text-decoration:underline;
+}
+
+.hiddenLabel{
+visibility:hidden;
+}
+

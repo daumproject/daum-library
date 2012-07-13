@@ -1,7 +1,5 @@
 package org.daum.library.javase.tileServer;
 
-import java.util.Map;
-
 /**
  * Created with IntelliJ IDEA.
  * User: jed

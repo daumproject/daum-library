@@ -15,7 +15,6 @@
  */
 package org.daum.library.javase.tileServer;
 import java.io.IOException;
-import java.io.InputStream;
 
 /**
  *  ITileCache interface. Implement to create new tile caches.
