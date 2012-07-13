@@ -1,9 +1,7 @@
 package org.daum.library.android.moyens.view.quickactionbar;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 
-import android.util.Log;
 import android.view.*;
 import android.widget.*;
 import org.daum.library.android.moyens.view.quickactionbar.listener.OnActionClickedListener;
@@ -16,7 +14,6 @@ import android.graphics.Rect;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.Shape;
 import android.util.Pair;
-import android.widget.AdapterView.OnItemClickListener;
 
 public class QuickActionsBar extends TabHost implements View.OnClickListener {
 	

@@ -1,0 +1,5 @@
+TODO list - SITACComponent
+-> arrow heads are not sized according to map's zoom level
+-> map provider URL are not checked, they have to be http://domain.tld/
+(don't know if IPs without http:// work)
+-> dictionary interNum value is not used

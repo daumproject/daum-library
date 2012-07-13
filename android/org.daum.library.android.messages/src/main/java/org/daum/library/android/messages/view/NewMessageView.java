@@ -12,6 +12,8 @@ import org.daum.library.android.messages.listener.MessagesEvent.MessagesEventTyp
 import org.sitac.MessageAmbiance;
 import org.sitac.SitacFactory;
 
+import java.util.Date;
+
 /**
  * Created with IntelliJ IDEA.
  * User: max
@@ -187,6 +189,7 @@ public class NewMessageView extends AbstractMessagesView {
 
         msg = SitacFactory.createMessageAmbiance();
         msg.setSender(senderName);
+        msg.setGroupeHoraire(new Date());
         msg.setJeSuis(jeSuis);
         msg.setJeVois(jeVois);
         msg.setJePrevois(jePrevois);

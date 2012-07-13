@@ -1,0 +1,3 @@
+TODO list - Model
+-> methods inherited from eContainer are not well overrided in ArrowAction
+-> refactoring on IModel

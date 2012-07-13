@@ -111,6 +111,15 @@ public class ExpandableMenuList {
 			}
 		}
 	}
+
+    /**
+     * Removes items from all groups but keeps groups (empty)
+     */
+    public void deleteItems() {
+        for (Pair<IExpandableMenuItem, List<IExpandableMenuItem>> pair : list) {
+            pair.second.clear();
+        }
+    }
 	
 	public void removeItem(int grpPos, IExpandableMenuItem item) {
 		if (grpPos < 0 || grpPos > list.size()-1) return;

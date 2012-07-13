@@ -1,4 +1,8 @@
-package org.sitac;
+package org.sitac
+
+import org.daum.library.ormH.annotations.Generated
+import org.daum.library.ormH.annotations.Id
+import org.daum.library.ormH.persistence.GeneratedType
 
 /**
  * Created by Ecore Model Generator.
@@ -8,14 +12,16 @@ package org.sitac;
  */
 trait MessageAmbiance extends org.sitac.SitacContainer {
 
+  @Id
+  @Generated(strategy = GeneratedType.UUID)
 	private var id : java.lang.String = ""
-  private var jeSuis : java.lang.String = ""
-  private var jeVois : java.lang.String = ""
-  private var jePrevois : java.lang.String = ""
-  private var jeFais : java.lang.String = ""
-  private var jeDemande : java.lang.String = ""
-  private var groupeHoraire : java.lang.String = ""
-  private var sender : java.lang.String = ""
+  private var jeSuis : java.lang.String = null
+  private var jeVois : java.lang.String = null
+  private var jePrevois : java.lang.String = null
+  private var jeFais : java.lang.String = null
+  private var jeDemande : java.lang.String = null
+  private var groupeHoraire : java.util.Date = null
+  private var sender : java.lang.String = null
 
 
   def getJeSuis : java.lang.String = {
@@ -66,11 +72,11 @@ trait MessageAmbiance extends org.sitac.SitacContainer {
     this.jeDemande = jeDemande
   }
 
-  def getGroupeHoraire : java.lang.String = {
+  def getGroupeHoraire : java.util.Date = {
     groupeHoraire
   }
 
-  def setGroupeHoraire(groupeHoraire : java.lang.String) {
+  def setGroupeHoraire(groupeHoraire : java.util.Date) {
     this.groupeHoraire = groupeHoraire
   }
 

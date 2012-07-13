@@ -144,7 +144,7 @@ public class MessagesComponent extends AbstractComponentType
     }
 
     @Override
-    public void onReplicaSynced(final Collection<MessageAmbiance> messages) {
+    public void onReplicaSynced(final Collection<? extends MessageAmbiance> messages) {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {

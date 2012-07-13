@@ -32,7 +32,7 @@ trait DonneeContextuel extends org.sitac.SitacContainer with org.sitac.InfoPos {
 		selfObjectClone.setOrientation(this.getOrientation)
 		selfObjectClone.setPrecision(this.getPrecision)
 		subResult.put(this,selfObjectClone)
-		this.getPositions.getClonelazy(subResult)
+		this.getPosition.getClonelazy(subResult)
 
 	}
 	override def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : DonneeContextuel = {
@@ -41,9 +41,9 @@ trait DonneeContextuel extends org.sitac.SitacContainer with org.sitac.InfoPos {
 			clonedSelfObject.setCategorie(Some(addrs.get(sub).asInstanceOf[org.sitac.Categorie]))
 		}
 
-		clonedSelfObject.setPositions(addrs.get(this.getPositions).asInstanceOf[org.sitac.Position])
+		clonedSelfObject.setPosition(addrs.get(this.getPosition).asInstanceOf[org.sitac.Position])
 
-		this.getPositions.resolve(addrs)
+		this.getPosition.resolve(addrs)
 
 		clonedSelfObject
 	}

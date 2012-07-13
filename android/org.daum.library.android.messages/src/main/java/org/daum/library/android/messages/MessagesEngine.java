@@ -40,7 +40,6 @@ public class MessagesEngine {
             // configuring persistence
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
             configuration.setStore(store);
-            configuration.addPersistentClass(MessageAmbiance.class);
             configuration.addPersistentClass(MessageAmbianceImpl.class);
 
             // retrieve the persistence factory
@@ -50,14 +49,14 @@ public class MessagesEngine {
             Log.e(TAG, "Error while initializing persistence in engine", ex);
         }
 
-        MessagesComponent.getChangeListenerInstance().addEventListener(MessageAmbiance.class, new PropertyChangeListener() {
+        MessagesComponent.getChangeListenerInstance().addEventListener(MessageAmbianceImpl.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent e) {
                 if (listener != null) {
                     PersistenceSession session = null;
                     try {
                         session = factory.getSession();
-                        MessageAmbiance m = (MessageAmbiance) session.get(MessageAmbiance.class, e.getId());
+                        MessageAmbiance m = (MessageAmbiance) session.get(MessageAmbianceImpl.class, e.getId());
 
                         switch (e.getEvent()) {
                             case ADD:
@@ -87,8 +86,8 @@ public class MessagesEngine {
                 PersistenceSession session = null;
                 try {
                     session = factory.getSession();
-                    Map<Object, MessageAmbiance> map = session.getAll(MessageAmbiance.class);
-                    if (listener != null) listener.onReplicaSynced(map.values());
+                    Map<Object, MessageAmbianceImpl> map = session.getAll(MessageAmbianceImpl.class);
+                    if (listener != null && map != null) listener.onReplicaSynced(map.values());
 
                 } catch (PersistenceException ex) {
                     Log.e(TAG, "Error while retrieving session on replica sync", ex);
@@ -132,6 +131,6 @@ public class MessagesEngine {
          *
          * @param messages the complete list of messages
          */
-        public void onReplicaSynced(Collection<MessageAmbiance> messages);
+        public void onReplicaSynced(Collection<? extends MessageAmbiance> messages);
     }
 }

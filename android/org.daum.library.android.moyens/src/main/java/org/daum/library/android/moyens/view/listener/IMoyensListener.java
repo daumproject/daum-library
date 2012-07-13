@@ -1,6 +1,6 @@
 package org.daum.library.android.moyens.view.listener;
 
-import org.daum.common.model.api.Demand;
+import org.sitac.Vehicule;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,11 +15,11 @@ public interface IMoyensListener {
      * Called when a new demand is asked
      * @param newDemand the new demand
      */
-    void onDemandAsked(Demand newDemand);
+    void onDemandAsked(Vehicule newDemand);
 
     /**
      * Called when a demand in the list has been updated
      * @param demand the updated demand
      */
-    void onDemandUpdated(Demand demand);
+    void onDemandUpdated(Vehicule demand);
 }

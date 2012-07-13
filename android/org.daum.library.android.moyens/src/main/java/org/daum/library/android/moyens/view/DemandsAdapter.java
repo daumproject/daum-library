@@ -4,7 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import org.daum.common.model.api.Demand;
+import org.sitac.Vehicule;
 
 import java.util.ArrayList;
 
@@ -20,9 +20,9 @@ public class DemandsAdapter extends BaseAdapter {
     private static final String TAG = "DemandsAdapter";
 
     private Context ctx;
-    private ArrayList<Demand> demands;
+    private ArrayList<Vehicule> demands;
 
-    public DemandsAdapter(Context ctx, ArrayList<Demand> demands) {
+    public DemandsAdapter(Context ctx, ArrayList<Vehicule> demands) {
         super();
         this.ctx = ctx;
         this.demands = demands;

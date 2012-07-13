@@ -1,11 +1,8 @@
 package org.daum.library.android.sitac;
 
-import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 import org.daum.library.android.sitac.controller.ISITACController;
+import org.daum.library.android.sitac.engine.IEngine;
 import org.daum.library.android.sitac.view.SITACView;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
@@ -26,9 +23,6 @@ import org.kevoree.framework.AbstractComponentType;
  * To change this template use File | Settings | File Templates.
  */
 
-// TODO
-// dico: - port:ip provider carte
-//       - filtre type intervention
 @Library(name = "Android")
 @Requires({
         @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = false)
@@ -45,9 +39,13 @@ public class SITACComponent extends AbstractComponentType {
 
     private static final String TAG = "SITACComponent";
 
+    private static final String TAB_NAME = "SITAC";
+
     private KevoreeAndroidService uiService;
     private static ChangeListener singleton=null;
-    private SITACView sitacView;
+    private SITACView view;
+    private ISITACController controller;
+    private IEngine engine;
 
     public static ChangeListener getChangeListenerInstance() {
         if (singleton == null) singleton = new ChangeListener();
@@ -58,8 +56,8 @@ public class SITACComponent extends AbstractComponentType {
     @Start
     public void start() {
         uiService = UIServiceHandler.getUIService();
-        final String mapProvider = getDictionary().get("mapProvider").toString();
-        final String interNum = getDictionary().get("interNum").toString();
+
+        initUI();
 
         getModelService().registerModelListener(new ModelListener() {
             @Override
@@ -78,13 +76,15 @@ public class SITACComponent extends AbstractComponentType {
                     @Override
                     public void run() {
                         try {
-                            ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
-                            ReplicaStore storeImpl = new ReplicaStore(replicatingService);
+                            String mapProvider = getDictionary().get("mapProvider").toString();
+                            String interNum = getDictionary().get("interNum").toString();
 
-                            sitacView = new SITACView(uiService.getRootActivity(), getNodeName(), storeImpl);
-                            ISITACController ctrl = sitacView.getController();
-                            ctrl.setMapProvider(mapProvider);
-                            uiService.addToGroup("SITAC", sitacView);
+                            ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
+                            ReplicaStore store = new ReplicaStore(replicatingService);
+
+                            engine = new SITACEngine(getNodeName(), store);
+                            controller.setEngine(engine);
+                            controller.setMapProvider(mapProvider);
 
                         } catch (PersistenceException e) {
                             Log.e(TAG, "Error on component startup", e);
@@ -95,15 +95,27 @@ public class SITACComponent extends AbstractComponentType {
         });
     }
 
+    private void initUI() {
+        uiService.getRootActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                view = new SITACView(uiService.getRootActivity());
+                controller = view.getController();
+                uiService.addToGroup(TAB_NAME, view);
+            }
+        });
+    }
+
     @Stop
     public void stop() {
-        uiService.remove(sitacView);
+        uiService.remove(view);
     }
 
     @Update
     public void update() {
-        stop();
-        start();
+
+//        stop();
+//        start();
     }
 
     @Port(name = "notify")

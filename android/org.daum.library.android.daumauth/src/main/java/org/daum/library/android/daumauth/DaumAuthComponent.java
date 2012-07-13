@@ -38,6 +38,7 @@ import scala.Option;
 import scala.Some;
 
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 
 /**
@@ -81,6 +82,7 @@ public class DaumAuthComponent extends AbstractComponentType
     private static ChangeListener listener = new ChangeListener();
     private boolean storeSynced = false;
     private DaumAuthView.State viewState = DaumAuthView.State.NOT_CONNECTED;
+    private final Semaphore onlyOne = new Semaphore(1);
 
     @Start
     public void start() {
@@ -193,6 +195,7 @@ public class DaumAuthComponent extends AbstractComponentType
             @Override
             public void run() {
                 try {
+                    onlyOne.acquire(); // prevent from double click on listView
                     controller.showDialog(TEXT_MODEL_GEN, false);
                     generateModel(inter);
                     uiService.remove(view);
@@ -201,9 +204,11 @@ public class DaumAuthComponent extends AbstractComponentType
                     logger.error("Error while generating model", e);
                 } finally {
                     controller.dismissDialog();
+                    onlyOne.release();
                 }
             }
         }).start();
+
     }
 
     private void generateModel(Intervention inter) throws Exception {
@@ -255,7 +260,9 @@ public class DaumAuthComponent extends AbstractComponentType
         // remove daumAuthComp
         engine.append("removeComponent {compName}@{nodeName}");
 
+        Log.w(TAG, ">>>> start interpretDeploy");
         engine.interpretDeploy();
+        Log.w(TAG, ">>>> interpretDeploy done");
     }
 
     @Port(name = "notify")

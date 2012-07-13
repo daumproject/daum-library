@@ -1,8 +1,8 @@
 package org.daum.library.android.sitac.visitor;
 
-import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.view.entity.DemandEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
+import org.sitac.IModel;
 
 /**
  * Created with IntelliJ IDEA.

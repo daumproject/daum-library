@@ -1,12 +1,10 @@
 package org.daum.library.android.sitac.view;
 
-import android.view.ViewGroup;
 import org.daum.library.android.sitac.controller.ISITACController;
 import org.daum.library.android.sitac.controller.SITACController;
 
 import android.content.Context;
 import android.widget.RelativeLayout;
-import org.daum.library.ormH.store.ReplicaStore;
 
 public class SITACView extends RelativeLayout {
 	
@@ -16,10 +14,10 @@ public class SITACView extends RelativeLayout {
 	private SITACMenuView menuView;
 	private SITACSelectedEntityView selectedEntityView;
 
-	public SITACView(Context context, String nodeName, ReplicaStore store) {
+	public SITACView(Context context) {
 		super(context);
 		this.ctx = context;
-		this.sitacCtrl = new SITACController(ctx, nodeName, store);
+		this.sitacCtrl = new SITACController(ctx);
 		initUI();
 		configUI();
 		defineCallbacks();

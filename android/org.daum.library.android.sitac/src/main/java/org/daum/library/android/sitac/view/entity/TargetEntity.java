@@ -1,8 +1,8 @@
 package org.daum.library.android.sitac.view.entity;
 
 import android.graphics.drawable.Drawable;
-import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.visitor.IVisitor;
+import org.sitac.IModel;
 
 public class TargetEntity extends AbstractEntity {
 

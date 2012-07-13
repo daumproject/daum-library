@@ -1,8 +1,6 @@
 package org.daum.library.android.sitac.view.entity;
 
 import android.graphics.*;
-import android.util.Log;
-import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.visitor.IVisitor;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.views.MapView;
@@ -10,6 +8,7 @@ import org.osmdroid.views.MapView.Projection;
 
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
+import org.sitac.IModel;
 
 public class ZoneEntity extends AbstractShapedEntity {
 

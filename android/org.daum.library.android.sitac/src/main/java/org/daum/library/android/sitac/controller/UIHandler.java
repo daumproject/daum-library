@@ -3,9 +3,6 @@ package org.daum.library.android.sitac.controller;
 import java.util.Date;
 import java.util.Hashtable;
 
-import org.daum.common.gps.impl.GpsPoint;
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.command.RedoCommand;
 import org.daum.library.android.sitac.command.UndoCommand;
 import org.daum.library.android.sitac.command.engine.AddModelCommand;
@@ -13,7 +10,7 @@ import org.daum.library.android.sitac.command.engine.DeleteModelCommand;
 import org.daum.library.android.sitac.command.engine.UpdateModelCommand;
 import org.daum.library.android.sitac.command.ui.AddPointCommand;
 import org.daum.library.android.sitac.command.ui.ClearUndoStackCommand;
-import org.daum.library.android.sitac.engine.SITACEngine;
+import org.daum.library.android.sitac.engine.IEngine;
 import org.daum.library.android.sitac.engine.UndoRedoEngine;
 import org.daum.library.android.sitac.listener.OnMenuViewEventListener;
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
@@ -32,6 +29,10 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.MapView.Projection;
 
 import android.view.MotionEvent;
+import org.sitac.GpsPoint;
+import org.sitac.IModel;
+import org.sitac.SitacFactory;
+import org.sitac.Vehicule;
 
 public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventListener, OnMenuViewEventListener {
 	
@@ -41,13 +42,12 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 	private SITACSelectedEntityView selectedEntityView;
 	private IEntity selectedEntity;
 	private IModelFactory factory;
-	private SITACEngine modelEngine;
+	private IEngine modelEngine;
 	private UndoRedoEngine undoRedoEngine;
 	private Hashtable<IEntity, IModel> modelMap;
 	
-	public UIHandler(IModelFactory factory, SITACEngine modelEngine, Hashtable<IEntity, IModel> modelMap) {
+	public UIHandler(IModelFactory factory, Hashtable<IEntity, IModel> modelMap) {
 		this.factory = factory;
-		this.modelEngine = modelEngine;
 		this.undoRedoEngine = new UndoRedoEngine();
 		this.modelMap = modelMap;
 	}
@@ -59,12 +59,16 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 			selectedEntity = selectedEntityView.registerEntity(entity);
 		}
 	}
+
+    public void setEngine(IEngine engine) {
+        this.modelEngine = engine;
+    }
 	
 	@Override
 	public void onDeleteButtonClicked() {
 		IModel m = modelMap.get(selectedEntity);
-		if (m instanceof Demand) {
-            ((Demand) m).setGh_desengagement(new Date());
+		if (m instanceof Vehicule) {
+            ((Vehicule) m).setGh_desengagement(new Date());
             EngineCmdManager.getInstance(modelEngine).execute(UpdateModelCommand.class, m);
         } else {
             EngineCmdManager.getInstance(modelEngine).execute(DeleteModelCommand.class, m);
@@ -147,7 +151,10 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
                         // we already have the model in the map
                         m = modelMap.get(selectedEntity);
                         // update the model location with the singleTap point
-                        m.setLocation(new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6()));
+                        GpsPoint gpsPt = SitacFactory.createGpsPoint();
+                        gpsPt.setLat(geoP.getLatitudeE6());
+                        gpsPt.setLong(geoP.getLongitudeE6());
+                        m.setLocation(gpsPt);
                     }
                     // update the model on the engine
                     EngineCmdManager.getInstance(modelEngine).execute(UpdateModelCommand.class, m);

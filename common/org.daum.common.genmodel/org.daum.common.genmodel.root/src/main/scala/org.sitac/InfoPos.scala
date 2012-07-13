@@ -7,24 +7,24 @@ package org.sitac;
  * Meta-Model:NS_URI=http://sitactest/1.0
  */
 trait InfoPos extends org.sitac.SitacContainer with org.sitac.InfoTactic {
-		private var positions : org.sitac.Position = _
+		private var position : org.sitac.Position = _
 
 
-		def getPositions : org.sitac.Position = {
-				positions
+		def getPosition : org.sitac.Position = {
+				position
 		}
 
-		def setPositions(positions : org.sitac.Position ) {
-      if(this.positions!= positions) {
-				this.positions = (positions)
-				positions.setEContainer(this, Some(() => { this.positions= _:org.sitac.Position }) )
+		def setPosition(position : org.sitac.Position ) {
+      if(this.position!= position) {
+				this.position = (position)
+				position.setEContainer(this, Some(() => { this.position= _:org.sitac.Position }) )
 }
 
 		}
 	override def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
 		val selfObjectClone = SitacFactory.createInfoPos
 		subResult.put(this,selfObjectClone)
-		this.getPositions.getClonelazy(subResult)
+		this.getPosition.getClonelazy(subResult)
 
 	}
 	override def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : InfoPos = {
@@ -33,9 +33,9 @@ trait InfoPos extends org.sitac.SitacContainer with org.sitac.InfoTactic {
 			clonedSelfObject.setCategorie(Some(addrs.get(sub).asInstanceOf[org.sitac.Categorie]))
 		}
 
-		clonedSelfObject.setPositions(addrs.get(this.getPositions).asInstanceOf[org.sitac.Position])
+		clonedSelfObject.setPosition(addrs.get(this.getPosition).asInstanceOf[org.sitac.Position])
 
-		this.getPositions.resolve(addrs)
+		this.getPosition.resolve(addrs)
 
 		clonedSelfObject
 	}

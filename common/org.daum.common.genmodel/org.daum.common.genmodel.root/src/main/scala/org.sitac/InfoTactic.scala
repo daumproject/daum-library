@@ -17,6 +17,9 @@ trait InfoTactic extends org.sitac.SitacContainer {
   @Id
   @Generated(strategy = GeneratedType.UUID)
   var id : java.lang.String = ""
+
+  def getId : java.lang.String ={ id }
+
   private var categorie : Option[org.sitac.Categorie] = null
 
   def getCategorie : Option[org.sitac.Categorie] = {

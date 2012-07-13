@@ -1,13 +1,12 @@
 package org.daum.library.android.moyens.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.Gravity;
 import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import org.daum.common.model.api.Demand;
 import org.daum.common.util.api.TimeFormatter;
+import org.sitac.Vehicule;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,7 +38,7 @@ public class ListItemView extends LinearLayout {
         configUI();
     }
 
-    public ListItemView(Context context, Demand demand) {
+    public ListItemView(Context context, Vehicule demand) {
         super(context);
         this.ctx = context;
         processDemandData(demand);
@@ -67,9 +66,9 @@ public class ListItemView extends LinearLayout {
         }
     }
 
-    private void processDemandData(Demand demand) {
+    private void processDemandData(Vehicule demand) {
         // filling data[] with the values from Demand
-        data[0] = demand.getType().name()+((demand.getNumber() == null) ? "": demand.getNumber());
+        data[0] = demand.getVehiculeType().name()+((demand.getNumber() == null) ? "": demand.getNumber());
         data[1] = (demand.getCis() == null)
                 ? "" : demand.getCis();
         data[2] = (demand.getGh_demande() == null)
@@ -128,7 +127,7 @@ public class ListItemView extends LinearLayout {
         addView(tv_ghDesengagement, tvParams);
     }
 
-    public void setDemand(Demand demand) {
+    public void setDemand(Vehicule demand) {
         removeAllViews();
         processDemandData(demand);
         configUI();

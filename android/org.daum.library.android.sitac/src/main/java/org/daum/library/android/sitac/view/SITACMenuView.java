@@ -2,19 +2,17 @@ package org.daum.library.android.sitac.view;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.GradientDrawable.Orientation;
-import android.util.Log;
 import android.view.View;
 import android.widget.*;
 import android.widget.ExpandableListView.OnChildClickListener;
-import org.daum.common.model.api.VehicleSector;
-import org.daum.common.model.api.VehicleType;
 import org.daum.library.android.sitac.listener.OnMenuViewEventListener;
 import org.daum.library.android.sitac.view.entity.*;
 import org.daum.library.android.sitac.view.menu.*;
+import org.sitac.VehiculeSector;
+import org.sitac.VehiculeType;
 
 import java.util.*;
 
@@ -83,12 +81,12 @@ public class SITACMenuView extends RelativeLayout implements Observer {
         cibles.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_DOWN, TargetEntity.CHEM));
         
         List<IExpandableMenuItem> moyens = new ArrayList<IExpandableMenuItem>();
-        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_DOTTED_AGRES, VehicleSector.ALIM.name()));
-        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_RED_DOTTED_AGRES, VehicleSector.INC.name()));
-        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_VIOLET_DOTTED_AGRES, VehicleSector.COM.name()));
-        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLACK_DOTTED_AGRES, VehicleSector.RTN.name()));
-        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_GREEN_DOTTED_AGRES, VehicleSector.SAP.name()));
-        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_DOTTED_AGRES, VehicleSector.CHEM.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLUE_DOTTED_AGRES, VehiculeSector.ALIM.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_RED_DOTTED_AGRES, VehiculeSector.INC.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_VIOLET_DOTTED_AGRES, VehiculeSector.COM.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_BLACK_DOTTED_AGRES, VehiculeSector.RTN.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_GREEN_DOTTED_AGRES, VehiculeSector.SAP.name()));
+        moyens.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_ORANGE_DOTTED_AGRES, VehiculeSector.CHEM.name()));
         
         List<IExpandableMenuItem> actions = new ArrayList<IExpandableMenuItem>();
         actions.add(new ExpandableMenuItem(ctx, DrawableFactory.PICTO_LINE_BLUE, ACTION_EAU));
@@ -308,33 +306,40 @@ public class SITACMenuView extends RelativeLayout implements Observer {
 	private String[] getVehicleTypeValues(String menuItemText) {
 		String[] ret = null;
 		int i = 0;
-		VehicleType[] types = null;
+        VehiculeType[] types = null;
 		
-		if (menuItemText.equals(VehicleSector.SAP.name())) {
-			types = VehicleType.getValues(VehicleSector.SAP);
+		if (menuItemText.equals(VehiculeSector.SAP.name())) {
+			types = VehiculeType.getValues(VehiculeSector.SAP);
 			
-		} else if (menuItemText.equals(VehicleSector.ALIM.name())) {
-			types = VehicleType.getValues(VehicleSector.ALIM);
+		} else if (menuItemText.equals(VehiculeSector.ALIM.name())) {
+			types = VehiculeType.getValues(VehiculeSector.ALIM);
 			
-		} else if (menuItemText.equals(VehicleSector.CHEM.name())) {
-			types = VehicleType.getValues(VehicleSector.CHEM);
+		} else if (menuItemText.equals(VehiculeSector.CHEM.name())) {
+			types = VehiculeType.getValues(VehiculeSector.CHEM);
 			
-		} else if (menuItemText.equals(VehicleSector.COM.name())) {
-			types = VehicleType.getValues(VehicleSector.COM);
+		} else if (menuItemText.equals(VehiculeSector.COM.name())) {
+			types = VehiculeType.getValues(VehiculeSector.COM);
 			
-		} else if (menuItemText.equals(VehicleSector.RTN.name())) {
-			types = VehicleType.getValues(VehicleSector.RTN);
+		} else if (menuItemText.equals(VehiculeSector.RTN.name())) {
+			types = VehiculeType.getValues(VehiculeSector.RTN);
 			
-		} else if (menuItemText.equals(VehicleSector.INC.name())) {
-			types = VehicleType.getValues(VehicleSector.INC);
+		} else if (menuItemText.equals(VehiculeSector.INC.name())) {
+			types = VehiculeType.getValues(VehiculeSector.INC);
 		}
 		
 		ret = new String[types.length];
-		for (VehicleType type : types) ret[i++] = type.name();
+		for (VehiculeType type : types) ret[i++] = type.name();
 		return ret;
 	}
 	
 	public void setOnMenuViewEventListener(OnMenuViewEventListener listener) {
 		this.listener = listener;
 	}
+
+    public void deleteAllEntities() {
+        noLocationMenuList.deleteItems();
+        noLocationDemands.clear();
+        noLocationAdapter.notifyDataSetChanged();
+        noLocationMenu.setVisibility(View.GONE);
+    }
 }

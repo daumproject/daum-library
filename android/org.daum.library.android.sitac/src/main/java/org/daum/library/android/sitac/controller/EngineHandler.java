@@ -2,7 +2,6 @@ package org.daum.library.android.sitac.controller;
 
 import java.util.*;
 
-import org.daum.common.model.api.IModel;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACMenuView;
@@ -10,9 +9,9 @@ import org.daum.library.android.sitac.view.entity.DemandEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.entity.IEntityFactory;
 
-import android.util.Log;
 import org.daum.library.android.sitac.visitor.EntityUpdateVisitor;
 import org.daum.library.android.sitac.visitor.IVisitor;
+import org.sitac.IModel;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -49,6 +48,17 @@ public class EngineHandler implements OnEngineStateChangeListener {
     public void onUpdate(IModel m) {
         logger.debug(TAG, "onUpdate(IModel) "+m);
         processModel(m);
+    }
+
+    @Override
+    public void onUpdateAll(ArrayList<IModel> data) {
+        logger.debug(TAG, "onUpdateAll(ArrayList<IModel>)");
+        mapView.deleteAllEntities();
+        menuView.deleteAllEntities();
+        modelMap.clear();
+        for (IModel m : data) {
+            onAdd(m);
+        }
     }
 
     private void processModel(IModel m) {
