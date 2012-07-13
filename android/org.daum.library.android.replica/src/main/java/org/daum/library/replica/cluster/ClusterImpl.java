@@ -32,7 +32,7 @@ public class ClusterImpl implements  ICluster,Runnable{
     private Channel chanel;
     private  Thread theartbeat = null;
     private  ICacheManger cacheManger=null;
-    private  final int freqHearBeat = 5000;
+    private  final int freqHearBeat = 3000;
 
 
     public ClusterImpl(Node current, Channel chanel)
@@ -202,7 +202,7 @@ public class ClusterImpl implements  ICluster,Runnable{
 
             chanel.write(req);
 
-            logger.debug("Sending heatbeat "+ currentNode.getNodeID());
+         //   logger.debug("Sending heatbeat "+ currentNode.getNodeID());
         }
         logger.debug("HeartBeat is closed");
     }

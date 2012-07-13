@@ -27,8 +27,11 @@ import org.slf4j.LoggerFactory;
 @Library(name = "JavaSE", names = {"Android"})
 @ComponentType
 @Requires({
-        @RequiredPort(name = "broadcast", type = PortType.MESSAGE),
+        @RequiredPort(name = "broadcast", type = PortType.MESSAGE,optional = true),
         @RequiredPort(name = "notification", type = PortType.MESSAGE,optional = true)
+})
+@DictionaryType({
+        @DictionaryAttribute(name = "synchronize", defaultValue = "true", optional = true,vals={"true","false"})
 })
 @Provides({
         @ProvidedPort(name = "remote", type = PortType.MESSAGE) ,
@@ -47,9 +50,21 @@ public class Replica extends AbstractComponentType implements ReplicaService {
         kChannel   = new KChannelImpl(this);
         Node node = new Node(getNodeName());
         cluster = new ClusterImpl(node,kChannel);
-
-        // request synchronize
-        cluster.synchronize();
+        Boolean synchronize=true;
+        try {
+            synchronize = Boolean.parseBoolean(getDictionary().get("synchronize").toString());
+        } catch (Exception e)
+        {
+           logger.warn("Fail get Dictionary synchronize ",e);
+        }
+        finally
+        {
+            if(synchronize)
+            {
+                // request synchronize
+                cluster.synchronize();
+            }
+        }
     }
 
     @Stop
