@@ -5,8 +5,8 @@
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.daum.library.javase</groupId>
-    <artifactId>org.daum.library.javase.web</artifactId>
-    <name>DAUM :: Library :: JavaSE :: Web</name>
+    <artifactId>org.daum.library.javase.webtests</artifactId>
+    <name>DAUM :: Library :: JavaSE :: WebTests</name>
     <version>1.8</version>
 
     <parent>
