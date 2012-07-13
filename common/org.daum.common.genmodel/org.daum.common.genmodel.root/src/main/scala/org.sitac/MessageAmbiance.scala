@@ -1,4 +1,8 @@
-package org.sitac;
+package org.sitac
+
+import org.daum.library.ormH.annotations.Generated
+import org.daum.library.ormH.annotations.Id
+import org.daum.library.ormH.persistence.GeneratedType
 
 /**
  * Created by Ecore Model Generator.
@@ -8,6 +12,8 @@ package org.sitac;
  */
 trait MessageAmbiance extends org.sitac.SitacContainer {
 
+  @Id
+  @Generated(strategy = GeneratedType.UUID)
 	private var id : java.lang.String = ""
   private var jeSuis : java.lang.String = null
   private var jeVois : java.lang.String = null

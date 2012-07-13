@@ -15,6 +15,7 @@ trait Vehicule extends org.sitac.SitacContainer with org.sitac.IModel with org.s
 
   private var vehiculetype : org.sitac.VehiculeType = null
   private var gh_desengagement : java.util.Date = null
+  // number is 01 in FPT01
   private var number : java.lang.String = null
   private var cis : java.lang.String = null
   private var gh_demande : java.util.Date = null

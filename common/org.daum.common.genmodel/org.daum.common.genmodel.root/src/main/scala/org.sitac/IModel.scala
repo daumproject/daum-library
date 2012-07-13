@@ -1,5 +1,6 @@
 package org.sitac;
 
+// TODO refactor
 trait IModel {
   private var location : org.sitac.GpsPoint = null
 
