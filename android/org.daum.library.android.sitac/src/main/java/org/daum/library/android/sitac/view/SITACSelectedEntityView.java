@@ -3,7 +3,6 @@ package org.daum.library.android.sitac.view;
 import android.util.Log;
 import android.widget.*;
 import org.daum.library.android.sitac.engine.IUndoRedoEngine;
-import org.daum.library.android.sitac.engine.UndoRedoEngine;
 import org.daum.library.android.sitac.listener.OnSelectedEntityEventListener;
 
 import android.content.Context;

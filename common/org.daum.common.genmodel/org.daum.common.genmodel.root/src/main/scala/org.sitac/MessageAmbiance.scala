@@ -9,13 +9,13 @@ package org.sitac;
 trait MessageAmbiance extends org.sitac.SitacContainer {
 
 	private var id : java.lang.String = ""
-  private var jeSuis : java.lang.String = ""
-  private var jeVois : java.lang.String = ""
-  private var jePrevois : java.lang.String = ""
-  private var jeFais : java.lang.String = ""
-  private var jeDemande : java.lang.String = ""
-  private var groupeHoraire : java.lang.String = ""
-  private var sender : java.lang.String = ""
+  private var jeSuis : java.lang.String = null
+  private var jeVois : java.lang.String = null
+  private var jePrevois : java.lang.String = null
+  private var jeFais : java.lang.String = null
+  private var jeDemande : java.lang.String = null
+  private var groupeHoraire : java.lang.String = null
+  private var sender : java.lang.String = null
 
 
   def getJeSuis : java.lang.String = {

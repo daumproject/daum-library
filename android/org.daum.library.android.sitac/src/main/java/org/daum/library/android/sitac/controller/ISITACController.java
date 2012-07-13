@@ -1,9 +1,8 @@
 package org.daum.library.android.sitac.controller;
 
-import org.daum.common.model.api.IModel;
+import org.daum.library.android.sitac.engine.IEngine;
 import org.daum.library.android.sitac.view.entity.IEntityFactory;
 import org.daum.library.android.sitac.view.entity.IModelFactory;
-import org.daum.library.ormH.store.ReplicaStore;
 
 /**
  * Created with IntelliJ IDEA.
@@ -34,12 +33,6 @@ public interface ISITACController {
     public void removeLocationUpdates();
 
     /**
-     * Add a new model object to the engine associated with the controller
-     * @param m
-     */
-    public void addModel(IModel m);
-
-    /**
      * Change the entity factory with the given one
      * If the factory given in parameter is null, then the old one is kept
      * has the current one
@@ -62,4 +55,10 @@ public interface ISITACController {
      * @param url a map provider
      */
     public void setMapProvider(String url);
+
+    /**
+     * Set the engine for the view
+     * @param engine an IEngine implementation
+     */
+    public void setEngine(IEngine engine);
 }

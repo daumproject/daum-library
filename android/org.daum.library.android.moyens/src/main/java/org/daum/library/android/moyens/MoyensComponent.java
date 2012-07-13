@@ -1,7 +1,6 @@
 package org.daum.library.android.moyens;
 
 import android.util.Log;
-import org.daum.common.model.api.Demand;
 import org.daum.library.android.moyens.view.MoyensView;
 import org.daum.library.android.moyens.view.listener.IMoyensListener;
 import org.daum.library.ormH.store.ReplicaStore;
@@ -14,7 +13,7 @@ import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
-import org.kevoree.framework.MessagePort;
+import org.sitac.Vehicule;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -119,8 +118,8 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
 
     @Update
     public void update() {
-        stop();
-        start();
+//        stop();
+//        start();
     }
 
     @Port(name="notify")
@@ -133,17 +132,17 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
     }
 
     @Override
-    public void onDemandAsked(Demand newDemand) {
+    public void onDemandAsked(Vehicule newDemand) {
         engine.add(newDemand);
     }
 
     @Override
-    public void onDemandUpdated(Demand demand) {
+    public void onDemandUpdated(Vehicule demand) {
         engine.update(demand);
     }
 
     @Override
-    public void onAdd(final Demand d) {
+    public void onAdd(final Vehicule d) {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -153,7 +152,7 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
     }
 
     @Override
-    public void onUpdate(final Demand d) {
+    public void onUpdate(final Vehicule d) {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -163,11 +162,11 @@ public class MoyensComponent extends AbstractComponentType implements IMoyensLis
     }
 
     @Override
-    public void onReplicaSynced(final Collection<Demand> data) {
+    public void onReplicaSynced(final Collection<? extends Vehicule> data) {
         uiService.getRootActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                moyensView.addDemands(new ArrayList<Demand>(data));
+                moyensView.addDemands(new ArrayList<Vehicule>(data));
             }
         });
     }

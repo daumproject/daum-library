@@ -1,14 +1,14 @@
 package org.daum.library.android.sitac.visitor;
 
-import org.daum.common.gps.api.IGpsPoint;
-import org.daum.common.model.api.IModel;
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.VehicleType;
 import org.daum.library.android.sitac.view.entity.DemandEntity;
 import org.daum.library.android.sitac.view.entity.EntityFactory;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
+import org.sitac.GpsPoint;
+import org.sitac.IModel;
+import org.sitac.Vehicule;
+import org.sitac.VehiculeType;
 
 /**
  * EntityUpdateVisitor handles entities updates.
@@ -30,7 +30,7 @@ public class EntityUpdateVisitor implements IVisitor {
 
     @Override
     public void visit(DemandEntity e, IModel m) {
-        Demand d = (Demand) m;
+        Vehicule d = (Vehicule) m;
 
         // get rid of the entity if gh_desengagement is set
         if (d.getGh_desengagement() != null) {
@@ -41,18 +41,18 @@ public class EntityUpdateVisitor implements IVisitor {
 
         // update the location
         if (m.getLocation() != null) {
-            IGpsPoint p = m.getLocation();
-            IGeoPoint geoP = new GeoPoint(p.getLat(), p.getLong_());
+            GpsPoint p = m.getLocation();
+            IGeoPoint geoP = new GeoPoint(p.getLat(), p.getLong());
             e.setGeoPoint(geoP);
         }
 
         // change the demand icon from dotted to normal if gh_Engage is set
         if (d.getGh_engage() == null) {
             // we should use dotted icons
-            e.setIcon(EntityFactory.getIcon(VehicleType.getSector(d.getType()), true));
+            e.setIcon(EntityFactory.getIcon(VehiculeType.getSector(d.getVehiculeType()), true));
 
         } else {
-            e.setIcon(EntityFactory.getIcon(VehicleType.getSector(d.getType()), false));
+            e.setIcon(EntityFactory.getIcon(VehiculeType.getSector(d.getVehiculeType()), false));
         }
 
         // add the number if any is set
@@ -64,8 +64,8 @@ public class EntityUpdateVisitor implements IVisitor {
     @Override
     public void visit(IEntity e, IModel m) {
         if (m.getLocation() != null) {
-            IGpsPoint p = m.getLocation();
-            IGeoPoint geoP = new GeoPoint(p.getLat(), p.getLong_());
+            GpsPoint p = m.getLocation();
+            IGeoPoint geoP = new GeoPoint(p.getLat(), p.getLong());
             e.setGeoPoint(geoP);
         }
     }

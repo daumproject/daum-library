@@ -1,7 +1,6 @@
 package org.daum.library.android.sitac.listener;
 
-import org.daum.common.model.api.IModel;
-import org.daum.library.android.sitac.view.entity.IEntity;
+import org.sitac.IModel;
 
 import java.util.ArrayList;
 
@@ -33,4 +32,11 @@ public interface OnEngineStateChangeListener {
      * @param data the full IModel list from the replica
      */
     void onReplicaSynced(ArrayList<IModel> data);
+
+    /**
+     * Called when the engine has a new listener set
+     *
+     * @param data the full IModel list from the replica
+     */
+    void onUpdateAll(ArrayList<IModel> data);
 }

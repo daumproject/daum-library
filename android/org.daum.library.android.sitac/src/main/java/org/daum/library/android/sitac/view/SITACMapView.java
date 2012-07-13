@@ -3,10 +3,6 @@ package org.daum.library.android.sitac.view;
 import java.util.Observable;
 import java.util.Observer;
 
-import android.content.BroadcastReceiver;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.util.Log;
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
 import org.daum.library.android.sitac.view.entity.DemandEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
@@ -24,7 +20,6 @@ import org.osmdroid.tileprovider.util.SimpleRegisterReceiver;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapController;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.util.constants.MapViewConstants;
 
 import android.content.Context;
 import android.widget.RelativeLayout;
@@ -86,6 +81,11 @@ public class SITACMapView extends RelativeLayout implements Observer {
 
     public void deleteEntity(IEntity entity) {
         overlay.deleteEntity(entity);
+        mapView.postInvalidate();
+    }
+
+    public void deleteAllEntities() {
+        overlay.deleteAllEntities();
         mapView.postInvalidate();
     }
 

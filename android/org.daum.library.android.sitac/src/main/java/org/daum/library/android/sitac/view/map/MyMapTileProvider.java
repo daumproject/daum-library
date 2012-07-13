@@ -1,12 +1,8 @@
 package org.daum.library.android.sitac.view.map;
 
-import android.content.Context;
-import android.util.Log;
 import org.osmdroid.tileprovider.IRegisterReceiver;
 import org.osmdroid.tileprovider.MapTileProviderBasic;
-import org.osmdroid.tileprovider.MapTileRequestState;
 import org.osmdroid.tileprovider.modules.INetworkAvailablityCheck;
-import org.osmdroid.tileprovider.modules.MapTileModuleProviderBase;
 import org.osmdroid.tileprovider.tilesource.ITileSource;
 
 /**

@@ -1,14 +1,13 @@
 package org.daum.library.android.sitac.command.engine;
 
-import org.daum.common.model.api.IModel;
-import org.daum.library.android.sitac.engine.SITACEngine;
-import org.daum.library.android.sitac.view.entity.IEntity;
+import org.daum.library.android.sitac.engine.IEngine;
+import org.sitac.IModel;
 
 public class AddModelCommand implements IEngineCommand {
 
-	private SITACEngine engine;
+	private IEngine engine;
 
-	public AddModelCommand(SITACEngine engine) {
+	public AddModelCommand(IEngine engine) {
 		this.engine = engine;
 	}
 

@@ -255,7 +255,9 @@ public class DaumAuthComponent extends AbstractComponentType
         // remove daumAuthComp
         engine.append("removeComponent {compName}@{nodeName}");
 
+        logger.debug(">>>> start interpretDeploy");
         engine.interpretDeploy();
+        logger.debug(">>>> interpretDeploy done");
     }
 
     @Port(name = "notify")

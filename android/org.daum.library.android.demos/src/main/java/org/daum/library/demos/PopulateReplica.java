@@ -1,6 +1,5 @@
 package org.daum.library.demos;
 
-import org.daum.common.model.api.Demand;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
@@ -49,7 +48,6 @@ public class PopulateReplica extends AbstractComponentType {
                 replicaService =   this.getPortByName("service", ReplicaService.class);
                 ReplicaStore store = new ReplicaStore(replicaService);
                 configuration.setStore(store);
-                configuration.addPersistentClass(Demand.class);
 
                 for (Class c : SitacFactory.classes()) configuration.addPersistentClass(c);
 

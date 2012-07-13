@@ -1,14 +1,5 @@
 package org.daum.library.android.sitac.view.entity;
 
-import org.daum.common.gps.api.IGpsPoint;
-import org.daum.common.model.api.ArrowAction;
-import org.daum.common.model.api.Danger;
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.IModel;
-import org.daum.common.model.api.Target;
-import org.daum.common.model.api.VehicleSector;
-import org.daum.common.model.api.VehicleType;
-import org.daum.common.model.api.ZoneAction;
 import org.daum.library.android.sitac.view.DrawableFactory;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
@@ -17,6 +8,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import org.sitac.*;
 
 
 public class EntityFactory implements IEntityFactory {
@@ -31,33 +23,33 @@ public class EntityFactory implements IEntityFactory {
 	
 	@Override
 	public IEntity build(IModel m) {
-		if (m instanceof Demand) return build((Demand) m);
-		else if (m instanceof Target) return build((Target) m);
-		else if (m instanceof Danger) return build((Danger) m);
+		if (m instanceof Vehicule) return build((Vehicule) m);
+		else if (m instanceof Cible) return build((Cible) m);
+		else if (m instanceof SourceDanger) return build((SourceDanger) m);
 		else if (m instanceof ArrowAction) return build((ArrowAction) m);
 		else if (m instanceof ZoneAction) return build((ZoneAction) m);
-		else Log.w(TAG, "build("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
+		else Log.e(TAG, "build("+m.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
 		return null;
 	}
 
-	private DemandEntity build(Demand d) {
-		VehicleType type = d.getType();
-		VehicleSector sector = VehicleType.getSector(type);
+	private DemandEntity build(Vehicule d) {
+		VehiculeType type = d.getVehiculeType();
+		VehiculeSector sector = VehiculeType.getSector(type);
 		// if the gh_engage is not set, then it's a dotted picto
 		boolean dotted = (d.getGh_engage() == null) ? true : false;
 		Drawable icon = getIcon(sector, dotted);
 		String number = (d.getNumber() == null) ? "" : d.getNumber();
 		DemandEntity e = new DemandEntity(icon, type.name(), number);
-		IGpsPoint location = d.getLocation();
+		GpsPoint location = d.getLocation();
 		if (location != null) {
-			IGeoPoint geoP = new GeoPoint(location.getLat(), location.getLong_());
+			IGeoPoint geoP = new GeoPoint(location.getLat(), location.getLong());
 			e.setGeoPoint(geoP);
 		}
 		return e;
 	}
 	
-	private DangerEntity build(Danger d) {
-		Danger.Type type = d.getType();
+	private DangerEntity build(SourceDanger d) {
+		DangerType type = d.getType();
 		Drawable icon = getIcon(type);
 		String name;
 		switch (type) {
@@ -75,13 +67,13 @@ public class EntityFactory implements IEntityFactory {
 		}
 		
 		DangerEntity e = new DangerEntity(icon, name);
-		IGeoPoint geoP = new GeoPoint(d.getLocation().getLat(), d.getLocation().getLong_());
+		IGeoPoint geoP = new GeoPoint(d.getLocation().getLat(), d.getLocation().getLong());
 		e.setGeoPoint(geoP);
 		return e;
 	}
 	
-	private TargetEntity build(Target t) {
-		Target.Type type = t.getType();
+	private TargetEntity build(Cible t) {
+        CibleType type = t.getType();
 		Drawable icon = getIcon(type);
 		String name;
 		switch (type) {
@@ -102,13 +94,13 @@ public class EntityFactory implements IEntityFactory {
 		}
 		
 		TargetEntity e = new TargetEntity(icon, name);
-		IGeoPoint geoP = new GeoPoint(t.getLocation().getLat(), t.getLocation().getLong_());
+		IGeoPoint geoP = new GeoPoint(t.getLocation().getLat(), t.getLocation().getLong());
 		e.setGeoPoint(geoP);
 		return e;
 	}
 	
 	private ArrowEntity build(ArrowAction a) {
-		ArrowAction.Type type = a.getType();
+		ArrowActionType type = a.getActionType();
 		Drawable icon = getIcon(type);
 		String name;
 		int arrowColor;
@@ -139,10 +131,10 @@ public class EntityFactory implements IEntityFactory {
 		}
 		ArrowEntity e = new ArrowEntity(icon, name, arrowColor);
 		if (a.getLocation() != null) {
-            e.setGeoPoint(new GeoPoint(a.getLocation().getLat(), a.getLocation().getLong_()));
+            e.setGeoPoint(new GeoPoint(a.getLocation().getLat(), a.getLocation().getLong()));
         }
-		for (IGpsPoint gpsPt : a.getPoints()) {
-			e.addPoint(new GeoPoint(gpsPt.getLat(), gpsPt.getLong_()));
+		for (GpsPoint gpsPt : a.getPoints()) {
+			e.addPoint(new GeoPoint(gpsPt.getLat(), gpsPt.getLong()));
 		}
 		return e;
 	}
@@ -154,15 +146,15 @@ public class EntityFactory implements IEntityFactory {
 
 		ZoneEntity e = new ZoneEntity(icon, name, color);
 		if (z.getLocation() != null) {
-            e.setGeoPoint(new GeoPoint(z.getLocation().getLat(), z.getLocation().getLong_()));
+            e.setGeoPoint(new GeoPoint(z.getLocation().getLat(), z.getLocation().getLong()));
         }
-		for (IGpsPoint gpsPt : z.getPoints()) {
-			e.addPoint(new GeoPoint(gpsPt.getLat(), gpsPt.getLong_()));
+		for (GpsPoint gpsPt : z.getPoints()) {
+			e.addPoint(new GeoPoint(gpsPt.getLat(), gpsPt.getLong()));
 		}
 		return e;
 	}
 	
-	public static Drawable getIcon(ArrowAction.Type type) {
+	public static Drawable getIcon(ArrowActionType type) {
 		switch (type) {
 			case WATER:
 				return DrawableFactory.build(ctx, DrawableFactory.PICTO_LINE_BLUE);
@@ -181,7 +173,7 @@ public class EntityFactory implements IEntityFactory {
 		}
 	}
 
-    public static Drawable getIcon(VehicleSector sector, boolean isDotted) {
+    public static Drawable getIcon(VehiculeSector sector, boolean isDotted) {
 		switch (sector) {
 			case SAP:
 				if (isDotted) return DrawableFactory.build(ctx, DrawableFactory.PICTO_GREEN_DOTTED_AGRES); 
@@ -212,8 +204,8 @@ public class EntityFactory implements IEntityFactory {
 		}
 	}
 
-    public static Drawable getIcon(Danger.Type dangerType) {
-		switch (dangerType) {
+    public static Drawable getIcon(DangerType type) {
+		switch (type) {
 			case WATER:
 				return DrawableFactory.build(ctx, DrawableFactory.PICTO_BLUE_UP);
 				
@@ -228,8 +220,8 @@ public class EntityFactory implements IEntityFactory {
 		}
 	}
 
-    public static Drawable getIcon(Target.Type targetType) {
-		switch (targetType) {
+    public static Drawable getIcon(CibleType type) {
+		switch (type) {
 			case WATER:
 				return DrawableFactory.build(ctx, DrawableFactory.PICTO_BLUE_DOWN);
 				

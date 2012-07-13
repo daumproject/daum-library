@@ -1,57 +1,50 @@
-package org.daum.library.android.sitac.engine;
+package org.daum.library.android.sitac;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
 
-import org.daum.common.model.api.ArrowAction;
-import org.daum.common.model.api.Danger;
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.IModel;
-import org.daum.common.model.api.Target;
-import org.daum.common.model.api.ZoneAction;
-import org.daum.library.android.sitac.SITACComponent;
+import org.daum.library.android.sitac.engine.IEngine;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
-import org.daum.library.ormH.persistence.PersistentClass;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 
 import android.util.Log;
-import org.daum.library.replica.listener.ChangeListener;
 import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
 import org.daum.library.replica.listener.SyncListener;
 import org.daum.library.replica.msg.SyncEvent;
-import org.sitac.Agent;
+import org.sitac.IModel;
 import org.sitac.SitacFactory;
+import org.sitac.Vehicule;
+import org.sitac.impl.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * SITACEngine save/update/delete data from/to the Replica/Persistence system
  */
-public class SITACEngine {
+public class SITACEngine implements IEngine {
 	
 	private static final String TAG = "SITACEngine";
     private static final Logger logger = LoggerFactory.getLogger(SITACEngine.class);
 
     /** Persisted classes in replica */
     private final Class[] classes = {
-            Demand.class,
-            Danger.class,
-            Target.class,
-            ArrowAction.class,
-            ZoneAction.class
+            VehiculeImpl.class,
+            ArrowActionImpl.class,
+            ZoneActionImpl.class,
+            CibleImpl.class,
+            SourceDangerImpl.class
     };
 
     private PersistenceSessionFactoryImpl factory;
 	private OnEngineStateChangeListener listener;
 	
-	public SITACEngine(final String nodeName, ReplicaStore store, OnEngineStateChangeListener engineHandler) {
-        listener = engineHandler;
-
+	public SITACEngine(final String nodeName, ReplicaStore store) {
         try {
             // configuring persistence
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
@@ -75,7 +68,10 @@ public class SITACEngine {
                         session = factory.getSession();
                         ArrayList<IModel> data = new ArrayList<IModel>();
                         for (Class c : classes) {
-                            data.addAll((Collection<IModel>) session.getAll(c).values());
+                            Map<String, IModel> map = session.getAll(c);
+                            if (map != null && !map.isEmpty()) {
+                                data.addAll(map.values());
+                            }
                         }
                         listener.onReplicaSynced(data);
 
@@ -154,6 +150,26 @@ public class SITACEngine {
             if (session != null) session.close();
         }
 	}
+
+    public void updateAll() {
+        PersistenceSession session = null;
+        try {
+            session = factory.getSession();
+            ArrayList<IModel> data = new ArrayList<IModel>();
+            for (Class c : classes) {
+                Map<Object, IModel> map = session.getAll(c);
+                if (map != null && !map.isEmpty()) {
+                    data.addAll(map.values());
+                }
+            }
+            if (listener != null) listener.onUpdateAll(data);
+
+        } catch (PersistenceException ex) {
+            Log.e(TAG, "Error while updating object in Replica", ex);
+        } finally {
+            if (session != null) session.close();
+        }
+    }
 	
 	public void delete(IModel m) {
         PersistenceSession session = null;
@@ -167,4 +183,9 @@ public class SITACEngine {
             if (session != null) session.close();
         }
 	}
+
+    public void setHandler(OnEngineStateChangeListener handler) {
+        this.listener = handler;
+        updateAll();
+    }
 }

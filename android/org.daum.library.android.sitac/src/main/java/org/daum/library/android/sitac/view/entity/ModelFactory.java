@@ -3,18 +3,10 @@ package org.daum.library.android.sitac.view.entity;
 import java.util.ArrayList;
 import java.util.Date;
 
-import org.daum.common.gps.api.IGpsPoint;
-import org.daum.common.gps.impl.GpsPoint;
-import org.daum.common.model.api.ArrowAction;
-import org.daum.common.model.api.Danger;
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.IModel;
-import org.daum.common.model.api.Target;
-import org.daum.common.model.api.VehicleType;
-import org.daum.common.model.api.ZoneAction;
 import org.osmdroid.api.IGeoPoint;
 
 import android.util.Log;
+import org.sitac.*;
 
 public class ModelFactory implements IModelFactory {
 	
@@ -31,71 +23,108 @@ public class ModelFactory implements IModelFactory {
 		return null;
 	}
 
-	private Demand build(DemandEntity ent) {
-		VehicleType type = VehicleType.valueOf(ent.getType());
+	private Vehicule build(DemandEntity ent) {
+		VehiculeType type = VehiculeType.valueOf(ent.getType());
 		IGeoPoint geoP = ent.getGeoPoint();
-		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
-		Demand d = new Demand(type, ent.getMessage(), "", new Date(), null, null, null, null, location);
-		return d;
+		GpsPoint location = SitacFactory.createGpsPoint();
+        location.setLat(geoP.getLatitudeE6());
+        location.setLong(geoP.getLongitudeE6());
+        Vehicule demand = SitacFactory.createVehicule();
+        demand.setVehiculeType(type);
+        demand.setNumber(ent.getMessage());
+        demand.setCis("");
+        demand.setGh_demande(new Date());
+        demand.setLocation(location);
+		return demand;
 	}
 	
-	private Danger build(DangerEntity ent) {
+	private SourceDanger build(DangerEntity ent) {
 		IGeoPoint geoP = ent.getGeoPoint();
-		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
-		Danger.Type type = Danger.Type.WATER;
+        GpsPoint location = SitacFactory.createGpsPoint();
+        location.setLat(geoP.getLatitudeE6());
+        location.setLong(geoP.getLongitudeE6());
+		DangerType type = DangerType.WATER;
 		if (ent.getType().equals(DangerEntity.FIRE)) {
-			type = Danger.Type.FIRE;
+			type = DangerType.FIRE;
 		} else if (ent.getType().equals(DangerEntity.CHEM)) {
-			type = Danger.Type.CHEM;
+			type = DangerType.CHEM;
 		}
-		Danger d = new Danger(type, location);
+        SourceDanger d = SitacFactory.createSourceDanger();
+        d.setType(type);
+        d.setLocation(location);
 		return d;
 	}
 	
 	private ArrowAction build(ArrowEntity ent) {
 		IGeoPoint geoP = ent.getGeoPoint();
-        IGpsPoint location = null;
-        if (geoP != null) location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
+        GpsPoint location = null;
+        if (geoP != null) {
+            location = SitacFactory.createGpsPoint();
+            location.setLat(geoP.getLatitudeE6());
+            location.setLong(geoP.getLongitudeE6());
+        }
 		ArrayList<IGeoPoint> geoPts = ent.getPoints();
-		ArrayList<IGpsPoint> points = new ArrayList<IGpsPoint>();
+		ArrayList<GpsPoint> points = new ArrayList<GpsPoint>();
 		for (IGeoPoint gp : geoPts) {
-			points.add(new GpsPoint(gp.getLatitudeE6(), gp.getLongitudeE6()));
+            GpsPoint gpsPt = SitacFactory.createGpsPoint();
+            gpsPt.setLat(gp.getLatitudeE6());
+            gpsPt.setLong(gp.getLongitudeE6());
+			points.add(gpsPt);
 		}
 		
-		ArrowAction.Type type = ArrowAction.Type.WATER;
+		ArrowActionType type = ArrowActionType.WATER;
 		if (ent.getType().equals("Extinction")) {
-			type = ArrowAction.Type.FIRE;
+			type = ArrowActionType.FIRE;
 		} else if (ent.getType().equals(ArrowEntity.SAP)) {
-			type = ArrowAction.Type.SAP;
+			type = ArrowActionType.SAP;
 		} else if (ent.getType().equals(ArrowEntity.CHEM)) {
-			type = ArrowAction.Type.CHEM;
+			type = ArrowActionType.CHEM;
 		}
-		ArrowAction a = new ArrowAction(type, location, points);
+		ArrowAction a = SitacFactory.createArrowAction();
+        a.setActionType(type);
+        a.setLocation(location);
+        a.setPoints(points);
 		return a;
 	}
 	
 	private ZoneAction build(ZoneEntity ent) {
 		ArrayList<IGeoPoint> geoPts = ent.getPoints();
-		ArrayList<IGpsPoint> pts = new ArrayList<IGpsPoint>();
-		for (IGeoPoint geoP : geoPts) pts.add(new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6()));
+        ArrayList<GpsPoint> points = new ArrayList<GpsPoint>();
+        for (IGeoPoint gp : geoPts) {
+            GpsPoint gpsPt = SitacFactory.createGpsPoint();
+            gpsPt.setLat(gp.getLatitudeE6());
+            gpsPt.setLong(gp.getLongitudeE6());
+            points.add(gpsPt);
+        }
 		IGeoPoint geoP = ent.getGeoPoint();
-        IGpsPoint location = null;
-        if (geoP != null) location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
-		return new ZoneAction(location, pts);
+        GpsPoint location = null;
+        if (geoP != null) {
+            location = SitacFactory.createGpsPoint();
+            location.setLat(geoP.getLatitudeE6());
+            location.setLong(geoP.getLongitudeE6());
+        }
+        ZoneAction z = SitacFactory.createZoneAction();
+        z.setLocation(location);
+        z.setPoints(points);
+		return z;
 	}
 
-	private Target build(TargetEntity ent) {
+	private Cible build(TargetEntity ent) {
 		IGeoPoint geoP = ent.getGeoPoint();
-		GpsPoint location = new GpsPoint(geoP.getLatitudeE6(), geoP.getLongitudeE6());
-		Target.Type type = Target.Type.WATER;
+		GpsPoint location = SitacFactory.createGpsPoint();
+        location.setLat(geoP.getLatitudeE6());
+        location.setLong(geoP.getLongitudeE6());
+        CibleType type = CibleType.WATER;
 		if (ent.getType().equals(TargetEntity.FIRE)) {
-			type = Target.Type.FIRE;
+			type = CibleType.FIRE;
 		} else if (ent.getType().equals(TargetEntity.CHEM)) {
-			type = Target.Type.CHEM;
+			type = CibleType.CHEM;
 		} else if (ent.getType().equals(TargetEntity.VICTIM)) {
-			type = Target.Type.VICTIM;
+			type = CibleType.VICTIM;
 		}
-		Target t = new Target(type, location);
-		return t;
+        Cible c = SitacFactory.createCible();
+        c.setType(type);
+        c.setLocation(location);
+		return c;
 	}
 }

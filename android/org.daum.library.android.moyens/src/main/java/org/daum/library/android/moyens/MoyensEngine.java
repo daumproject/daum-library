@@ -1,17 +1,17 @@
 package org.daum.library.android.moyens;
 
 import android.util.Log;
-import org.daum.common.model.api.Demand;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.daum.library.replica.listener.ChangeListener;
 import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
 import org.daum.library.replica.listener.SyncListener;
 import org.daum.library.replica.msg.SyncEvent;
+import org.sitac.Vehicule;
+import org.sitac.impl.VehiculeImpl;
 
 import java.util.Collection;
 import java.util.Map;
@@ -38,7 +38,7 @@ public class MoyensEngine {
             // configuring persistence
             PersistenceConfiguration configuration = new PersistenceConfiguration(nodeName);
             configuration.setStore(store);
-            configuration.addPersistentClass(Demand.class);
+            configuration.addPersistentClass(VehiculeImpl.class);
 
             // retrieve the persistence factory
             this.factory = configuration.getPersistenceSessionFactory();
@@ -47,14 +47,14 @@ public class MoyensEngine {
             Log.e(TAG, "Error while initializing persistence in engine", ex);
         }
 
-        MoyensComponent.getChangeListenerInstance().addEventListener(Demand.class, new PropertyChangeListener() {
+        MoyensComponent.getChangeListenerInstance().addEventListener(VehiculeImpl.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent e) {
                 if (listener != null) {
                     PersistenceSession session = null;
                     try {
                         session = factory.getSession();
-                        Demand d = (Demand) session.get(Demand.class, e.getId());
+                        Vehicule d = (Vehicule) session.get(VehiculeImpl.class, e.getId());
 
                         switch (e.getEvent()) {
                             case ADD:
@@ -82,7 +82,7 @@ public class MoyensEngine {
                 PersistenceSession session = null;
                 try {
                     session = factory.getSession();
-                    Map<Object, Demand> map = (Map<Object, Demand>) session.getAll(Demand.class);
+                    Map<Object, VehiculeImpl> map = session.getAll(VehiculeImpl.class);
                     if (listener != null) listener.onReplicaSynced(map.values());
 
                 } catch (PersistenceException ex) {
@@ -95,28 +95,28 @@ public class MoyensEngine {
         });
     }
 
-    public void add(Demand d) {
+    public void add(Vehicule d) {
         PersistenceSession session = null;
         try {
             session = factory.getSession();
             session.save(d);
 
         } catch (PersistenceException ex) {
-            Log.e(TAG, "Error while saving demand "+d, ex);
+            Log.e(TAG, "Error while saving vehicle "+d, ex);
 
         } finally {
             if (session != null) session.close();
         }
     }
 
-    public void update(Demand d) {
+    public void update(Vehicule d) {
         PersistenceSession session = null;
         try {
             session = factory.getSession();
             session.update(d);
 
         } catch (PersistenceException ex) {
-            Log.e(TAG, "Error while updating demand "+d, ex);
+            Log.e(TAG, "Error while updating vehicle "+d, ex);
 
         } finally {
             if (session != null) session.close();
@@ -133,19 +133,19 @@ public class MoyensEngine {
          *
          * @param d the new demand
          */
-        public void onAdd(Demand d);
+        public void onAdd(Vehicule d);
 
         /**
          * Called be the engine when a demand has been updated in the replica
          *
          * @param d the updated demand
          */
-        public void onUpdate(Demand d);
+        public void onUpdate(Vehicule d);
 
         /**
          * Called by the replica when its data are synced
          * @param data the whole demand list know by the replica
          */
-        public void onReplicaSynced(Collection<Demand> data);
+        public void onReplicaSynced(Collection<? extends Vehicule> data);
     }
 }

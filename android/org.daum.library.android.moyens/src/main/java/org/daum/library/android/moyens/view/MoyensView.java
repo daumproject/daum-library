@@ -3,20 +3,15 @@ package org.daum.library.android.moyens.view;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.*;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.util.Log;
 import android.util.Pair;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.*;
-import org.daum.common.model.api.*;
 import org.daum.library.android.moyens.view.listener.IMoyensListener;
 import org.daum.library.android.moyens.view.quickactionbar.QuickActionsBar;
 import org.daum.library.android.moyens.view.quickactionbar.listener.OnActionClickedListener;
+import org.sitac.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -52,7 +47,7 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
     private static final String TEXT_BTN_CANCEL = "Annuler";
 
     private Context ctx;
-    private ArrayList<Demand> demands;
+    private ArrayList<Vehicule> demands;
     private ListView listView;
     private DemandsAdapter adapter;
     private QuickActionsBar qActionsBar;
@@ -69,13 +64,13 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
     }
 
     private void initUI() {
-        demands = new ArrayList<Demand>();
+        demands = new ArrayList<Vehicule>();
         listView = new ListView(ctx);
         adapter = new DemandsAdapter(ctx, demands);
         qaBarData = new ArrayList<Pair<String, ArrayList<String>>>();
-        for (VehicleSector sector : VehicleSector.values()) {
+        for (VehiculeSector sector : VehiculeSector.values()) {
             ArrayList<String> actions = new ArrayList<String>();
-            for (VehicleType type : VehicleType.getValues(sector)) actions.add(type.name());
+            for (VehiculeType type : VehiculeType.getValues(sector)) actions.add(type.name());
             qaBarData.add(new Pair<String, ArrayList<String>>(sector.name(), actions));
         }
         qActionsBar = new QuickActionsBar(ctx, qaBarData);
@@ -135,10 +130,10 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                final Demand d = demands.get(i);
+                final Vehicule d = demands.get(i);
                 if (d.getGh_desengagement() == null) {
                     String num = (d.getNumber() == null) ? "" : d.getNumber();
-                    String name = d.getType()+num;
+                    String name = d.getVehiculeType()+num;
                     builder.setMessage(name+TEXT_DIALOG_MESSAGE);
                     builder.setPositiveButton(TEXT_BTN_DESENG, new DialogInterface.OnClickListener() {
                         @Override
@@ -158,7 +153,7 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
      * Adds a resource to the demandList
      * @param d the resource to add
      */
-    public void addDemand(Demand d) {
+    public void addDemand(Vehicule d) {
         updateDemand(d);
         listView.setSelection(demands.size()-1);
     }
@@ -167,13 +162,13 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
      * Adds a list of demands to the actual demandList
      * @param dlist the demandList to add
      */
-    public void addDemands(ArrayList<Demand> dlist) {
-        for (Demand d : dlist) updateDemand(d);
+    public void addDemands(ArrayList<Vehicule> dlist) {
+        for (Vehicule d : dlist) updateDemand(d);
         listView.setSelection(demands.size()-1);
     }
 
-    public void updateDemand(Demand d) {
-        for (Demand de : demands) {
+    public void updateDemand(Vehicule d) {
+        for (Vehicule de : demands) {
             if (de.getId().equals(d.getId())) {
                 demands.remove(de);
                 demands.add(d);
@@ -188,7 +183,9 @@ public class MoyensView extends RelativeLayout implements OnActionClickedListene
     @Override
     public void onActionClicked(String tab, String action) {
         if (listener != null) {
-            listener.onDemandAsked(new Demand(VehicleType.valueOf(action)));
+            Vehicule d = SitacFactory.createVehicule();
+            d.setVehiculeType(VehiculeType.valueOf(action));
+            listener.onDemandAsked(d);
         }
     }
 

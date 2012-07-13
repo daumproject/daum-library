@@ -1,7 +1,6 @@
 package org.daum.library.android.sitac.view.entity;
 
 import java.util.ArrayList;
-import java.util.Observer;
 
 import org.osmdroid.api.IGeoPoint;
 
