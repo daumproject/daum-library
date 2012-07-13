@@ -20,7 +20,7 @@ trait MessageAmbiance extends org.sitac.SitacContainer {
   private var jePrevois : java.lang.String = null
   private var jeFais : java.lang.String = null
   private var jeDemande : java.lang.String = null
-  private var groupeHoraire : java.lang.String = null
+  private var groupeHoraire : java.util.Date = null
   private var sender : java.lang.String = null
 
 
@@ -72,11 +72,11 @@ trait MessageAmbiance extends org.sitac.SitacContainer {
     this.jeDemande = jeDemande
   }
 
-  def getGroupeHoraire : java.lang.String = {
+  def getGroupeHoraire : java.util.Date = {
     groupeHoraire
   }
 
-  def setGroupeHoraire(groupeHoraire : java.lang.String) {
+  def setGroupeHoraire(groupeHoraire : java.util.Date) {
     this.groupeHoraire = groupeHoraire
   }
 

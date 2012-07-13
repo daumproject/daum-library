@@ -5,6 +5,7 @@ import android.util.Pair;
 import android.widget.TextView;
 import android.content.Context;
 import android.widget.LinearLayout;
+import org.daum.common.util.api.TimeFormatter;
 import org.sitac.MessageAmbiance;
 
 /**
@@ -56,7 +57,7 @@ public class ListItemView extends LinearLayout {
                 break;
         }
 
-        tv_header.setText(msg.getGroupeHoraire()+" - "+msg.getSender());
+        tv_header.setText(TimeFormatter.getGroupeHoraire(msg.getGroupeHoraire())+" - "+msg.getSender());
         tv_header.setTextSize(25f);
         tv_header.setTextColor(Color.RED);
 

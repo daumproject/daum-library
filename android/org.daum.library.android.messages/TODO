@@ -2,3 +2,4 @@ TODO list - MessagesComponent
 -> if replica is already synced before MessagesComponent is started, then
 they will be no messages in the list even if they are messages in the
 replica
+-> dictionary value interNum is not used
