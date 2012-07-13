@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.daum.library.javase</groupId>
     <artifactId>org.daum.library.javase.tileServer</artifactId>
-    <name>DAUM :: Library :: JavaSE :: tileServer</name>
+    <name>DAUM :: Library :: JavaSE :: Tile Server</name>
     <version>1.1</version>
     <description>Tile Server</description>
 

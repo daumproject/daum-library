@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 @DictionaryType({
         @DictionaryAttribute(name = "pathCache",defaultValue = "/tmp/tila", optional =false)   ,
-        @DictionaryAttribute(name = "provider", defaultValue = "Openstreetmap", optional = true,vals={"Openstreetmap","Google"})
+        @DictionaryAttribute(name = "provider", defaultValue = "OpenStreetMap", optional = true,vals={"OpenStreetMap","Google"})
 })
 @Library(name = "JavaSE")
 @ComponentType
@@ -50,16 +50,23 @@ public class TileServer extends AbstractPage {
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse)
     {
-        Tile tile = tileCacheImpl.getTile(transformeUrlIntoTileUrl(kevoreeHttpRequest.getUrl()));
-        if(tile != null && tile.getImage() != null)
+        if(!kevoreeHttpRequest.getUrl().equals("/"))
         {
-            kevoreeHttpResponse.setRawContent(tile.getImage());
-        }else
+            Tile tile = tileCacheImpl.getTile(transformeUrlIntoTileUrl(kevoreeHttpRequest.getUrl()));
+            if(tile != null && tile.getImage() != null)
+            {
+                kevoreeHttpResponse.setRawContent(tile.getImage());
+            }else
+            {
+                // todo
+                logger.error("WTF");
+                kevoreeHttpResponse.setRawContent("404".getBytes());
+            }
+        } else
         {
-            // todo
-            logger.error("WTF");
-            kevoreeHttpResponse.setRawContent("404".getBytes());
+            kevoreeHttpResponse.setContent("You've reached the "+getDictionary().get("provider").toString()+"tile server.");
         }
+
         return kevoreeHttpResponse;
     }
 
