@@ -1,14 +1,7 @@
 package org.sitac;
 
-import impl._
-;
+import impl._ ;
 
-/**
- * Created by Ecore Model Generator.
- * @authors: Gregory NAIN, Fouquet Francois
- * Date: 04 juil. 12 Time: 09:48
- * Meta-Model:NS_URI=http://sitactest/1.0
- */
 object SitacFactory {
 
   def eINSTANCE = SitacFactory
@@ -16,9 +9,9 @@ object SitacFactory {
 
   def createIntervention : Intervention = new InterventionImpl
   def createDetachement : Detachement = new DetachementImpl
-  def createMoyen : Moyen = new MoyenImpl
+  def createMoyens : Moyens = new MoyensImpl
   def createVehicule : Vehicule = new VehiculeImpl
-  def createInterventionType : InterventionType = new InterventionTypeImpl
+  def createInterventionType : CodeSinistre = new CodeSinistreImpl
   def createHistorique : Historique = new HistoriqueImpl
   def createEntree : Entree = new EntreeImpl
   def createTypeEntree : TypeEntree = new TypeEntreeImpl
@@ -50,5 +43,5 @@ object SitacFactory {
   def createDonneeContextuel : DonneeContextuel = new DonneeContextuelImpl
   def createMessageAmbiance : MessageAmbiance = new MessageAmbianceImpl
 
-  final val classes: Array[Class[_]] = Array(classOf[ActionImpl], classOf[ActionTypeImpl], classOf[AffectationImpl], classOf[AgentImpl], classOf[CategorieImpl], classOf[CibleImpl], classOf[DetachementImpl], classOf[DonneeContextuelImpl], classOf[EntreeImpl], classOf[GpsPointImpl], classOf[HistoriqueImpl], classOf[InfoHorodateImpl], classOf[InfoLignePosImpl], classOf[InfoNiveauImpl], classOf[InfoPosImpl], classOf[InfoResponsableImpl], classOf[InfoTacticImpl], classOf[InfoZoneImpl], classOf[InterventionImpl], classOf[InterventionTypeImpl], classOf[MessageAmbianceImpl], classOf[MoyenImpl],classOf[PersonneImpl], classOf[PositionCivilImpl], classOf[PositionImpl], classOf[PriseEauImpl], classOf[SecteurFonctionnelImpl], classOf[SecteurGeoImpl], classOf[SinistreImpl], classOf[SitacModelImpl], classOf[SourceDangerImpl], classOf[TypeEntreeImpl],classOf[VehiculeImpl], classOf[ArrowActionImpl], classOf[ZoneActionImpl])
+  final val classes: Array[Class[_]] = Array(classOf[ActionImpl], classOf[ActionTypeImpl], classOf[AffectationImpl], classOf[AgentImpl], classOf[CategorieImpl], classOf[CibleImpl], classOf[DetachementImpl], classOf[DonneeContextuelImpl], classOf[EntreeImpl], classOf[GpsPointImpl], classOf[HistoriqueImpl], classOf[InfoHorodateImpl], classOf[InfoLignePosImpl], classOf[InfoNiveauImpl], classOf[InfoPosImpl], classOf[InfoResponsableImpl], classOf[InfoTacticImpl], classOf[InfoZoneImpl], classOf[InterventionImpl], classOf[CodeSinistreImpl], classOf[MessageAmbianceImpl], classOf[MoyensImpl],classOf[PersonneImpl], classOf[PositionCivilImpl], classOf[PositionImpl], classOf[PriseEauImpl], classOf[SecteurFonctionnelImpl], classOf[SecteurGeoImpl], classOf[SinistreImpl], classOf[SitacModelImpl], classOf[SourceDangerImpl], classOf[TypeEntreeImpl],classOf[VehiculeImpl], classOf[ArrowActionImpl], classOf[ZoneActionImpl])
 }

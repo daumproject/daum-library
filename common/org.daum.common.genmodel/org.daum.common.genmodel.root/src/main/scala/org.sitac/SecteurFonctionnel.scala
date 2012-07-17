@@ -23,7 +23,7 @@ trait SecteurFonctionnel extends org.sitac.SitacContainer with org.sitac.InfoPos
 
 		clonedSelfObject.setPosition(addrs.get(this.getPosition).asInstanceOf[org.sitac.Position])
 
-		clonedSelfObject.setChef(addrs.get(this.getChef).asInstanceOf[org.sitac.Moyen])
+		clonedSelfObject.setChef(addrs.get(this.getChef).asInstanceOf[org.sitac.Moyens])
 
 		this.getPosition.resolve(addrs)
 

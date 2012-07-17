@@ -19,7 +19,7 @@ trait SitacModel extends org.sitac.SitacContainer {
   @Generated(strategy = GeneratedType.UUID)
   private var id : java.lang.String = ""
   @OneToMany
-  private lazy val interventionTypes : scala.collection.mutable.ListBuffer[org.sitac.InterventionType] = new scala.collection.mutable.ListBuffer[org.sitac.InterventionType]()
+  private lazy val interventionTypes : scala.collection.mutable.ListBuffer[org.sitac.CodeSinistre] = new scala.collection.mutable.ListBuffer[org.sitac.CodeSinistre]()
   @OneToMany
   private lazy val interventions : scala.collection.mutable.ListBuffer[org.sitac.Intervention] = new scala.collection.mutable.ListBuffer[org.sitac.Intervention]()
   @OneToMany
@@ -28,15 +28,15 @@ trait SitacModel extends org.sitac.SitacContainer {
   private lazy val typeActions : scala.collection.mutable.ListBuffer[org.sitac.ActionType] = new scala.collection.mutable.ListBuffer[org.sitac.ActionType]()
 
 
-  def getInterventionTypes : List[org.sitac.InterventionType] = {
+  def getInterventionTypes : List[org.sitac.CodeSinistre] = {
     interventionTypes.toList
   }
-  def getInterventionTypesForJ : java.util.List[org.sitac.InterventionType] = {
+  def getInterventionTypesForJ : java.util.List[org.sitac.CodeSinistre] = {
     import scala.collection.JavaConversions._
     interventionTypes
   }
 
-  def setInterventionTypes(interventionTypes : List[org.sitac.InterventionType] ) {
+  def setInterventionTypes(interventionTypes : List[org.sitac.CodeSinistre] ) {
     if(this.interventionTypes!= interventionTypes){
       this.interventionTypes.clear()
       this.interventionTypes.insertAll(0,interventionTypes)
@@ -53,16 +53,16 @@ trait SitacModel extends org.sitac.SitacContainer {
   }
 
 
-  def addInterventionTypes(interventionTypes : org.sitac.InterventionType) {
+  def addInterventionTypes(interventionTypes : org.sitac.CodeSinistre) {
     interventionTypes.setEContainer(this,Some(()=>{this.removeInterventionTypes(interventionTypes)}))
     this.interventionTypes.append(interventionTypes)
   }
 
-  def addAllInterventionTypes(interventionTypes : List[org.sitac.InterventionType]) {
+  def addAllInterventionTypes(interventionTypes : List[org.sitac.CodeSinistre]) {
     interventionTypes.foreach{ elem => addInterventionTypes(elem)}
   }
 
-  def removeInterventionTypes(interventionTypes : org.sitac.InterventionType) {
+  def removeInterventionTypes(interventionTypes : org.sitac.CodeSinistre) {
     if(this.interventionTypes.size != 0 && this.interventionTypes.indexOf(interventionTypes) != -1 ) {
       this.interventionTypes.remove(this.interventionTypes.indexOf(interventionTypes))
       interventionTypes.setEContainer(null,None)
@@ -212,7 +212,7 @@ trait SitacModel extends org.sitac.SitacContainer {
   def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : SitacModel = {
     val clonedSelfObject = addrs.get(this).asInstanceOf[org.sitac.SitacModel]
     this.getInterventionTypes.foreach{sub =>
-      clonedSelfObject.addInterventionTypes(addrs.get(sub).asInstanceOf[org.sitac.InterventionType])
+      clonedSelfObject.addInterventionTypes(addrs.get(sub).asInstanceOf[org.sitac.CodeSinistre])
     }
 
     this.getInterventions.foreach{sub =>

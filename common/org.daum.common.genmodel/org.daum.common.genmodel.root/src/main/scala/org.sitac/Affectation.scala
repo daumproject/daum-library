@@ -23,7 +23,7 @@ trait Affectation extends org.sitac.SitacContainer {
   private var horodatageDemande : java.util.Date=_
   private var horodatageEngagement : java.util.Date=_
   private var horodatageDesengagement : java.util.Date=_
-  private var moyen : Option[org.sitac.Moyen] = null
+  private var moyen : Option[org.sitac.Moyens] = null
 
 
   def getHorodatageDemande : java.util.Date = {
@@ -50,11 +50,11 @@ trait Affectation extends org.sitac.SitacContainer {
     this.horodatageDesengagement = horodatageDesengagement
   }
 
-  def getMoyen : Option[org.sitac.Moyen] = {
+  def getMoyen : Option[org.sitac.Moyens] = {
     moyen
   }
 
-  def setMoyen(moyen : Option[org.sitac.Moyen] ) {
+  def setMoyen(moyen : Option[org.sitac.Moyens] ) {
     this.moyen = (moyen)
 
   }
@@ -68,7 +68,7 @@ trait Affectation extends org.sitac.SitacContainer {
   def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : Affectation = {
     val clonedSelfObject = addrs.get(this).asInstanceOf[org.sitac.Affectation]
     this.getMoyen.map{sub =>
-      clonedSelfObject.setMoyen(Some(addrs.get(sub).asInstanceOf[org.sitac.Moyen]))
+      clonedSelfObject.setMoyen(Some(addrs.get(sub).asInstanceOf[org.sitac.Moyens]))
     }
 
     clonedSelfObject

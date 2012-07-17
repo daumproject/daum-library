@@ -12,7 +12,7 @@ import org.daum.library.ormH.annotations.Id
 import org.daum.library.ormH.persistence.GeneratedType
 import org.daum.library.ormH.annotations.OneToMany
 
-trait InterventionType extends org.sitac.SitacContainer {
+trait CodeSinistre extends org.sitac.SitacContainer {
 
   @Id
   @Generated(strategy = GeneratedType.UUID)
@@ -31,8 +31,8 @@ def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
 		selfObjectClone.setCode(this.getCode)
 		subResult.put(this,selfObjectClone)
 	}
-def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : InterventionType = {
-		val clonedSelfObject = addrs.get(this).asInstanceOf[org.sitac.InterventionType]
+def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : CodeSinistre = {
+		val clonedSelfObject = addrs.get(this).asInstanceOf[org.sitac.CodeSinistre]
 		clonedSelfObject
 	}
 

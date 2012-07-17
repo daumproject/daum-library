@@ -27,7 +27,7 @@ trait SecteurGeo extends org.sitac.SitacContainer with org.sitac.InfoZone with o
 			clonedSelfObject.addPositions(addrs.get(sub).asInstanceOf[org.sitac.Position])
 		}
 
-		clonedSelfObject.setChef(addrs.get(this.getChef).asInstanceOf[org.sitac.Moyen])
+		clonedSelfObject.setChef(addrs.get(this.getChef).asInstanceOf[org.sitac.Moyens])
 
 		this.getPositions.foreach{ sub => 
 			sub.resolve(addrs)

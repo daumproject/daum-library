@@ -9,7 +9,7 @@ package org.sitac;
 trait InfoResponsable extends org.sitac.SitacContainer {
 		private var niveau : java.lang.String = ""
 
-		private var chef : org.sitac.Moyen = _
+		private var chef : org.sitac.Moyens = _
 
 
 		def getNiveau : java.lang.String = {
@@ -20,11 +20,11 @@ trait InfoResponsable extends org.sitac.SitacContainer {
 			this.niveau = niveau
 		}
 
-		def getChef : org.sitac.Moyen = {
+		def getChef : org.sitac.Moyens = {
 				chef
 		}
 
-		def setChef(chef : org.sitac.Moyen ) {
+		def setChef(chef : org.sitac.Moyens ) {
 				this.chef = (chef)
 
 		}
@@ -35,7 +35,7 @@ def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
 	}
 def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : InfoResponsable = {
 		val clonedSelfObject = addrs.get(this).asInstanceOf[org.sitac.InfoResponsable]
-		clonedSelfObject.setChef(addrs.get(this.getChef).asInstanceOf[org.sitac.Moyen])
+		clonedSelfObject.setChef(addrs.get(this.getChef).asInstanceOf[org.sitac.Moyens])
 
 		clonedSelfObject
 	}

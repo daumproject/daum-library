@@ -22,7 +22,7 @@ trait Intervention extends org.sitac.SitacContainer {
   @Generated(strategy = GeneratedType.UUID)
   private var numeroIntervention : java.lang.String = ""
 
-  private var `type` : org.sitac.InterventionType = _
+  private var code : org.sitac.CodeSinistre = _
 
   private var historique : Option[org.sitac.Historique] = null
 
@@ -50,12 +50,12 @@ trait Intervention extends org.sitac.SitacContainer {
   }
 
 
-  def getType : org.sitac.InterventionType = {
-    `type`
+  def getCode : org.sitac.CodeSinistre = {
+    code
   }
 
-  def setType(`type` : org.sitac.InterventionType ) {
-    this.`type` = (`type`)
+  def setType(code : org.sitac.CodeSinistre ) {
+    this.code = (code)
 
   }
 
@@ -224,7 +224,7 @@ trait Intervention extends org.sitac.SitacContainer {
   }
   def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : Intervention = {
     val clonedSelfObject = addrs.get(this).asInstanceOf[org.sitac.Intervention]
-    clonedSelfObject.setType(addrs.get(this.getType).asInstanceOf[org.sitac.InterventionType])
+    clonedSelfObject.setType(addrs.get(this.code).asInstanceOf[org.sitac.CodeSinistre])
 
     this.getHistorique.map{sub =>
       clonedSelfObject.setHistorique(Some(addrs.get(sub).asInstanceOf[org.sitac.Historique]))
