@@ -112,6 +112,7 @@ public class PopulateReplica extends AbstractComponentType {
                         agentnoel.setMatricule("nplouzeau");
                         agentnoel.setPassword("nplouzeau");
                         sitacModel.addPersonnes(agentnoel);
+                        agentnoel.setAutorisation(AutorisationType.ALL);
 
                         Agent agentERWAN =  SitacFactory.createAgent();
                         agentERWAN.setNom("DAUBERT");
@@ -161,32 +162,31 @@ public class PopulateReplica extends AbstractComponentType {
                         interventionfake.addVictimes(vitc2);
 
 
-
-                        Moyen   moyen1 = SitacFactory.createMoyen();
-                        moyen1.setChef(new Some((agentnoel)));
-                        moyen1.addPersonnels(agentERWAN);
-                        moyen1.addPersonnels(agentjed);
-                        moyen1.addPersonnels(agentMaxime);
-
+                        Vehicule fpt2 =SitacFactory.createVehicule();
+                        fpt2.setVehiculeType(VehiculeType.FPT);
 
                         Vehicule fpt =SitacFactory.createVehicule();
                         fpt.setVehiculeType(VehiculeType.FPT);
-                        moyen1.addMateriel(fpt);
 
-                        Vehicule fpt2 =SitacFactory.createVehicule();
-                        fpt2.setVehiculeType(VehiculeType.FPT);
-                        moyen1.addMateriel(fpt2);
+
+                        Moyens   moyens = SitacFactory.createMoyens();
+                        moyens.addAgent(agentERWAN);
+                        moyens.addAgent(agentjed);
+                        moyens.addAgent(agentMaxime);
+                        moyens.addMateriel(fpt);
+                        moyens.addMateriel(fpt2);
 
 
 
                         Detachement detachement = SitacFactory.createDetachement();
-
+                        detachement.setChef(new Some((agentnoel)));
                         Affectation affectation = SitacFactory.createAffectation();
-                        affectation.setMoyen(new Some(moyen1));
+                        affectation.setMoyen(new Some(moyens));
                         detachement.addAffectation(affectation);
 
 
                         interventionfake.addDetachements(detachement);
+
                         sitacModel.addInterventions(interventionfake);
 
                         session.save(sitacModel);
