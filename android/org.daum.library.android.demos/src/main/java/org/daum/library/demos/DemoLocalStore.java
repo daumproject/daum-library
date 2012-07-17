@@ -1,17 +1,14 @@
 package org.daum.library.demos;
 
-import org.daum.library.ormH.store.LocalStore;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
-
+import org.daum.library.ormH.store.LocalStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -73,7 +70,8 @@ public class DemoLocalStore  extends AbstractComponentType implements  Runnable 
                     s.save(test);
 
 
-                    Map<Object,TestDemo> result =  s.getAll(TestDemo.class);
+
+                  /*  Map<Object,TestDemo> result =  s.getAll(TestDemo.class);
                     int count =      result.size();
 
                     logger.debug("Number of Test Demo "+count);
@@ -83,7 +81,7 @@ public class DemoLocalStore  extends AbstractComponentType implements  Runnable 
 
                             s.delete(result.get(key));
                         }
-                    }
+                    }    */
 
                 }
                 s.close();
