@@ -10,7 +10,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
  * To change this template use File | Settings | File Templates.
  */
 public interface AuthentificationService extends RemoteService {
-    public void initHibernate();
+    public void initormh();
 
     public boolean authenticateAgent(String name, String password);
 }

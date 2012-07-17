@@ -17,6 +17,7 @@ public class IHMwebPortal implements EntryPoint {
     public void onModuleLoad() {
         AuthentiForm authenificationForm = new AuthentiForm();
         authenificationForm.init();
+
     }
 }
 

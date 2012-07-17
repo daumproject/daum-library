@@ -10,6 +10,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * To change this template use File | Settings | File Templates.
  */
 public interface AuthentificationServiceAsync {
-      void initHibernate(AsyncCallback<Void> callback);
+      void initormh(AsyncCallback<Void> callback);
       void authenticateAgent(String name, String password, AsyncCallback<Boolean> callback);
 }
