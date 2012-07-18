@@ -3,13 +3,13 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.daum.library.android.bluetooth</artifactId>
     <name>Daum :: Library :: Android :: Bluetooth</name>
-    <version>1.8.2-SNAPSHOT</version>
+    <version>1.8.2</version>
 
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
         <groupId>org.daum.library.android</groupId>
-        <version>1.8.2-SNAPSHOT</version>
+        <version>1.8.2</version>
         <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
 
