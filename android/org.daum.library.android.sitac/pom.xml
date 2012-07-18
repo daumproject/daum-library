@@ -9,7 +9,7 @@
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
         <groupId>org.daum.library.android</groupId>
-        <version>1.8.2</version>
+        <version>1.8.3-SNAPSHOT</version>
         <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
 

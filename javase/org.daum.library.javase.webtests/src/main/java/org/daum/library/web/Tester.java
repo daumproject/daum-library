@@ -8,6 +8,7 @@ import org.sitac.Personne;
 import org.sitac.Position;
 import org.sitac.SitacFactory;
 import scala.Option;
+import scala.Some;
 
 /**
  * Created with IntelliJ IDEA.

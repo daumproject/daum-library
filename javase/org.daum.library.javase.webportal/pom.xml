@@ -11,16 +11,17 @@
     <parent>
         <groupId>org.daum.library.javase</groupId>
         <artifactId>org.daum.library.javase.root</artifactId>
-        <version>1.8.2</version>
+        <version>1.8.3-SNAPSHOT</version>
         <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
     </parent>
 
     <properties>
         <gwtVersion>2.4.0</gwtVersion>
-        <kevoree.version>1.8.2</kevoree.version>
+        <kevoree.version>1.8.3-SNAPSHOT</kevoree.version>
     </properties>
 
     <dependencies>
+
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-servlet</artifactId>
@@ -28,16 +29,18 @@
         </dependency>
 
         <dependency>
-            <groupId>org.kevoree.library.javase</groupId>
-            <artifactId>org.kevoree.library.javase.webserver.servlet</artifactId>
-            <version>1.8.2</version>
-        </dependency>
-
-        <dependency>
             <groupId>org.kevoree.corelibrary.javase</groupId>
             <artifactId>org.kevoree.library.javase.webserver.api</artifactId>
-            <version>1.8.2</version>
+            <version>1.8.3-SNAPSHOT</version>
         </dependency>
+
+
+        <dependency>
+            <groupId>org.kevoree.library.javase</groupId>
+            <artifactId>org.kevoree.library.javase.webserver.servlet</artifactId>
+            <version>1.8.3-SNAPSHOT</version>
+        </dependency>
+
 
         <dependency>
             <groupId>com.google.gwt</groupId>
