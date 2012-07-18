@@ -17,7 +17,7 @@
 
     <properties>
         <gwtVersion>2.4.0</gwtVersion>
-        <kevoree.version>${project.version}</kevoree.version>
+        <kevoree.version>1.8.2</kevoree.version>
     </properties>
 
     <dependencies>
@@ -30,13 +30,13 @@
         <dependency>
             <groupId>org.kevoree.library.javase</groupId>
             <artifactId>org.kevoree.library.javase.webserver.servlet</artifactId>
-            <version>${kevoree.version}</version>
+            <version>1.8.2</version>
         </dependency>
 
         <dependency>
             <groupId>org.kevoree.corelibrary.javase</groupId>
             <artifactId>org.kevoree.library.javase.webserver.api</artifactId>
-            <version>${kevoree.version}</version>
+            <version>1.8.2</version>
         </dependency>
 
         <dependency>
