@@ -19,5 +19,4 @@
         <module>./org.daum.common.genmodel.android</module>
         <module>./org.daum.common.genmodel.javase</module>
     </modules>
-
 </project>

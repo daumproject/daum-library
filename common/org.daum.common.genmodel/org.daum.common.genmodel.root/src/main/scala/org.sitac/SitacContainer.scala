@@ -1,6 +1,7 @@
 package org.sitac
 
 import java.io.Serializable;
+import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 /**
@@ -9,7 +10,7 @@ import java.io.Serializable;
  * Date: 04 juil. 12 Time: 09:48
  * Meta-Model:NS_URI=http://sitactest/1.0
  */
-trait SitacContainer extends Serializable {
+trait SitacContainer extends Serializable with IsSerializable {
 
 	 private var internal_eContainer : SitacContainer = null
 	 private var internal_unsetCmd : Option[()=>Any] = None
