@@ -1,14 +1,16 @@
 package org.daum.javase.webportal.server;
 
-import org.kevoree.annotation.ComponentType;
-import org.kevoree.annotation.DictionaryAttribute;
-import org.kevoree.annotation.DictionaryType;
-import org.kevoree.annotation.Library;
-import org.kevoree.library.javase.webserver.AbstractPage;
-import org.kevoree.library.javase.webserver.FileServiceHelper;
-import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
-import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
+import org.daum.library.ormH.persistence.PersistenceConfiguration;
+import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
+import org.daum.library.ormH.store.ReplicaStore;
+import org.daum.library.ormH.utils.PersistenceException;
+import org.daum.library.replica.cache.ReplicaService;
+import org.kevoree.ContainerRoot;
+import org.kevoree.annotation.*;
+import org.kevoree.api.service.core.handler.ModelListener;
+import org.kevoree.library.javase.webserver.*;
 import org.kevoree.library.javase.webserver.servlet.LocalServletRegistry;
+import org.sitac.SitacFactory;
 import scala.collection.immutable.List;
 
 import javax.servlet.ServletContextListener;
@@ -20,22 +22,41 @@ import javax.servlet.ServletContextListener;
  * Time: 11:45 AM
  * To change this template use File | Settings | File Templates.
  */
-@Library(name = "JavaSE")
-@ComponentType
-@DictionaryType({
-        @DictionaryAttribute(name = "directoryPath" , defaultValue = "/tmp/"),
+@Requires({
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
 })
-public class webPortalComponent extends AbstractPage {
+@ComponentType
+public class webPortalComponent extends ParentAbstractPage {
 
+    public PersistenceConfiguration configuration=null;
+    private PersistenceSessionFactoryImpl factory=null;
+    private ReplicaService replicaService =  null;
     private LocalServletRegistry servletRepository = null;
 
 
     public void startPage() {
 
+        getModelService().registerModelListener(new ModelListener() {
+            @Override
+            public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return true;
+            }
+
+            @Override
+            public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return true;
+            }
+
+            @Override
+            public void modelUpdated() {
+                initormh();
+            }
+        });
+
         servletRepository = new LocalServletRegistry(){
             @Override
             public String getCDefaultPath(){
-                return "/ihmcodemirror";
+                return "/ihmwebportal";
             }
 
             @Override
@@ -49,6 +70,7 @@ public class webPortalComponent extends AbstractPage {
             }
         };
         super.startPage();
+        servletRepository.registerServlet("/ihmwebportal/authentifService", new AuthentificationServiceImpl());
     }
 
     @Override
@@ -68,11 +90,30 @@ public class webPortalComponent extends AbstractPage {
         if (FileServiceHelper.checkStaticFile(request.getUrl(), this, request, response)) {
             return response;
         }
-        if (FileServiceHelper.checkStaticFile("IHMcodeMirror.html", this, request, response)) {
+        if (FileServiceHelper.checkStaticFile("IHMwebPortal.html", this, request, response)) {
 
             return response;
         }
         response.setContent("Bad request1");
         return response;
+    }
+
+    public void initormh() {
+        try
+        {
+            ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
+            configuration = new PersistenceConfiguration(getNodeName());
+            replicaService =   this.getPortByName("service", ReplicaService.class);
+            ReplicaStore store = new ReplicaStore(replicaService);
+            configuration.setStore(store);
+            for (Class c : SitacFactory.classes()) configuration.addPersistentClass(c);
+
+            factory = configuration.getPersistenceSessionFactory();
+
+
+        } catch (PersistenceException e)
+        {
+
+        }
     }
 }

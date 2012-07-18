@@ -110,7 +110,7 @@ public class PopulateReplica extends AbstractComponentType {
 
                         SitacModel sitacModel = SitacFactory.createSitacModel();
 
-                        Agent agentnoel =SitacFactory.createAgent();
+                        Agent agentnoel = SitacFactory.createAgent();
                         agentnoel.setNom("PLOUZEAU");
                         agentnoel.setPrenom("NOEL");
                         agentnoel.setMatricule("nplouzeau");

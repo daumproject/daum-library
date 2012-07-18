@@ -1,6 +1,7 @@
 package org.daum.javase.webportal.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import org.sitac.Agent;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,6 +11,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
  * To change this template use File | Settings | File Templates.
  */
 public interface AuthentificationServiceAsync {
-      void initormh(AsyncCallback<Void> callback);
       void authenticateAgent(String name, String password, AsyncCallback<Boolean> callback);
+      void createAgent(String nom, String prenom, String matricule , String password,AsyncCallback<String> callback);
 }
