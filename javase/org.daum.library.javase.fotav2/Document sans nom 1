@@ -1,0 +1,146 @@
+#include <jni.h>
+#include <nativelib.h>
+#include "fota.h"
+
+ /**
+  * Created by jed
+  * User: jedartois@gmail.com
+  * Date: 18/07/12
+  * Time: 8:49
+  */
+    /*
+  #define CLASSPATH "-Djava.class.path=/home/jed/githubJED/org.powet.fota/eu.powet.fota/target/classes"
+
+ JNIEnv* create_vm(JavaVM ** jvm)
+ {
+
+     JNIEnv *env;
+     JavaVMInitArgs vm_args;
+     JavaVMOption options[2];
+     options[0].optionString = CLASSPATH; //"-Djava.class.path=/scratch/workareas/JTest/Java/"
+     options[1].optionString = "-DXcheck:jni:pedantic";
+     vm_args.version = JNI_VERSION_1_6; //JDK version. This indicates version 1.6
+     vm_args.nOptions = 2;
+     vm_args.options = options;
+     vm_args.ignoreUnrecognized = JNI_TRUE; //drop unrecognized options
+
+     int ret = JNI_CreateJavaVM(jvm, (void**) &env, &vm_args);
+     if (ret < 0) printf("\n<<<<< Unable to Launch JVM >>>>>\n");
+     return env;
+ }
+         JNIEnv* env;
+             JavaVM* jvm;
+             printf("Creating JVM....");
+             env = create_vm(&jvm);
+             printf(" done! [env = %p\tjvm = %p]\n", env, jvm);
+             if (env == NULL) return 1;
+
+             jclass myClass = NULL;
+             jmethodID dispatchMessage = NULL;
+             int counter = 0;
+
+             //Obtaining Class
+             myClass = (*env)->FindClass(env, "EventHandler");
+             printf("FindClass done! [%p]\n", myClass);
+
+             //Obtaining Method ID
+             if (myClass != NULL)
+                 dispatchMessage = (*env)->GetStaticMethodID(env, myClass, "dispatchEvent", "(I)V");
+             else
+                 printf("Unable to find the requested class\n");
+
+             printf("Calling dispatchEvent() [%p] ...\n", dispatchMessage);
+             if (dispatchMessage != NULL)
+             {
+         //      jstring newMessage = (*env)->NewStringUTF(env, "Test call::Called from C\n");
+                 for(counter = 0; counter < 10; counter ++)
+                 {
+                     jint newMessage = counter;
+                     (*env)->CallStaticVoidMethod(env, myClass, dispatchMessage, newMessage);
+                 }
+             } printf("dispatchMessage() done!\n");
+
+             //Release resources.
+             printf("Releasing resources...");
+             (*jvm)->DestroyJavaVM(jvm);
+             printf(" done! Exiting.\n");
+
+      */
+
+
+
+
+// cached refs for later callbacks
+ jclass Class_C;
+ jmethodID MID_C_g;
+
+
+
+void fota_event(int evt)
+{
+            /*
+
+  if (getEnvStat == JNI_EDETACHED) {
+       // std::cout << "GetEnv: not attached" << std::endl;
+        if ((*cached_jvm)->AttachCurrentThread(cached_jvm,(void **) &g_env, NULL) != 0) {
+         //   std::cout << "Failed to attach" << std::endl;
+        }
+    } else if (getEnvStat == JNI_OK) {
+        //
+    } else if (getEnvStat == JNI_EVERSION) {
+    //    std::cout << "GetEnv: version not supported" << std::endl;
+    }
+
+    (*g_env)->CallVoidMethod(g_env,g_obj, g_mid, evt);
+
+
+    if (g_env->ExceptionCheck(g_env)) {
+        g_env->ExceptionDescribe(g_env);
+    }
+
+ (*cached_jvm)->DetachCurrentThread(cached_jvm);  */
+ puts(evt);
+}
+
+JNIEXPORT void JNICALL Java_eu_powet_fota_Nativelib_close_1flash(JNIEnv * env, jobject obj)
+{
+   close_flash();
+}
+
+
+JNIEXPORT jint JNICALL Java_eu_powet_fota_Nativelib_write_1on_1the_1air_1program  (JNIEnv *env, jobject obj, jstring device, jint target, jstring path){
+
+    // convert
+  const char *n_device = (*env)->GetStringUTFChars(env, device, 0);
+  const char *n_hex_path = (*env)->GetStringUTFChars(env, path, 0);
+ // todo malloc in open_file
+  unsigned char file_intel_hex_array[1200000];
+  register_FlashEvent(fota_event);
+  int taille =  open_file(n_hex_path,&file_intel_hex_array);
+
+   return write_on_the_air_program(n_device,target,taille,&file_intel_hex_array[0]);
+  }
+
+jobject g_obj;
+jmethodID g_mid;
+
+JNIEXPORT jboolean JNICALL Java_eu_powet_fota_Nativelib_register  (JNIEnv *env, jobject obj)
+{
+
+         /* convert local to global reference
+         g_obj = (*env)->NewGlobalRef(env,obj);
+         // save refs for callback
+         jclass g_clazz = (*env)->GetObjectClass(env,g_obj);
+
+         if (g_clazz == NULL)
+         {
+             puts( "Failed to find class");
+         }
+
+         g_mid = (*env)->GetMethodID(env,g_clazz, "callback", "(I)V");
+         if (g_mid == NULL)
+          {
+           puts( "Unable to get method ref");
+
+*/
+}
