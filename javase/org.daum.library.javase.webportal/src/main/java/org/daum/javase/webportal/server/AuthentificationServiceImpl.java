@@ -24,9 +24,11 @@ import org.sitac.SitacFactory;
  */
 
 public class AuthentificationServiceImpl extends RemoteServiceServlet implements AuthentificationService {
-    public PersistenceConfiguration configuration=null;
-    private PersistenceSessionFactoryImpl factory=null;
-    private ReplicaService replicaService =  null;
+    private PersistenceSessionFactoryImpl factory;
+
+    public AuthentificationServiceImpl(PersistenceSessionFactoryImpl factory){
+        this.factory = factory;
+    }
 
     @Override
     public boolean authenticateAgent(String name, String password) {
@@ -44,12 +46,20 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
             agent.setPrenom(prenom);
             agent.setMatricule(matricule);
             agent.setPassword(password);
+            System.err.println("WTF WTF");
             session.save(agent);
         } catch (PersistenceException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            session.close();
         }
         return agent.getNom();
     }
+
+
+
+
+
+
 
 
 }

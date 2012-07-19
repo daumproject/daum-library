@@ -50,58 +50,59 @@ public class webPortalComponent extends ParentAbstractPage {
             @Override
             public void modelUpdated() {
                 initormh();
+                servletRepository.registerServlet("/ihmwebportal/authentifService", new AuthentificationServiceImpl(factory));
             }
         });
 
-        servletRepository = new LocalServletRegistry(){
+        servletRepository = new LocalServletRegistry() {
             @Override
-            public String getCDefaultPath(){
+            public String getCDefaultPath () {
                 return "/ihmwebportal";
             }
-
-            @Override
-            public List<ServletContextListener> listeners() {
-                return null;  //To change body of implemented methods use File | Settings | File Templates.
-            }
-
-            @Override
-            public void listeners_$eq(List<ServletContextListener> listeners) {
-                //To change body of implemented methods use File | Settings | File Templates.
-            }
         };
+
         super.startPage();
-        servletRepository.registerServlet("/ihmwebportal/authentifService", new AuthentificationServiceImpl());
+
+
+
+
     }
 
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest request, KevoreeHttpResponse response) {
+        String pattern = this.getDictionary().get("urlpattern").toString();
+        pattern = pattern.replace("**", "");
+        if (request.getUrl().equals(pattern)) {
+            if (FileServiceHelper.checkStaticFile("IHMwebPortal.html", this, request, response)) {
+                logger.debug("The IHMcodeMirror.html has been returned to respond to the request: {}", request.getUrl());
+                return response;
+            }
+        }
         ClassLoader l = Thread.currentThread().getContextClassLoader();
-        Thread.currentThread().setContextClassLoader(webPortalComponent.class.getClassLoader() );
-        System.err.println("URL " + request.getUrl() + "\n" + request + "\n" );
+        Thread.currentThread().setContextClassLoader(webPortalComponent.class.getClassLoader());
 
-        boolean res = servletRepository.tryURL(request.getUrl(),request,response);
-
+        boolean res = servletRepository.tryURL(request.getUrl(), request, response);
         Thread.currentThread().setContextClassLoader(l);
-        if ( res ){
+        if (res) {
+            logger.debug("one servlet is able to respond to the request: {}", request.getUrl());
             return response;
+
         }
 
 
         if (FileServiceHelper.checkStaticFile(request.getUrl(), this, request, response)) {
+            logger.debug("A static resource has been found to respond to the request: {}", request.getUrl());
             return response;
         }
-        if (FileServiceHelper.checkStaticFile("IHMwebPortal.html", this, request, response)) {
 
-            return response;
-        }
-        response.setContent("Bad request1");
+        logger.warn("Unable to find the needed resource to the request: {}", request.getUrl());
+        response.setContent("Bad request");
         return response;
     }
 
     public void initormh() {
         try
         {
-            ReplicaService replicatingService = getPortByName("service", ReplicaService.class);
             configuration = new PersistenceConfiguration(getNodeName());
             replicaService =   this.getPortByName("service", ReplicaService.class);
             ReplicaStore store = new ReplicaStore(replicaService);
@@ -109,11 +110,9 @@ public class webPortalComponent extends ParentAbstractPage {
             for (Class c : SitacFactory.classes()) configuration.addPersistentClass(c);
 
             factory = configuration.getPersistenceSessionFactory();
-
-
         } catch (PersistenceException e)
         {
-
+             e.printStackTrace();
         }
     }
 }

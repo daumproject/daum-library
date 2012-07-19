@@ -1,0 +1,46 @@
+ {
+merge 'mvn:org.kevoree.library.javase/org.kevoree.library.javase.webserver.servlet/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.sky/org.kevoree.library.sky.jails/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nioChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.library.javase/org.kevoree.library.javase.webserver/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.sky/org.kevoree.library.sky.provider/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.javaseNode/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.authentication/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.webserver.tjws/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}'
+merge 'mvn:org.daum.library.javase/org.daum.library.javase.webportal/{kevoree.version}'
+merge 'mvn:org.daum.library.javase/org.daum.library.javase.demos/1.0-SNAPSHOT'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.defaultChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.webserver.api/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.socketChannels/{kevoree.version}'
+merge 'mvn:org.daum.library.javase/org.daum.library.javase.replica/2.0'
+merge 'mvn:org.kevoree.corelibrary.sky/org.kevoree.library.sky.minicloud/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.sky/org.kevoree.library.sky.api/{kevoree.version}'
+addNode editor_node:MiniCloudNode
+ {
+  addComponent WebServer820@editor_node : WebServer {}
+  addComponent webPortal685@editor_node : webPortalComponent {}
+  addComponent Replica987@editor_node : Replica {synchronize='false'}
+  addComponent PopulateR561@editor_node : PopulateReplica {}
+addChannel defSERVIC414 : defSERVICE {}
+addChannel defMSG964 : defMSG {}
+addChannel defMSG813 : defMSG {}
+bind Replica987.service@editor_node => defSERVIC414
+bind PopulateR561.service@editor_node => defSERVIC414
+bind webPortal685.service@editor_node => defSERVIC414
+bind WebServer820.response@editor_node => defMSG964
+bind webPortal685.content@editor_node => defMSG964
+bind WebServer820.handler@editor_node => defMSG813
+bind webPortal685.request@editor_node => defMSG813
+updateDictionary defSERVIC414 
+updateDictionary defMSG964 
+updateDictionary defMSG813 
+updateDictionary WebServer820@editor_node 
+updateDictionary webPortal685@editor_node 
+updateDictionary Replica987@editor_node 
+updateDictionary PopulateR561@editor_node 
+}
+
+addGroup editor_group:NanoRestGroup
+addToGroup editor_group editor_node
+}

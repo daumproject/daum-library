@@ -2,7 +2,7 @@ package org.daum.javase.webportal.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import org.sitac.Agent;
+
 
 /**
  * Created with IntelliJ IDEA.

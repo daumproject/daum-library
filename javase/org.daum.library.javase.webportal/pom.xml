@@ -18,6 +18,7 @@
     <properties>
         <gwtVersion>2.4.0</gwtVersion>
         <kevoree.version>1.8.3-SNAPSHOT</kevoree.version>
+        <kevoree.exclude>javax.servlet:*</kevoree.exclude>
     </properties>
 
     <dependencies>
@@ -34,11 +35,16 @@
             <version>1.8.3-SNAPSHOT</version>
         </dependency>
 
-
         <dependency>
             <groupId>org.kevoree.library.javase</groupId>
             <artifactId>org.kevoree.library.javase.webserver.servlet</artifactId>
-            <version>1.8.3-SNAPSHOT</version>
+            <version>${kevoree.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
 
@@ -102,16 +108,14 @@
                     <execution>
                         <phase>generate-resources</phase>
                         <configuration>
-
-
                             <localWorkers>4</localWorkers>
                             <!-- use style OBF for prod -->
-                            <style>OBFUSCATED</style>
+                            <!--<style>OBFUSCATED</style>-->
                             <extraJvmArgs>-Xmx2048m -Xss1024k</extraJvmArgs>
-                            <gwtVersion>${version.gwt}</gwtVersion>
-                            <runTarget>TarificateurDirectM.html</runTarget>
-                            <hostedWebapp>${webappDirectory}</hostedWebapp>
-                            <i18nMessagesBundle>fr.directm.tarificateur.client.Messages</i18nMessagesBundle>
+                            <!--<gwtVersion>${version.gwt}</gwtVersion>-->
+                            <!--<runTarget>TarificateurDirectM.html</runTarget>-->
+                            <webappDirectory>${webappDirectory}</webappDirectory>
+                            <!--<i18nMessagesBundle>fr.directm.tarificateur.client.Messages</i18nMessagesBundle>-->
                         </configuration>
                         <goals>
                             <goal>compile</goal>

@@ -1,58 +1,32 @@
-body{
-    font-family:AlternateGothicFSNo3,"Arial Narrow";
-    margin:auto;
-
+/** Add css rules here for your application. */
+/** Example rules used by the template application (remove for your app) */
+h1 {
+	font-size: 2em;
+	font-weight: bold;
+	color: #777777;
+	margin: 40px 0px 70px;
+	text-align: center;
 }
 
-#buttonBar {
-    width: 915px;
-    height: 100px;
-    background-color: whitesmoke;
+.sendButton {
+	display: block;
+	font-size: 16pt;
 }
 
-#fileSystem {
-    float: left;
-    min-width: 300px;
-    min-height: 800px;
-
-    background:#252525;
-    color:white;
-    border: solid 1px
-    padding: 20px;
+/** Most GWT widgets already have a style name defined */
+.gwt-DialogBox {
+	width: 400px;
 }
 
-#editor {
-    float:left;
-    min-width: 500px;
-    min-height: 700px;
+.dialogVPanel {
+	margin: 5px;
 }
 
-.buttonBarGrid table{
-    margin:auto;
+.serverResponseLabelError {
+	color: red;
 }
 
-.popup
-{
-    background-color       :   whitesmoke;
-    border                 :    3px solid black;
+/** Set ids using widget.getElement().setId("idOfElement") */
+#closeButton {
+	margin: 15px 6px 6px;
 }
-
-.textAreaCodeShow
-{
-    border: solid 1px;
-    width: 300px;
-    min-height: 800px;
-}
-
-.systemFileScrollPanel{
-    min-height:800px;
-}
-
-.gwt-Tree .gwt-TreeItem-selected {
-         text-decoration:underline;
-}
-
-.hiddenLabel{
-visibility:hidden;
-}
-

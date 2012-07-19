@@ -9,7 +9,7 @@
   
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>IHMcodeMirror.html</welcome-file>
+    <welcome-file>IHMwebPortal.html</welcome-file>
   </welcome-file-list>
 
 </web-app>

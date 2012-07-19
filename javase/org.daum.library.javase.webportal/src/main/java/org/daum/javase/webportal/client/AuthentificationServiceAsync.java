@@ -1,7 +1,7 @@
 package org.daum.javase.webportal.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import org.sitac.Agent;
+
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,6 +1,8 @@
 package org.daum.javase.webportal.client;
 
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ButtonItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
@@ -11,7 +13,7 @@ import com.smartgwt.client.widgets.form.fields.events.ClickEvent;
 import com.smartgwt.client.widgets.form.fields.events.ClickHandler;
 import com.google.gwt.core.client.GWT;
 import com.smartgwt.client.widgets.layout.HLayout;
-import org.sitac.Agent;
+//import org.sitac.Agent;
 
 
 public class AgentForm extends HLayout{
@@ -19,6 +21,7 @@ public class AgentForm extends HLayout{
     private final AuthentificationServiceAsync loginService = GWT.create(AuthentificationService.class);
 
 	public AgentForm(){
+
 
 		final DynamicForm form = new DynamicForm();
 		form.setTop(50);
@@ -60,12 +63,12 @@ public class AgentForm extends HLayout{
 
                     @Override
                     public void onFailure(Throwable error) {
-                          error.printStackTrace();
+                        Window.alert("Fail ");
                     }
 
                     @Override
                     public void onSuccess(String nom) {
-                        System.err.println("DAT AGENT'S NAME => "+ nom);
+                        Window.alert("Success "+nom);
                     }
                 });
 
@@ -75,6 +78,7 @@ public class AgentForm extends HLayout{
 
 		form.setFields(new FormItem[] {header, nomItem, prenomItem, matriculeItem, passwordItem, btnValider});
 		this.addChild(form);
+     //   this.addChild(labelNom);
 		this.draw();		
 	}
 
