@@ -14,12 +14,6 @@ public class Helpers {
 
     public static List<String> getPortIdentifiers() {
         List<String> ports = new ArrayList<String>();
-        try{
-
-
-        }   catch (Exception e){
-
-        }
         File file = new File("/dev");
         File[] files = file.listFiles();
         if (files != null) {
@@ -43,7 +37,8 @@ public class Helpers {
     }
 
 
-   public  static Byte[]  read_file(String pathfile){
+   public  static Byte[] load_file(String pathfile)
+   {
        File file = new File(pathfile);
        FileInputStream fis = null;
        BufferedInputStream bis = null;
@@ -73,7 +68,7 @@ public class Helpers {
        }
         return  tab.toArray(new Byte[tab.size()]);
    }
-    public static Byte[] read_file(InputStream reader) throws IOException {
+    public static Byte[] load_file(InputStream reader) throws IOException {
         int c;
         ArrayList<Byte> tab = new ArrayList<Byte>();
         while((c = reader.read()) != -1) {
@@ -81,9 +76,7 @@ public class Helpers {
         }
         if (reader!=null)
             reader.close();
-
         Byte[] data = tab.toArray(new Byte[tab.size()]);
-
         return data;
     }
 }

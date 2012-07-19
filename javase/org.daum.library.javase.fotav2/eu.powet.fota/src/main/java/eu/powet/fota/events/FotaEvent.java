@@ -8,7 +8,7 @@ package eu.powet.fota.events;
  * Time: 11:32
  */
 public interface FotaEvent {
-   public void dispatchEvent(int msg);
+    public void dispatchEvent(int msg);
     public long getDuree();
     public int getSize_uploaded();
     public int getProgram_size();
