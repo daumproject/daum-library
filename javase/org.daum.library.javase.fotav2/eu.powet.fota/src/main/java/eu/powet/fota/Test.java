@@ -15,36 +15,33 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 
-
-
-        // System.load("/home/jed/githubJED/org.powet.fota/eu.powet.fota.native/nux32/target/eu.powet.fota.native.nux32.so");
-        Fota fota = new Fota("*", Board.ATMEGA328);
-
-
-
-
-        //  Byte[] intel = Helpers.read_file(NativeLoader.class.getClassLoader().getResourceAsStream("programTest/test.hex"));
-
-        fota.upload("/home/jed/DAUM_PROJECT/daum-library/javase/org.daum.library.javase.fota/src/main/resources/programTest/test.hex");
-
-
-        //  System.exit(0);
-        fota.addEventListener(new FotaEventListener()
+        try
         {
-            @Override
-            public void progressEvent(FotaEvent evt) {
-                System.out.println(" Uploaded " + evt.getSize_uploaded()+"/"+evt.getFota().getProgram_size() + " octets");
-            }
+            Fota fota = new Fota("*", Board.ATMEGA328);
 
-            @Override
-            public void completedEvent(FotaEvent evt) {
-                System.out.println("Transmission completed successfully <" + evt.getFota().getProgram_size() + " octets "+evt.getFota().getDuree()+" secondes >");
-                System.exit(0);
-            }
-        });
+            fota.upload("/home/jed/DAUM_PROJECT/daum-library/javase/org.daum.library.javase.fota/src/main/resources/programTest/test.hex");
 
-        Thread.sleep(5000);
-        fota.close();
+
+            fota.addEventListener(new FotaEventListener()
+            {
+                @Override
+                public void progressEvent(FotaEvent evt) {
+                    System.out.println(" Uploaded " + evt.getSize_uploaded()+"/"+evt.getProgram_size() + " octets");
+                }
+
+                @Override
+                public void completedEvent(FotaEvent evt) {
+                    System.out.println("Transmission completed successfully <" + evt.getProgram_size() + " octets "+evt.getDuree()+" secondes >");
+                    System.exit(0);
+                }
+            });
+
+            Thread.sleep(3000);
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
     }

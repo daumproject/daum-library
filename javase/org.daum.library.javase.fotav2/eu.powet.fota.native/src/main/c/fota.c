@@ -30,6 +30,10 @@ static int *quitter;
 void (*FlashEvent) (int evt);
 
 
+
+
+
+
 /**
  *  Assign function
  * @param fn pointer to the callback
@@ -425,7 +429,9 @@ int write_on_the_air_program(char *port_device,int target,int taille,unsigned ch
    // strcpy(mytarget->dest_node_id,dest_node_id);
     mytarget->taille = taille;
 
+
     mytarget->intel_hex_array =  parse_intel_hex(mytarget->taille,&mytarget->last_memory_address,raw_intel_hex_array);
+
 
     if(mytarget->last_memory_address <= 0)
     {
@@ -433,7 +439,7 @@ int write_on_the_air_program(char *port_device,int target,int taille,unsigned ch
     }
 
 
-      // create memory shared
+  // create memory shared
      shmid = shmget(JED_IPC_PRIVATE,sizeof(int), 0666 | IPC_CREAT );
      if(shmid < 0)
      {
@@ -459,6 +465,7 @@ int write_on_the_air_program(char *port_device,int target,int taille,unsigned ch
        sleep(2);
     }
 
+
     *quitter =ALIVE;
 
  RESTART:
@@ -479,13 +486,13 @@ int write_on_the_air_program(char *port_device,int target,int taille,unsigned ch
     do
     {
         boot_flag =  serialport_readbyte(fd);
-        FlashEvent(EVENT_WAITING_BOOTLOADER);
+       // FlashEvent(EVENT_WAITING_BOOTLOADER);
         usleep(1000);
     }while( boot_flag !=BOOTLOADER_STARTED && *quitter == ALIVE);
 
     if(serialport_writebyte(fd,BOOT_INTO_BOOTLOADER_FLAG) < 0)
     {
-        FlashEvent(ERROR_WRITE);
+     //   FlashEvent(ERROR_WRITE);
     }
     boot_flag =  serialport_readbyte(fd);
     if(boot_flag == BOOTLOADER_STARTED )
@@ -495,7 +502,7 @@ int write_on_the_air_program(char *port_device,int target,int taille,unsigned ch
         tentative++;
         if(tentative > 5)
         {
-              return FAIL_TO_BOOT_INTO_BOOTLOADER;
+             // return FAIL_TO_BOOT_INTO_BOOTLOADER;
         }
         goto RESTART;
     }

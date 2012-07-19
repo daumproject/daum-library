@@ -1,8 +1,7 @@
 package  eu.powet.fota.events;
 
 
-
-import java.util.EventObject;
+import eu.powet.fota.Nativelib;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,8 +10,8 @@ import java.util.EventObject;
  * Time: 14:42
  * To change this template use File | Settings | File Templates.
  */
-public class WaitingBLEvent extends FotaEvent {
-    public WaitingBLEvent(eu.powet.fota.Fota src) {
+public class WaitingBLFotaEvent extends Nativelib {
+    public WaitingBLFotaEvent(eu.powet.fota.Fota src) {
         super(src);
     }
 }

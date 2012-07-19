@@ -89,35 +89,6 @@
 
             </plugin>
 
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>copy</goal>
-                        </goals>
-                        <configuration>
-                            <artifactItems>
-                                <artifactItem>
-                                    <groupId>eu.powet.fota.native</groupId>
-                                    <artifactId>eu.powet.fota.native.nix32</artifactId>
-                                    <version>1.1-SNAPSHOT</version>
-                                    <type>so</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>/home/jed/githubJED/org.powet.fota/eu.powet.fota/src/main/resources/nix32</outputDirectory>
-                                    <destFileName>native.so</destFileName>
-                                </artifactItem>
-
-                            </artifactItems>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
            <!--
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>

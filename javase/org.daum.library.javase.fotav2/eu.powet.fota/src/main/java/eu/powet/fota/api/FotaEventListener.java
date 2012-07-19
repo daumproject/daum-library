@@ -1,6 +1,7 @@
 package eu.powet.fota.api;
 
 
+import eu.powet.fota.Nativelib;
 import eu.powet.fota.events.FotaEvent;
 
 /**

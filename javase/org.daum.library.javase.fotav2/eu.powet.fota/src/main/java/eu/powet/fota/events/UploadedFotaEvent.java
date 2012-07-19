@@ -2,6 +2,7 @@ package eu.powet.fota.events;
 
 
 import eu.powet.fota.Fota;
+import eu.powet.fota.Nativelib;
 
 /**
  * Created by jed
@@ -9,8 +10,8 @@ import eu.powet.fota.Fota;
  * Date: 29/02/12
  * Time: 10:28
  */
-public class UploadedEvent extends FotaEvent {
-    public UploadedEvent(Fota src) {
+public class UploadedFotaEvent extends Nativelib {
+    public UploadedFotaEvent(Fota src) {
         super(src);
     }
 }

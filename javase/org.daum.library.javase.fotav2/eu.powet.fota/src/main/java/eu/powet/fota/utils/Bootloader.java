@@ -100,12 +100,12 @@ public class Bootloader  implements Runnable,IBootloader
          File folder = new File(System.getProperty("java.io.tmpdir") + File.separator + "Bootloader");
          if (folder.exists())
          {
-             NativeLoader.deleteOldFile(folder);
+             Nativelib.deleteOldFile(folder);
          }
          folder.mkdirs();
 
-         String pathcodesource = NativeLoader.copyFileFromStream( "Bootloaders/atmega328p/Wireless_Bootloader_ATmega328.c", folder.getAbsolutePath(), "Wireless_Bootloader_ATmega328.c");
-         String pathmakefile = NativeLoader.copyFileFromStream( "Bootloaders/atmega328p/Makefile", folder.getAbsolutePath(), "Makefile");
+         String pathcodesource = Nativelib.copyFileFromStream( "Bootloaders/atmega328p/Wireless_Bootloader_ATmega328.c", folder.getAbsolutePath(), "Wireless_Bootloader_ATmega328.c");
+         String pathmakefile = Nativelib.copyFileFromStream( "Bootloaders/atmega328p/Makefile", folder.getAbsolutePath(), "Makefile");
 
          File dir = new File ( folder.getPath()) ;
          String [] envp = {"" } ;
@@ -119,7 +119,7 @@ public class Bootloader  implements Runnable,IBootloader
 
 
 
-         String pathavrdude =  Bootloader.class.getClassLoader().getResource(NativeLoader.getPath("avrdude")).getPath();
+         String pathavrdude =  Bootloader.class.getClassLoader().getResource(Nativelib.getPath("avrdude")).getPath();
 
 
          String fuse = pathavrdude+" -c "+programmer.getProgrammerType()+" -p "+avr.getType()+" -e -u -U lock:w:0x3f:m -U efuse:w:0x00:m -U hfuse:w:0xDA:m -U lfuse:w:0xFF:m";
