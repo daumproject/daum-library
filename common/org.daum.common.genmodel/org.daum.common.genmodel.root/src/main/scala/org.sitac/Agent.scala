@@ -1,4 +1,4 @@
-package org.daum.javase.webportal.shared
+package org.sitac;
 
 import java.io.Serializable;
 
