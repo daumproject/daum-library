@@ -1,5 +1,6 @@
 package org.daum.javase.webportal.server;
 
+import org.daum.common.genmodel.SitacFactory;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.ReplicaStore;
@@ -10,7 +11,6 @@ import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.library.javase.webserver.*;
 import org.kevoree.library.javase.webserver.servlet.LocalServletRegistry;
-import org.sitac.SitacFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.collection.immutable.List;

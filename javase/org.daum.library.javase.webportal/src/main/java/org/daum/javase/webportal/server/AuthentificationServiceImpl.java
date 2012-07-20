@@ -1,12 +1,13 @@
 package org.daum.javase.webportal.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import org.daum.common.genmodel.Agent;
+import org.daum.common.genmodel.SitacFactory;
 import org.daum.javase.webportal.client.AuthentificationService;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.sitac.Agent;
-import org.sitac.SitacFactory;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -61,7 +61,7 @@
         <dependency>
             <groupId>org.daum.common.genmodel.javase</groupId>
             <artifactId>org.daum.common.genmodel.javase.root</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <version>1.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.daum.library.javase</groupId>
@@ -115,7 +115,9 @@
                             <!--<gwtVersion>${version.gwt}</gwtVersion>-->
                             <!--<runTarget>TarificateurDirectM.html</runTarget>-->
                             <webappDirectory>${webappDirectory}</webappDirectory>
+                            <module>org.daum.common.genmodel.gwtGenmodel</module>
                             <!--<i18nMessagesBundle>fr.directm.tarificateur.client.Messages</i18nMessagesBundle>-->
+                            <style>OBF</style>
                         </configuration>
                         <goals>
                             <goal>compile</goal>

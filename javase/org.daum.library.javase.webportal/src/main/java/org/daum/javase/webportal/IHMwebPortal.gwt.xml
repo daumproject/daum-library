@@ -8,12 +8,13 @@
     <inherits name='com.google.gwt.user.User'/>
     <inherits name="com.smartgwt.SmartGwt"/>
 
+   <!-- <inherits name="org.daum.common.genmodel.gwtGenmodel"/>  -->
 
     <!-- Specify the app entry point class.                   -->
     <entry-point class='org.daum.javase.webportal.client.IHMwebPortal'/>
 
     <source path='client'/>
-    <source path='shared'/>
+
 
 
 </module>

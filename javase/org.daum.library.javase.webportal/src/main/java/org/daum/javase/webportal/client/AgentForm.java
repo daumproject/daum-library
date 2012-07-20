@@ -13,7 +13,7 @@ import com.smartgwt.client.widgets.form.fields.events.ClickEvent;
 import com.smartgwt.client.widgets.form.fields.events.ClickHandler;
 import com.google.gwt.core.client.GWT;
 import com.smartgwt.client.widgets.layout.HLayout;
-import org.sitac.Agent;
+import org.daum.common.genmodel.Agent;
 
 
 public class AgentForm extends HLayout{
