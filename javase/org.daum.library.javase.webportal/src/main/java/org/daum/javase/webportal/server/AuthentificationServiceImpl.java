@@ -2,18 +2,13 @@ package org.daum.javase.webportal.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import org.daum.javase.webportal.client.AuthentificationService;
-import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
-import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
-import org.daum.library.replica.cache.ReplicaService;
-import org.kevoree.ContainerRoot;
-import org.kevoree.annotation.*;
-import org.kevoree.api.service.core.handler.ModelListener;
-import org.kevoree.framework.AbstractComponentType;
 import org.sitac.Agent;
 import org.sitac.SitacFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,6 +20,8 @@ import org.sitac.SitacFactory;
 
 public class AuthentificationServiceImpl extends RemoteServiceServlet implements AuthentificationService {
     private PersistenceSessionFactoryImpl factory;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     public AuthentificationServiceImpl(PersistenceSessionFactoryImpl factory){
         this.factory = factory;
@@ -36,7 +33,9 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
-    public String createAgent(String nom, String prenom, String matricule, String password) {
+    public Agent createAgent(String nom, String prenom, String matricule, String password) {
+
+        logger.debug("CALL createAgent " + factory + " " + nom + " " + prenom);
         PersistenceSession session = null;
         Agent agent = null;
         try {
@@ -46,13 +45,12 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
             agent.setPrenom(prenom);
             agent.setMatricule(matricule);
             agent.setPassword(password);
-            System.err.println("WTF WTF");
             session.save(agent);
         } catch (PersistenceException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
             session.close();
         }
-        return agent.getNom();
+        return agent;
     }
 
 

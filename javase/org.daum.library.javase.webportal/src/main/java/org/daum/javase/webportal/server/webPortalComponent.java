@@ -11,6 +11,8 @@ import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.library.javase.webserver.*;
 import org.kevoree.library.javase.webserver.servlet.LocalServletRegistry;
 import org.sitac.SitacFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scala.collection.immutable.List;
 
 import javax.servlet.ServletContextListener;
@@ -32,7 +34,7 @@ public class webPortalComponent extends ParentAbstractPage {
     private PersistenceSessionFactoryImpl factory=null;
     private ReplicaService replicaService =  null;
     private LocalServletRegistry servletRepository = null;
-
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public void startPage() {
 

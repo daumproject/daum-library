@@ -2,6 +2,7 @@ package org.daum.javase.webportal.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import org.sitac.Agent;
 
 
 /**
@@ -16,5 +17,7 @@ public interface AuthentificationService extends RemoteService {
 
     public boolean authenticateAgent(String name, String password);
 
-    public String createAgent(String nom, String prenom, String matricule, String password);
+    public Agent createAgent(String nom, String prenom, String matricule, String password);
+
+
 }

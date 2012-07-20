@@ -13,7 +13,7 @@ import com.smartgwt.client.widgets.form.fields.events.ClickEvent;
 import com.smartgwt.client.widgets.form.fields.events.ClickHandler;
 import com.google.gwt.core.client.GWT;
 import com.smartgwt.client.widgets.layout.HLayout;
-//import org.sitac.Agent;
+import org.sitac.Agent;
 
 
 public class AgentForm extends HLayout{
@@ -59,19 +59,17 @@ public class AgentForm extends HLayout{
                 String matricule = matriculeItem.getValueAsString();
                 String password = passwordItem.getValueAsString();
 
-                loginService.createAgent(nom, prenom, matricule, password, new AsyncCallback<String>() {
-
+                loginService.createAgent(nom, prenom, matricule, password, new AsyncCallback<Agent>() {
                     @Override
-                    public void onFailure(Throwable error) {
-                        Window.alert("Fail ");
+                    public void onFailure(Throwable throwable) {
+                        Window.alert("Fail");
                     }
 
                     @Override
-                    public void onSuccess(String nom) {
-                        Window.alert("Success "+nom);
+                    public void onSuccess(Agent agent) {
+                        Window.alert(agent.getNom());
                     }
                 });
-
             }
 		});
 
