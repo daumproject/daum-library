@@ -1,4 +1,4 @@
-package org.sitac;
+package org.daum.common.genmodel;
 
 
 /**
@@ -32,32 +32,32 @@ public enum VehiculeType {
 		return VehiculeSector.values();
 	}
 
-	public static org.sitac.VehiculeType[] getValues(VehiculeSector sector) {
+	public static org.daum.common.genmodel.VehiculeType[] getValues(VehiculeSector sector) {
 		switch (sector) {
 			case ALIM:
-				return new org.sitac.VehiculeType[] {CCGC, DA, MPR};
+				return new org.daum.common.genmodel.VehiculeType[] {CCGC, DA, MPR};
 
 			case INC:
-				return new org.sitac.VehiculeType[] {BEA, CAEM, CCFM, CCGCLC, EPS, FMOGP, FPT, VPRO, VAR};
+				return new org.daum.common.genmodel.VehiculeType[] {BEA, CAEM, CCFM, CCGCLC, EPS, FMOGP, FPT, VPRO, VAR};
 
 			case COM:
-				return new org.sitac.VehiculeType[] {VL, VLHR, VPL, VPHV, VTP, VTU, VCYNO};
+				return new org.daum.common.genmodel.VehiculeType[] {VL, VLHR, VPL, VPHV, VTP, VTU, VCYNO};
 
 			case SAP:
-				return new org.sitac.VehiculeType[] {SAC_PS, VLSV, VLOS, VLS, VSAV, VSM, VSR};
+				return new org.daum.common.genmodel.VehiculeType[] {SAC_PS, VLSV, VLOS, VLS, VSAV, VSM, VSR};
 
 			case RTN:
-				return new org.sitac.VehiculeType[] {VRCB, VICB, VNRBC, VRAD};
+				return new org.daum.common.genmodel.VehiculeType[] {VRCB, VICB, VNRBC, VRAD};
 
 			case CHEM:
-				return new org.sitac.VehiculeType[] {PCM, VLCC, VLCGD, VLCS, VLCG};
+				return new org.daum.common.genmodel.VehiculeType[] {PCM, VLCC, VLCGD, VLCS, VLCG};
 
 			default:
 				return null;
 		}
 	}
 
-	public static VehiculeSector getSector(org.sitac.VehiculeType type) {
+	public static VehiculeSector getSector(org.daum.common.genmodel.VehiculeType type) {
 		switch (type) {
 			case SAC_PS:
 			case VLSV:

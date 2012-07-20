@@ -1,4 +1,4 @@
-package org.sitac;
+package org.daum.common.genmodel;
 
 public enum CibleType {
     WATER,
