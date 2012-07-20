@@ -6,7 +6,7 @@
     <artifactId>org.daum.common.genmodel.android.root</artifactId>
     <packaging>jar</packaging>
     <name>Daum :: Common :: Android :: GenModel</name>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
 
     <parent>
         <artifactId>org.daum.common.genmodel</artifactId>
@@ -41,12 +41,11 @@
     </dependencies>
 
     <build>
-        <sourceDirectory>../org.daum.common.genmodel.root/src/main</sourceDirectory>
+        <sourceDirectory>../org.daum.common.genmodel.javase/src</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.0.2</version>
                 <configuration>
                     <source>1.5</source>
                     <target>1.5</target>
