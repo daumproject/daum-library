@@ -1,15 +1,16 @@
 package org.daum.javase.webportal.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import org.daum.common.genmodel.Agent;
-import org.daum.common.genmodel.SitacFactory;
+import org.daum.javase.webportal.dto.AdapteurAgent;
+import org.daum.javase.webportal.shared.Agent;
 import org.daum.javase.webportal.client.AuthentificationService;
-import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
-import org.daum.library.ormH.utils.PersistenceException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,27 +30,41 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
-    public boolean authenticateAgent(String name, String password) {
-        return false;
+    public Agent createAgent(String nom, String prenom, String matricule, String password) {
+        Agent agent = new Agent(nom,prenom,matricule,password);
+        AdapteurAgent adapteurAgent = new AdapteurAgent(factory);
+        agent = adapteurAgent.saveAgent(agent);
+        return agent;
     }
 
     @Override
-    public Agent createAgent(String nom, String prenom, String matricule, String password) {
+    public boolean authenticateAgent(String matricule, String password){
 
-        logger.debug("CALL createAgent " + factory + " " + nom + " " + prenom);
-        PersistenceSession session = null;
+        //TODO get agent from ormH
+        //Agent agent = new Agent();
+
+        if(matricule.equals("admin") && password.equals("admin")) {
+            return true;
+            //get caracteristics of the agent
+            /*agent.setLastname("Despagne");
+               agent.setMatricule("pdespagn");
+               agent.setFirstname("Pierre");
+               agent.setLogged(true);*/
+        }
+        return false;
+        /*if (agent.isLogged()) {
+              storeAgentInSession(agent);
+          }
+          return agent;*/
+    }
+
+    private Agent getAgentAlreadyFromSession() {
         Agent agent = null;
-        try {
-            session = factory.getSession();
-            agent = SitacFactory.createAgent();
-            agent.setNom(nom);
-            agent.setPrenom(prenom);
-            agent.setMatricule(matricule);
-            agent.setPassword(password);
-            session.save(agent);
-        } catch (PersistenceException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            session.close();
+        HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
+        HttpSession session = httpServletRequest.getSession();
+        Object userObj = session.getAttribute("agent");
+        if (userObj != null && userObj instanceof Agent) {
+            agent = (Agent) userObj;
         }
         return agent;
     }
@@ -57,8 +72,34 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
 
 
 
+    private void storeAgentInSession(Agent agent) {
+        HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
+        HttpSession session = httpServletRequest.getSession();
+        session.setAttribute("agent", agent);
+    }
 
+    @Override
+    public void logout() {
+        deleteAgentFromSession();
+    }
 
+    private void deleteAgentFromSession() {
+        HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
+        HttpSession session = httpServletRequest.getSession();
+        session.removeAttribute("agent");
+    }
+
+    @Override
+    public Agent loginFromSessionServer() {
+        Agent agent = getAgentAlreadyFromSession();
+        return agent;
+    }
+
+    @Override
+    public List<Agent> getAllAgent() {
+        AdapteurAgent adapteurAgent = new AdapteurAgent(factory);
+        return adapteurAgent.getAllAgentFromSitac();
+    }
 
 
 }

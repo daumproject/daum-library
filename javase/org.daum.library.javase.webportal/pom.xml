@@ -115,7 +115,7 @@
                             <!--<gwtVersion>${version.gwt}</gwtVersion>-->
                             <!--<runTarget>TarificateurDirectM.html</runTarget>-->
                             <webappDirectory>${webappDirectory}</webappDirectory>
-                            <module>org.daum.common.genmodel.gwtGenmodel</module>
+                           <!-- <module>org.daum.common.genmodel.gwtGenmodel</module> -->
                             <!--<i18nMessagesBundle>fr.directm.tarificateur.client.Messages</i18nMessagesBundle>-->
                             <style>OBF</style>
                         </configuration>

@@ -2,7 +2,9 @@ package org.daum.javase.webportal.client;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import org.daum.common.genmodel.Agent;
+import org.daum.javase.webportal.shared.Agent;
+
+import java.util.List;
 
 
 /**
@@ -15,9 +17,13 @@ import org.daum.common.genmodel.Agent;
 @RemoteServiceRelativePath(value = "authentifService")
 public interface AuthentificationService extends RemoteService {
 
-    public boolean authenticateAgent(String name, String password);
-
     public Agent createAgent(String nom, String prenom, String matricule, String password);
 
+    public boolean authenticateAgent(String matricule, String password) throws IllegalArgumentException;
 
+    public void logout();
+
+    public Agent loginFromSessionServer();
+
+    public List<Agent> getAllAgent();
 }

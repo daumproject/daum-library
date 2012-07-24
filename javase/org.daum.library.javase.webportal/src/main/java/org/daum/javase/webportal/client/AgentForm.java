@@ -13,46 +13,62 @@ import com.smartgwt.client.widgets.form.fields.events.ClickEvent;
 import com.smartgwt.client.widgets.form.fields.events.ClickHandler;
 import com.google.gwt.core.client.GWT;
 import com.smartgwt.client.widgets.layout.HLayout;
-import org.daum.common.genmodel.Agent;
+import org.daum.javase.webportal.shared.Agent;
 
 
 public class AgentForm extends HLayout{
 
     private final AuthentificationServiceAsync loginService = GWT.create(AuthentificationService.class);
+    private Label labelAjoutSucces = new Label("Agent ajoute avec succes");
+    private Label labelAjoutFail = new Label("Probleme lors de l'ajout de l'agent");
 
-	public AgentForm(){
+
+    public AgentForm(){
 
 
-		final DynamicForm form = new DynamicForm();
-		form.setTop(50);
-		form.setLeft(50);
-		form.setWidth(250);
-		form.setHeight(350);
-		
-		HeaderItem header = new HeaderItem();
-		header.setDefaultValue("Ajout d'un agent");
+        final DynamicForm form = new DynamicForm();
+        form.setTop(50);
+        form.setLeft(50);
+        form.setWidth(250);
+        form.setHeight(350);
 
-		final TextItem nomItem = new TextItem();
-		nomItem.setTitle("Nom");  
-		nomItem.setRequired(true);   
 
-		final TextItem prenomItem = new TextItem();
-		prenomItem.setTitle("Prenom");  
-		prenomItem.setRequired(true);
-		
-		final TextItem matriculeItem = new TextItem();
-		matriculeItem.setTitle("Matricule");  
-		matriculeItem.setRequired(true);
-		
-		final PasswordItem passwordItem = new PasswordItem();
-		passwordItem.setTitle("Password");  
-		passwordItem.setRequired(true);
+        labelAjoutSucces.setVisible(false);
+        labelAjoutSucces.setBackgroundColor("green");
+        labelAjoutSucces.setWidth("200px");
+        labelAjoutSucces.setHeight("25px");
 
-		ButtonItem btnValider = new ButtonItem("Valider");
-		btnValider.addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
+
+        labelAjoutFail.setVisible(false);
+        labelAjoutFail.setBackgroundColor("red");
+        labelAjoutFail.setWidth("200px");
+        labelAjoutFail.setHeight("25px");
+
+        HeaderItem header = new HeaderItem();
+        header.setDefaultValue("Ajout d'un agent");
+
+
+        final TextItem nomItem = new TextItem();
+        nomItem.setTitle("Nom");
+        nomItem.setRequired(true);
+
+        final TextItem prenomItem = new TextItem();
+        prenomItem.setTitle("Prenom");
+        prenomItem.setRequired(true);
+
+        final TextItem matriculeItem = new TextItem();
+        matriculeItem.setTitle("Matricule");
+        matriculeItem.setRequired(true);
+
+        final PasswordItem passwordItem = new PasswordItem();
+        passwordItem.setTitle("Password");
+        passwordItem.setRequired(true);
+
+        ButtonItem btnValider = new ButtonItem("Valider");
+        btnValider.addClickHandler(new ClickHandler() {
+
+            @Override
+            public void onClick(ClickEvent event) {
 
                 String nom = nomItem.getValueAsString();
                 String prenom = prenomItem.getValueAsString();
@@ -62,22 +78,25 @@ public class AgentForm extends HLayout{
                 loginService.createAgent(nom, prenom, matricule, password, new AsyncCallback<Agent>() {
                     @Override
                     public void onFailure(Throwable throwable) {
-                        Window.alert("Fail");
+                        labelAjoutSucces.setVisible(false);
+                        labelAjoutFail.setVisible(true);
                     }
 
                     @Override
                     public void onSuccess(Agent agent) {
-                        Window.alert(agent.getNom());
+                        labelAjoutFail.setVisible(false);
+                        labelAjoutSucces.setVisible(true);
                     }
                 });
             }
-		});
+        });
 
 
-		form.setFields(new FormItem[] {header, nomItem, prenomItem, matriculeItem, passwordItem, btnValider});
-		this.addChild(form);
-     //   this.addChild(labelNom);
-		this.draw();		
-	}
+        form.setFields(new FormItem[] {header, nomItem, prenomItem, matriculeItem, passwordItem, btnValider});
+        this.addChild(form);
+        this.addChild(labelAjoutFail);
+        this.addChild(labelAjoutSucces);
+        this.draw();
+    }
 
 }

@@ -114,7 +114,7 @@ public class webPortalComponent extends ParentAbstractPage {
             factory = configuration.getPersistenceSessionFactory();
         } catch (PersistenceException e)
         {
-             e.printStackTrace();
+            e.printStackTrace();
         }
     }
 }

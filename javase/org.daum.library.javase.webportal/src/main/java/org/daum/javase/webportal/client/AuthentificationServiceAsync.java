@@ -1,7 +1,9 @@
 package org.daum.javase.webportal.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import org.daum.common.genmodel.Agent;
+import org.daum.javase.webportal.shared.Agent;
+
+import java.util.List;
 
 
 /**
@@ -12,6 +14,9 @@ import org.daum.common.genmodel.Agent;
  * To change this template use File | Settings | File Templates.
  */
 public interface AuthentificationServiceAsync {
-      void authenticateAgent(String name, String password, AsyncCallback<Boolean> callback);
-      void createAgent(String nom, String prenom, String matricule , String password,AsyncCallback<Agent> callback);
+    void authenticateAgent(String matricule, String password, AsyncCallback<Boolean> callback);
+    void createAgent(String nom, String prenom, String matricule , String password,AsyncCallback<Agent> callback);
+    void logout(AsyncCallback<Void> callback);
+    void loginFromSessionServer(AsyncCallback<Agent> callback);
+    void  getAllAgent(AsyncCallback<List<Agent>> callback);
 }
