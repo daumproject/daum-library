@@ -1,7 +1,6 @@
 package org.daum.common.genmodel
 
 import java.io.Serializable;
-import com.google.gwt.user.client.rpc.IsSerializable;
 
 
 /**
@@ -10,7 +9,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * Date: 04 juil. 12 Time: 09:48
  * Meta-Model:NS_URI=http://sitactest/1.0
  */
-trait SitacContainer extends Serializable with IsSerializable {
+trait SitacContainer extends Serializable {
 
 	 private var internal_eContainer : SitacContainer = null
 	 private var internal_unsetCmd : Option[()=>Any] = None
