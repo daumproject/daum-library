@@ -11,13 +11,24 @@ import java.util.List;
  */
 public class Snapshot extends AMessage {
     private static final long serialVersionUID = 1519L;
-    public List<Update> snapshot = new ArrayList<Update>();
 
-    public List<Update> getSnapshot() {
-        return snapshot;
+    private byte[] bytes;
+
+    public byte[] getBytes() {
+        return bytes;
     }
 
-    public void setSnapshot(List<Update> snapshot) {
-        this.snapshot = snapshot;
+    public void setBytes(byte[] bytes) {
+        this.bytes = bytes;
     }
+
+    /* public List<Update> snapshot = new ArrayList<Update>();
+
+   public List<Update> getSnapshot() {
+       return snapshot;
+   }
+
+   public void setSnapshot(List<Update> snapshot) {
+       this.snapshot = snapshot;
+   } */
 }

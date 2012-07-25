@@ -22,7 +22,7 @@ public interface ICluster {
     public void shutdown();
     public Channel getChannel();
     public void synchronize();
-
+    public double getStart();
 
 
     public ICacheManger getCacheManager();

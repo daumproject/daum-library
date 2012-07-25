@@ -33,7 +33,7 @@ public class ClusterImpl implements  ICluster,Runnable{
     private  Thread theartbeat = null;
     private  ICacheManger cacheManger=null;
     private  final int freqHearBeat = 3000;
-
+    private double start;
 
     public ClusterImpl(Node current, Channel chanel)
     {
@@ -84,12 +84,12 @@ public class ClusterImpl implements  ICluster,Runnable{
             Node exist =  searchNode(n);
             if(exist !=null)
             {
-                logger.debug("Update node tick "+n.getNodeID());
+              //  logger.debug("Update node tick "+n.getNodeID());
                 exist.setLastTickTime(systemTime.getNanoseconds());
                 exist.setSynchronized(n.isSynchronized());
             } else
             {
-                logger.debug("addNode "+n.getNodeID());
+            //    logger.debug("addNode "+n.getNodeID());
                 n.setLastTickTime(systemTime.getNanoseconds());
                 nodesOfCluster.add(n);
             }
@@ -162,6 +162,7 @@ public class ClusterImpl implements  ICluster,Runnable{
                 logger.info("Synchronization request sent to" + req.dest);
 
                 chanel.write(req);
+                start= System.currentTimeMillis();
             }
         });
 
@@ -169,6 +170,9 @@ public class ClusterImpl implements  ICluster,Runnable{
 
     }
 
+    public double getStart() {
+        return start;
+    }
 
 
 

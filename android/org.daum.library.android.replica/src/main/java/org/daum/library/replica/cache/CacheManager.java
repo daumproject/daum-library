@@ -6,10 +6,16 @@ import org.daum.library.replica.msg.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 /**
  * Created by jed
@@ -73,23 +79,21 @@ public class CacheManager implements ICacheManger
             {
                 Integer counter = history.get(((AMessage)o).getUuid());
                 counter++;
-                if(counter > cluster.getNodesOfCluster().size())
+                if(counter > cluster.getNodesOfCluster().size()-1)
                 {
-
                     history.remove(((AMessage)o).getUuid());
                 }else
                 {
                     history.put(((AMessage)o).getUuid(),counter);
                 }
 
-
             } else
             {
-
+                history.put(((AMessage)o).getUuid(),1);
                 if(o instanceof Update)
                 {
                     // first
-                    history.put(((AMessage)o).getUuid(),1);
+
                     final Update update = (Update)o;
 
                     if(!update.getSourceNode().equals(cluster.getCurrentNode()))
@@ -110,10 +114,6 @@ public class CacheManager implements ICacheManger
                 }
                 if(o instanceof Updates)
                 {
-
-                    // first
-                    history.put(((AMessage)o).getUuid(),1);
-
                     final Updates updates = (Updates)o;
 
                     if(!updates.getSourceNode().equals(cluster.getCurrentNode()))
@@ -132,27 +132,52 @@ public class CacheManager implements ICacheManger
 
                     if(storeSnapshot.dest.equals(cluster.getCurrentNode()))
                     {
-                        // if(cluster.getCurrentNode().isSynchronized())
-                        // {
-
-                        logger.debug(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest);
-
-                        for(Update msg:  storeSnapshot.snapshot)
+                        if(!cluster.getCurrentNode().isSynchronized())
                         {
-                            getCache(msg.cache).putIfAbsent(msg.key, msg.getVersionedValue());
+
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run()
+                                {
+                                    List<Update> snapshot=null;
+                                    try
+                                    {
+                                        logger.debug(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest);
+
+                                        ByteArrayInputStream bais = new ByteArrayInputStream(storeSnapshot.getBytes());
+                                        GZIPInputStream gzipIn = new GZIPInputStream(bais);
+
+                                        ObjectInputStream objectIn = new ObjectInputStream(gzipIn);
+                                        snapshot  = ( List<Update>) objectIn.readObject();
+                                        objectIn.close();
+
+                                        for(Update msg: snapshot)
+                                        {
+                                            Cache cache = getCache(msg.cache);
+                                            cache.localDispatch(msg);
+                                        }
+
+                                        // notify is syncEvent
+                                        SyncEvent syncEvent = new SyncEvent();
+                                        // todo add node
+                                        cluster.getChannel().write(syncEvent);
+                                        cluster.getCurrentNode().setSynchronized();
+
+                                        double duree = (System.currentTimeMillis() - cluster.getStart())  / 1000;
+
+                                        logger.info(cluster.getCurrentNode().getNodeID()+" isSynchronized in "+duree+" secondes size="+ snapshot.size());
+                                    }catch (Exception e)
+                                    {
+                                        logger.error("Snapshot ",e);
+                                        cluster.getCurrentNode().setSynchronized(false);
+                                        cluster.synchronize();
+                                    }
+
+                                }
+                            }).start();
+
+
                         }
-
-                        // notify is syncEvent
-                        SyncEvent syncEvent = new SyncEvent();
-                        // todo add node
-                        cluster.getChannel().write(syncEvent);
-                        cluster.getCurrentNode().setSynchronized();
-
-                        /*
-                      } else
-                      {
-                          logger.error(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest+" but is already Synchronized");
-                      }    */
 
                     }
 
@@ -160,7 +185,7 @@ public class CacheManager implements ICacheManger
                 {
                     final Command command = (Command)o;
 
-                    logger.debug("Command from : "+command.getSourceNode().getNodeID());
+                    //  logger.debug("Command from : "+command.getSourceNode().getNodeID());
 
                     if(!command.getSourceNode().equals(cluster.getCurrentNode()))
                     {
@@ -172,6 +197,8 @@ public class CacheManager implements ICacheManger
                         {
                             if(command.dest.equals(cluster.getCurrentNode()))
                             {
+
+                                double startc= System.currentTimeMillis();
                                 logger.info("Creating snapshot for "+ command.source);
 
                                 final List<Update> current_snapshot= new ArrayList<Update>();
@@ -193,13 +220,21 @@ public class CacheManager implements ICacheManger
 
                                 logger.info("Snapshot is created for "+ command.source);
 
+
+                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                                GZIPOutputStream gzipOut = new GZIPOutputStream(baos);
+                                ObjectOutputStream objectOut = new ObjectOutputStream(gzipOut);
+                                objectOut.writeObject(current_snapshot);
+                                objectOut.close();
+
+
                                 Snapshot storeSnapshot = new Snapshot();
-                                storeSnapshot.snapshot =   current_snapshot;
+                                storeSnapshot.setBytes(baos.toByteArray());
                                 storeSnapshot.source = cluster.getCurrentNode();
                                 storeSnapshot.dest =   command.source;
                                 cluster.getChannel().write(storeSnapshot);
-
-                                logger.info("Snapshot is sent for "+ command.source);
+                                double duree = (System.currentTimeMillis() - startc)  / 1000;
+                                logger.info("Snapshot is sent for "+ command.source+" "+duree+" secondes");
                             } else
                             {
                                 // ignore it's not for me
@@ -207,7 +242,7 @@ public class CacheManager implements ICacheManger
                         }
                     }
                 }
-          }
+            }
         }catch (Exception e){
             logger.error("processing MSG fail : ",e);
         }

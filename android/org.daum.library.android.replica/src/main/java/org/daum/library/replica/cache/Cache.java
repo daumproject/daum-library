@@ -85,7 +85,7 @@ public class Cache extends DHashMap<Object,VersionedValue> {
 
     public void localDispatch(Update replica)
     {
-        logger.debug("Local dispatch "+name);
+    //    logger.debug("Local dispatch "+name);
         try
         {
             if (replica.event.equals(StoreEvent.ADD) || replica.event.equals(StoreEvent.UPDATE))
