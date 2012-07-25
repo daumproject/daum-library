@@ -30,6 +30,9 @@ import javax.servlet.ServletContextListener;
  * Time: 11:45 AM
  * To change this template use File | Settings | File Templates.
  */
+@Provides({
+        @ProvidedPort(name = "notify", type = PortType.MESSAGE)
+})
 @Requires({
         @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
 })
@@ -41,7 +44,14 @@ public class webPortalComponent extends ParentAbstractPage {
     private ReplicaService replicaService =  null;
     private LocalServletRegistry servletRepository = null;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private  ChangeListener changeListener = new ChangeListener();
+    private static ChangeListener singleton=null;
+
+    public static ChangeListener getChangeListenerInstance(){
+        if(singleton == null){
+            singleton = new ChangeListener();
+        }
+        return singleton;
+    }
 
     public void startPage() {
 
@@ -70,20 +80,20 @@ public class webPortalComponent extends ParentAbstractPage {
             }
         };
 
-        /*changeListener.addSyncListener(new SyncListener() {
+        getChangeListenerInstance().addSyncListener(new SyncListener() {
             @Override
             public void sync(SyncEvent syncEvent) {
-                //To change body of implemented methods use File | Settings | File Templates.
+
             }
         });
 
-        changeListener.addEventListener(AgentImpl.class,new PropertyChangeListener() {
+        getChangeListenerInstance().addEventListener(AgentImpl.class,new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent propertyChangeEvent) {
                 switch (propertyChangeEvent.getEvent()){
                     case UPDATE:
                         break;
-                    propertyChangeEvent.getId()
+
                     case ADD:
 
                         break;
@@ -94,7 +104,7 @@ public class webPortalComponent extends ParentAbstractPage {
                 }
 
             }
-        });    */
+        });
         super.startPage();
 
 
@@ -134,7 +144,17 @@ public class webPortalComponent extends ParentAbstractPage {
         return response;
     }
 
-    public void initormh() {
+    @Port(name="notify")
+    public void notifiedByReplica(final Object m) {
+        try {
+            getChangeListenerInstance().receive(m);
+        } catch (Exception e) {
+            logger.error("notify ",e);
+        }
+    }
+
+    public void initormh()
+    {
         try
         {
             configuration = new PersistenceConfiguration(getNodeName());
