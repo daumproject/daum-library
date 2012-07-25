@@ -118,10 +118,8 @@ public class PopulateReplica extends AbstractComponentType {
                         sitacModel.addPersonnes(agentnoel);
                         agentnoel.setAutorisation(AutorisationType.ALL);
 
-                        session.save(agentnoel);
-                          logger.warn(agentnoel.getId());
 
-                        /*
+
                         Agent agentERWAN =  SitacFactory.createAgent();
                         agentERWAN.setNom("DAUBERT");
                         agentERWAN.setPrenom("Erwan");
@@ -204,9 +202,6 @@ public class PopulateReplica extends AbstractComponentType {
                         session.save(sitacModel);
 
 
-                        logger.warn(""+session.getAll(InterventionImpl.class).size());
-
-                         */
 
 
                     }
