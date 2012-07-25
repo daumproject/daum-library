@@ -1,9 +1,12 @@
 package org.daum.javase.webportal.client;
 
+import com.google.gwt.user.client.Window;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.tab.Tab;
 import com.smartgwt.client.widgets.tab.TabSet;
+import com.smartgwt.client.widgets.tab.events.TabSelectedEvent;
+import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 
 public class AdministrationForm extends VLayout{
 
@@ -17,17 +20,18 @@ public class AdministrationForm extends VLayout{
         materielTab.setTitle("Gestion du materiel");   
         materielTab.setPane(new MaterielForm());  
   
-        Tab agentTab = new Tab();  
-        agentTab.setTitle("Gestion des Agents");  
-        agentTab.setPane(new AgentForm());
+        final Tab agentTab = new Tab();
+        agentTab.setTitle("Liste des Agents");
+        agentTab.setPane(new GridPompierTest());
         
-        Tab exempleTab1 = new Tab();  
-        exempleTab1.setTitle("Onglet d'exemple 1");  
+        Tab ajoutAgentTab = new Tab();
+        ajoutAgentTab.setTitle("Ajout d'un agent");
+        ajoutAgentTab.setPane(new AgentForm());
         
         Tab exempleTab2 = new Tab();  
         exempleTab2.setTitle("Onglet d'exemple 2");         
           
-        theTabs.setTabs(materielTab, agentTab, exempleTab1, exempleTab2);  
+        theTabs.setTabs(materielTab, agentTab, ajoutAgentTab, exempleTab2);
           
         //IButton submit = new IButton("Submit");
         
@@ -35,8 +39,6 @@ public class AdministrationForm extends VLayout{
         this.setHeight100();
         this.setMembersMargin(10);  
         this.addMember(theTabs);
-        //this.addMember(submit);
- 
         this.draw();  
 	}
 }

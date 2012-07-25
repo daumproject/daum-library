@@ -1,11 +1,17 @@
 package org.daum.javase.webportal.server;
 
 import org.daum.common.genmodel.SitacFactory;
+import org.daum.common.genmodel.impl.AgentImpl;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
+import org.daum.library.replica.listener.ChangeListener;
+import org.daum.library.replica.listener.PropertyChangeEvent;
+import org.daum.library.replica.listener.PropertyChangeListener;
+import org.daum.library.replica.listener.SyncListener;
+import org.daum.library.replica.msg.SyncEvent;
 import org.kevoree.ContainerRoot;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
@@ -35,6 +41,7 @@ public class webPortalComponent extends ParentAbstractPage {
     private ReplicaService replicaService =  null;
     private LocalServletRegistry servletRepository = null;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private  ChangeListener changeListener = new ChangeListener();
 
     public void startPage() {
 
@@ -63,6 +70,31 @@ public class webPortalComponent extends ParentAbstractPage {
             }
         };
 
+        /*changeListener.addSyncListener(new SyncListener() {
+            @Override
+            public void sync(SyncEvent syncEvent) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+        });
+
+        changeListener.addEventListener(AgentImpl.class,new PropertyChangeListener() {
+            @Override
+            public void update(PropertyChangeEvent propertyChangeEvent) {
+                switch (propertyChangeEvent.getEvent()){
+                    case UPDATE:
+                        break;
+                    propertyChangeEvent.getId()
+                    case ADD:
+
+                        break;
+
+                    case DELETE:
+
+                        break;
+                }
+
+            }
+        });    */
         super.startPage();
 
 

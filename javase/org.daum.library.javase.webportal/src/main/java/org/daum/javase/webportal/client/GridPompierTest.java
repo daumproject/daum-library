@@ -48,11 +48,13 @@ import com.smartgwt.client.widgets.layout.VLayout;
 public class GridPompierTest extends VLayout{  
   
     private HLayout rollOverCanvas;  
-    private ListGridRecord rollOverRecord;  
+    private ListGridRecord rollOverRecord;
+    private ListGrid countryGrid;
+    private PompierData pompierData= new PompierData();
   
     public GridPompierTest() {  
   
-        final ListGrid countryGrid = new ListGrid() {  
+        countryGrid = new ListGrid() {
             @Override  
             protected Canvas getRollOverCanvas(Integer rowNum, Integer colNum) {  
                 rollOverRecord = this.getRecord(rowNum);  
@@ -83,9 +85,7 @@ public class GridPompierTest extends VLayout{
   
             }  
         };  
-        countryGrid.setShowRollOverCanvas(true);  
-  
-  
+        countryGrid.setShowRollOverCanvas(true);
         countryGrid.setWidth(500);  
         countryGrid.setHeight(224);  
         countryGrid.setShowAllRecords(true);  
@@ -93,10 +93,23 @@ public class GridPompierTest extends VLayout{
         ListGridField nomField = new ListGridField("nom", "Nom");  
         ListGridField prenomField = new ListGridField("prenom", "Prenom");  
         countryGrid.setFields(nomField, prenomField);  
-        countryGrid.setCanResizeFields(true);  
-        countryGrid.setData(PompierData.getRecords());  
-  
-        countryGrid.draw();  
-    }  
+        countryGrid.setCanResizeFields(true);
+        countryGrid.setData(pompierData.getNewPompiersRecord());
+
+
+
+
+
+
+
+        this.addChild(countryGrid);
+        this.setWidth100();
+        this.setHeight100();
+        this.draw();
+    }
+
+
+
+
   
 }  
