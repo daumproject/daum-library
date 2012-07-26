@@ -8,6 +8,7 @@ package org.daum.library.arduino.sensors; /**
 
 import org.kevoree.annotation.*;
 import org.kevoree.tools.arduino.framework.AbstractArduinoComponent;
+import org.kevoree.tools.arduino.framework.AbstractPeriodicArduinoComponent;
 import org.kevoree.tools.arduino.framework.ArduinoGenerator;
 
 @Library(name = "Arduino")
@@ -15,7 +16,7 @@ import org.kevoree.tools.arduino.framework.ArduinoGenerator;
 @Requires({
         @RequiredPort(name = "heartrate", type = PortType.MESSAGE, needCheckDependency = false)
 })
-public class HeartrateEarClip extends AbstractArduinoComponent
+public class HeartrateEarClip extends AbstractPeriodicArduinoComponent
 {
 
     @Override
@@ -23,17 +24,14 @@ public class HeartrateEarClip extends AbstractArduinoComponent
     {
         gen.appendNativeStatement("unsigned char pin = 13;\n" +
                 "unsigned char counter=0;\n" +
-                "unsigned int heart_rate=0;\n" +
+                "unsigned int heart_rate=-1;\n" +
                 "unsigned long temp[21];\n" +
-                "unsigned long sub=0;\n" +
+                "unsigned long sub=-1;\n" +
                 "volatile unsigned char state = LOW;\n" +
                 "bool data_effect=true;\n" +
                 "const int max_heartpluse_duty=2000;//you can change it follow your system's request.2000 meams 2 seconds. System return error if the duty overtrip 2 second.");
         gen.appendNativeStatement("char buf[10];");
-    }
 
-    @Override
-    public void generateClassHeader(ArduinoGenerator gen) {
         gen.appendNativeStatement("\n" +
                 "void interrupt()\n" +
                 "{\n" +
@@ -57,7 +55,7 @@ public class HeartrateEarClip extends AbstractArduinoComponent
                 "        data_effect=0;//sign bit\n" +
                 "        counter=0;\n" +
                 "        \n" +
-                "        Serial.println(-1);\n" +
+                "       heart_rate=-1;\n" +
                 "        array_init();\n" +
                 "       }\n" +
                 "    if (counter==20&&data_effect)\n" +
@@ -88,6 +86,34 @@ public class HeartrateEarClip extends AbstractArduinoComponent
                 "    {\n" +
                 "      heart_rate=1200000/(temp[20]-temp[0]);//60*20*1000/20_total_time \n");
 
+
+
+        gen.appendNativeStatement("    }\n" +
+                "   data_effect=1;//sign bit\n" +
+                "}");
+
+        gen.appendNativeStatement("void init_heart_rate_ear(){\n" +
+                " attachInterrupt(0, interrupt, RISING);//set interrupt 0,digital port 2\n" +
+                "}");
+
+
+
+
+    }
+
+
+
+    @Override
+    public void generateInit(ArduinoGenerator gen)
+    {
+        gen.appendNativeStatement("array_init();");
+        gen.appendNativeStatement("init_heart_rate_ear();");
+
+    }
+
+
+    @Override
+    public void generatePeriodic(ArduinoGenerator arduinoGenerator) {
         getGenerator().appendNativeStatement("kmessage * smsg = (kmessage*) malloc(sizeof(kmessage));");
         getGenerator().appendNativeStatement("if (smsg){memset(smsg, 0, sizeof(kmessage));}");
         getGenerator().appendNativeStatement("sprintf(buf,\"%d\",heart_rate);\n");
@@ -95,24 +121,5 @@ public class HeartrateEarClip extends AbstractArduinoComponent
         getGenerator().appendNativeStatement("smsg->metric=\"hearrate\";");
         getGenerator().appendNativeStatement("heartrate_rport(smsg);");
         getGenerator().appendNativeStatement("free(smsg);");
-
-        gen.appendNativeStatement("    }\n" +
-                "   data_effect=1;//sign bit\n" +
-                "}");
-
-
-
     }
-
-    @Override
-    public void generateInit(ArduinoGenerator gen)
-    {
-        gen.appendNativeStatement(" array_init();\n" +
-                "  Serial.println(\"Heart rate test begin.\");\n" +
-                "  attachInterrupt(0, interrupt, RISING);//set interrupt 0,digital port 2");
-    }
-
-
-
-
 }
