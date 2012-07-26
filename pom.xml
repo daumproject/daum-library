@@ -16,6 +16,7 @@
     </properties>
 
     <modules>
+        <module>./arduino/org.daum.library.arduino.root</module>
         <module>./android/org.daum.library.android.root</module>
         <module>./javase/org.daum.library.javase.root</module>
         <module>./common/org.daum.common.root</module>

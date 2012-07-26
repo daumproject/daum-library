@@ -1,0 +1,24 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.daum.library.arduino</groupId>
+    <artifactId>org.daum.library.arduino.sensors</artifactId>
+    <name>Daum :: Library :: Arduino :: Sensors</name>
+    <version>1.8.3-SNAPSHOT</version>
+
+    <parent>
+        <artifactId>org.daum.library.arduino.root</artifactId>
+        <groupId>org.daum.library.arduino</groupId>
+        <version>1.8.3-SNAPSHOT</version>
+        <relativePath>../org.daum.library.arduino.root/pom.xml</relativePath>
+    </parent>
+
+<dependencies>
+        <dependency>
+            <groupId>org.kevoree.tools</groupId>
+            <artifactId>org.kevoree.tools.arduino.framework</artifactId>
+            <version>${kevoree.version}</version>
+        </dependency>
+    </dependencies>
+</project>
