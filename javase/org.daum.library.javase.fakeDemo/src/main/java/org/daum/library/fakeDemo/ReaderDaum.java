@@ -1,5 +1,11 @@
 package org.daum.library.fakeDemo;
 
+import org.daum.common.genmodel.Agent;
+import org.daum.common.genmodel.Moyens;
+import org.daum.common.genmodel.SitacFactory;
+import org.daum.common.genmodel.impl.AgentImpl;
+import org.daum.common.genmodel.impl.InterventionImpl;
+import org.daum.common.genmodel.impl.MoyensImpl;
 import org.daum.library.fakeDemo.pojos.HeartMonitor;
 import org.daum.library.fakeDemo.pojos.Moyen;
 import org.daum.library.fakeDemo.pojos.TemperatureMonitor;
@@ -16,10 +22,6 @@ import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
 //import org.kevoree.library.ui.layout.KevoreeLayout;
-import org.sitac.Agent;
-import org.sitac.impl.AgentImpl;
-import org.sitac.impl.InterventionImpl;
-import org.sitac.impl.MoyenImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,25 +71,23 @@ public class ReaderDaum extends AbstractComponentType {
             configuration.addPersistentClass(HeartMonitor.class);
             configuration.addPersistentClass(AgentImpl.class);
             configuration.addPersistentClass(InterventionImpl.class);
-            configuration.addPersistentClass(MoyenImpl.class);
+            for (Class c : SitacFactory.classes()) configuration.addPersistentClass(c);
 
             replicatingService =   this.getPortByName("service", ReplicaService.class);
             StoreImpl storeImpl = new StoreImpl(replicatingService);
             configuration.setStore(storeImpl);
             factory = configuration.getPersistenceSessionFactory();
 
-        } catch (PersistenceException e) {
+        } catch (PersistenceException e)
+        {
             logger.error("",e);
         }
 
-
         // listeners
-
         ChangeListener.getInstance("READERDAUM").addEventListener(TemperatureMonitor.class, new PropertyChangeListener() {
             @Override
-            public void update(PropertyChangeEvent e) {
-
-
+            public void update(PropertyChangeEvent e)
+            {
                 switch (e.getEvent())
                 {
                     case ADD:
@@ -98,8 +98,6 @@ public class ReaderDaum extends AbstractComponentType {
                         processTemperature(e.getId());
                         break;
                 }
-
-
             }
         });
 
@@ -132,7 +130,7 @@ public class ReaderDaum extends AbstractComponentType {
         });
 
 
-        ChangeListener.getInstance("READERDAUM").addEventListener(MoyenImpl.class, new PropertyChangeListener() {
+        ChangeListener.getInstance("READERDAUM").addEventListener(MoyensImpl.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent e) {
 
@@ -172,9 +170,9 @@ public class ReaderDaum extends AbstractComponentType {
                logger.warn(temp.getNom()+" "+temp.getPrenom());
                 logger.warn("------------------------------------");
 
-             for(Object key2:  s.getAll(MoyenImpl.class).keySet()){
+             for(Object key2:  s.getAll(MoyensImpl.class).keySet()){
 
-                 for(Agent a: ((MoyenImpl)s.get(MoyenImpl.class,key2)).getPersonnelsForJ()){
+                 for(Agent a: ((MoyensImpl)s.get(MoyensImpl.class,key2)).getAgentsForJ()){
 
                      logger.warn(a.getNom()+" "+a.getPrenom());
                  }
@@ -195,30 +193,25 @@ public class ReaderDaum extends AbstractComponentType {
 
 
     public void processMoyenImpl(Object key){
-        MoyenImpl temp = null;
+        MoyensImpl temp = null;
         try
         {
             s  = factory.getSession();
             if(s != null)
             {
-                temp = (MoyenImpl) s.get(MoyenImpl.class,key);
-
-
+                temp = (MoyensImpl) s.get(MoyensImpl.class,key);
                 s.close();
-
-
-
-                for(Agent a: temp.getPersonnelsForJ()){
-
+                for(Agent a: temp.getAgentsForJ())
+                {
                     logger.warn(a.getNom()+" "+a.getPrenom());
                 }
             }
 
-
         } catch (PersistenceException e) {
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
-        finally {
+        finally
+        {
             if( s != null){
                 s.close();
             }
@@ -240,10 +233,8 @@ public class ReaderDaum extends AbstractComponentType {
                     getPortByName("value", MessagePort.class).process(format);
                 }
             }
-
-
         } catch (PersistenceException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
         finally {
             if( s != null){
@@ -267,7 +258,7 @@ public class ReaderDaum extends AbstractComponentType {
             }
 
         } catch (PersistenceException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }   finally {
             if( s != null){
                 s.close();

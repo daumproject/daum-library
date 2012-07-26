@@ -1,5 +1,9 @@
 package org.daum.library.fakeDemo;
 
+import org.daum.common.genmodel.Capteurs;
+import org.daum.common.genmodel.DatedValue;
+import org.daum.common.genmodel.SitacFactory;
+import org.daum.common.genmodel.impl.AgentImpl;
 import org.daum.library.fakeDemo.pojos.HeartMonitor;
 import org.daum.library.fakeDemo.pojos.Moyen;
 import org.daum.library.fakeDemo.pojos.TemperatureMonitor;
@@ -34,7 +38,7 @@ import java.util.Set;
         @ProvidedPort(name = "inputvalue", type = PortType.MESSAGE)
 })
 @DictionaryType({
-        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature"})
+        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature","heartmonitor"})
 }
 )
 @ComponentType
@@ -51,7 +55,7 @@ public class ArduinoGW extends AbstractComponentType {
     public void start() {
         try {
             configuration = new PersistenceConfiguration(getNodeName());
-
+            for (Class c : SitacFactory.classes()) configuration.addPersistentClass(c);
             configuration.addPersistentClass(TemperatureMonitor.class);
             configuration.addPersistentClass(Moyen.class);
             configuration.addPersistentClass(HeartMonitor.class);
@@ -98,8 +102,8 @@ public class ArduinoGW extends AbstractComponentType {
                     if (lvl.length >= 2) {
                         Double value = Double.parseDouble(lvl[1]);
 
-                        if (getDictionary().get("mode").toString().equals("temperature")) {
-
+                        if (getDictionary().get("mode").toString().equals("temperature"))
+                        {
                             TemperatureMonitor temperatureMonitor = new TemperatureMonitor();
                             temperatureMonitor.setDate(systemTime.getCurrentDate());
 
@@ -107,15 +111,23 @@ public class ArduinoGW extends AbstractComponentType {
 
                             s.save(temperatureMonitor);
 
-
                             Set<Object> dates = (Set<Object>) s.getAll(TemperatureMonitor.class).keySet();
-                            if (dates.size() > 3) {
+                            if (dates.size() > 3)
+                            {
                                 //delete first
                                 Date d = systemTime.getDatemin(dates);
                                 s.delete(s.get(TemperatureMonitor.class, d));
-
                             }
 
+                        }else  if (getDictionary().get("mode").toString().equals("heartmonitor"))
+                        {
+                            String matriculeAgent = lvl[0];
+                            AgentImpl agent = s.get(AgentImpl.class,matriculeAgent);
+                            if(agent != null)
+                            {
+                                DatedValue valuesr = (DatedValue) agent.getCapteur("heartmonitor") ;
+                                valuesr.addValue(value);
+                            }
                         }
 
                     }
