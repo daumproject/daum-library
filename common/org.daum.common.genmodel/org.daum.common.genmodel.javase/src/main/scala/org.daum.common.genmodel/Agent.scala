@@ -16,7 +16,7 @@ trait Agent extends org.daum.common.genmodel.SitacContainer with org.daum.common
   private var password : java.lang.String = ""
 
   private lazy val capteurs : java.util.HashMap[String,org.daum.common.genmodel.Capteurs] = new java.util.HashMap[String,org.daum.common.genmodel.Capteurs]()
-    // todo
+  // todo
   private  var auth : org.daum.common.genmodel.AutorisationType  =  AutorisationType.READONLY
 
   def getPassword : java.lang.String = {
@@ -33,6 +33,14 @@ trait Agent extends org.daum.common.genmodel.SitacContainer with org.daum.common
 
   def getMatricule : java.lang.String = {
     matricule
+  }
+
+  def getCapteur(id : java.lang.String) : Capteurs=
+  {
+    if (capteurs.get(id) == null) {
+      capteurs.put("hearmonitor", SitacFactory.createDatedValue)
+    }
+    capteurs.get(id)
   }
 
   def setAutorisation(auth : org.daum.common.genmodel.AutorisationType){

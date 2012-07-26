@@ -42,6 +42,7 @@ object SitacFactory {
   def createInfoResponsable : InfoResponsable = new InfoResponsableImpl
   def createDonneeContextuel : DonneeContextuel = new DonneeContextuelImpl
   def createMessageAmbiance : MessageAmbiance = new MessageAmbianceImpl
+  def createDatedValue : DatedValue = new DatedValueImpl
 
   final val classes: Array[Class[_]] = Array(classOf[ActionImpl], classOf[ActionTypeImpl], classOf[AffectationImpl], classOf[AgentImpl], classOf[CategorieImpl], classOf[CibleImpl], classOf[DetachementImpl], classOf[DonneeContextuelImpl], classOf[EntreeImpl], classOf[GpsPointImpl], classOf[HistoriqueImpl], classOf[InfoHorodateImpl], classOf[InfoLignePosImpl], classOf[InfoNiveauImpl], classOf[InfoPosImpl], classOf[InfoResponsableImpl], classOf[InfoTacticImpl], classOf[InfoZoneImpl], classOf[InterventionImpl], classOf[CodeSinistreImpl], classOf[MessageAmbianceImpl], classOf[MoyensImpl],classOf[PersonneImpl], classOf[PositionCivilImpl], classOf[PositionImpl], classOf[PriseEauImpl], classOf[SecteurFonctionnelImpl], classOf[SecteurGeoImpl], classOf[SinistreImpl], classOf[SitacModelImpl], classOf[SourceDangerImpl], classOf[TypeEntreeImpl],classOf[VehiculeImpl], classOf[ArrowActionImpl], classOf[ZoneActionImpl])
 }
