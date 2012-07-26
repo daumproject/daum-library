@@ -13,8 +13,7 @@
         <version>1.8.3-SNAPSHOT</version>
         <relativePath>../org.daum.library.arduino.root/pom.xml</relativePath>
     </parent>
-
-<dependencies>
+    <dependencies>
         <dependency>
             <groupId>org.kevoree.tools</groupId>
             <artifactId>org.kevoree.tools.arduino.framework</artifactId>

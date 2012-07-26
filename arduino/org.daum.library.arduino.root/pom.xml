@@ -7,6 +7,13 @@
     <packaging>pom</packaging>
     <name>DAUM :: Library :: Arduino :: Root</name>
 
+
+
+    <properties>
+        <kevoree.version>${project.version}</kevoree.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <parent>
         <groupId>org.daum.library</groupId>
         <artifactId>org.daum.library</artifactId>
@@ -68,8 +75,6 @@
         </plugins>
     </build>
 
-
-
     <repositories>
         <repository>
             <id>kevoree-release</id>
@@ -91,5 +96,6 @@
             <url>http://maven.kevoree.org/snapshots</url>
         </pluginRepository>
     </pluginRepositories>
+
 
 </project>

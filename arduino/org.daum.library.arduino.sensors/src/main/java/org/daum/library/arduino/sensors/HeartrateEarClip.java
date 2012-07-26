@@ -1,4 +1,4 @@
-/**
+package org.daum.library.arduino.sensors; /**
  * Created with IntelliJ IDEA.
  * User: jed
  * Date: 26/07/12

@@ -58,7 +58,7 @@ bind r0.service@node0 =>defservice0
  addGroup sync2: ArduinoSerialDelegation
  addToGroup sync2 node3
  addChannel  s1 : SerialCT {  }
- addComponent t1@node3 : TempSensorInfrared { }
+ addComponent t1@node3 : org.daum.library.arduino.sensors.TempSensorInfrared { }
 
  bind t1.temp@node3 =>s1
 
