@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -46,24 +47,27 @@ import java.util.Set;
 })
 
 @DictionaryType({
-        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature", "moyens","heart","sitactest"})
+        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature", "moyens","heart","sitactest","agents"})
 }
 )
 @ComponentType
-public class ReaderDaum extends AbstractComponentType {
+public class ReaderDaum extends AbstractComponentType implements Runnable {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     public PersistenceConfiguration configuration=null;
     private PersistenceSessionFactoryImpl factory=null;
     private ReplicaService replicatingService =  null;
     private  PersistenceSession s=null;
-
-
+    private boolean alive =false;
+    private Thread thread;
     @Start
     public void start()
     {
         try
         {
+            thread = new Thread(this);
+            thread.start();
+            alive =true;
             configuration = new PersistenceConfiguration(getNodeName());
 
             configuration.addPersistentClass(TemperatureMonitor.class);
@@ -140,12 +144,15 @@ public class ReaderDaum extends AbstractComponentType {
             }
         });
 
+
+
     }
 
 
     @Stop
     public void stop() {
-
+        alive=false;
+        if(thread != null){ thread.interrupt(); }
     }
 
     @Update
@@ -273,4 +280,34 @@ public class ReaderDaum extends AbstractComponentType {
     }
 
 
+    @Override
+    public void run() {
+       while(alive){
+
+           try
+           {
+               if(factory != null){
+                   s  = factory.getSession();
+                   if(s != null)
+                   {
+
+                       Map<String,AgentImpl> agents =   s.getAll(AgentImpl.class);
+                logger.warn("agents size = "+agents.size());
+                       for(String key: agents.keySet()){
+
+                           logger.warn(agents.get(key).getNom()+" "+agents.get(key));
+                       }
+                       s.close();
+
+                   }
+               }
+
+
+               Thread.sleep(2000);
+           } catch (Exception e) {
+               e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+           }
+       }
+
+    }
 }
