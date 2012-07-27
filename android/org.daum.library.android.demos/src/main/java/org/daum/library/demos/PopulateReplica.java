@@ -101,9 +101,6 @@ public class PopulateReplica extends AbstractComponentType {
                 {
                     session = factory.getSession();
 
-
-
-
                     if(session != null)
                     {
 
