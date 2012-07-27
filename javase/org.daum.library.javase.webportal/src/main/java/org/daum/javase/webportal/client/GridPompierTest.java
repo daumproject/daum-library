@@ -32,6 +32,8 @@ package org.daum.javase.webportal.client;
  * Lesser General Public License for more details. 
  */  
   
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.util.SC;
@@ -44,7 +46,7 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-  
+
 public class GridPompierTest extends VLayout{  
   
     private HLayout rollOverCanvas;  
@@ -84,7 +86,10 @@ public class GridPompierTest extends VLayout{
                 return rollOverCanvas;  
   
             }  
-        };  
+        };
+
+
+
         countryGrid.setShowRollOverCanvas(true);
         countryGrid.setWidth(500);  
         countryGrid.setHeight(224);  
@@ -94,21 +99,13 @@ public class GridPompierTest extends VLayout{
         ListGridField prenomField = new ListGridField("prenom", "Prenom");  
         countryGrid.setFields(nomField, prenomField);  
         countryGrid.setCanResizeFields(true);
-        countryGrid.setData(pompierData.getNewPompiersRecord());
-
-
-
-
-
-
+        countryGrid.setData(pompierData.getNewRecords());
 
         this.addChild(countryGrid);
         this.setWidth100();
         this.setHeight100();
         this.draw();
     }
-
-
 
 
   

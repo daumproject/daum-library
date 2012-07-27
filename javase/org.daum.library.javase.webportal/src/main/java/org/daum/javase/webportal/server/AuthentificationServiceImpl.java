@@ -1,16 +1,20 @@
 package org.daum.javase.webportal.server;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import org.daum.common.genmodel.impl.AgentImpl;
 import org.daum.javase.webportal.dto.AdapteurAgent;
 import org.daum.javase.webportal.shared.Agent;
 import org.daum.javase.webportal.client.AuthentificationService;
+import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
+import org.daum.library.ormH.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -39,23 +43,22 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
 
     @Override
     public boolean authenticateAgent(String matricule, String password){
+        PersistenceSession session = null;
+        try {
+            session = factory.getSession();
+            List<Agent> listeAgents = getAllAgent();
+            for (Agent a : listeAgents) {
+                if (a.getMatricule().equals(matricule) && a.getPassword().equals(password)) {
+                    return true;
+                }
+            }
 
-        //TODO get agent from ormH
-        //Agent agent = new Agent();
-
-        if(matricule.equals("admin") && password.equals("admin")) {
-            return true;
-            //get caracteristics of the agent
-            /*agent.setLastname("Despagne");
-               agent.setMatricule("pdespagn");
-               agent.setFirstname("Pierre");
-               agent.setLogged(true);*/
+        } catch (PersistenceException e) {
+            logger.debug( "Error while trying to authenticate user", e);
+        } finally {
+            if (session != null) session.close();
         }
         return false;
-        /*if (agent.isLogged()) {
-              storeAgentInSession(agent);
-          }
-          return agent;*/
     }
 
     private Agent getAgentAlreadyFromSession() {

@@ -21,7 +21,6 @@ public class IHMwebPortal implements EntryPoint {
      */
     public void onModuleLoad() {
 
-        //RootPanel.get().add(new AdministrationForm());
         loginService.loginFromSessionServer(new AsyncCallback<Agent>() {
 
             @Override
@@ -40,7 +39,6 @@ public class IHMwebPortal implements EntryPoint {
                 }
             }
         });
-
     }
 }
 

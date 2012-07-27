@@ -11,6 +11,7 @@ import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
 import org.sitac.*;
+import org.sitac.impl.AgentImpl;
 import org.sitac.impl.InterventionImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -202,7 +203,7 @@ public class PopulateReplica extends AbstractComponentType {
                         session.save(sitacModel);
 
 
-
+                        logger.warn("Agent size => "+session.getAll(AgentImpl.class).size());
 
                     }
                 } catch (PersistenceException ex)

@@ -2,6 +2,7 @@ package org.daum.javase.webportal.server;
 
 import org.daum.common.genmodel.SitacFactory;
 import org.daum.common.genmodel.impl.AgentImpl;
+import org.daum.javase.webportal.client.AdministrationForm;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.ReplicaStore;
@@ -79,7 +80,7 @@ public class webPortalComponent extends ParentAbstractPage {
                 return "/ihmwebportal";
             }
         };
-
+        /*
         getChangeListenerInstance().addSyncListener(new SyncListener() {
             @Override
             public void sync(SyncEvent syncEvent) {
@@ -95,16 +96,14 @@ public class webPortalComponent extends ParentAbstractPage {
                         break;
 
                     case ADD:
-
                         break;
 
                     case DELETE:
-
                         break;
                 }
 
             }
-        });
+        });*/
         super.startPage();
 
 

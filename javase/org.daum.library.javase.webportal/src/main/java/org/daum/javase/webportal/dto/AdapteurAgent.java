@@ -98,9 +98,11 @@ public class AdapteurAgent {
         List<Agent> listeAgents = new ArrayList<Agent>();
         try {
             session = factory.getSession();
-            Map<String,AgentImpl> hashmapAgent = session.getAll(AgentImpl.class);
-            for(Map.Entry<String, AgentImpl> entry : hashmapAgent.entrySet()) {
+            Map<String, AgentImpl> agents = session.getAll(AgentImpl.class);
+            logger.warn("===================== > GET ALL Agent FROM SITAC "+agents.size());
+            for(Map.Entry<String, AgentImpl> entry : agents.entrySet()) {
                 AgentImpl agentSitac = entry.getValue();
+                logger.warn("===================== >  AGENT DISPONIBLE : "+agentSitac.getNom());
                 Agent agentTemp = new Agent();
                 agentTemp.setId(agentSitac.getId());
                 agentTemp.setNom(agentSitac.getNom());
@@ -110,15 +112,13 @@ public class AdapteurAgent {
                 listeAgents.add(agentTemp);
             }
         } catch (PersistenceException e) {
-            logger.debug("Problem encountered while getting Agent List");
+            logger.error("Problem encountered while getting Agent List",e);
         } finally {
             if(session != null)
                 session.close();
         }
         return listeAgents;
     }
-
-
 
 
 }
