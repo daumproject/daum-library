@@ -42,22 +42,14 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
-    public boolean authenticateAgent(String matricule, String password){
-        PersistenceSession session = null;
-        try {
-            session = factory.getSession();
+    public boolean authenticateAgent(String matricule, String password)
+    {
             List<Agent> listeAgents = getAllAgent();
             for (Agent a : listeAgents) {
                 if (a.getMatricule().equals(matricule) && a.getPassword().equals(password)) {
                     return true;
                 }
             }
-
-        } catch (PersistenceException e) {
-            logger.debug( "Error while trying to authenticate user", e);
-        } finally {
-            if (session != null) session.close();
-        }
         return false;
     }
 
