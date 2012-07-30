@@ -15,7 +15,6 @@ import org.daum.library.ormH.annotations.OneToMany
 
 trait Affectation extends org.daum.common.genmodel.SitacContainer {
 
-
   @Id
   @Generated(strategy = GeneratedType.UUID)
   private var id : String = ""
