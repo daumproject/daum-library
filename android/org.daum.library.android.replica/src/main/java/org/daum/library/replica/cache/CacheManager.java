@@ -1,5 +1,7 @@
 package org.daum.library.replica.cache;
 
+import org.apache.jdbm.DB;
+import org.apache.jdbm.DBMaker;
 import org.daum.library.replica.cluster.ICacheManger;
 import org.daum.library.replica.cluster.ICluster;
 import org.daum.library.replica.msg.*;
@@ -10,10 +12,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -30,8 +29,17 @@ public class CacheManager implements ICacheManger
     private HashMap<String,Integer> history = new HashMap<String,Integer>();
     private ICluster cluster;
 
+
     public CacheManager(ICluster cluster)
     {
+        this.cluster = cluster;
+    }
+
+    public ICluster getCluster() {
+        return cluster;
+    }
+
+    public void setCluster(ICluster cluster) {
         this.cluster = cluster;
     }
 
@@ -168,6 +176,12 @@ public class CacheManager implements ICacheManger
                                         logger.info(cluster.getCurrentNode().getNodeID()+" isSynchronized in "+duree+" secondes size="+ snapshot.size());
                                     }catch (Exception e)
                                     {
+                                        try
+                                        {
+                                            Thread.sleep(5000);
+                                        } catch (InterruptedException e1) {
+                                            e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                                        }
                                         logger.error("Snapshot ",e);
                                         cluster.getCurrentNode().setSynchronized(false);
                                         cluster.synchronize();

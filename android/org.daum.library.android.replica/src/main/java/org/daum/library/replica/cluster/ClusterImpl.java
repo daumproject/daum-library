@@ -1,7 +1,11 @@
 package org.daum.library.replica.cluster;
 
+import org.apache.jdbm.DB;
+import org.apache.jdbm.DBMaker;
+import org.daum.library.replica.cache.Cache;
 import org.daum.library.replica.cache.CacheManager;
 import org.daum.library.replica.cache.StoreEvent;
+import org.daum.library.replica.cache.VersionedValue;
 import org.daum.library.replica.channel.Channel;
 import org.daum.library.replica.channel.KChannelImpl;
 import org.daum.library.replica.msg.Command;
@@ -10,8 +14,10 @@ import org.daum.library.replica.utils.SystemTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedMap;
 
 
 /**
@@ -34,24 +40,85 @@ public class ClusterImpl implements  ICluster,Runnable{
     private  ICacheManger cacheManger=null;
     private  final int freqHearBeat = 3000;
     private double start;
+    private String path_disk="";
+    private DB db=null;
+    private boolean diskPersitence =false;
 
-    public ClusterImpl(Node current, Channel chanel)
+    public ClusterImpl(Node current, Channel chanel,boolean diskPersitence,String path_disk)
     {
         alive = true;
         this.currentNode = current;
         this.chanel = chanel;
         theartbeat = new Thread(this);
         cacheManger = new CacheManager(this);
-        theartbeat.start();
+        this.diskPersitence = diskPersitence;
+        this.path_disk = path_disk;
 
+        if(diskPersitence)
+        {
+            File folder = new File(path_disk);
+            if(!folder.exists())
+            {
+                folder.mkdir();
+                folder.canRead();
+                folder.canWrite();
+            }
+            db  = DBMaker.openFile(getPath_disk()+"/store") .make();
+            restoreFromDB();
+        }
+
+        theartbeat.start();
+    }
+
+    public boolean isDiskPersitence() {
+        return diskPersitence;
+    }
+
+    public void setDiskPersitence(boolean diskPersitence) {
+        this.diskPersitence = diskPersitence;
+    }
+
+    public void restoreFromDB()
+    {
+        if(diskPersitence)
+        {
+            // restore
+            for(String key_cache :   db.getCollections().keySet())
+            {
+                logger.debug("Reading cache from diskPersitence "+key_cache);
+
+                Cache cache =      cacheManger.getCache(key_cache) ;
+                SortedMap<String,VersionedValue> disk = (SortedMap<String, VersionedValue>) db.getCollections().get(key_cache);
+
+                for(Object key_row : disk.keySet())
+                {
+                    logger.debug("Reading object from diskPersitence "+key_row);
+
+                    cache.put(key_row,disk.get(key_row));
+                }
+            }
+        }
     }
 
     public void shutdown()
     {
         logger.debug("Cluster is closing");
         alive = false;
-        theartbeat.interrupt();
-        tsnapshot.interrupt();
+        if(theartbeat != null){
+            theartbeat.interrupt();
+        }
+        if(tsnapshot != null){
+            tsnapshot.interrupt();
+        }
+    }
+
+
+    public DB getDb() {
+        return db;
+    }
+
+    public void setDb(DB db) {
+        this.db = db;
     }
 
     @Override
@@ -84,12 +151,12 @@ public class ClusterImpl implements  ICluster,Runnable{
             Node exist =  searchNode(n);
             if(exist !=null)
             {
-              //  logger.debug("Update node tick "+n.getNodeID());
+                //  logger.debug("Update node tick "+n.getNodeID());
                 exist.setLastTickTime(systemTime.getNanoseconds());
                 exist.setSynchronized(n.isSynchronized());
             } else
             {
-            //    logger.debug("addNode "+n.getNodeID());
+                //    logger.debug("addNode "+n.getNodeID());
                 n.setLastTickTime(systemTime.getNanoseconds());
                 nodesOfCluster.add(n);
             }
@@ -174,6 +241,16 @@ public class ClusterImpl implements  ICluster,Runnable{
         return start;
     }
 
+    @Override
+    public void setPath_disk(String path_disk)
+    {
+        this.path_disk = path_disk;
+    }
+
+    @Override
+    public String getPath_disk() {
+        return path_disk;
+    }
 
 
     @Override
@@ -206,7 +283,7 @@ public class ClusterImpl implements  ICluster,Runnable{
 
             chanel.write(req);
 
-         //   logger.debug("Sending heatbeat "+ currentNode.getNodeID());
+            //   logger.debug("Sending heatbeat "+ currentNode.getNodeID());
         }
         logger.debug("HeartBeat is closed");
     }

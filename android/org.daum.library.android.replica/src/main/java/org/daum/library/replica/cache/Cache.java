@@ -1,9 +1,12 @@
 package org.daum.library.replica.cache;
 
+import org.apache.jdbm.DB;
 import org.daum.library.replica.msg.Update;
 import org.daum.library.replica.utils.SystemTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.SortedMap;
 
 /**
  * Created by jed
@@ -17,12 +20,25 @@ public class Cache extends DHashMap<Object,VersionedValue> {
     private CacheManager cacheManger=null;
     private SystemTime systemTime = new SystemTime();
     private int MaxEntriesLocalHeap=8000;
-
+    private SortedMap<String,VersionedValue> disk;
+    private DB db =null;
 
     public Cache(String cachename,CacheManager cacheManger)
     {
         this.name = cachename;
         this.cacheManger = cacheManger;
+
+        if(cacheManger.getCluster().isDiskPersitence())
+        {
+            db =  cacheManger.getCluster().getDb();
+            if(cacheManger.getCluster().getDb().getTreeMap(cachename) == null)
+            {
+                disk = db.createTreeMap(cachename);
+            }else {
+                disk =db.getTreeMap(cachename);
+            }
+        }
+
     }
 
     public void setMaxEntriesLocalHeap(int max)
@@ -32,46 +48,59 @@ public class Cache extends DHashMap<Object,VersionedValue> {
 
     public VersionedValue put(Object key, Object value) {
 
-        if(this.size() > MaxEntriesLocalHeap)
+        try{
+            if(this.size() > MaxEntriesLocalHeap)
+            {
+                //todo
+                logger.warn("The Max Entries Local Heap is reached ");
+                return null;
+            }else
+            {
+                Update e = new Update();
+                e.key = key;
+                e.cache = name;
+
+                VersionedValue updated=new VersionedValue();
+                VersionedValue old = super.get(key);
+                if(old == null)
+                {
+                    e.event = StoreEvent.ADD;
+                    updated.setValue(value);
+                    e.setVersionedValue(updated);
+                } else
+                {
+                    // update
+                    e.event = StoreEvent.UPDATE;
+                    updated.setVersion(old.getVersion());
+                    updated.updated();
+                    updated.setValue(value);
+                    e.setVersionedValue(updated);
+                }
+
+                // local
+                if(updated == null)
+                {
+                    logger.error("update is null");
+                } else
+                {
+                    super.put(key, updated);
+                }
+                // remote
+                cacheManger.remoteDisptach(e);
+
+                if(cacheManger.getCluster().isDiskPersitence()){
+                    disk.put(key.toString(),updated);
+                    db.commit();
+                }
+                return  updated;
+            }
+        }catch (Exception e )
         {
-            //todo
-            logger.warn("The Max Entries Local Heap is reached ");
+            if(cacheManger.getCluster().isDiskPersitence()){
+                db.rollback();
+            }
+
             return null;
-        }else
-        {
-            Update e = new Update();
-            e.key = key;
-            e.cache = name;
-
-            VersionedValue updated=new VersionedValue();
-            VersionedValue old = super.get(key);
-            if(old == null)
-            {
-                e.event = StoreEvent.ADD;
-                updated.setValue(value);
-                e.setVersionedValue(updated);
-            } else
-            {
-                // update
-                e.event = StoreEvent.UPDATE;
-                updated.setVersion(old.getVersion());
-                updated.updated();
-                updated.setValue(value);
-                e.setVersionedValue(updated);
-            }
-
-            // local
-            if(updated == null)
-            {
-                logger.error("update is null");
-            } else
-            {
-                super.put(key, updated);
-            }
-
-            // remote
-            cacheManger.remoteDisptach(e);
-            return  updated;
         }
     }
 
@@ -85,15 +114,31 @@ public class Cache extends DHashMap<Object,VersionedValue> {
 
     public void localDispatch(Update replica)
     {
-    //    logger.debug("Local dispatch "+name);
+        //    logger.debug("Local dispatch "+name);
         try
         {
+
+            if(cacheManger.getCluster().getDb().getTreeMap(replica.getCache()) == null)
+            {
+                disk = db.createTreeMap(replica.getCache());
+            }else {
+                disk =db.getTreeMap(replica.cache);
+            }
+
+
             if (replica.event.equals(StoreEvent.ADD) || replica.event.equals(StoreEvent.UPDATE))
             {
                 VersionedValue old = get(replica.key);
                 if(old == null)
                 {
+                    // disk
+                    if(cacheManger.getCluster().isDiskPersitence())
+                    {
+                        disk.put(replica.key.toString(), replica.getVersionedValue());
+                    }
+                    // memory
                     super.put(replica.key, replica.getVersionedValue());
+
                 }
                 else
                 {
@@ -101,6 +146,11 @@ public class Cache extends DHashMap<Object,VersionedValue> {
                     {
                         if(replica.getVersionedValue().getVersion() > old.getVersion())
                         {
+                            //disk
+                            if(cacheManger.getCluster().isDiskPersitence()){
+                                disk.put(replica.key.toString(), replica.getVersionedValue());
+                            }
+                            // memory
                             super.put(replica.key, replica.getVersionedValue());
                         } else
                         {
@@ -115,12 +165,25 @@ public class Cache extends DHashMap<Object,VersionedValue> {
             {
                 if(super.get(replica.key) != null)
                 {
+                    if(cacheManger.getCluster().isDiskPersitence()){
+                        disk.remove(replica.key.toString());
+                    }
                     super.remove(replica.key);
                 }
 
             }
-        } catch (Exception e){
+
+            if(cacheManger.getCluster().isDiskPersitence()){
+                db.commit();
+            }
+
+        } catch (Exception e)
+        {
             logger.error("Local dispatch ",e);
+            if(cacheManger.getCluster().isDiskPersitence()){
+                db.rollback();
+            }
+
         }
 
     }
@@ -136,6 +199,12 @@ public class Cache extends DHashMap<Object,VersionedValue> {
         e.cache = name;
         VersionedValue last = super.remove(key);
         cacheManger.remoteDisptach(e);
+        if(cacheManger.getCluster().isDiskPersitence())
+        {
+            disk.remove(key.toString());
+            db.commit();
+        }
+
         return   last;
     }
 
