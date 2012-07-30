@@ -19,4 +19,8 @@ public interface AuthentificationServiceAsync {
     void logout(AsyncCallback<Void> callback);
     void loginFromSessionServer(AsyncCallback<Agent> callback);
     void  getAllAgent(AsyncCallback<List<Agent>> callback);
+    void editAgent(Agent agentEdited, AsyncCallback<Agent> callback);
+    void getAgent(String id, AsyncCallback<Agent> callback);
+
+    void delete(String id, AsyncCallback<Void> asyncCallback);
 }

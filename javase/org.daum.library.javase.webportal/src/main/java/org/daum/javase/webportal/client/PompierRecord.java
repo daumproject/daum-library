@@ -14,6 +14,7 @@ public class PompierRecord extends ListGridRecord {
 	}  
 	
 	public PompierRecord(Agent agent){
+        setId(agent.getId());
 	    setNom(agent.getNom());
         setPrenom(agent.getPrenom());
         setMatricule(agent.getMatricule());

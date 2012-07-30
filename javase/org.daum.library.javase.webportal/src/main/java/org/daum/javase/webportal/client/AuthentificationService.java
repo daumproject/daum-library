@@ -26,4 +26,10 @@ public interface AuthentificationService extends RemoteService {
     public Agent loginFromSessionServer();
 
     public List<Agent> getAllAgent();
+
+    public Agent editAgent(Agent agent);
+
+    public Agent getAgent(String id);
+
+    public void delete(String id);
 }

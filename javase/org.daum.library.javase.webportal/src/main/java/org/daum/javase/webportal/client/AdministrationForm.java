@@ -10,11 +10,13 @@ import com.smartgwt.client.widgets.tab.events.TabSelectedHandler;
 
 public class AdministrationForm extends VLayout{
 
+    GridPompierTest gridPompier;
+
 	public AdministrationForm(){  
         
         TabSet theTabs = new TabSet();  
-        theTabs.setWidth("50%");  
-        theTabs.setHeight("250px");  
+        theTabs.setWidth100();
+        theTabs.setHeight100();
           
         Tab materielTab = new Tab();  
         materielTab.setTitle("Gestion du materiel");   
@@ -22,11 +24,25 @@ public class AdministrationForm extends VLayout{
   
         final Tab agentTab = new Tab();
         agentTab.setTitle("Liste des Agents");
-        agentTab.setPane(new GridPompierTest());
+        gridPompier = new GridPompierTest();
+        agentTab.setPane(gridPompier);
+
+        agentTab.addTabSelectedHandler(new TabSelectedHandler() {
+            @Override
+            public void onTabSelected(TabSelectedEvent tabSelectedEvent) {
+                gridPompier.refreshGrille();
+            }
+        });
         
         Tab ajoutAgentTab = new Tab();
         ajoutAgentTab.setTitle("Ajout d'un agent");
         ajoutAgentTab.setPane(new AgentForm());
+        ajoutAgentTab.addTabSelectedHandler(new TabSelectedHandler() {
+            @Override
+            public void onTabSelected(TabSelectedEvent tabSelectedEvent) {
+                new AgentForm();
+            }
+        });
         
         Tab exempleTab2 = new Tab();  
         exempleTab2.setTitle("Onglet d'exemple 2");         

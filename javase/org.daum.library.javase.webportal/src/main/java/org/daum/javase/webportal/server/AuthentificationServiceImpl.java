@@ -96,5 +96,26 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
         return adapteurAgent.getAllAgentFromSitac();
     }
 
+    @Override
+    public Agent editAgent(Agent agent) {
+        AdapteurAgent adapteurAgent = new AdapteurAgent(factory);
+        agent = adapteurAgent.editAgent(agent);
+        return agent;
+    }
+
+    @Override
+    public Agent getAgent(String id) {
+        AdapteurAgent adapteurAgent = new AdapteurAgent(factory);
+        Agent agent = new Agent();
+        agent =  adapteurAgent.getAgentSharedFromId(id);
+        return agent;
+    }
+
+    @Override
+    public void delete(String id) {
+        AdapteurAgent adapteurAgent = new AdapteurAgent(factory);
+        adapteurAgent.deleteAgent(id);
+    }
+
 
 }

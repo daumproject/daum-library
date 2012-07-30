@@ -63,8 +63,31 @@ public class AdapteurAgent {
         return agentShared;
     }
 
+    public Agent editAgent(Agent agentShared){
+        PersistenceSession session = null;
+        org.daum.common.genmodel.Agent agentSitac = null;
+        try {
+            session = factory.getSession();
+            agentSitac = session.get(AgentImpl.class, agentShared.getId());
+            agentSitac.setNom(agentShared.getNom());
+            agentSitac.setPrenom(agentShared.getPrenom());
+            agentSitac.setMatricule(agentShared.getMatricule());
+            agentSitac.setPassword(agentShared.getPassword());
+            session.save(agentSitac);
+            //TODO session.lock();
+            //TODO session.unlock();
+        } catch (PersistenceException e) {
+            logger.debug("Problem encountered while saving object "+ agentSitac.getNom());
+        } finally {
+            if(session != null)
+                session.close();
+        }
+        return getAgentSharedFromSitacAgent(agentSitac);
+    }
+
     public Agent getAgentSharedFromSitacAgent(org.daum.common.genmodel.Agent agentSitac){
-        Agent agentShared = null;
+        Agent agentShared = new Agent();
+        agentShared.setId(agentSitac.getId());
         agentShared.setNom(agentSitac.getNom());
         agentShared.setPrenom(agentSitac.getPrenom());
         agentShared.setMatricule(agentSitac.getMatricule());
@@ -78,18 +101,19 @@ public class AdapteurAgent {
         Agent agentShared = null;
         try {
             session = factory.getSession();
-            agentSitac = session.get(AgentImpl.class , idSitacAgent);
+            agentSitac = session.get(AgentImpl.class, idSitacAgent);
+            agentShared = new Agent();
+            agentShared.setId(agentSitac.getId());
+            agentShared.setNom(agentSitac.getNom());
+            agentShared.setPrenom(agentSitac.getPrenom());
+            agentShared.setMatricule(agentSitac.getMatricule());
+            agentShared.setPassword(agentSitac.getPassword());
         } catch (PersistenceException e) {
-            logger.debug("Problem encountered while saving object "+ agentSitac.getNom());
+            logger.warn("Problem encountered while getting object "+ agentSitac.getNom());
         } finally {
            if(session != null)
                session.close();
         }
-        agentShared.setId(agentSitac.getId());
-        agentShared.setNom(agentSitac.getNom());
-        agentShared.setPrenom(agentSitac.getPrenom());
-        agentShared.setMatricule(agentSitac.getMatricule());
-        agentShared.setPassword(agentSitac.getPassword());
         return agentShared;
     }
 
@@ -99,10 +123,8 @@ public class AdapteurAgent {
         try {
             session = factory.getSession();
             Map<String, AgentImpl> agents = session.getAll(AgentImpl.class);
-            logger.warn("===================== > GET ALL Agent FROM SITAC "+agents.size());
             for(Map.Entry<String, AgentImpl> entry : agents.entrySet()) {
                 AgentImpl agentSitac = entry.getValue();
-                logger.warn("===================== >  AGENT DISPONIBLE : "+agentSitac.getNom());
                 Agent agentTemp = new Agent();
                 agentTemp.setId(agentSitac.getId());
                 agentTemp.setNom(agentSitac.getNom());
@@ -118,6 +140,22 @@ public class AdapteurAgent {
                 session.close();
         }
         return listeAgents;
+    }
+
+    public void deleteAgent(String id){
+        PersistenceSession session = null;
+        org.daum.common.genmodel.Agent agentSitac = null;
+        Agent agentShared = null;
+        try {
+            session = factory.getSession();
+            agentSitac = session.get(AgentImpl.class, id);
+            session.delete(agentSitac);
+        } catch (PersistenceException e) {
+            logger.error("Problem encountered while delete Agent",e);
+        } finally {
+            if(session != null)
+                session.close();
+        }
     }
 
 

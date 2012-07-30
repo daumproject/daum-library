@@ -20,8 +20,8 @@ public class IHMwebPortal implements EntryPoint {
      * This is the entry point method.
      */
     public void onModuleLoad() {
-
-        loginService.loginFromSessionServer(new AsyncCallback<Agent>() {
+        RootPanel.get().add(new AdministrationForm());
+       /* loginService.loginFromSessionServer(new AsyncCallback<Agent>() {
 
             @Override
             public void onFailure(Throwable caught) {
@@ -38,7 +38,7 @@ public class IHMwebPortal implements EntryPoint {
                     RootPanel.get().add(new AdministrationForm());
                 }
             }
-        });
+        });*/
     }
 }
 
