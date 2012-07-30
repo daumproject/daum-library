@@ -1,9 +1,11 @@
 package org.daum.library.fakeDemo;
 
+import org.daum.common.genmodel.Agent;
 import org.daum.common.genmodel.Capteurs;
 import org.daum.common.genmodel.DatedValue;
 import org.daum.common.genmodel.SitacFactory;
 import org.daum.common.genmodel.impl.AgentImpl;
+import org.daum.common.genmodel.impl.DatedValueImpl;
 import org.daum.library.fakeDemo.pojos.HeartMonitor;
 import org.daum.library.fakeDemo.pojos.Moyen;
 import org.daum.library.fakeDemo.pojos.TemperatureMonitor;
@@ -19,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -38,7 +41,8 @@ import java.util.Set;
         @ProvidedPort(name = "inputvalue", type = PortType.MESSAGE)
 })
 @DictionaryType({
-        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature","heartmonitor"})
+        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature","heartmonitor"}) ,
+        @DictionaryAttribute(name = "agent", defaultValue = "jedartois")
 }
 )
 @ComponentType
@@ -94,7 +98,6 @@ public class ArduinoGW extends AbstractComponentType {
                 //c/28
                 String[] values = msg.toString().split(",");
 
-
                 //System.out.println(values.length);;
                 for (int i = 0; i < values.length; i++) {
                     String[] lvl = values[i].split("=");
@@ -121,20 +124,35 @@ public class ArduinoGW extends AbstractComponentType {
 
                         }else  if (getDictionary().get("mode").toString().equals("heartmonitor"))
                         {
-                            String matriculeAgent = lvl[0];
-                            AgentImpl agent = s.get(AgentImpl.class,matriculeAgent);
-                            if(agent != null)
-                            {
-                                DatedValue valuesr = (DatedValue) agent.getCapteur("heartmonitor") ;
-                                valuesr.addValue(value);
+
+                            Map<String, AgentImpl> agents = s.getAll(AgentImpl.class);
+                            for (Agent agent : agents.values()) {
+                                if (agent.getMatricule().equals(getDictionary().get("agent").toString())) {
+
+                                   if(agent.getCapteurs().get("heartmonitor") == null){
+                                       agent.getCapteurs().put("heartmonitor",new DatedValueImpl());
+                                   }
+
+                                    DatedValueImpl value1 = (DatedValueImpl) agent.getCapteurs().get("heartmonitor");
+                                    if(value1 != null)
+                                    {
+                                        value1.addValue(value);
+                                    }else {
+                                        logger.warn("DatedValueImpl is null ");
+                                    }
+
+                                    s.update(agent);
+
+                                }
                             }
+
+
                         }
 
                     }
                 }
             } catch (Exception e) {
-                logger.warn("ArduinoGW bad message => ", e.getMessage());
-                replicatingService = null;
+                logger.warn("ArduinoGW bad message => ", e);
             } finally {
                 s.close();
             }
