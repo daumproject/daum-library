@@ -1,0 +1,81 @@
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Heart Monitor</title>
+    <script type="text/javascript" language="javascript" src="media/js/jquery-1.7.2.js"></script>
+    <script type="text/javascript" language="javascript" src="media/js/jquery.flot.js"></script>
+
+
+
+</head>
+<body>
+<h1>Heart Monitor</h1>
+
+
+<div id="text">
+
+</div>
+
+<div id="placeholder" style="width:600px;height:300px;"></div>
+
+<script type="text/javascript">
+
+    $(function () {
+        var data = [[],[]];
+        var xVal = 0;
+
+        var plot = $.plot($("#placeholder"),data);
+
+        function showMessage(text)
+        {
+            document.getElementById('text').innerHTML = text;
+        }
+
+
+        var ws = new WebSocket('ws://$ip$:8082/flotpage');
+        showMessage('Connecting...');
+
+        ws.onopen = function()
+        {
+            showMessage('Connected!');
+
+        };
+
+        ws.onclose = function()
+        {
+            showMessage('Lost connection');
+
+        };
+
+        ws.onmessage = function(evt)
+        {
+            // This could be an ajax call back.
+      //      var yVal1 = Math.floor(Math.random()*11);
+         //   var yVal2 = Math.floor(Math.random()*11);
+            var datum1 = [xVal, evt.data];
+           // var datum2 = [xVal, yVal2];
+            data[0].push(datum1);
+          //  data[1].push(datum2);
+            if(data[0].length>50){
+                // only allow ten points
+                data[0] = data[0].splice(1);
+             //   data[1] = data[1].splice(1);
+            }
+            xVal++;
+            plot.setData(data);
+            plot.setupGrid();
+            plot.draw();
+        }
+
+
+    });
+
+
+
+
+</script>
+
+</body>
+</html>
