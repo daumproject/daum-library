@@ -1,7 +1,7 @@
 package org.daum.library.demos;
 
 import org.daum.common.genmodel.*;
-import org.daum.common.genmodel.impl.AgentImpl;
+import org.daum.common.genmodel.impl.*;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;

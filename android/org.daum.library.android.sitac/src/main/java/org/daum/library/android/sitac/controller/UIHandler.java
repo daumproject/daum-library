@@ -3,6 +3,7 @@ package org.daum.library.android.sitac.controller;
 import java.util.Date;
 import java.util.Hashtable;
 
+
 import org.daum.library.android.sitac.command.RedoCommand;
 import org.daum.library.android.sitac.command.UndoCommand;
 import org.daum.library.android.sitac.command.engine.AddModelCommand;
@@ -29,10 +30,8 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.MapView.Projection;
 
 import android.view.MotionEvent;
-import org.sitac.GpsPoint;
-import org.sitac.IModel;
-import org.sitac.SitacFactory;
-import org.sitac.Vehicule;
+import org.daum.common.genmodel.*;
+
 
 public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventListener, OnMenuViewEventListener {
 	

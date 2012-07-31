@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
+import org.daum.common.genmodel.impl.*;
 import org.daum.library.android.sitac.engine.IEngine;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
@@ -17,10 +18,7 @@ import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
 import org.daum.library.replica.listener.SyncListener;
 import org.daum.library.replica.msg.SyncEvent;
-import org.sitac.IModel;
-import org.sitac.SitacFactory;
-import org.sitac.Vehicule;
-import org.sitac.impl.*;
+import org.daum.common.genmodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

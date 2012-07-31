@@ -1,5 +1,6 @@
 package org.daum.library.web.pages;
 
+import org.daum.common.genmodel.*;
 import org.daum.common.model.api.Demand;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
@@ -19,10 +20,8 @@ import org.kevoree.extra.marshalling.RichJSONObject;
 import org.kevoree.library.javase.webserver.AbstractPage;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
 import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
-import org.sitac.Intervention;
-import org.sitac.SitacFactory;
-import org.sitac.impl.InterventionImpl;
 import org.webbitserver.WebSocketConnection;
+
 
 import java.util.Map;
 import java.util.Observable;

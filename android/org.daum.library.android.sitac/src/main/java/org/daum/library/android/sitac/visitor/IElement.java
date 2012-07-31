@@ -1,6 +1,6 @@
 package org.daum.library.android.sitac.visitor;
 
-import org.sitac.IModel;
+import org.daum.common.genmodel.*;
 
 /**
  * Created with IntelliJ IDEA.

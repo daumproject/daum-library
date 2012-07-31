@@ -1,6 +1,6 @@
 package org.daum.library.android.moyens.view.listener;
 
-import org.sitac.Vehicule;
+import org.daum.common.genmodel.*;
 
 /**
  * Created with IntelliJ IDEA.

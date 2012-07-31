@@ -8,8 +8,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
-import org.sitac.*;
-
+import org.daum.common.genmodel.*;
 
 public class EntityFactory implements IEntityFactory {
 	

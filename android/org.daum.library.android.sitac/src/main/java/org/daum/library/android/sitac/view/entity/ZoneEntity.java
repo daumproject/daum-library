@@ -8,7 +8,7 @@ import org.osmdroid.views.MapView.Projection;
 
 import android.graphics.Paint.Style;
 import android.graphics.drawable.Drawable;
-import org.sitac.IModel;
+import org.daum.common.genmodel.*;
 
 public class ZoneEntity extends AbstractShapedEntity {
 

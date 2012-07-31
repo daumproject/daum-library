@@ -2,6 +2,7 @@ package org.daum.library.android.messages;
 
 import android.util.Log;
 //import org.daum.common.message.api.Message;
+import org.daum.common.genmodel.impl.MessageAmbianceImpl;
 import org.daum.library.android.messages.view.ListItemView.MessageType;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
@@ -12,8 +13,7 @@ import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
 import org.daum.library.replica.listener.SyncListener;
 import org.daum.library.replica.msg.SyncEvent;
-import org.sitac.MessageAmbiance;
-import org.sitac.impl.MessageAmbianceImpl;
+import org.daum.common.genmodel.*;
 
 import java.util.Collection;
 import java.util.Map;

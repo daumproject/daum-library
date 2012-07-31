@@ -13,8 +13,7 @@ import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
-import org.sitac.Vehicule;
-
+import org.daum.common.genmodel.*;
 import java.util.ArrayList;
 import java.util.Collection;
 

@@ -1,7 +1,7 @@
 package org.daum.library.android.sitac.command.engine;
 
 import org.daum.library.android.sitac.engine.IEngine;
-import org.sitac.IModel;
+import org.daum.common.genmodel.*;
 
 public class UpdateModelCommand implements IEngineCommand {
 

@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.*;
 //import org.daum.common.message.api.Message;
 import org.daum.library.android.messages.view.ListItemView.MessageType;
-import org.sitac.MessageAmbiance;
+import org.daum.common.genmodel.*;
 
 import java.util.*;
 

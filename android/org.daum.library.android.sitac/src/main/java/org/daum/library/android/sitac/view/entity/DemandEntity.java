@@ -2,7 +2,7 @@ package org.daum.library.android.sitac.view.entity;
 
 import android.graphics.drawable.Drawable;
 import org.daum.library.android.sitac.visitor.IVisitor;
-import org.sitac.IModel;
+import org.daum.common.genmodel.*;
 
 public class DemandEntity extends AbstractEntity {
 

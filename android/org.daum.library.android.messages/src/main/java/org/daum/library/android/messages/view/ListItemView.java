@@ -6,7 +6,7 @@ import android.widget.TextView;
 import android.content.Context;
 import android.widget.LinearLayout;
 import org.daum.common.util.api.TimeFormatter;
-import org.sitac.MessageAmbiance;
+import org.daum.common.genmodel.*;
 
 /**
  * Created with IntelliJ IDEA.

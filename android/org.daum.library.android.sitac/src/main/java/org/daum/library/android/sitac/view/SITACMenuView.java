@@ -11,8 +11,7 @@ import android.widget.ExpandableListView.OnChildClickListener;
 import org.daum.library.android.sitac.listener.OnMenuViewEventListener;
 import org.daum.library.android.sitac.view.entity.*;
 import org.daum.library.android.sitac.view.menu.*;
-import org.sitac.VehiculeSector;
-import org.sitac.VehiculeType;
+import org.daum.common.genmodel.*;
 
 import java.util.*;
 

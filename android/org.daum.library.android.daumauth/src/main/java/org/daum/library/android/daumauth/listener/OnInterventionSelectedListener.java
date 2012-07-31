@@ -1,6 +1,6 @@
 package org.daum.library.android.daumauth.listener;
 
-import org.sitac.Intervention;
+import org.daum.common.genmodel.*;
 
 /**
  * Created with IntelliJ IDEA.

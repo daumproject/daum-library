@@ -1,12 +1,10 @@
 package org.daum.library.web;
 
-import org.daum.common.model.api.Demand;
-import org.daum.common.model.api.VehicleType;
+
+import org.daum.common.genmodel.*;
+
 import org.kevoree.extra.marshalling.RichJSONObject;
-import org.sitac.Intervention;
-import org.sitac.Personne;
-import org.sitac.Position;
-import org.sitac.SitacFactory;
+
 import scala.Option;
 import scala.Some;
 
@@ -37,9 +35,9 @@ public class Tester {
         vitc2.setPrenom("Prenom victime2");
 
 
-        intervention.setRequerant(new Some(requerant));
-        RichJSONObject c = new RichJSONObject(new Demand(VehicleType.CAEM));
+       // intervention.setRequerant(new Some(requerant));
+        //RichJSONObject c = new RichJSONObject(new Demand(VehicleType.CAEM));
 
-        System.out.println(c.toJSON());
+    //    System.out.println(c.toJSON());
     }
 }

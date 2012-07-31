@@ -7,7 +7,7 @@ import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.MapView.Projection;
 
-import org.sitac.IModel;
+import org.daum.common.genmodel.*;
 import pythagoras.f.IRectangle;
 import pythagoras.f.Line;
 import pythagoras.f.Rectangle;
