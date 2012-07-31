@@ -1,6 +1,8 @@
 package org.daum.library.android.daumauth;
 
 import android.util.Log;
+import org.daum.common.genmodel.impl.AgentImpl;
+import org.daum.common.genmodel.impl.InterventionImpl;
 import org.daum.library.android.daumauth.controller.IConnectionEngine;
 import org.daum.library.android.daumauth.controller.IInterventionEngine;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
@@ -12,9 +14,7 @@ import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
 import org.daum.library.replica.listener.SyncListener;
 import org.daum.library.replica.msg.SyncEvent;
-import org.sitac.*;
-import org.sitac.impl.AgentImpl;
-import org.sitac.impl.InterventionImpl;
+import org.daum.common.genmodel.*;
 
 import java.util.ArrayList;
 import java.util.Map;

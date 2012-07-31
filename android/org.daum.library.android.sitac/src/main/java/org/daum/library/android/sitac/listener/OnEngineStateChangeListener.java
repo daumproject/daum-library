@@ -1,7 +1,6 @@
 package org.daum.library.android.sitac.listener;
 
-import org.sitac.IModel;
-
+import org.daum.common.genmodel.*;
 import java.util.ArrayList;
 
 public interface OnEngineStateChangeListener {

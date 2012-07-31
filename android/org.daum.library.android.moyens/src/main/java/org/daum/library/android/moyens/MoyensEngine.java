@@ -1,6 +1,7 @@
 package org.daum.library.android.moyens;
 
 import android.util.Log;
+import org.daum.common.genmodel.impl.VehiculeImpl;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
@@ -10,8 +11,7 @@ import org.daum.library.replica.listener.PropertyChangeEvent;
 import org.daum.library.replica.listener.PropertyChangeListener;
 import org.daum.library.replica.listener.SyncListener;
 import org.daum.library.replica.msg.SyncEvent;
-import org.sitac.Vehicule;
-import org.sitac.impl.VehiculeImpl;
+import org.daum.common.genmodel.*;
 
 import java.util.Collection;
 import java.util.Map;

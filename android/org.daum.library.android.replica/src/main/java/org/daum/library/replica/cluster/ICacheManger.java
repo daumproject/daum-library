@@ -1,5 +1,6 @@
 package org.daum.library.replica.cluster;
 
+import org.apache.jdbm.DB;
 import org.daum.library.replica.cache.Cache;
 import org.daum.library.replica.msg.Message;
 
@@ -10,6 +11,7 @@ import org.daum.library.replica.msg.Message;
  * Time: 14:27
  */
 public interface ICacheManger {
+    public ICluster getCluster();
     public Cache getCache(String name);
     public void processingMSG(Message e);
 }

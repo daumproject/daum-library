@@ -30,8 +30,7 @@ import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.api.service.core.script.KevScriptEngine;
 import org.kevoree.framework.AbstractComponentType;
 
-import org.sitac.Intervention;
-
+import org.daum.common.genmodel.*;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import scala.Option;
@@ -60,8 +59,7 @@ import java.util.concurrent.Semaphore;
         @DictionaryAttribute(name = "connTimeout", defaultValue = "15000", optional = false)
 })
 @ComponentType
-public class DaumAuthComponent extends AbstractComponentType
-        implements OnStoreSyncedListener, OnConnectionListener, OnInterventionSelectedListener {
+public class DaumAuthComponent extends AbstractComponentType       implements OnStoreSyncedListener, OnConnectionListener, OnInterventionSelectedListener {
 
     private static final String TAG = "DaumAuthComponent";
     private static final Logger logger = LoggerFactory.getLogger(DaumAuthComponent.class);

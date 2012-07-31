@@ -2,7 +2,7 @@ package org.daum.library.android.sitac.visitor;
 
 import org.daum.library.android.sitac.view.entity.DemandEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
-import org.sitac.IModel;
+import org.daum.common.genmodel.*;
 
 /**
  * Created with IntelliJ IDEA.

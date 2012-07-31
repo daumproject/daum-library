@@ -1,7 +1,7 @@
 package org.daum.library.android.sitac.engine;
 
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
-import org.sitac.IModel;
+import org.daum.common.genmodel.*;
 
 /**
  * Created with IntelliJ IDEA.

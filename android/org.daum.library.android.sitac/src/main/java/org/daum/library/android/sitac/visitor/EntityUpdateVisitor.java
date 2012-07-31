@@ -5,10 +5,7 @@ import org.daum.library.android.sitac.view.entity.EntityFactory;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
-import org.sitac.GpsPoint;
-import org.sitac.IModel;
-import org.sitac.Vehicule;
-import org.sitac.VehiculeType;
+import org.daum.common.genmodel.*;
 
 /**
  * EntityUpdateVisitor handles entities updates.

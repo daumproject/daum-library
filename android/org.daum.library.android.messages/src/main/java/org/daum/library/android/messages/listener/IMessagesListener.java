@@ -2,7 +2,7 @@ package org.daum.library.android.messages.listener;
 
 //import org.daum.common.message.api.Message;
 
-import org.sitac.MessageAmbiance;
+import org.daum.common.genmodel.*;
 
 /**
  * Created with IntelliJ IDEA.

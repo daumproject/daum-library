@@ -19,10 +19,14 @@ import org.slf4j.LoggerFactory;
  * Time: 18:00
  *
  * TODO : add power manangement of nodes
- * TODO : add persistence (https://github.com/jankotek/JDBM3)
+ * TODO : add persistence (https://github.com/jankotek/JDBM3)   more generics
+ * todo : USE LRU
+ * todo
  * TODO : add conflits manager
  * TODO : merge dependencies
  */
+
+
 
 @Library(name = "JavaSE", names = {"Android"})
 @ComponentType
@@ -31,7 +35,9 @@ import org.slf4j.LoggerFactory;
         @RequiredPort(name = "notification", type = PortType.MESSAGE,optional = true)
 })
 @DictionaryType({
-        @DictionaryAttribute(name = "synchronize", defaultValue = "true", optional = true,vals={"true","false"})
+        @DictionaryAttribute(name = "synchronize", defaultValue = "true", optional = true,vals={"true","false"}) ,
+        @DictionaryAttribute(name = "diskPersitence", defaultValue = "true", optional = true,vals={"true","false"}) ,
+        @DictionaryAttribute(name = "path_disk", defaultValue = "/tmp/replica", optional = true)
 })
 @Provides({
         @ProvidedPort(name = "remote", type = PortType.MESSAGE) ,
@@ -49,21 +55,23 @@ public class Replica extends AbstractComponentType implements ReplicaService {
     {
         kChannel   = new KChannelImpl(this);
         Node node = new Node(getNodeName());
-        cluster = new ClusterImpl(node,kChannel);
-        Boolean synchronize=true;
-        try {
-            synchronize = Boolean.parseBoolean(getDictionary().get("synchronize").toString());
-        } catch (Exception e)
+        try
         {
-           logger.warn("Fail get Dictionary synchronize ",e);
-        }
-        finally
-        {
+            Boolean  synchronize = Boolean.parseBoolean(getDictionary().get("synchronize").toString());
+            Boolean  diskPersitence = Boolean.parseBoolean(getDictionary().get("diskPersitence").toString());
+            String path_disk =       getDictionary().get("path_disk").toString();
+
+            cluster = new ClusterImpl(node,kChannel,diskPersitence,path_disk);
+
             if(synchronize)
             {
                 // request synchronize
                 cluster.synchronize();
             }
+
+        } catch (Exception e)
+        {
+            logger.warn("Fail get Dictionary synchronize ",e);
         }
     }
 
@@ -78,6 +86,7 @@ public class Replica extends AbstractComponentType implements ReplicaService {
     {
         kChannel   = new KChannelImpl(this);
         cluster.setChanel(kChannel);
+        cluster.setPath_disk(getDictionary().get("path_disk").toString());
     }
 
     @Port(name = "remote")

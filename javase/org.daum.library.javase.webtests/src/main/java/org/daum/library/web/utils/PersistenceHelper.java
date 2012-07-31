@@ -8,7 +8,7 @@ import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
-import org.sitac.SitacFactory;
+import org.daum.common.genmodel.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

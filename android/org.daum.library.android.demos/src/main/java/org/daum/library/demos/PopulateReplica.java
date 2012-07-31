@@ -1,7 +1,7 @@
 package org.daum.library.demos;
 
 import org.daum.common.genmodel.*;
-import org.daum.common.genmodel.impl.AgentImpl;
+import org.daum.common.genmodel.impl.*;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
@@ -186,6 +186,8 @@ public class PopulateReplica extends AbstractComponentType {
 
                         Detachement detachement = SitacFactory.createDetachement();
                         detachement.setChef(new Some((agentnoel)));
+
+
                         Affectation affectation = SitacFactory.createAffectation();
                         affectation.setMoyen(new Some(moyens));
                         detachement.addAffectation(affectation);

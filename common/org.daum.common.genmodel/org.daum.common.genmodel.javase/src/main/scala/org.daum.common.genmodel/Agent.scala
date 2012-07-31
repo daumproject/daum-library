@@ -8,9 +8,12 @@ import java.io.Serializable;
  * Date: 04 juil. 12 Time: 09:48
  * Meta-Model:NS_URI=http://sitactest/1.0
  */
+
+import org.daum.library.ormH.annotations.Id
+
 trait Agent extends org.daum.common.genmodel.SitacContainer with org.daum.common.genmodel.Personne with Serializable
 {
-
+  @Id
   private var matricule : java.lang.String = ""
 
   private var password : java.lang.String = ""
@@ -38,7 +41,7 @@ trait Agent extends org.daum.common.genmodel.SitacContainer with org.daum.common
   def getCapteur(id : java.lang.String) : Capteurs=
   {
     if (capteurs.get(id) == null) {
-      capteurs.put("hearmonitor", SitacFactory.createDatedValue)
+      capteurs.put(id, SitacFactory.createDatedValue)
     }
     capteurs.get(id)
   }

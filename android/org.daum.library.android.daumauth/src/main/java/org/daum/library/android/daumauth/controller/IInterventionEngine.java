@@ -1,7 +1,7 @@
 package org.daum.library.android.daumauth.controller;
 
 import org.kevoree.library.javase.authentication.Authentication;
-import org.sitac.Intervention;
+import org.daum.common.genmodel.*;
 
 import java.util.ArrayList;
 

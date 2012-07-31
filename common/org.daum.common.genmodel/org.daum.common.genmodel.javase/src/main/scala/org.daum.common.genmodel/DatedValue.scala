@@ -14,13 +14,21 @@ import java.util.Date
 trait DatedValue extends org.daum.common.genmodel.SitacContainer with Capteurs
 {
  var values :  java.util.HashMap[Date,Double] = new java.util.HashMap[Date,Double]
+ var last :Date = null
 
   def addValue(value : Double) {
-    values.put(new Date(),value)
+   val d : Date = new Date()
+    values.put(d,value)
+    last = d
   }
 
   def getValues() : java.util.HashMap[Date,Double] = {
     values
   }
+
+
+def lastUpdate() : Date =  {
+  last
+}
 
 }

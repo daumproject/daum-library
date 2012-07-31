@@ -9,9 +9,7 @@ import org.daum.library.android.daumauth.listener.OnConnectionListener;
 import org.daum.library.android.daumauth.listener.OnInterventionSelectedListener;
 import org.daum.library.android.daumauth.util.ConnectionTask;
 import org.daum.library.android.daumauth.view.DaumAuthView;
-import org.sitac.Intervention;
-import org.sitac.Personne;
-
+import org.daum.common.genmodel.*;
 import java.util.ArrayList;
 
 /**

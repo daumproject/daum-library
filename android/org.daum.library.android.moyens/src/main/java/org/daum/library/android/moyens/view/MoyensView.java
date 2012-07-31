@@ -10,7 +10,7 @@ import android.widget.*;
 import org.daum.library.android.moyens.view.listener.IMoyensListener;
 import org.daum.library.android.moyens.view.quickactionbar.QuickActionsBar;
 import org.daum.library.android.moyens.view.quickactionbar.listener.OnActionClickedListener;
-import org.sitac.*;
+import org.daum.common.genmodel.*;
 
 import java.util.ArrayList;
 import java.util.Date;

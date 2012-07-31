@@ -16,7 +16,7 @@ import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
 import org.daum.library.android.messages.listener.IMessagesListener;
-import org.sitac.MessageAmbiance;
+import org.daum.common.genmodel.*;
 
 import java.util.Collection;
 
@@ -39,8 +39,7 @@ import java.util.Collection;
         @DictionaryAttribute(name = "interNum", optional = false)
 })
 @ComponentType
-public class MessagesComponent extends AbstractComponentType
-        implements IMessagesListener, MessagesEngine.OnEventListener {
+public class MessagesComponent extends AbstractComponentType       implements IMessagesListener, MessagesEngine.OnEventListener {
 
     // Debugging
     private static final String TAG = "MessagesComponent";

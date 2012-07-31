@@ -6,8 +6,7 @@ import java.util.Date;
 import org.osmdroid.api.IGeoPoint;
 
 import android.util.Log;
-import org.sitac.*;
-
+import org.daum.common.genmodel.*;
 public class ModelFactory implements IModelFactory {
 	
 	private static final String TAG = "ModelFactory";

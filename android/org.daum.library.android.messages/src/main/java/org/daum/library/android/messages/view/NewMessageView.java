@@ -9,8 +9,7 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.*;
 import org.daum.library.android.messages.listener.MessagesEvent;
 import org.daum.library.android.messages.listener.MessagesEvent.MessagesEventType;
-import org.sitac.MessageAmbiance;
-import org.sitac.SitacFactory;
+import org.daum.common.genmodel.*;
 
 import java.util.Date;
 

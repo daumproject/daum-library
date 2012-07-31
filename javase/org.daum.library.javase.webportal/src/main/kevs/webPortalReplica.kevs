@@ -4,7 +4,7 @@ merge 'mvn:org.kevoree.corelibrary.sky/org.kevoree.library.sky.minicloud/{kevore
 merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.authentication/{kevoree.version}'
 merge 'mvn:org.daum.library.javase/org.daum.library.javase.webportal/{kevoree.version}'
 merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.socketChannels/{kevoree.version}'
-merge 'mvn:org.daum.library.javase/org.daum.library.javase.demos/1.0-SNAPSHOT'
+merge 'mvn:org.daum.library.javase/org.daum.library.javase.demos/1.1-SNAPSHOT'
 merge 'mvn:org.kevoree.corelibrary.sky/org.kevoree.library.sky.provider/{kevoree.version}'
 merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nioChannels/{kevoree.version}'
 merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.webserver.api/{kevoree.version}'

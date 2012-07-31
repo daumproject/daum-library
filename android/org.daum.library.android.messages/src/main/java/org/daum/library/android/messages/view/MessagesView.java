@@ -9,7 +9,7 @@ import android.view.View;
 import android.widget.*;
 import org.daum.library.android.messages.listener.IMessagesListener;
 import org.daum.library.android.messages.view.ListItemView.MessageType;
-import org.sitac.MessageAmbiance;
+import org.daum.common.genmodel.*;
 
 /**
  * Created with IntelliJ IDEA.

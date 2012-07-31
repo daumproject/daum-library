@@ -1,6 +1,7 @@
 package org.daum.library.replica.cache;
 
 import java.io.Serializable;
+import java.util.TreeMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -9,5 +10,5 @@ import java.util.concurrent.ConcurrentHashMap;
  * Date: 24/05/12
  * Time: 10:44
  */
-public class DHashMap<K, V> extends ConcurrentHashMap<K, V> implements Serializable {
+public class StoreMap<K, V> extends TreeMap<K, V> implements Serializable {
 }

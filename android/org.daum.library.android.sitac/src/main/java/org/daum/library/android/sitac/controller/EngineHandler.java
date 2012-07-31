@@ -11,7 +11,7 @@ import org.daum.library.android.sitac.view.entity.IEntityFactory;
 
 import org.daum.library.android.sitac.visitor.EntityUpdateVisitor;
 import org.daum.library.android.sitac.visitor.IVisitor;
-import org.sitac.IModel;
+import org.daum.common.genmodel.*;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 

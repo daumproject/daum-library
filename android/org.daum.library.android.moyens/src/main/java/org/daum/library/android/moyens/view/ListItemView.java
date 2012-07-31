@@ -6,7 +6,7 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import org.daum.common.util.api.TimeFormatter;
-import org.sitac.Vehicule;
+import org.daum.common.genmodel.*;
 
 /**
  * Created with IntelliJ IDEA.

@@ -19,7 +19,7 @@ import org.kevoree.extra.marshalling.RichJSONObject;
 import org.kevoree.library.javase.webserver.AbstractPage;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
 import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
-import org.sitac.SitacFactory;
+import org.daum.common.genmodel.*;
 import org.webbitserver.WebSocketConnection;
 
 import java.util.Map;

@@ -1,6 +1,7 @@
 package org.daum.library.android.sitac.view.entity;
 
-import org.sitac.IModel;
+
+import org.daum.common.genmodel.IModel;
 
 public interface IModelFactory {
 

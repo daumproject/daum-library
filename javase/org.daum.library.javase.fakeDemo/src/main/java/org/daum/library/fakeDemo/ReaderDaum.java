@@ -4,6 +4,7 @@ import org.daum.common.genmodel.Agent;
 import org.daum.common.genmodel.Moyens;
 import org.daum.common.genmodel.SitacFactory;
 import org.daum.common.genmodel.impl.AgentImpl;
+import org.daum.common.genmodel.impl.DatedValueImpl;
 import org.daum.common.genmodel.impl.InterventionImpl;
 import org.daum.common.genmodel.impl.MoyensImpl;
 import org.daum.library.fakeDemo.pojos.HeartMonitor;
@@ -47,7 +48,8 @@ import java.util.Set;
 })
 
 @DictionaryType({
-        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature", "moyens","heart","sitactest","agents"})
+        @DictionaryAttribute(name = "mode", defaultValue = "temperature", optional = true, vals = {"temperature", "moyens","heart","sitactest","agents"}) ,
+        @DictionaryAttribute(name = "agent", defaultValue = "jedartois")
 }
 )
 @ComponentType
@@ -60,13 +62,15 @@ public class ReaderDaum extends AbstractComponentType implements Runnable {
     private  PersistenceSession s=null;
     private boolean alive =false;
     private Thread thread;
+    private ChangeListener changeListener = new ChangeListener();
+
     @Start
     public void start()
     {
         try
         {
-            thread = new Thread(this);
-            thread.start();
+            // thread = new Thread(this);
+            //  thread.start();
             alive =true;
             configuration = new PersistenceConfiguration(getNodeName());
 
@@ -88,12 +92,10 @@ public class ReaderDaum extends AbstractComponentType implements Runnable {
         }
 
         // listeners
-        ChangeListener.getInstance("READERDAUM").addEventListener(TemperatureMonitor.class, new PropertyChangeListener() {
+        changeListener.addEventListener(TemperatureMonitor.class, new PropertyChangeListener() {
             @Override
-            public void update(PropertyChangeEvent e)
-            {
-                switch (e.getEvent())
-                {
+            public void update(PropertyChangeEvent e) {
+                switch (e.getEvent()) {
                     case ADD:
                         processTemperature(e.getId());
                         break;
@@ -106,11 +108,10 @@ public class ReaderDaum extends AbstractComponentType implements Runnable {
         });
 
 
-        ChangeListener.getInstance("READERDAUM").addEventListener(HeartMonitor.class, new PropertyChangeListener() {
+        changeListener.addEventListener(HeartMonitor.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent e) {
-                switch (e.getEvent())
-                {
+                switch (e.getEvent()) {
                     case ADD:
                         processHeartMonitor(e.getId());
                         break;
@@ -123,18 +124,45 @@ public class ReaderDaum extends AbstractComponentType implements Runnable {
             }
         });
 
-        ChangeListener.getInstance("READERDAUM").addEventListener(AgentImpl.class, new PropertyChangeListener() {
+        changeListener.addEventListener(AgentImpl.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent e) {
 
-                processAgent(e.getId());
+
+                try
+                {
+                    s  = factory.getSession();
+                    Agent temp = (Agent) s.get(AgentImpl.class, e.getId());
+
+                    if (temp.getMatricule().equals(getDictionary().get("agent").toString())) {
+
+                        DatedValueImpl value1 = (DatedValueImpl) temp.getCapteurs().get("heartmonitor");
+                        if(value1 != null && value1.lastUpdate() != null)
+                        {
+                        double value =  (Double)value1.getValues().get(value1.lastUpdate());
+                            String format = "hm="+value;
+                            getPortByName("value", MessagePort.class).process(format);
+                        }
+
+
+                    }
+
+                } catch (PersistenceException e1)
+                {
+                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                }
+                finally {
+                    if( s != null){
+                        s.close();
+                    }
+                }
 
 
             }
         });
 
 
-        ChangeListener.getInstance("READERDAUM").addEventListener(MoyensImpl.class, new PropertyChangeListener() {
+        changeListener.addEventListener(MoyensImpl.class, new PropertyChangeListener() {
             @Override
             public void update(PropertyChangeEvent e) {
 
@@ -174,16 +202,16 @@ public class ReaderDaum extends AbstractComponentType implements Runnable {
 
                 temp = (Agent) s.get(AgentImpl.class,key);
                 s.close();
-               logger.warn(temp.getNom()+" "+temp.getPrenom());
+                logger.warn(temp.getNom()+" "+temp.getPrenom());
                 logger.warn("------------------------------------");
 
-             for(Object key2:  s.getAll(MoyensImpl.class).keySet()){
+                for(Object key2:  s.getAll(MoyensImpl.class).keySet()){
 
-                 for(Agent a: ((MoyensImpl)s.get(MoyensImpl.class,key2)).getAgentsForJ()){
+                    for(Agent a: ((MoyensImpl)s.get(MoyensImpl.class,key2)).getAgentsForJ()){
 
-                     logger.warn(a.getNom()+" "+a.getPrenom());
-                 }
-             }
+                        logger.warn(a.getNom()+" "+a.getPrenom());
+                    }
+                }
             }
 
 
@@ -276,38 +304,38 @@ public class ReaderDaum extends AbstractComponentType implements Runnable {
     @Port(name = "notify")
     public void notifybyReplica(Object m)
     {
-        ChangeListener.getInstance("READERDAUM").receive(m);
+        changeListener.receive(m);
     }
 
 
     @Override
     public void run() {
-       while(alive){
+        while(alive){
 
-           try
-           {
-               if(factory != null){
-                   s  = factory.getSession();
-                   if(s != null)
-                   {
+            try
+            {
+                if(factory != null){
+                    s  = factory.getSession();
+                    if(s != null)
+                    {
 
-                       Map<String,AgentImpl> agents =   s.getAll(AgentImpl.class);
-                logger.warn("agents size = "+agents.size());
-                       for(String key: agents.keySet()){
+                        Map<String,AgentImpl> agents =   s.getAll(AgentImpl.class);
+                        logger.warn("agents size = "+agents.size());
+                        for(String key: agents.keySet()){
 
-                           logger.warn(agents.get(key).getNom()+" "+agents.get(key));
-                       }
-                       s.close();
+                            logger.warn(agents.get(key).getNom()+" "+agents.get(key));
+                        }
+                        s.close();
 
-                   }
-               }
+                    }
+                }
 
 
-               Thread.sleep(2000);
-           } catch (Exception e) {
-               e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-           }
-       }
+                Thread.sleep(2000);
+            } catch (Exception e) {
+                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            }
+        }
 
     }
 }
