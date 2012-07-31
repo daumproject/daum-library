@@ -186,6 +186,8 @@ public class PopulateReplica extends AbstractComponentType {
 
                         Detachement detachement = SitacFactory.createDetachement();
                         detachement.setChef(new Some((agentnoel)));
+
+
                         Affectation affectation = SitacFactory.createAffectation();
                         affectation.setMoyen(new Some(moyens));
                         detachement.addAffectation(affectation);

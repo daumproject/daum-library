@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Snapshot extends AMessage {
     private static final long serialVersionUID = 1519L;
-
+       /*
     private byte[] bytes;
 
     public byte[] getBytes() {
@@ -20,9 +20,9 @@ public class Snapshot extends AMessage {
 
     public void setBytes(byte[] bytes) {
         this.bytes = bytes;
-    }
+    }    */
 
-    /* public List<Update> snapshot = new ArrayList<Update>();
+    public List<Update> snapshot = new ArrayList<Update>();
 
    public List<Update> getSnapshot() {
        return snapshot;
@@ -30,5 +30,5 @@ public class Snapshot extends AMessage {
 
    public void setSnapshot(List<Update> snapshot) {
        this.snapshot = snapshot;
-   } */
+   }
 }

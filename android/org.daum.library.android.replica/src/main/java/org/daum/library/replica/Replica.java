@@ -19,7 +19,9 @@ import org.slf4j.LoggerFactory;
  * Time: 18:00
  *
  * TODO : add power manangement of nodes
- * TODO : add persistence (https://github.com/jankotek/JDBM3)
+ * TODO : add persistence (https://github.com/jankotek/JDBM3)   more generics
+ * todo : USE LRU
+ * todo
  * TODO : add conflits manager
  * TODO : merge dependencies
  */
@@ -61,9 +63,6 @@ public class Replica extends AbstractComponentType implements ReplicaService {
 
             cluster = new ClusterImpl(node,kChannel,diskPersitence,path_disk);
 
-
-
-
             if(synchronize)
             {
                 // request synchronize
@@ -80,7 +79,6 @@ public class Replica extends AbstractComponentType implements ReplicaService {
     public void stop()
     {
         cluster.shutdown();
-        cluster.getDb().close();
     }
 
     @Update
@@ -88,6 +86,7 @@ public class Replica extends AbstractComponentType implements ReplicaService {
     {
         kChannel   = new KChannelImpl(this);
         cluster.setChanel(kChannel);
+        cluster.setPath_disk(getDictionary().get("path_disk").toString());
     }
 
     @Port(name = "remote")

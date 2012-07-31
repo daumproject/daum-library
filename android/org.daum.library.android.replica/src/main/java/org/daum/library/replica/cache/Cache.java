@@ -14,7 +14,8 @@ import java.util.SortedMap;
  * Date: 23/05/12
  * Time: 15:43
  */
-public class Cache extends DHashMap<Object,VersionedValue> {
+public class Cache extends StoreMap<Object,VersionedValue>
+{
     private Logger logger = LoggerFactory.getLogger(this.getClass());
     private String name = "";
     private CacheManager cacheManger=null;
@@ -28,6 +29,7 @@ public class Cache extends DHashMap<Object,VersionedValue> {
         this.name = cachename;
         this.cacheManger = cacheManger;
 
+        // todo connect IDisk
         if(cacheManger.getCluster().isDiskPersitence())
         {
             db =  cacheManger.getCluster().getDb();
@@ -38,7 +40,6 @@ public class Cache extends DHashMap<Object,VersionedValue> {
                 disk =db.getTreeMap(cachename);
             }
         }
-
     }
 
     public void setMaxEntriesLocalHeap(int max)
@@ -65,7 +66,7 @@ public class Cache extends DHashMap<Object,VersionedValue> {
                 if(old == null)
                 {
                     e.event = StoreEvent.ADD;
-                    updated.setValue(value);
+                    updated.setObject(value);
                     e.setVersionedValue(updated);
                 } else
                 {
@@ -73,7 +74,7 @@ public class Cache extends DHashMap<Object,VersionedValue> {
                     e.event = StoreEvent.UPDATE;
                     updated.setVersion(old.getVersion());
                     updated.updated();
-                    updated.setValue(value);
+                    updated.setObject(value);
                     e.setVersionedValue(updated);
                 }
 
@@ -90,7 +91,6 @@ public class Cache extends DHashMap<Object,VersionedValue> {
 
                 if(cacheManger.getCluster().isDiskPersitence()){
                     disk.put(key.toString(),updated);
-                    db.commit();
                 }
                 return  updated;
             }
@@ -114,31 +114,21 @@ public class Cache extends DHashMap<Object,VersionedValue> {
 
     public void localDispatch(Update replica)
     {
-        //    logger.debug("Local dispatch "+name);
+     //   logger.debug("Local dispatch "+name+" "+replica.getKey()+" "+replica.getEvent());
         try
         {
-
-            if(cacheManger.getCluster().getDb().getTreeMap(replica.getCache()) == null)
-            {
-                disk = db.createTreeMap(replica.getCache());
-            }else {
-                disk =db.getTreeMap(replica.cache);
-            }
-
-
-            if (replica.event.equals(StoreEvent.ADD) || replica.event.equals(StoreEvent.UPDATE))
+            if (replica.event.equals(StoreEvent.ADD) || replica.event.equals(StoreEvent.UPDATE) || replica.event.equals(StoreEvent.SNAPSHOT))
             {
                 VersionedValue old = get(replica.key);
                 if(old == null)
                 {
+                    // memory
+                    super.put(replica.key, replica.getVersionedValue());
                     // disk
                     if(cacheManger.getCluster().isDiskPersitence())
                     {
                         disk.put(replica.key.toString(), replica.getVersionedValue());
                     }
-                    // memory
-                    super.put(replica.key, replica.getVersionedValue());
-
                 }
                 else
                 {
@@ -146,12 +136,13 @@ public class Cache extends DHashMap<Object,VersionedValue> {
                     {
                         if(replica.getVersionedValue().getVersion() > old.getVersion())
                         {
+                            // memory
+                            super.put(replica.key, replica.getVersionedValue());
                             //disk
                             if(cacheManger.getCluster().isDiskPersitence()){
                                 disk.put(replica.key.toString(), replica.getVersionedValue());
                             }
-                            // memory
-                            super.put(replica.key, replica.getVersionedValue());
+
                         } else
                         {
                             logger.warn("Current version "+replica.getVersionedValue().getVersion()+" replica version ="+old.getVersion());
@@ -165,16 +156,11 @@ public class Cache extends DHashMap<Object,VersionedValue> {
             {
                 if(super.get(replica.key) != null)
                 {
+                    super.remove(replica.key);
                     if(cacheManger.getCluster().isDiskPersitence()){
                         disk.remove(replica.key.toString());
                     }
-                    super.remove(replica.key);
                 }
-
-            }
-
-            if(cacheManger.getCluster().isDiskPersitence()){
-                db.commit();
             }
 
         } catch (Exception e)
@@ -199,10 +185,10 @@ public class Cache extends DHashMap<Object,VersionedValue> {
         e.cache = name;
         VersionedValue last = super.remove(key);
         cacheManger.remoteDisptach(e);
+
         if(cacheManger.getCluster().isDiskPersitence())
         {
             disk.remove(key.toString());
-            db.commit();
         }
 
         return   last;

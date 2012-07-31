@@ -44,7 +44,7 @@ public class ClusterImpl implements  ICluster,Runnable{
     private DB db=null;
     private boolean diskPersitence =false;
 
-    public ClusterImpl(Node current, Channel chanel,boolean diskPersitence,String path_disk)
+    public ClusterImpl(Node current, Channel chanel,boolean diskPersitence,String pathdisk)
     {
         alive = true;
         this.currentNode = current;
@@ -52,20 +52,34 @@ public class ClusterImpl implements  ICluster,Runnable{
         theartbeat = new Thread(this);
         cacheManger = new CacheManager(this);
         this.diskPersitence = diskPersitence;
-        this.path_disk = path_disk;
+
+        // adding node id
+        setPath_disk(pathdisk+File.separator+current.getNodeID()+File.separator);
 
         if(diskPersitence)
         {
-            File folder = new File(path_disk);
-            if(!folder.exists())
+            try
             {
-                folder.mkdir();
-                folder.canRead();
-                folder.canWrite();
+                File folder = new File(path_disk);
+
+                if(!folder.exists())
+                {
+                    logger.debug("Creating disk path "+folder.getAbsolutePath());
+                    folder.mkdirs();
+                    folder.canRead();
+                    folder.canWrite();
+                }
+
+                db  = DBMaker.openFile(folder.getAbsolutePath()+File.separator+"store") .make();
+                restoreFromDB();
+
+            }catch (Exception e)
+            {
+                logger.error("Disk persistence ",e);
+                diskPersitence =false;
             }
-            db  = DBMaker.openFile(getPath_disk()+"/store") .make();
-            restoreFromDB();
         }
+
 
         theartbeat.start();
     }
@@ -104,6 +118,12 @@ public class ClusterImpl implements  ICluster,Runnable{
     {
         logger.debug("Cluster is closing");
         alive = false;
+
+        if(db != null)
+        {
+            db.commit();
+            db.close();
+        }
         if(theartbeat != null){
             theartbeat.interrupt();
         }
