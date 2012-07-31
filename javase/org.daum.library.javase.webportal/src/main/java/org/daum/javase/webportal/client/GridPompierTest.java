@@ -170,7 +170,6 @@ public class GridPompierTest extends VLayout{
         ListGridField prenomField = new ListGridField("prenom", "Prenom");
         countryGrid.setFields(nomField, prenomField);
         countryGrid.setCanResizeFields(true);
-        // Window.alert("SIZE = "+pompierData.getPompierRecords().length);
         refreshGrille();
         this.addChild(countryGrid);
         this.setWidth100();

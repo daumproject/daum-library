@@ -40,7 +40,7 @@ public class AdministrationForm extends VLayout{
         ajoutAgentTab.addTabSelectedHandler(new TabSelectedHandler() {
             @Override
             public void onTabSelected(TabSelectedEvent tabSelectedEvent) {
-                new AgentForm();
+
             }
         });
         

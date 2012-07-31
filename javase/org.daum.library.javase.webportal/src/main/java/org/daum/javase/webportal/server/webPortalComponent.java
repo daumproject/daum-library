@@ -80,30 +80,6 @@ public class webPortalComponent extends ParentAbstractPage {
                 return "/ihmwebportal";
             }
         };
-        /*
-        getChangeListenerInstance().addSyncListener(new SyncListener() {
-            @Override
-            public void sync(SyncEvent syncEvent) {
-
-            }
-        });
-
-        getChangeListenerInstance().addEventListener(AgentImpl.class,new PropertyChangeListener() {
-            @Override
-            public void update(PropertyChangeEvent propertyChangeEvent) {
-                switch (propertyChangeEvent.getEvent()){
-                    case UPDATE:
-                        break;
-
-                    case ADD:
-                        break;
-
-                    case DELETE:
-                        break;
-                }
-
-            }
-        });*/
         super.startPage();
 
 

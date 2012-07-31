@@ -1,12 +1,11 @@
 package org.daum.javase.webportal.dto;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-import org.daum.common.genmodel.Personne;
-import org.daum.common.genmodel.PositionCivil;
-import org.daum.common.genmodel.SitacFactory;
+import org.daum.common.genmodel.*;
+import org.daum.common.genmodel.impl.AgentImpl;
 import org.daum.javase.webportal.shared.Agent;
+import org.daum.javase.webportal.shared.Detachement;
 import org.daum.javase.webportal.shared.Intervention;
-import org.daum.javase.webportal.shared.Moyens;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
@@ -14,31 +13,33 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.Some;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created with IntelliJ IDEA.
  * User: max
  * Date: 31/07/12
- * Time: 11:53
+ * Time: 11:37
  * To change this template use File | Settings | File Templates.
  */
-public class AdapteurMoyens {
+public class AdapteurIntervention {
 
     private PersistenceSessionFactoryImpl factory;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    public AdapteurMoyens(PersistenceSessionFactoryImpl factory){
+    public AdapteurIntervention(PersistenceSessionFactoryImpl factory){
         this.factory = factory;
     }
 
-
-
-    public Intervention saveMoyens(Moyens moyens){
+    public Intervention saveIntervention(Intervention intervention){
         PersistenceSession session = null;
-        org.daum.common.genmodel.Moyens moyensSitac = sharedMoyensToSitac(moyens);
+        org.daum.common.genmodel.Intervention interventionSitac = sharedInterventionToSitac(intervention);
         try {
             session = factory.getSession();
-            session.save(moyens);
+            session.save(interventionSitac);
             //TODO session.lock();
             //TODO session.unlock();
         } catch (PersistenceException e) {
@@ -48,21 +49,6 @@ public class AdapteurMoyens {
                 session.close();
         }
         return intervention;
-    }
-
-    private org.daum.common.genmodel.Moyens sharedMoyensToSitac(Moyens moyens) {
-        PersistenceSession session = null;
-        org.daum.common.genmodel.Moyens moyensSitac = null;
-        moyensSitac = SitacFactory.createMoyens();
-        AdapteurAgent adapteurAgent = new AdapteurAgent(factory);
-        for(Agent agent : moyens.getListeAgent()){
-            agent.g
-        }
-        adapteurAgent.saveAgent()
-
-
-        //moyensSitac.addAllAgents(moyens.getListeAgent());
-
     }
 
     private org.daum.common.genmodel.Intervention sharedInterventionToSitac(Intervention intervention) {
@@ -79,5 +65,7 @@ public class AdapteurMoyens {
         interventionSitac.setVictimes((scala.collection.immutable.List<Personne>) intervention.getListeVictime());
         return interventionSitac;
     }
+
+
 
 }
