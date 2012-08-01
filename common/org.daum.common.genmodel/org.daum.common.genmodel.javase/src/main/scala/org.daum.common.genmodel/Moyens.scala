@@ -15,9 +15,12 @@ import scala.collection.mutable.ListBuffer
 
 
 trait Moyens extends org.daum.common.genmodel.SitacContainer {
+
+  @Id
+  @Generated(strategy = GeneratedType.UUID)
+  private var id : String = ""
   private var precision : java.lang.String = ""
 
-  private var numero : java.lang.String = ""
 
   @OneToMany
   private lazy val agents : ListBuffer[org.daum.common.genmodel.Agent] = new ListBuffer[org.daum.common.genmodel.Agent]()
@@ -40,12 +43,8 @@ trait Moyens extends org.daum.common.genmodel.SitacContainer {
     this.precision = precision
   }
 
-  def getNumero : java.lang.String = {
-    numero
-  }
-
-  def setNumero(numero : java.lang.String) {
-    this.numero = numero
+  def getId() : java.lang.String = {
+    id
   }
 
 

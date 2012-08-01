@@ -22,6 +22,8 @@ trait Affectation extends org.daum.common.genmodel.SitacContainer {
   private var horodatageDemande : java.util.Date=_
   private var horodatageEngagement : java.util.Date=_
   private var horodatageDesengagement : java.util.Date=_
+
+  @OneToMany
   private var moyen : Option[org.daum.common.genmodel.Moyens] = null
 
   def getId : java.lang.String = {
