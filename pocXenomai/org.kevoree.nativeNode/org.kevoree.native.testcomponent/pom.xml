@@ -1,0 +1,67 @@
+<project>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.kevoree.nativeNode</groupId>
+    <artifactId>org.kevoree.native.testcomponent</artifactId>
+    <version>1.1-SNAPSHOT</version>
+
+    <packaging>uexe</packaging>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <compilerProvider>generic-classic</compilerProvider>
+                    <compilerExecutable>gcc</compilerExecutable>
+                    <linkerExecutable>gcc</linkerExecutable>
+
+                    <compilerStartOptions>
+                        <compilerStartOption>-W -O2 -Wall -g  -I.</compilerStartOption>
+                    </compilerStartOptions>
+
+                    <sources>
+                        <source>
+                            <directory>src/main/c</directory>
+                            <fileNames>
+                                <fileName>test.c</fileName>
+                            </fileNames>
+                        </source>
+                        <source>
+                            <directory>src/main/include</directory>
+                        </source>
+
+                        <source>
+                            <directory>>/home/jed/pocXenomai/org.kevoree.nativeNode/org.kevoree.nativeNode.native/src/main/c</directory>
+                        </source>
+
+                    </sources>
+                    <linkerStartOptions>
+                        <linkerStartOption> -lpthread -llog4c </linkerStartOption>
+                    </linkerStartOptions>
+                </configuration>
+            </plugin>
+            <!--
+      <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.2.1</version>
+          <executions>
+              <execution>
+                  <phase>generate-resources</phase>
+                  <goals>
+                      <goal>exec</goal>
+                  </goals>
+              </execution>
+          </executions>
+          <configuration>
+              <executable>${builder}</executable>
+              <workingDirectory>${project.build.directory}</workingDirectory>
+          </configuration>
+      </plugin>      -->
+        </plugins>
+    </build>
+</project>

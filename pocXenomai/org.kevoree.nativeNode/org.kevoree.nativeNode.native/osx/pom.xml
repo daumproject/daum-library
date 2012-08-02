@@ -1,0 +1,125 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.kevoree.extra</groupId>
+        <artifactId>org.kevoree.extra.fota.native</artifactId>
+        <version>1.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>org.kevoree.extra</groupId>
+    <artifactId>org.kevoree.extra.fota.native.osx</artifactId>
+    <version>1.1-SNAPSHOT</version>
+
+    <name>native OSX</name>
+
+    <packaging>so</packaging>
+
+    <properties>
+        <platform>osx</platform>
+        <platform.jdk.include.dir>${java.home}/include</platform.jdk.include.dir>
+        <platform.javahOS>macosx</platform.javahOS>
+        <platform.define>__DARWIN__</platform.define>
+        <platform.shlib>dylib</platform.shlib>
+        <platform.jni>jnilib</platform.jni>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.kevoree.extra</groupId>
+            <artifactId>org.kevoree.extra.fota.api</artifactId>
+            <version>1.1-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <!--  trigger javah -->
+                    <javahOS>osx</javahOS>
+
+                    <compilerProvider>generic-classic</compilerProvider>
+
+                    <compilerExecutable>cc</compilerExecutable>
+                    <linkerExecutable>cc</linkerExecutable>
+
+                    <sources>
+                        <source>
+                            <directory>${platform.jdk.include.dir}</directory>
+                        </source>
+                        <source>
+                            <directory>../src/main/c</directory>
+                            <fileNames>
+                                <fileName>fota.c</fileName>
+                                <fileName>native.c</fileName>
+                            </fileNames>
+                        </source>
+                    </sources>
+
+
+                    <linkerStartOptions>
+                        <linkerStartOption> -shared -fPIC -Wl -lpthread </linkerStartOption>
+                    </linkerStartOptions>
+
+                </configuration>
+
+
+                <executions>
+                    <execution>
+                        <id>javah</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <javahOS>osx</javahOS>
+                            <javahProvider>default</javahProvider>
+                            <javahOutputDirectory>${project.build.directory}/custom-javah</javahOutputDirectory>
+                            <workingDirectory>${basedir}</workingDirectory>
+                            <javahOutputFileName>nativelib.h</javahOutputFileName>
+                            <javahClassNames>
+                                <javahClassName>org.kevoree.fota.Nativelib</javahClassName>
+                            </javahClassNames>
+                        </configuration>
+                        <goals>
+                            <goal>javah</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+
+                <plugin>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <phase>install</phase>
+                            <configuration>
+                                <tasks>
+                                    <copy tofile="../../org.kevoree.fota.api/src/main/resources/osx/native.so">
+                                        <fileset file="${project.build.directory}/org.kevoree.extra.fota.native.osx.so"/>
+                                    </copy>
+
+                                </tasks>
+                            </configuration>
+                            <goals>
+                                <goal>run</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+            </plugin>
+
+        </plugins>
+    </build>
+</project>
