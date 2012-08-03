@@ -2,6 +2,7 @@ package org.daum.javase.webportal.shared;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,8 +15,8 @@ import java.util.List;
 public class Detachement implements IsSerializable {
 
     private String id;
-    private List<Affectation> listeAffectation;
-    private Agent chef;
+    private List<String> listeIdAffectation = new ArrayList<String>();
+    private String idChef;
 
     public Detachement(){
 
@@ -29,28 +30,23 @@ public class Detachement implements IsSerializable {
         this.id = id;
     }
 
-
-    public Agent getChef() {
-        return chef;
+    public String getIdChef() {
+        return idChef;
     }
 
-    public void setChef(Agent chef) {
-        this.chef = chef;
+    public void setIdChef(String idChef) {
+        this.idChef = idChef;
     }
 
-    public List<Affectation> getAffectation() {
-        return listeAffectation;
+    public List<String> getListeIdAffectation() {
+        return listeIdAffectation;
     }
 
-    public void setAffectation(List<Affectation> listeAffectation) {
-        this.listeAffectation = listeAffectation;
+    public void setListeIdAffectation(List<String> listeIdAffectation) {
+        this.listeIdAffectation = listeIdAffectation;
     }
 
-    public List<Affectation> getListeAffectation() {
-        return listeAffectation;
-    }
-
-    public void setListeAffectation(List<Affectation> listeAffectation) {
-        this.listeAffectation = listeAffectation;
+    public void addIdAffectation(String idAffectation){
+        listeIdAffectation.add(idAffectation);
     }
 }

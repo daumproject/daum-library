@@ -11,11 +11,20 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  */
 public class Personne implements IsSerializable {
 
+    private String id;
     private String nom;
     private String prenom;
 
     public Personne(){
 
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNom() {

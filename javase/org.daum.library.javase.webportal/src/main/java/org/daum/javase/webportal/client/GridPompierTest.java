@@ -34,9 +34,7 @@ package org.daum.javase.webportal.client;
   
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HTML;
 import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.types.ListGridFieldType;
 import com.smartgwt.client.util.BooleanCallback;
 import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
@@ -50,14 +48,13 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-import com.smartgwt.client.widgets.tab.events.CloseClickHandler;
 import org.daum.javase.webportal.shared.Agent;
 
 public class GridPompierTest extends VLayout{
 
     private HLayout rollOverCanvas;
     private ListGridRecord rollOverRecord;
-    private ListGrid countryGrid;
+    private ListGrid pompierGrid;
     private PompierData pompierData= new PompierData();
     private final AuthentificationServiceAsync loginService = GWT
             .create(AuthentificationService.class);
@@ -65,7 +62,7 @@ public class GridPompierTest extends VLayout{
 
 
     public GridPompierTest() {
-        countryGrid = new ListGrid() {
+        pompierGrid = new ListGrid() {
             @Override
             protected Canvas getRollOverCanvas(Integer rowNum, Integer colNum) {
                 rollOverRecord = this.getRecord(rowNum);
@@ -135,7 +132,7 @@ public class GridPompierTest extends VLayout{
                                 @Override
                                 public void execute(Boolean aBoolean) {
                                     if(aBoolean){
-                                         loginService.delete(rollOverRecord.getAttribute("id"), new AsyncCallback<Void>(){
+                                         loginService.deleteAgent(rollOverRecord.getAttribute("id"), new AsyncCallback<Void>(){
 
                                              @Override
                                              public void onFailure(Throwable throwable) {
@@ -161,24 +158,25 @@ public class GridPompierTest extends VLayout{
         };
 
 
-        countryGrid.setShowRollOverCanvas(true);
-        countryGrid.setWidth100();
-        countryGrid.setHeight100();
-        countryGrid.setShowAllRecords(true);
+        pompierGrid.setShowRollOverCanvas(true);
+        pompierGrid.setWidth100();
+        pompierGrid.setHeight100();
+        pompierGrid.setShowAllRecords(true);
 
         ListGridField nomField = new ListGridField("nom", "Nom");
         ListGridField prenomField = new ListGridField("prenom", "Prenom");
-        countryGrid.setFields(nomField, prenomField);
-        countryGrid.setCanResizeFields(true);
+        ListGridField matriculeField = new ListGridField("matricule", "Matricule");
+        pompierGrid.setFields(nomField, prenomField, matriculeField);
+        pompierGrid.setCanResizeFields(true);
         refreshGrille();
-        this.addChild(countryGrid);
+        this.addChild(pompierGrid);
         this.setWidth100();
         this.setHeight100();
         this.draw();
     }
 
     public void refreshGrille(){
-        pompierData.getPompierRecords(countryGrid);
+        pompierData.getPompierRecords(pompierGrid);
     }
 
 

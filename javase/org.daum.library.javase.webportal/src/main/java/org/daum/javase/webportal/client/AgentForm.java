@@ -24,12 +24,15 @@ public class AgentForm extends HLayout{
     private Label labelAjoutSucces = new Label("Agent ajoute avec succes");
     private Label labelAjoutFail = new Label("Probleme lors de l'ajout de l'agent");
     private Agent agentEdited;
+    private DynamicForm form;
+    private TextItem nomItem, prenomItem, matriculeItem;
+    private PasswordItem passwordItem;
 
 
     public AgentForm(){
 
 
-        final DynamicForm form = new DynamicForm();
+        form = new DynamicForm();
         form.setTop(50);
         form.setLeft(50);
         form.setWidth(250);
@@ -51,19 +54,19 @@ public class AgentForm extends HLayout{
         header.setDefaultValue("Ajout d'un agent");
 
 
-        final TextItem nomItem = new TextItem();
+        nomItem = new TextItem();
         nomItem.setTitle("Nom");
         nomItem.setRequired(true);
 
-        final TextItem prenomItem = new TextItem();
+        prenomItem = new TextItem();
         prenomItem.setTitle("Prenom");
         prenomItem.setRequired(true);
 
-        final TextItem matriculeItem = new TextItem();
+        matriculeItem = new TextItem();
         matriculeItem.setTitle("Matricule");
         matriculeItem.setRequired(true);
 
-        final PasswordItem passwordItem = new PasswordItem();
+        passwordItem = new PasswordItem();
         passwordItem.setTitle("Password");
         passwordItem.setRequired(true);
 
@@ -106,7 +109,7 @@ public class AgentForm extends HLayout{
     public AgentForm(Agent agent){
         agentEdited = agent;
 
-        final DynamicForm form = new DynamicForm();
+        form = new DynamicForm();
         form.setTop(50);
         form.setLeft(50);
         form.setWidth(250);
@@ -128,22 +131,22 @@ public class AgentForm extends HLayout{
         header.setDefaultValue("Edition d'un agent");
 
 
-        final TextItem nomItem = new TextItem();
+        nomItem = new TextItem();
         nomItem.setTitle("Nom");
         nomItem.setRequired(true);
         nomItem.setValue(agent.getNom());
 
-        final TextItem prenomItem = new TextItem();
+        prenomItem = new TextItem();
         prenomItem.setTitle("Prenom");
         prenomItem.setRequired(true);
         prenomItem.setValue(agent.getPrenom());
 
-        final TextItem matriculeItem = new TextItem();
+        matriculeItem = new TextItem();
         matriculeItem.setTitle("Matricule");
         matriculeItem.setRequired(true);
         matriculeItem.setValue(agent.getMatricule());
 
-        final PasswordItem passwordItem = new PasswordItem();
+        passwordItem = new PasswordItem();
         passwordItem.setTitle("Password");
 
         ButtonItem btnValider = new ButtonItem("Valider");
@@ -189,4 +192,7 @@ public class AgentForm extends HLayout{
         this.draw();
     }
 
+    public void reset() {
+        form.clearValues();
+    }
 }

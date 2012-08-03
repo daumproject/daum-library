@@ -2,6 +2,8 @@ package org.daum.javase.webportal.client;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import org.daum.javase.webportal.shared.Agent;
+import org.daum.javase.webportal.shared.Intervention;
+import org.daum.javase.webportal.shared.Personne;
 
 import java.util.List;
 
@@ -21,6 +23,8 @@ public interface AuthentificationServiceAsync {
     void  getAllAgent(AsyncCallback<List<Agent>> callback);
     void editAgent(Agent agentEdited, AsyncCallback<Agent> callback);
     void getAgent(String id, AsyncCallback<Agent> callback);
+    void deleteAgent(String id, AsyncCallback<Void> asyncCallback);
+    void createIntervention(String description, Personne requerant, String codePostal, String adresse, List<String> listeIdAgent, AsyncCallback<Intervention> asyncCallback);
 
-    void delete(String id, AsyncCallback<Void> asyncCallback);
+    void getAllIntervention(AsyncCallback<List<Intervention>> asyncCallback);
 }

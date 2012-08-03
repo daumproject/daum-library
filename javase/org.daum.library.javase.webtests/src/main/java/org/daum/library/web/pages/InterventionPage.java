@@ -1,6 +1,7 @@
 package org.daum.library.web.pages;
 
 import org.daum.common.genmodel.*;
+import org.daum.common.genmodel.impl.InterventionImpl;
 import org.daum.common.model.api.Demand;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSession;

@@ -10,8 +10,9 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * To change this template use File | Settings | File Templates.
  */
 public class Affectation implements IsSerializable {
+
     private String id;
-    private Moyens moyens;
+    private String idMoyen;
 
     public Affectation(){
 
@@ -25,11 +26,11 @@ public class Affectation implements IsSerializable {
         this.id = id;
     }
 
-    public Moyens getMoyens() {
-        return moyens;
+    public String getIdMoyen() {
+        return idMoyen;
     }
 
-    public void setMoyens(Moyens moyens) {
-        this.moyens = moyens;
+    public void setIdMoyen(String idMoyen) {
+        this.idMoyen = idMoyen;
     }
 }

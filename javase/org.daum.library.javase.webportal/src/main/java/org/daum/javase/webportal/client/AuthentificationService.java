@@ -3,6 +3,8 @@ package org.daum.javase.webportal.client;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import org.daum.javase.webportal.shared.Agent;
+import org.daum.javase.webportal.shared.Intervention;
+import org.daum.javase.webportal.shared.Personne;
 
 import java.util.List;
 
@@ -31,5 +33,9 @@ public interface AuthentificationService extends RemoteService {
 
     public Agent getAgent(String id);
 
-    public void delete(String id);
+    public void deleteAgent(String id);
+
+    public Intervention createIntervention(String description, Personne requerant, String codePostal, String adresse, List<String> listeIdAgent);
+
+    public List<Intervention> getAllIntervention();
 }
