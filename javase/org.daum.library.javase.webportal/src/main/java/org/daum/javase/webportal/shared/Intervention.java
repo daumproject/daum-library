@@ -2,6 +2,7 @@ package org.daum.javase.webportal.shared;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,10 +18,12 @@ public class Intervention implements IsSerializable {
     private String adresse;
     private String codePostal;
     private String ville;
-    private Personne requerant;
+    private String idRequerant;
     private String codeSinistre;
-    private List<Detachement> detachement;
-    private List<Personne> listeVictime;
+    private List<String> listeIdDetachement = new ArrayList<String>();
+    private List<String> listeIdVictime = new ArrayList<String>();
+    private String idDetachement;
+    private String description;
 
 
     public Intervention(){
@@ -33,22 +36,6 @@ public class Intervention implements IsSerializable {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public Personne getRequerant() {
-        return requerant;
-    }
-
-    public void setRequerant(Personne requerant) {
-        this.requerant = requerant;
-    }
-
-    public List<Detachement> getDetachement() {
-        return detachement;
-    }
-
-    public void setDetachement(List<Detachement> detachement) {
-        this.detachement = detachement;
     }
 
     public String getAdresse() {
@@ -83,19 +70,47 @@ public class Intervention implements IsSerializable {
         this.codeSinistre = codeSinistre;
     }
 
-    public List<Personne> getListeVictime() {
-        return listeVictime;
+    public List<String> getListeIdDetachement() {
+        return listeIdDetachement;
     }
 
-    public void setListeVictime(List<Personne> listeVictime) {
-        this.listeVictime = listeVictime;
+    public void setListeIdDetachement(List<String> listeIdDetachement) {
+        this.listeIdDetachement = listeIdDetachement;
     }
 
+    public List<String> getListeIdVictime() {
+        return listeIdVictime;
+    }
 
+    public void setListeIdVictime(List<String> listeIdVictime) {
+        this.listeIdVictime = listeIdVictime;
+    }
 
+    public void addVictime(String idVictime){
+        listeIdVictime.add(idVictime);
+    }
 
+    public String getIdRequerant() {
+        return idRequerant;
+    }
 
+    public void setIdRequerant(String idRequerant) {
+        this.idRequerant = idRequerant;
+    }
 
+    public String getIdDetachement() {
+        return idDetachement;
+    }
 
+    public void setIdDetachement(String idDetachement) {
+        this.idDetachement = idDetachement;
+    }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }

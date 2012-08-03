@@ -22,6 +22,8 @@ trait Intervention extends org.daum.common.genmodel.SitacContainer {
   @Generated(strategy = GeneratedType.UUID)
   private var numeroIntervention : java.lang.String = ""
 
+  private var description : java.lang.String = ""
+
   private var code : org.daum.common.genmodel.CodeSinistre = _
 
   private var historique : Option[org.daum.common.genmodel.Historique] = null
@@ -41,6 +43,7 @@ trait Intervention extends org.daum.common.genmodel.SitacContainer {
   private lazy val infoTactics : scala.collection.mutable.ListBuffer[org.daum.common.genmodel.InfoTactic] = new scala.collection.mutable.ListBuffer[org.daum.common.genmodel.InfoTactic]()
 
 
+
   def getNumeroIntervention : java.lang.String = {
     numeroIntervention
   }
@@ -48,6 +51,15 @@ trait Intervention extends org.daum.common.genmodel.SitacContainer {
   def setNumeroIntervention(numeroIntervention : java.lang.String) {
     this.numeroIntervention = numeroIntervention
   }
+
+  def getDescription : java.lang.String = {
+    description
+  }
+
+  def setDescription(description : java.lang.String) {
+    this.description = description
+  }
+
 
 
   def getCode : org.daum.common.genmodel.CodeSinistre = {

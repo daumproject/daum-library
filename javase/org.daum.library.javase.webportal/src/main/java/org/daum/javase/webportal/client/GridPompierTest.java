@@ -135,7 +135,7 @@ public class GridPompierTest extends VLayout{
                                 @Override
                                 public void execute(Boolean aBoolean) {
                                     if(aBoolean){
-                                         loginService.delete(rollOverRecord.getAttribute("id"), new AsyncCallback<Void>(){
+                                         loginService.deleteAgent(rollOverRecord.getAttribute("id"), new AsyncCallback<Void>(){
 
                                              @Override
                                              public void onFailure(Throwable throwable) {

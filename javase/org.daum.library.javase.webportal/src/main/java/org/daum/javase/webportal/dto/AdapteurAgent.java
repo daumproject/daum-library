@@ -109,7 +109,7 @@ public class AdapteurAgent {
             agentShared.setMatricule(agentSitac.getMatricule());
             agentShared.setPassword(agentSitac.getPassword());
         } catch (PersistenceException e) {
-            logger.warn("Problem encountered while getting object "+ agentSitac.getNom());
+            logger.debug("Problem encountered while getting object "+ agentSitac.getNom());
         } finally {
            if(session != null)
                session.close();
@@ -134,7 +134,7 @@ public class AdapteurAgent {
                 listeAgents.add(agentTemp);
             }
         } catch (PersistenceException e) {
-            logger.error("Problem encountered while getting Agent List",e);
+            logger.debug("Problem encountered while getting Agent List",e);
         } finally {
             if(session != null)
                 session.close();
@@ -151,11 +151,27 @@ public class AdapteurAgent {
             agentSitac = session.get(AgentImpl.class, id);
             session.delete(agentSitac);
         } catch (PersistenceException e) {
-            logger.error("Problem encountered while delete Agent",e);
+            logger.debug("Problem encountered while delete Agent",e);
         } finally {
             if(session != null)
                 session.close();
         }
+    }
+
+    public org.daum.common.genmodel.Agent getAgent(String idAgent){
+        PersistenceSession session = null;
+        org.daum.common.genmodel.Agent agentSitac = null;
+        try {
+            session = factory.getSession();
+            logger.debug("idAGENT TEST =====> " + idAgent);
+            agentSitac = session.get(AgentImpl.class, idAgent);
+        } catch (PersistenceException e) {
+            logger.debug("Problem encountered while delete Agent",e);
+        } finally {
+            if(session != null)
+                session.close();
+        }
+        return agentSitac;
     }
 
 

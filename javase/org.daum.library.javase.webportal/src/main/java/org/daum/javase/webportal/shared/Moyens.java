@@ -13,26 +13,35 @@ import java.util.List;
  */
 public class Moyens implements IsSerializable {
 
-    private List<Agent> listeAgent;
-    private List<Materiel> listeMateriel;
+    private String id;
+    private List<String> listeIdAgent;
+    private List<String> listeIdMateriel;
 
     public Moyens(){
 
     }
 
-    public List<Agent> getListeAgent() {
-        return listeAgent;
+    public String getId() {
+        return id;
     }
 
-    public void setListeAgent(List<Agent> listeAgent) {
-        this.listeAgent = listeAgent;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public List<Materiel> getListeMateriel() {
-        return listeMateriel;
+    public List<String> getListeIdAgent() {
+        return listeIdAgent;
     }
 
-    public void setListeMateriel(List<Materiel> listeMateriel) {
-        this.listeMateriel = listeMateriel;
+    public void setListeIdAgent(List<String> listeIdAgent) {
+        this.listeIdAgent = listeIdAgent;
+    }
+
+    public List<String> getListeIdMateriel() {
+        return listeIdMateriel;
+    }
+
+    public void setListeIdMateriel(List<String> listeIdMateriel) {
+        this.listeIdMateriel = listeIdMateriel;
     }
 }

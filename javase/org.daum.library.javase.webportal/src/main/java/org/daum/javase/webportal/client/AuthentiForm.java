@@ -59,7 +59,7 @@ public class AuthentiForm extends VLayout{
 						public void onSuccess(Boolean result) {
 							if(result){
 								RootPanel.get().clear();
-								RootPanel.get().add(new AdministrationForm());
+								RootPanel.get().add(new MainGUI());
 							} else{
 								errorLoginPassword.setVisible(true);
 							}
