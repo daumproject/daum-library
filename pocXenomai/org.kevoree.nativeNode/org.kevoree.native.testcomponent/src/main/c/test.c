@@ -1,4 +1,4 @@
-#include "/home/jed/pocXenomai/org.kevoree.nativeNode/org.kevoree.nativeNode.native/src/main/c/component.h"
+#include "../../../../../org.kevoree.nativeNode/org.kevoree.nativeNode.native/src/main/c/component.h"
 #include <stdio.h>
 
 
@@ -8,7 +8,8 @@ int start()
 
 	while(1)
 	{
-		fprintf(stderr,"ALIVE \n");
+
+         // do someting !
 		sleep(1);
 	}
 }
@@ -27,37 +28,45 @@ int update()
 
 
 
-void input_port()
+
+ /********************** TODO GENERATE STUB  *******************/
+
+void output_port(char *input)
 {
-
-
-
+    process_output("output_port",input);
 }
 
-void trig_port()
-{
-int i=0;
 
-   if(ctx == NULL)
+void input_port(char *input)
+{
+    output_port(input);
+}
+
+
+void dispatch()
+{
+   int i=0,j=0;
+   if(ctx != NULL)
    {
-        fprintf(stderr,"ctx is null \n");
-   }else
-    {
-         fprintf(stderr,"port trigger %d \n",ctx->countPorts);
-       for(i=0;i<  ctx->countPorts;i++)
+       for(i=0;i<  ctx->inputs_count;i++)
        {
-         kmessage *msg = dequeue(ctx->ports[i].id);
-         if(msg !=NULL)
-         {
-            fprintf(stderr,"MSG !!");
-         } else
-         {
-                    fprintf(stderr,"NULL !!");
-         }
+          for(j=0;j<getQnum(ctx->inputs[i].id);j++)
+          {
+             kmessage *msg = dequeue(ctx->inputs[i].id);
+             if(msg !=NULL)
+                     {
+                        switch(i)
+                        {
+                        case 0:
+                           input_port(msg->value);
+                        break;
+                        }
+                     }
+          }
        }
-        }
-}
+  }
 
+}
 
 
 int main (int argc,char *argv[])
@@ -67,14 +76,10 @@ int main (int argc,char *argv[])
 	    key_t key =   atoi(argv[1]);
 
 	     bootstrap(key);
-
          register_start(start);
          register_stop(stop);
          register_update(update);
-
-         register_trigger_port(trig_port);
-
-
+         register_trigger_port(dispatch);
 	    ctx->start();
      }
 }

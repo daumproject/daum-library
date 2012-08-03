@@ -1,6 +1,6 @@
 package org.kevoree.nativeNode;
 
-import java.io.IOException;
+import javax.swing.event.EventListenerList;
 import java.util.TreeMap;
 
 /**
@@ -12,7 +12,8 @@ import java.util.TreeMap;
  */
 public class Handler {
 
-    private NativeHandler nativeHandler;
+    protected EventListenerList listenerList = new EventListenerList();
+    private NativeJNI nativeHandler;
     private String path;
     private  int key;
     private TreeMap<String,Integer> ports = new TreeMap<String, Integer>();
@@ -21,31 +22,76 @@ public class Handler {
     {
         this.key = key;
         this.path =path;
-        nativeHandler = new NativeHandler();
+        nativeHandler = new NativeJNI(this);
         nativeHandler.configureCL();
+        nativeHandler.init(key);
+        nativeHandler.register();
     }
 
-    public  void start()  {
-        nativeHandler.start(key,path);
+
+    public  void start() throws Exception {
+        if(nativeHandler.start(key,path) != 0){
+
+        }
+        //todo check started  remove sleep
+        Thread.sleep(2000);
     }
 
-    public void stop(){
+    public void stop() throws InterruptedException
+    {
+        Thread.sleep(3500);
         nativeHandler.stop(key);
     }
 
 
+    public void addEventListener (NativePortsListener listener) {
+        listenerList.add(NativePortsListener.class, listener);
+    }
+
+    public void removeEventListener (NativePortsListener listener) {
+        listenerList.remove(NativePortsListener.class, listener);
+    }
+
+
+    public void fireEvent(NativePortEvent evt,String msg)
+    {
+        Object[] listeners = listenerList.getListenerList();
+        for (int i = 0; i < listeners.length; i += 2)
+        {
+            if (evt instanceof NativePortEvent)
+            {
+                ((NativePortsListener) listeners[i + 1]).disptach(evt,msg);
+            }
+        }
+    }
     public void update(){
         nativeHandler.update(key);
     }
 
-    public void create_queue(String name){
-       int id= nativeHandler.create_queue(key,name);
-        if(id < 0){ System.out.println("ERROR"); }
+    public void create_input(String name)
+    {
+        int id= nativeHandler.create_input(key,name);
+        if(id < 0)
+        {
+            System.out.println("ERROR");
+        }
+        ports.put(name,id);
+    }
+
+    public void create_output(String name){
+        int id= nativeHandler.create_output(key, name);
+        if(id < 0)
+        {
+            System.out.println("ERROR");
+        }
         ports.put(name,id);
     }
     public void enqueue(String port,String msg)
     {
-        nativeHandler.enqueue(key,ports.get(port),msg);
+        if(nativeHandler.enqueue(key,ports.get(port),msg) != 0){
+            //error
+            System.out.println("error");
+        }
     }
 }
 

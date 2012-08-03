@@ -1,8 +1,10 @@
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <unistd.h>
-#include <signal.h>
 #include <stdlib.h>
+#include <sys/shm.h>
+#include <sys/stat.h>
+#include <pthread.h>
 #include "kqueue.h"
 
 
@@ -14,13 +16,15 @@ typedef struct _port {
 typedef struct _context
 {
     int pid;
-    int countPorts;
-    Ports ports[100];
+    int pid_jvm;
+    int inputs_count;
+    Ports inputs[100];
+    int outputs_count;
+    Ports outputs[100];
     void (*start) (void);
     void (*stop) (void);
     void (*update) (void);
     void (*trigger_port) (void);
-
 } Context;
 
 
@@ -30,7 +34,7 @@ int  bootstrap(key_t key);
 int start();
 int stop();
 int update();
-
+ int alive_component=0;
 int register_start( void* fn);
 int register_stop( void* fn);
 int register_update( void* fn);
@@ -38,8 +42,8 @@ int register_trigger_port( void* fn);
 
 #define SIG_STOP 14
 #define SIG_UPDATE 15
-#define SIG_TRIGGER_PORT 18
-
+#define SIG_TRIGGER_PORT 25
+#define SIG_OUTPUT 30
 
 struct sigaction sig_stop;
 struct sigaction sig_update;
@@ -47,7 +51,23 @@ struct sigaction sig_port;
 
 void sig_handler_stop(int sig)
 {
-   ctx->stop();
+
+    usleep(2000);
+    int i=0;
+    for(i=0;i<  ctx->inputs_count;i++)
+    {
+        if(destroy_queue(ctx->inputs[i].id) !=0){
+            //error
+        }
+     }
+         for(i=0;i<  ctx->outputs_count;i++)
+         {
+             if(destroy_queue(ctx->outputs[i].id) !=0){
+                 //error
+             }
+          }
+
+             ctx->stop();
 
    exit(sig);
 }
@@ -59,7 +79,8 @@ void sig_handler_update(int sig)
 
 void sig_handler_port(int sig)
 {
-   ctx->trigger_port();
+   //  fprintf(stderr," sig_handler_port %d \n", ctx->inputs_count);
+    ctx->trigger_port();
 }
 
 
@@ -79,13 +100,30 @@ int init_sig()
 
 }
 
-int  bootstrap(key_t key){
+
+
+void *manage_inputs(void *p)
+{
+     int i,j;
+    while(alive_component == 1)
+    {
+             ctx->trigger_port();
+              usleep(1000);
+
+    }
+
+    pthread_exit(NULL);
+}
+
+
+int  bootstrap(key_t key)
+{
         int shmid;
          void* ptr_mem_partagee;
 
         init_sig();
         /* create memory shared   */
-         shmid= shmget(key,sizeof(Context), 0666 | IPC_CREAT );
+          shmid = shmget(key,sizeof(Context),  S_IRUSR | S_IWUSR);
           if(shmid < 0)
               {
                   perror("shmid");
@@ -99,8 +137,36 @@ int  bootstrap(key_t key){
               }
         ctx = (Context*)ptr_mem_partagee;
         ctx->pid=getpid();
+
+           pthread_t callbacks;
+                  alive_component=1;
+                if(pthread_create (& callbacks, NULL,&manage_inputs, NULL) != 0){
+                    return -1;
+                }
 }
-int register_start( void* fn){
+
+
+
+
+void process_output(char *name,char *n_value)
+{
+     int i=0;
+   for(i=0;i<ctx->outputs_count;i++)
+   {
+       if(strcmp(ctx->outputs[i].name,name) == 0)
+       {
+         kmessage kmsg;
+            kmsg.type = 1;
+            strcpy(kmsg.value,n_value);
+            enqueue(ctx->outputs[i].id,kmsg);
+       break;
+       }
+     }
+
+}
+
+int register_start( void* fn)
+{
 	ctx->start=fn;
 	return 0;
 };

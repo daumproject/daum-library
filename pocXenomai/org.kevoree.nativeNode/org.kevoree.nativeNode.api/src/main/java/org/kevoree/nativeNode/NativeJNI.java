@@ -1,6 +1,7 @@
 package org.kevoree.nativeNode;
 
 import java.io.*;
+import java.util.EventObject;
 import java.util.Random;
 
 /**
@@ -10,26 +11,30 @@ import java.util.Random;
  * Time: 16:27
  * To change this template use File | Settings | File Templates.
  */
-public class NativeHandler {
+public class NativeJNI extends EventObject implements NativePortEvent{
 
+    public native int init(int key);
+    public native boolean register();
     public native int start(int key,String path);
     public native int stop(int key);
     public native int update(int key);
-
-    public native boolean register();
-
-    public native int create_queue(int key,String name);
-
-
+    public native int create_input(int key,String name);
+    public native int create_output(int key,String name);
     public native int enqueue(int key,int port,String msg);
 
+    private Handler handler=null;
 
-    public void dispatchEvent(String port,String msg)
+    public NativeJNI(Handler obj)
     {
-
-
+        super(obj);
+        this.handler =obj;
     }
 
+    public void dispatchEvent(String evt)
+    {
+
+        handler.fireEvent(this,evt);
+    }
     public String configureCL()
     {
         try
@@ -100,7 +105,7 @@ public class NativeHandler {
     }
 
     public static String copyFileFromStream(String inputFile, String path, String targetName) throws IOException {
-        InputStream inputStream = NativeHandler.class.getClassLoader().getResourceAsStream(inputFile);
+        InputStream inputStream = NativeJNI.class.getClassLoader().getResourceAsStream(inputFile);
         if (inputStream != null) {
             File copy = new File(path + File.separator + targetName);
             copy.deleteOnExit();
@@ -121,4 +126,8 @@ public class NativeHandler {
         return null;
     }
 
+    @Override
+    public String getMessage() {
+        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    }
 }

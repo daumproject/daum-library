@@ -69,7 +69,7 @@
                             <workingDirectory>${basedir}</workingDirectory>
                             <javahOutputFileName>nativelib.h</javahOutputFileName>
                             <javahClassNames>
-                                <javahClassName>org.kevoree.nativeNode.NativeHandler</javahClassName>
+                                <javahClassName>org.kevoree.nativeNode.NativeJNI</javahClassName>
                             </javahClassNames>
                         </configuration>
                         <goals>
@@ -88,7 +88,7 @@
                         <phase>install</phase>
                         <configuration>
                             <tasks>
-                                <copy tofile="/home/jed/pocXenomai/org.kevoree.nativeNode/org.kevoree.nativeNode.api/src/main/resources/nix32/native.so">
+                                <copy tofile="/home/jed/DAUM_PROJECT/daum-library/pocXenomai/org.kevoree.nativeNode/org.kevoree.nativeNode.api/src/main/resources/nix32/native.so">
                                     <fileset file="${project.build.directory}/org.kevoree.nativeNode.native.nix32.so"/>
                                 </copy>
                             </tasks>

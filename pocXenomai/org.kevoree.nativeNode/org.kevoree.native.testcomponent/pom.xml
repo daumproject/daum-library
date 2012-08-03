@@ -30,38 +30,12 @@
                                 <fileName>test.c</fileName>
                             </fileNames>
                         </source>
-                        <source>
-                            <directory>src/main/include</directory>
-                        </source>
-
-                        <source>
-                            <directory>>/home/jed/pocXenomai/org.kevoree.nativeNode/org.kevoree.nativeNode.native/src/main/c</directory>
-                        </source>
-
                     </sources>
-                    <linkerStartOptions>
-                        <linkerStartOption> -lpthread -llog4c </linkerStartOption>
-                    </linkerStartOptions>
+                    <linkerEndOptions>
+                        <linkerEndOption> -lpthread</linkerEndOption>
+                    </linkerEndOptions>
                 </configuration>
             </plugin>
-            <!--
-      <plugin>
-          <groupId>org.codehaus.mojo</groupId>
-          <artifactId>exec-maven-plugin</artifactId>
-          <version>1.2.1</version>
-          <executions>
-              <execution>
-                  <phase>generate-resources</phase>
-                  <goals>
-                      <goal>exec</goal>
-                  </goals>
-              </execution>
-          </executions>
-          <configuration>
-              <executable>${builder}</executable>
-              <workingDirectory>${project.build.directory}</workingDirectory>
-          </configuration>
-      </plugin>      -->
         </plugins>
     </build>
 </project>
