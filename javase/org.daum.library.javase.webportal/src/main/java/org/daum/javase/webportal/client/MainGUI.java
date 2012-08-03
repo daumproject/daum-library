@@ -15,7 +15,7 @@ public class MainGUI extends HLayout{
 
 	public MainGUI(){
 		this.setWidth100();
-		this.setHeight100();
+		this.setHeight("95%");
 		AgentDragnDrop agentWindow = new AgentDragnDrop();
 		InterventionForm interventionWindow = new InterventionForm();
 		MaterielDragnDrop materielWindow = new MaterielDragnDrop();
