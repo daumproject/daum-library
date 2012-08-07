@@ -32,9 +32,10 @@ public class NativeJNI extends EventObject implements NativePortEvent{
 
     public void dispatchEvent(String evt)
     {
-
         handler.fireEvent(this,evt);
     }
+
+
     public String configureCL()
     {
         try

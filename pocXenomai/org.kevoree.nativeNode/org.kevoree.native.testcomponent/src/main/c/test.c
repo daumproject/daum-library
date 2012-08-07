@@ -6,11 +6,11 @@ int start()
 {
 	fprintf(stderr,"Component starting \n");
 
+
+
 	while(1)
 	{
-
-         // do someting !
-		sleep(1);
+        sleep(1000000);
 	}
 }
 
@@ -27,45 +27,34 @@ int update()
 }
 
 
-
-
  /********************** TODO GENERATE STUB  *******************/
 
-void output_port(char *input)
+void output_port(void *input)
 {
-    process_output("output_port",input);
+    process_output(0,input);
 }
 
 
-void input_port(char *input)
+void input_port(void *input)
 {
-    output_port(input);
+     fprintf(stderr,"IN %s \n",input);
 }
 
 
-void dispatch()
+void dispatch(int id_queue)
 {
-   int i=0,j=0;
-   if(ctx != NULL)
-   {
-       for(i=0;i<  ctx->inputs_count;i++)
-       {
-          for(j=0;j<getQnum(ctx->inputs[i].id);j++)
-          {
-             kmessage *msg = dequeue(ctx->inputs[i].id);
-             if(msg !=NULL)
-                     {
-                        switch(i)
-                        {
-                        case 0:
-                           input_port(msg->value);
-                        break;
-                        }
-                     }
-          }
-       }
-  }
+   int method=0;
+   kmessage *msg = dequeue(id_queue);
 
+  if(msg !=NULL)
+  {
+    switch(method)
+    {
+        case 0:
+               input_port(msg->value);
+        break;
+    }
+   }
 }
 
 
@@ -79,7 +68,7 @@ int main (int argc,char *argv[])
          register_start(start);
          register_stop(stop);
          register_update(update);
-         register_trigger_port(dispatch);
-	    ctx->start();
+         register_dispatch(dispatch);
+	     ctx->start();
      }
 }

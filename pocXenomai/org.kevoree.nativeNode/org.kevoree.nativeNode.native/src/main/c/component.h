@@ -1,193 +1,182 @@
+#ifndef COMPONENT_H
+#define COMPONENT_H
 #include <sys/ipc.h>
 #include <sys/shm.h>
-#include <unistd.h>
 #include <stdlib.h>
 #include <sys/shm.h>
 #include <sys/stat.h>
 #include <pthread.h>
 #include "kqueue.h"
+#include "events.h"
 
 
-typedef struct _port {
-    char name[32];
-    int id;
-}  Ports;
+typedef struct _port
+{
+  char name[32];
+  int id;
+} Ports;
 
 typedef struct _context
 {
-    int pid;
-    int pid_jvm;
-    int inputs_count;
-    Ports inputs[100];
-    int outputs_count;
-    Ports outputs[100];
-    void (*start) (void);
-    void (*stop) (void);
-    void (*update) (void);
-    void (*trigger_port) (void);
+  int pid;
+  int pid_jvm;
+  int inputs_count;
+  Ports inputs[100];
+  int outputs_count;
+  Ports outputs[100];
+  void (*start) (void);
+  void (*stop) (void);
+  void (*update) (void);
+  void (*dispatch) (int id_queue);
 } Context;
 
 
+int bootstrap (key_t key);
+int start ();
+int stop ();
+int update ();
+int alive_component = 0;
+int register_start (void *fn);
+int register_stop (void *fn);
+int register_update (void *fn);
+int register_trigger_port (void *fn);
+
 Context *ctx;
+EventBroker component_event_broker;
+Publisher component_event_publisher;
 
-int  bootstrap(key_t key);
-int start();
-int stop();
-int update();
- int alive_component=0;
-int register_start( void* fn);
-int register_stop( void* fn);
-int register_update( void* fn);
-int register_trigger_port( void* fn);
 
-#define SIG_STOP 14
-#define SIG_UPDATE 15
-#define SIG_TRIGGER_PORT 25
-#define SIG_OUTPUT 30
-
-struct sigaction sig_stop;
-struct sigaction sig_update;
-struct sigaction sig_port;
-
-void sig_handler_stop(int sig)
+void notify(Events ev)
 {
+    int i;
+    switch(ev.ev_type){
 
-    usleep(2000);
-    int i=0;
-    for(i=0;i<  ctx->inputs_count;i++)
-    {
-        if(destroy_queue(ctx->inputs[i].id) !=0){
-            //error
-        }
-     }
-         for(i=0;i<  ctx->outputs_count;i++)
-         {
-             if(destroy_queue(ctx->outputs[i].id) !=0){
-                 //error
-             }
-          }
+        case EV_PORT_INPUT:
+                 ctx->dispatch (ev.id_queue);
+        break;
 
-             ctx->stop();
+        case EV_PORT_OUTPUT:
 
-   exit(sig);
-}
+        break;
 
-void sig_handler_update(int sig)
-{
-   ctx->update();
-}
+        case EV_UPDATE:
+              ctx->update ();
+        break;
 
-void sig_handler_port(int sig)
-{
-   //  fprintf(stderr," sig_handler_port %d \n", ctx->inputs_count);
-    ctx->trigger_port();
-}
+        case EV_STOP:
 
+        for (i = 0; i < ctx->inputs_count; i++)
+            {
+              if (destroy_queue (ctx->inputs[i].id) != 0)
+            {
+              //error
+            }
+            }
+          for (i = 0; i < ctx->outputs_count; i++)
+            {
+              if (destroy_queue (ctx->outputs[i].id) != 0)
+            {
+              //error
+            }
+            }
 
-int init_sig()
-{
-       sig_stop.sa_handler = sig_handler_stop;
-       sigemptyset(&sig_stop.sa_mask);
-       sigaction(SIG_STOP, &sig_stop, NULL);
-
-       sig_update.sa_handler = sig_handler_update;
-       sigemptyset(&sig_update.sa_mask);
-       sigaction(SIG_UPDATE, &sig_update, NULL);
-
-      sig_port.sa_handler = sig_handler_port;
-      sigemptyset(&sig_port.sa_mask);
-      sigaction(SIG_TRIGGER_PORT, &sig_port, NULL);
-
-}
-
-
-
-void *manage_inputs(void *p)
-{
-     int i,j;
-    while(alive_component == 1)
-    {
-             ctx->trigger_port();
-              usleep(1000);
+          ctx->stop ();
+          close(component_event_broker.sckServer);
+          exit (0);
+        break;
 
     }
-
-    pthread_exit(NULL);
 }
 
 
-int  bootstrap(key_t key)
+void *   t_broker (void *p)
 {
-        int shmid;
-         void* ptr_mem_partagee;
+  createEventBroker (&component_event_broker);
+  pthread_exit (NULL);
+}
 
-        init_sig();
-        /* create memory shared   */
-          shmid = shmget(key,sizeof(Context),  S_IRUSR | S_IWUSR);
-          if(shmid < 0)
-              {
-                  perror("shmid");
-                  return -1;
-              }
 
-              if ((ptr_mem_partagee = shmat(shmid, NULL, 0)) == (void*) -1)
-              {
-              	perror("shmat");
-              	exit(1);
-              }
-        ctx = (Context*)ptr_mem_partagee;
-        ctx->pid=getpid();
+int
+bootstrap (key_t key)
+{
+  int shmid;
+  void *ptr_mem_partagee;
+  pthread_t t_event_broker;
 
-           pthread_t callbacks;
-                  alive_component=1;
-                if(pthread_create (& callbacks, NULL,&manage_inputs, NULL) != 0){
-                    return -1;
-                }
+  /* create memory shared   */
+  shmid = shmget (key, sizeof (Context), S_IRUSR | S_IWUSR);
+  if (shmid < 0)
+    {
+      perror ("shmid");
+      return -1;
+    }
+
+  if ((ptr_mem_partagee = shmat (shmid, NULL, 0)) == (void *) -1)
+    {
+      perror ("shmat");
+      exit (1);
+    }
+    ctx = (Context *) ptr_mem_partagee;
+    ctx->pid = getpid ();
+
+    component_event_broker.port = 8085;
+    component_event_broker.dispatch = &notify;
+
+    component_event_publisher.port = 8086;
+    component_event_publisher.socket = -1;
+    strcpy (component_event_publisher.hostname, "127.0.0.1");
+
+  if (pthread_create (&t_event_broker, NULL, &t_broker, NULL) != 0)
+    {
+      return -1;
+    }
+
 }
 
 
 
-
-void process_output(char *name,char *n_value)
+void  process_output (int id_output, void *n_value)
 {
-     int i=0;
-   for(i=0;i<ctx->outputs_count;i++)
-   {
-       if(strcmp(ctx->outputs[i].name,name) == 0)
-       {
-         kmessage kmsg;
-            kmsg.type = 1;
-            strcpy(kmsg.value,n_value);
-            enqueue(ctx->outputs[i].id,kmsg);
-       break;
-       }
-     }
+	  kmessage kmsg;
+	  kmsg.type = 1;
+	  strcpy (kmsg.value, n_value);
+	  enqueue (ctx->outputs[id_output].id, kmsg);
 
+	  Events      ev;
+      ev.ev_type = EV_PORT_OUTPUT;
+      ev.id_queue =   ctx->outputs[id_output].id;
+      send_event(component_event_publisher,ev);
 }
 
-int register_start( void* fn)
+int
+register_start (void *fn)
 {
-	ctx->start=fn;
-	return 0;
+  ctx->start = fn;
+  return 0;
 };
 
 
-int register_stop( void* fn)
+int
+register_stop (void *fn)
 {
-	ctx->stop=fn;
-	return 0;
+  ctx->stop = fn;
+  return 0;
 };
 
 
-int register_update( void* fn)
+int
+register_update (void *fn)
 {
-	ctx->update=fn;
-	return 0;
+  ctx->update = fn;
+  return 0;
 };
 
 
-int register_trigger_port( void* fn)
+int
+register_dispatch (void *fn)
 {
-	ctx->trigger_port=fn;
-	return 0;
+  ctx->dispatch = fn;
+  return 0;
 };
+
+#endif

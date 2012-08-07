@@ -1,3 +1,6 @@
+#ifndef QUEUE_H
+#define QUEUE_H
+
 #include<string.h>
 #include<time.h>
 #include<sys/ipc.h>
@@ -13,7 +16,7 @@ extern int errno;       // error NO.
 typedef struct _kmsg
 {
          long    type;
-         char value[512];
+         char value[1024];
  } kmessage;
 
 
@@ -117,3 +120,5 @@ kmessage* dequeue(int msgqid)
     }
     return msg;
 }
+
+#endif

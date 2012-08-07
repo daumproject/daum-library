@@ -29,21 +29,20 @@ public class Test {
         poc.start();
 
         poc.update();
+
         Thread t = new Thread(new Runnable() {
            @Override
            public void run()
            {
-               for(int i=0;i<100;i++)
+               for(int i=0;i<50;i++)
                {
-                   poc.enqueue("input_port","hello world "+i);
+                   poc.enqueue("input_port","hello world hello worldhello worldhello worldhello worldhello world hello worldhello worldhello worldhello worldhello worldhello world "+i);
                }
            }
        });
         t.start();
 
         t.join();
-
-
 
 
         poc.stop();
