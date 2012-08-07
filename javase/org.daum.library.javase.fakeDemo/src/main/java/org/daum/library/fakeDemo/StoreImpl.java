@@ -5,6 +5,7 @@ import org.daum.library.ormH.persistence.Orhm;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.Cache;
 import org.daum.library.replica.cache.ReplicaService;
+import org.daum.library.replica.cache.VersionedValue;
 
 
 import java.util.HashMap;
@@ -45,7 +46,8 @@ public class StoreImpl implements PersistenceSessionStore {
     @Override
     public Object get(Orhm id) throws PersistenceException {
         Cache cache = replicatingService.getCache(id.getCacheName());
-        return cache.get(id.getId()).getValue();
+        VersionedValue data = cache.get(id.getId());
+        return data.getObject();
     }
 
     @Override
@@ -56,7 +58,7 @@ public class StoreImpl implements PersistenceSessionStore {
             HashMap<Object,Object> result = new HashMap<Object, Object>();
             for( Object key : cache.keySet())
             {
-                result.put(key,cache.get(key).getValue());
+                result.put(key,((VersionedValue)cache.get(key)).getObject());
             }       return result;
         }
           return  null;
