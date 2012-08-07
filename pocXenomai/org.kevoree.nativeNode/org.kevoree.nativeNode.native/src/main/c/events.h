@@ -13,7 +13,7 @@
 #include <arpa/inet.h>
 
 
-#define FILE_ATTENTE 100
+#define FILE_ATTENTE 15
 
  typedef enum
    {
@@ -26,7 +26,7 @@
  typedef struct Events
  {
      Type ev_type;
-     int id_queue;
+     int id_port;
  } Events;
 
 /**

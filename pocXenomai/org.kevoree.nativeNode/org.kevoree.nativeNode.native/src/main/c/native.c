@@ -21,9 +21,9 @@ jmethodID g_mid;
 
 Publisher     native_event_publisher;
 EventBroker   native_event_broker;
+int alive=0;
 
-
-void   process (char *port, void *msg)
+void   process (char *queue, void *msg)
 {
   JNIEnv *g_env;
   int getEnvStat = (*g_vm)->GetEnv (g_vm, (void **) &g_env, JNI_VERSION_1_6);
@@ -44,13 +44,38 @@ void   process (char *port, void *msg)
       printf ("GetEnv: version not supported\n");
     }
 
-  (*g_env)->CallVoidMethod (g_env, g_obj, g_mid,
-			    (*g_env)->NewStringUTF (g_env, msg));
+  (*g_env)->CallVoidMethod (g_env, g_obj, g_mid,(*g_env)->NewStringUTF (g_env, queue), (*g_env)->NewStringUTF (g_env, msg));
   if ((*g_env)->ExceptionCheck (g_env))
     {
       (*g_env)->ExceptionDescribe (g_env);
     }
   (*g_vm)->DetachCurrentThread (g_vm);
+}
+
+   // todo notify
+void *manage_callbacks(void *p)
+{
+     ctx = (Context*)ptr_mem_partagee;
+     int i,j;
+    while(alive ==1)
+    {
+          if(ctx != NULL)
+          {
+              for(i=0;i<  ctx->outputs_count;i++)
+              {
+                 for(j=0;j<getQnum(ctx->outputs[i].id);j++)
+                 {
+                    kmessage *msg = dequeue(ctx->outputs[i].id);
+                    if(msg !=NULL)
+                      {
+                              process(ctx->outputs[i].name,msg->value);
+                        }
+                 }
+              }
+              usleep(1000);
+         }
+    }
+    pthread_exit(NULL);
 }
 
 
@@ -65,7 +90,11 @@ JNI_OnLoad (JavaVM * jvm, void *reserved)
 JNIEXPORT jboolean JNICALL
 Java_org_kevoree_nativeNode_NativeJNI_register (JNIEnv * env, jobject obj)
 {
-
+    pthread_t callbacks;
+    alive = 1;
+        if(pthread_create (& callbacks, NULL,&manage_callbacks, NULL) != 0){
+            return -1;
+        }
   // convert local to global reference
   g_obj = (*env)->NewGlobalRef (env, obj);
   // save refs for callback
@@ -76,9 +105,10 @@ Java_org_kevoree_nativeNode_NativeJNI_register (JNIEnv * env, jobject obj)
       printf ("Failed to find class \n");
     }
 
-  g_mid =
-    (*env)->GetMethodID (env, g_clazz, "dispatchEvent",
-			 "(Ljava/lang/String;)V");
+//   (*env)->GetMethodID (env, g_clazz, "dispatchEvent", "(ILjava/lang/String;)V");    (int v,string)
+// "(Ljava/lang/String;Ljava/lang/String;)V")
+//http://docs.oracle.com/javase/1.5.0/docs/guide/jni/spec/types.html#wp276
+  g_mid =       (*env)->GetMethodID (env, g_clazz, "dispatchEvent", "(Ljava/lang/String;Ljava/lang/String;)V");
   if (g_mid == NULL)
     {
       printf ("Unable to get method ref");
@@ -98,12 +128,12 @@ void native_notify(Events ev)
     {
         case EV_PORT_OUTPUT:
 
-         for (j = 0; j < getQnum (ev.id_queue); j++)
+         for (j = 0; j < getQnum (ev.id_port); j++)
 		{
-		         msg = dequeue (ev.id_queue);
+		         msg = dequeue (ev.id_port);
              	 if (msg != NULL)
                  {
-             		    process (ctx->outputs[ev.id_queue].name, msg->value);
+             		    process (ctx->outputs[ev.id_port].name, msg->value);
              	  }
 		}
 		break;
@@ -118,15 +148,12 @@ void *   t_native_broker (void *p)
 }
 
 
-JNIEXPORT jint JNICALL Java_org_kevoree_nativeNode_NativeJNI_init (JNIEnv * env, jobject obj, jint key)
+JNIEXPORT jint JNICALL Java_org_kevoree_nativeNode_NativeJNI_init (JNIEnv * env, jobject obj, jint key,jint port)
 {
-
+  /*
    native_event_broker.port = 8086;
    native_event_broker.dispatch = &native_notify;
 
-   native_event_publisher.port = 8085;
-   native_event_publisher.socket = -1;
-   strcpy (native_event_publisher.hostname, "127.0.0.1");
 
   pthread_t t_event_broker;
 
@@ -134,6 +161,10 @@ JNIEXPORT jint JNICALL Java_org_kevoree_nativeNode_NativeJNI_init (JNIEnv * env,
     {
       return -1;
     }
+        */
+ native_event_publisher.port = port;
+ native_event_publisher.socket = -1;
+ strcpy (native_event_publisher.hostname, "127.0.0.1");
 
   // create memory shared
   shmid = shmget (key, sizeof (Context), IPC_CREAT | S_IRUSR | S_IWUSR);
@@ -154,7 +185,6 @@ JNIEXPORT jint JNICALL Java_org_kevoree_nativeNode_NativeJNI_init (JNIEnv * env,
   ctx->outputs_count = 0;
   ctx->inputs_count = 0;
 
-
   ctx->pid_jvm = getpid ();
 
   //    fprintf (stderr,"shared memory attached at address %p\n", ptr_mem_partagee);
@@ -168,6 +198,7 @@ Java_org_kevoree_nativeNode_NativeJNI_start (JNIEnv * env, jobject obj,
 
   const char *n_path_binary = (*env)->GetStringUTFChars (env, path_binary, 0);
   char cipckey[25];
+    char port[25];
   int pid;
   switch (pid = fork ())
     {
@@ -175,7 +206,8 @@ Java_org_kevoree_nativeNode_NativeJNI_start (JNIEnv * env, jobject obj,
       return -1;
     case 0:
       sprintf (cipckey, "%d", key);
-      if (execl (n_path_binary, n_path_binary, cipckey, NULL) != 0)
+      sprintf(port,"%d", native_event_publisher.port );
+      if (execl (n_path_binary, n_path_binary, cipckey,port, NULL) != 0)
 	{
 	  perror ("execlp");
 	  return -1;
@@ -188,17 +220,16 @@ Java_org_kevoree_nativeNode_NativeJNI_start (JNIEnv * env, jobject obj,
 
 
 
-JNIEXPORT jint JNICALL
-Java_org_kevoree_nativeNode_NativeJNI_stop (JNIEnv * env, jobject obj,
+JNIEXPORT jint JNICALL   Java_org_kevoree_nativeNode_NativeJNI_stop (JNIEnv * env, jobject obj,
 					    jint key)
 {
 
   ctx = (Context *) ptr_mem_partagee;
-
+  alive =0;
   Events      ev;
   ev.ev_type = EV_STOP;
 
-   send_event(native_event_publisher,ev);
+  send_event(native_event_publisher,ev);
 
 
   shmdt (ptr_mem_partagee);	/* detach segment */
@@ -231,11 +262,10 @@ Java_org_kevoree_nativeNode_NativeJNI_create_1input (JNIEnv * env,  						     j
   strcpy (ctx->inputs[ctx->inputs_count].name, n_port_name);
   ctx->inputs[ctx->inputs_count].id = id_queue;
   ctx->inputs_count = ctx->inputs_count + 1;
-  return id_queue;
+  return   ctx->inputs_count-1;
 }
 
-JNIEXPORT jint JNICALL
-Java_org_kevoree_nativeNode_NativeJNI_create_1output (JNIEnv * env,
+JNIEXPORT jint JNICALL    Java_org_kevoree_nativeNode_NativeJNI_create_1output (JNIEnv * env,
 						      jobject obj, jint key,
 						      jstring queue)
 {
@@ -245,23 +275,36 @@ Java_org_kevoree_nativeNode_NativeJNI_create_1output (JNIEnv * env,
   strcpy (ctx->outputs[ctx->outputs_count].name, n_port_name);
   ctx->outputs[ctx->outputs_count].id = id_queue;
   ctx->outputs_count = ctx->outputs_count + 1;
-  return id_queue;
+  return  ctx->outputs_count-1;
 }
 
-JNIEXPORT jint JNICALL Java_org_kevoree_nativeNode_NativeJNI_enqueue (JNIEnv * env, jobject obj,  jint key, jint id_queue,    jstring msg)
+JNIEXPORT jint JNICALL Java_org_kevoree_nativeNode_NativeJNI_enqueue (JNIEnv * env, jobject obj,  jint key, jint id_port,    jstring msg)
 {
-  const char *n_value = (*env)->GetStringUTFChars (env, msg, 0);
-  kmessage kmsg;
-  kmsg.type = 1;
-  strcpy (kmsg.value, n_value);
   ctx = (Context *) ptr_mem_partagee;
-  enqueue (id_queue, kmsg);
 
-  Events      ev;
-  ev.ev_type = EV_PORT_INPUT;
-  ev.id_queue =   id_queue;
+  if(ctx != NULL){
 
-    send_event(native_event_publisher,ev);
-  return 0;
+     const char *n_value = (*env)->GetStringUTFChars (env, msg, 0);
+      kmessage kmsg;
+      kmsg.type = 1;
+      strcpy (kmsg.value, n_value);
+
+      enqueue (ctx->inputs[id_port].id, kmsg);
+
+      Events      ev;
+      ev.ev_type = EV_PORT_INPUT;
+      ev.id_port =   id_port;
+
+        send_event(native_event_publisher,ev);
+
+
+      return 0;
+
+  } else
+  {
+
+  return -1;
+  }
+
 
 }

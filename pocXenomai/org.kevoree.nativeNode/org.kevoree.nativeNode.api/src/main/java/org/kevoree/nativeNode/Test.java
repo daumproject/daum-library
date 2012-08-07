@@ -11,18 +11,23 @@ public class Test {
 
         String binary =   "/home/jed/DAUM_PROJECT/daum-library/pocXenomai/org.kevoree.nativeNode/org.kevoree.native.testcomponent/target/org.kevoree.native.testcomponent.uexe";
 
-        final Handler  poc = new Handler(ipc_key,binary);
+        final Handler  poc = new Handler(ipc_key,9014,binary);
 
         poc.create_input("input_port");
+
         poc.create_output("output_port");
 
+
+        /*
+         System.out.println(poc.GenerateInputsPorts());
+        System.out.println(poc.generatorPorts());    */
 
         poc.addEventListener(new NativePortsListener() {
 
             @Override
-            public void disptach(NativePortEvent event, String msg)
+            public void disptach(NativePortEvent event, String port_name, String msg)
             {
-                System.out.println("NATIVE SAYS="+msg);
+                System.out.println("DISPATCH from "+port_name+" ="+msg);
             }
         });
 
@@ -34,9 +39,9 @@ public class Test {
            @Override
            public void run()
            {
-               for(int i=0;i<50;i++)
+               for(int i=0;i<4000;i++)
                {
-                   poc.enqueue("input_port","hello world hello worldhello worldhello worldhello worldhello world hello worldhello worldhello worldhello worldhello worldhello world "+i);
+                   poc.enqueue("input_port","hello world "+i);
                }
            }
        });

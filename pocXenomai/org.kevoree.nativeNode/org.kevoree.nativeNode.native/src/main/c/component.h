@@ -27,11 +27,11 @@ typedef struct _context
   void (*start) (void);
   void (*stop) (void);
   void (*update) (void);
-  void (*dispatch) (int id_queue);
+  void (*dispatch) (int id_port,int id_queue);
 } Context;
 
 
-int bootstrap (key_t key);
+
 int start ();
 int stop ();
 int update ();
@@ -43,7 +43,7 @@ int register_trigger_port (void *fn);
 
 Context *ctx;
 EventBroker component_event_broker;
-Publisher component_event_publisher;
+//Publisher component_event_publisher;
 
 
 void notify(Events ev)
@@ -52,7 +52,7 @@ void notify(Events ev)
     switch(ev.ev_type){
 
         case EV_PORT_INPUT:
-                 ctx->dispatch (ev.id_queue);
+                 ctx->dispatch (ev.id_port,ctx->inputs[ev.id_port].id);
         break;
 
         case EV_PORT_OUTPUT:
@@ -96,8 +96,7 @@ void *   t_broker (void *p)
 }
 
 
-int
-bootstrap (key_t key)
+int bootstrap (key_t key,int port_event_broker)
 {
   int shmid;
   void *ptr_mem_partagee;
@@ -119,12 +118,12 @@ bootstrap (key_t key)
     ctx = (Context *) ptr_mem_partagee;
     ctx->pid = getpid ();
 
-    component_event_broker.port = 8085;
+    component_event_broker.port = port_event_broker;
     component_event_broker.dispatch = &notify;
-
+  /*
     component_event_publisher.port = 8086;
     component_event_publisher.socket = -1;
-    strcpy (component_event_publisher.hostname, "127.0.0.1");
+    strcpy (component_event_publisher.hostname, "127.0.0.1");  */
 
   if (pthread_create (&t_event_broker, NULL, &t_broker, NULL) != 0)
     {
@@ -141,11 +140,11 @@ void  process_output (int id_output, void *n_value)
 	  kmsg.type = 1;
 	  strcpy (kmsg.value, n_value);
 	  enqueue (ctx->outputs[id_output].id, kmsg);
-
+     /*
 	  Events      ev;
       ev.ev_type = EV_PORT_OUTPUT;
       ev.id_queue =   ctx->outputs[id_output].id;
-      send_event(component_event_publisher,ev);
+      send_event(component_event_publisher,ev);   */
 }
 
 int

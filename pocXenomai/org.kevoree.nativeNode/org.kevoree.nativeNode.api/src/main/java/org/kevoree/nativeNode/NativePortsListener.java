@@ -9,5 +9,5 @@ package org.kevoree.nativeNode;
  */
 public interface NativePortsListener extends java.util.EventListener
 {
-      public void disptach(NativePortEvent event,String msg);
+      public void disptach(NativePortEvent event,String port_name,String msg);
 }

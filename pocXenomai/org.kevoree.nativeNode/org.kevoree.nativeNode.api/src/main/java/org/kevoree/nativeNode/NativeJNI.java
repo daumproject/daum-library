@@ -13,7 +13,7 @@ import java.util.Random;
  */
 public class NativeJNI extends EventObject implements NativePortEvent{
 
-    public native int init(int key);
+    public native int init(int key,int port_event);
     public native boolean register();
     public native int start(int key,String path);
     public native int stop(int key);
@@ -30,9 +30,9 @@ public class NativeJNI extends EventObject implements NativePortEvent{
         this.handler =obj;
     }
 
-    public void dispatchEvent(String evt)
+    public void dispatchEvent(String queue,String evt)
     {
-        handler.fireEvent(this,evt);
+        handler.fireEvent(this,queue,evt);
     }
 
 
