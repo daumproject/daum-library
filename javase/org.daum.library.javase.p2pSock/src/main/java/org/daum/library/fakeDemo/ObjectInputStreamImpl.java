@@ -1,11 +1,9 @@
-package org.daum.library.ppSock;
+package org.daum.library.fakeDemo;
 
 import org.kevoree.framework.AbstractChannelFragment;
 import org.slf4j.LoggerFactory;
 
-import org.kevoree.framework.AbstractChannelFragment;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;

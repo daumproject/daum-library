@@ -1,4 +1,4 @@
-package org.daum.library.ppSock
+package org.daum.library.fakeDemo
 
 import java.lang.Class
 import org.kevoree.framework.AbstractChannelFragment

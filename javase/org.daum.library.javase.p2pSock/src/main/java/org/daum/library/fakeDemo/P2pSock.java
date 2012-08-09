@@ -1,4 +1,4 @@
-package org.daum.library.ppSock;
+package org.daum.library.fakeDemo;
 
 import org.kevoree.annotation.*;
 import org.kevoree.framework.*;
