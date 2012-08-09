@@ -31,6 +31,7 @@
         <module>../org.daum.library.android.moyens</module>
         <module>../org.daum.library.android.messages</module>
         <module>../org.daum.library.android.daumauth</module>
+        <module>../org.daum.library.android.p2pSock</module>
     </modules>
 
     <dependencies>

@@ -45,10 +45,9 @@ import org.slf4j.LoggerFactory;
 })
 public class Replica extends AbstractComponentType implements ReplicaService {
 
-    KChannelImpl kChannel=null;
-
+    private KChannelImpl kChannel=null;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-    private ICluster cluster;
+    private ICluster cluster=null;
 
     @Start
     public void start()
@@ -60,9 +59,7 @@ public class Replica extends AbstractComponentType implements ReplicaService {
             Boolean  synchronize = Boolean.parseBoolean(getDictionary().get("synchronize").toString());
             Boolean  diskPersitence = Boolean.parseBoolean(getDictionary().get("diskPersitence").toString());
             String path_disk =       getDictionary().get("path_disk").toString();
-
             cluster = new ClusterImpl(node,kChannel,diskPersitence,path_disk);
-
             if(synchronize)
             {
                 // request synchronize
@@ -78,15 +75,20 @@ public class Replica extends AbstractComponentType implements ReplicaService {
     @Stop
     public void stop()
     {
-        cluster.shutdown();
+        if(cluster != null)
+            cluster.shutdown();
     }
 
     @Update
     public void update()
     {
         kChannel   = new KChannelImpl(this);
-        cluster.setChanel(kChannel);
-        cluster.setPath_disk(getDictionary().get("path_disk").toString());
+        if(cluster != null){
+            cluster.setChanel(kChannel);
+            cluster.setPath_disk(getDictionary().get("path_disk").toString());
+        }else {
+            logger.error("update fail cluster is null ");
+        }
     }
 
     @Port(name = "remote")
@@ -101,6 +103,7 @@ public class Replica extends AbstractComponentType implements ReplicaService {
     @Port(name = "service", method = "getCache")
     @Override
     public Cache getCache(String name) {
+        if(cluster == null){ return null; }
         return cluster.getCacheManager().getCache(name);
     }
 

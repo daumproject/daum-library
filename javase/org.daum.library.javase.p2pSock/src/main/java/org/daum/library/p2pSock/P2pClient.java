@@ -1,4 +1,4 @@
-package org.daum.library.fakeDemo;
+package org.daum.library.p2pSock;
 
 /**
  * Created with IntelliJ IDEA.

@@ -103,7 +103,7 @@ public class Handler {
 
     public void stop() throws InterruptedException
     {
-        Thread.sleep(3500);
+        Thread.sleep(2000);
         nativeHandler.stop(key);
     }
 

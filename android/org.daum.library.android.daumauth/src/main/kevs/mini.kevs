@@ -19,7 +19,7 @@ merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.agrapher/
 merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.webserver.api/{kevoree.version}'
 merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.swingUI/{kevoree.version}'
 merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}'
-merge 'mvn:org.daum.library.android/org.daum.library.android.replica/2.0'
+merge 'mvn:org.daum.library.android/org.daum.library.android.replica/2.2-SNAPSHOT'
 merge 'mvn:org.kevoree.corelibrary.sky/org.kevoree.library.sky.api/{kevoree.version}'
 merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.camel/{kevoree.version}'
 merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.fakeDomo/{kevoree.version}'

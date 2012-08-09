@@ -13,12 +13,10 @@ import java.io.Serializable;
  */
 public class Node implements INode,Serializable {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
     private String nodeID= "";
     private boolean isSynchronized = false;
     private volatile long lastTickTime;
     private  NodeType nodeType=null;
-
 
     public Node(String node){
         nodeID = node;

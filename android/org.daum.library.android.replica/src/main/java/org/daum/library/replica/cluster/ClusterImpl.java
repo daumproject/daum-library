@@ -100,16 +100,22 @@ public class ClusterImpl implements  ICluster,Runnable{
             for(String key_cache :   db.getCollections().keySet())
             {
                 logger.debug("Reading cache from diskPersitence "+key_cache);
+               try
+               {
+                   Cache cache =      cacheManger.getCache(key_cache) ;
+                   SortedMap<String,VersionedValue> disk = (SortedMap<String, VersionedValue>) db.getCollections().get(key_cache);
 
-                Cache cache =      cacheManger.getCache(key_cache) ;
-                SortedMap<String,VersionedValue> disk = (SortedMap<String, VersionedValue>) db.getCollections().get(key_cache);
+                   for(Object key_row : disk.keySet())
+                   {
+                       logger.debug("Reading object from diskPersitence "+key_row);
 
-                for(Object key_row : disk.keySet())
-                {
-                    logger.debug("Reading object from diskPersitence "+key_row);
+                       cache.put(key_row,disk.get(key_row));
+                   }
+               }catch (Exception e)
+               {
+                    logger.warn("Restore from disk ",e);
+               }
 
-                    cache.put(key_row,disk.get(key_row));
-                }
             }
         }
     }

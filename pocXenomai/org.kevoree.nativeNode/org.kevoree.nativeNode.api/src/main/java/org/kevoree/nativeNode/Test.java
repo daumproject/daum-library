@@ -7,11 +7,11 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 
-        int ipc_key = 256181;
+        int ipc_key = 25181;
 
         String binary =   "/home/jed/DAUM_PROJECT/daum-library/pocXenomai/org.kevoree.nativeNode/org.kevoree.native.testcomponent/target/org.kevoree.native.testcomponent.uexe";
 
-        final Handler  poc = new Handler(ipc_key,9014,binary);
+        final Handler  poc = new Handler(ipc_key,9018,binary);
 
         poc.create_input("input_port");
 
@@ -35,19 +35,11 @@ public class Test {
 
         poc.update();
 
-        Thread t = new Thread(new Runnable() {
-           @Override
-           public void run()
-           {
-               for(int i=0;i<4000;i++)
+               for(int i=0;i<6000;i++)
                {
                    poc.enqueue("input_port","hello world "+i);
+                   Thread.sleep(5);
                }
-           }
-       });
-        t.start();
-
-        t.join();
 
 
         poc.stop();

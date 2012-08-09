@@ -1,4 +1,4 @@
-package org.daum.library.fakeDemo
+package org.daum.library.p2pSock
 
 import java.lang.Class
 import org.kevoree.framework.AbstractChannelFragment
