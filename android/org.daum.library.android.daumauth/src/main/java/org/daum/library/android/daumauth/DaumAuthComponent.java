@@ -56,7 +56,8 @@ import java.util.concurrent.Semaphore;
         @ProvidedPort(name = "notify", type = PortType.MESSAGE)
 })
 @DictionaryType({
-        @DictionaryAttribute(name = "connTimeout", defaultValue = "15000", optional = false)
+        @DictionaryAttribute(name = "connTimeout", defaultValue = "15000", optional = false),
+        @DictionaryAttribute(name = "tileServer", defaultValue = "http://tile.openstreetmap.org/", optional = false)
 })
 @ComponentType
 public class DaumAuthComponent extends AbstractComponentType       implements OnStoreSyncedListener, OnConnectionListener, OnInterventionSelectedListener {
@@ -235,6 +236,7 @@ public class DaumAuthComponent extends AbstractComponentType       implements On
         engine.addVariable("replicaNotifChanName", replicaNotifChanName);
         engine.addVariable("replicaServiceChanName", replicaServiceChanName);
         engine.addVariable("interNum", inter.getNumeroIntervention());
+        engine.addVariable("tileServer",getDictionary().get("tileServer").toString());
 
         // kevScript model for SITAC, Moyens & Messages
         engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
@@ -244,7 +246,7 @@ public class DaumAuthComponent extends AbstractComponentType       implements On
         engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
                 "org.daum.library.android/org.daum.library.android.moyens/1.8.2-SNAPSHOT'");
 
-        engine.append("addComponent sitacComp@{nodeName} : SITACComponent {interNum='{interNum}'}");
+        engine.append("addComponent sitacComp@{nodeName} : SITACComponent {mapProvider='{tileServer}',interNum='{interNum}'}");
         engine.append("addComponent moyensComp@{nodeName} : MoyensComponent {interNum='{interNum}'}");
         engine.append("addComponent msgComp@{nodeName} : MessagesComponent {interNum='{interNum}'}");
 
