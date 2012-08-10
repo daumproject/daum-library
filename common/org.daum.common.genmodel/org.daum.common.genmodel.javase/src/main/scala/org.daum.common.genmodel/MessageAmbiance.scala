@@ -4,12 +4,7 @@ import org.daum.library.ormH.annotations.Generated
 import org.daum.library.ormH.annotations.Id
 import org.daum.library.ormH.persistence.GeneratedType
 
-/**
- * Created by Ecore Model Generator.
- * @authors: Gregory NAIN, Fouquet Francois
- * Date: 04 juil. 12 Time: 09:48
- * Meta-Model:NS_URI=http://sitactest/1.0
- */
+
 trait MessageAmbiance extends org.daum.common.genmodel.SitacContainer {
 
   @Id

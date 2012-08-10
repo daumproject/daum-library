@@ -2,13 +2,6 @@ package org.daum.common.genmodel;
 
 import java.io.Serializable;
 
-/**
- * Created by Ecore Model Generator.
- * @authors: Gregory NAIN, Fouquet Francois
- * Date: 04 juil. 12 Time: 09:48
- * Meta-Model:NS_URI=http://sitactest/1.0
- */
-
 import org.daum.library.ormH.annotations.Id
 
 trait Agent extends org.daum.common.genmodel.SitacContainer with org.daum.common.genmodel.Personne with Serializable
@@ -57,24 +50,9 @@ trait Agent extends org.daum.common.genmodel.SitacContainer with org.daum.common
   def setMatricule(matricule : java.lang.String) {
     this.matricule = matricule
   }
-  override def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
-    val selfObjectClone = SitacFactory.createAgent
-    selfObjectClone.setNom(this.getNom)
-    selfObjectClone.setPrenom(this.getPrenom)
-    selfObjectClone.setMatricule(this.getMatricule)
-    subResult.put(this,selfObjectClone)
-  }
-  override def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : Agent = {
-    val clonedSelfObject = addrs.get(this).asInstanceOf[org.daum.common.genmodel.Agent]
-    clonedSelfObject
-  }
-
 
   def getCapteurs :java.util.HashMap[String,org.daum.common.genmodel.Capteurs] = {
     capteurs
   }
-
-
-
 
 }

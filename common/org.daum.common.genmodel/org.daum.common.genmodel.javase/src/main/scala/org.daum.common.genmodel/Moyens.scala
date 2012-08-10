@@ -1,17 +1,11 @@
 package org.daum.common.genmodel;
 
-/**
- * Created by Ecore Model Generator.
- * @authors: Gregory NAIN, Fouquet Francois
- * Date: 04 juil. 12 Time: 09:48
- * Meta-Model:NS_URI=http://sitactest/1.0
- */
 
 import org.daum.library.ormH.annotations.Generated
 import org.daum.library.ormH.annotations.Id
 import org.daum.library.ormH.persistence.GeneratedType
 import org.daum.library.ormH.annotations.OneToMany
-import scala.collection.mutable.ListBuffer
+import java.util.ArrayList
 
 
 trait Moyens extends org.daum.common.genmodel.SitacContainer {
@@ -23,16 +17,16 @@ trait Moyens extends org.daum.common.genmodel.SitacContainer {
 
 
   @OneToMany
-  private lazy val agents : ListBuffer[org.daum.common.genmodel.Agent] = new ListBuffer[org.daum.common.genmodel.Agent]()
+  private lazy val agents : java.util.ArrayList[org.daum.common.genmodel.Agent] = new ArrayList[org.daum.common.genmodel.Agent]()
 
 
   @OneToMany
-  private lazy val materiels : ListBuffer[org.daum.common.genmodel.Materiel] = new ListBuffer[org.daum.common.genmodel.Materiel]()
+  private lazy val materiels : java.util.ArrayList[org.daum.common.genmodel.Materiel] = new ArrayList[org.daum.common.genmodel.Materiel]()
 
 
-  private var posRef : Option[org.daum.common.genmodel.Position] = null
+  private var posRef : org.daum.common.genmodel.Position = null
 
-  private var posTarget : Option[org.daum.common.genmodel.Position] = null
+  private var posTarget : org.daum.common.genmodel.Position = null
 
 
   def getPrecision : java.lang.String = {
@@ -56,30 +50,29 @@ trait Moyens extends org.daum.common.genmodel.SitacContainer {
 
 
   def addMateriel(materiel : org.daum.common.genmodel.Materiel) {
-    this.materiels.append(materiel)
+    this.materiels.add(materiel)
   }
 
 
-  def getAgents : List[org.daum.common.genmodel.Agent] = {
-    agents.toList
+  def getAgents : java.util.List[org.daum.common.genmodel.Agent] = {
+    agents
   }
   def getAgentsForJ : java.util.List[org.daum.common.genmodel.Agent] = {
-    import scala.collection.JavaConversions._
     agents
   }
 
-  def setAgents(Agents : List[org.daum.common.genmodel.Agent] ) {
+  def setAgents(Agents : java.util.List[org.daum.common.genmodel.Agent] ) {
     this.agents.clear()
-    this.agents.insertAll(0,Agents)
+    this.agents.addAll(Agents)
 
   }
 
   def addAgent(Agents : org.daum.common.genmodel.Agent) {
-    this.agents.append(Agents)
+    this.agents.add(Agents)
   }
 
-  def addAllAgents(Agents : List[org.daum.common.genmodel.Agent]) {
-    Agents.foreach{ elem => addAgent(elem)}
+  def addAllAgents(Agents : java.util.List[org.daum.common.genmodel.Agent]) {
+    Agents.addAll(agents)
   }
 
   def removeAgents(Agents : org.daum.common.genmodel.Agent) {
@@ -89,30 +82,28 @@ trait Moyens extends org.daum.common.genmodel.SitacContainer {
   }
 
   def removeAllAgents() {
-    this.agents.foreach{ elem => removeAgents(elem)}
+    this.agents.clear()
   }
 
-  def getPosRef : Option[org.daum.common.genmodel.Position] = {
+  def getPosRef : org.daum.common.genmodel.Position = {
     posRef
   }
 
-  def setPosRef(posRef : Option[org.daum.common.genmodel.Position] ) {
+  def setPosRef(posRef : org.daum.common.genmodel.Position ) {
     if(this.posRef!= posRef){
       this.posRef = (posRef)
-      posRef.map{ dic=>	dic.setEContainer(this, Some(() => { this.posRef= null }) )
-      }}
+    }
 
   }
 
-  def getPosTarget : Option[org.daum.common.genmodel.Position] = {
+  def getPosTarget : org.daum.common.genmodel.Position = {
     posTarget
   }
 
-  def setPosTarget(posTarget : Option[org.daum.common.genmodel.Position] ) {
+  def setPosTarget(posTarget : org.daum.common.genmodel.Position ) {
     if(this.posTarget!= posTarget){
       this.posTarget = (posTarget)
-      posTarget.map{ dic=>				dic.setEContainer(this, Some(() => { this.posTarget= null }) )
-      }}
+ }
 
   }
 

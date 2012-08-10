@@ -1,11 +1,5 @@
 package org.daum.common.genmodel;
 
-/**
- * Created by Ecore Model Generator.
- * @authors: Gregory NAIN, Fouquet Francois
- * Date: 04 juil. 12 Time: 09:48
- * Meta-Model:NS_URI=http://sitactest/1.0
- */
 
 import org.daum.library.ormH.annotations.Generated
 import org.daum.library.ormH.annotations.Id
@@ -19,32 +13,27 @@ trait SitacModel extends org.daum.common.genmodel.SitacContainer {
   @Generated(strategy = GeneratedType.UUID)
   private var id : java.lang.String = ""
   @OneToMany
-  private lazy val interventionTypes : scala.collection.mutable.ListBuffer[org.daum.common.genmodel.CodeSinistre] = new scala.collection.mutable.ListBuffer[org.daum.common.genmodel.CodeSinistre]()
+  private lazy val interventionTypes : java.util.ArrayList[org.daum.common.genmodel.CodeSinistre] = new java.util.ArrayList[org.daum.common.genmodel.CodeSinistre]()
   @OneToMany
-  private lazy val interventions : scala.collection.mutable.ListBuffer[org.daum.common.genmodel.Intervention] = new scala.collection.mutable.ListBuffer[org.daum.common.genmodel.Intervention]()
+  private lazy val interventions : java.util.ArrayList[org.daum.common.genmodel.Intervention] = new java.util.ArrayList[org.daum.common.genmodel.Intervention]()
   @OneToMany
-  private lazy val personnes : scala.collection.mutable.ListBuffer[org.daum.common.genmodel.Personne] = new scala.collection.mutable.ListBuffer[org.daum.common.genmodel.Personne]()
+  private lazy val personnes : java.util.ArrayList[org.daum.common.genmodel.Personne] = new java.util.ArrayList[org.daum.common.genmodel.Personne]()
   @OneToMany
-  private lazy val typeActions : scala.collection.mutable.ListBuffer[org.daum.common.genmodel.ActionType] = new scala.collection.mutable.ListBuffer[org.daum.common.genmodel.ActionType]()
+  private lazy val typeActions : java.util.ArrayList[org.daum.common.genmodel.ActionType] = new java.util.ArrayList[org.daum.common.genmodel.ActionType]()
 
 
-  def getInterventionTypes : List[org.daum.common.genmodel.CodeSinistre] = {
-    interventionTypes.toList
+  def getInterventionTypes : java.util.List[org.daum.common.genmodel.CodeSinistre] = {
+    interventionTypes
   }
   def getInterventionTypesForJ : java.util.List[org.daum.common.genmodel.CodeSinistre] = {
-    import scala.collection.JavaConversions._
     interventionTypes
   }
 
-  def setInterventionTypes(interventionTypes : List[org.daum.common.genmodel.CodeSinistre] ) {
+  def setInterventionTypes(interventionTypes : java.util.List[org.daum.common.genmodel.CodeSinistre] ) {
     if(this.interventionTypes!= interventionTypes){
       this.interventionTypes.clear()
-      this.interventionTypes.insertAll(0,interventionTypes)
-      interventionTypes.foreach{el=>
-        el.setEContainer(this,Some(()=>{this.removeInterventionTypes(el)}))
-      }
+      this.interventionTypes.addAll(interventionTypes)
     }
-
   }
 
 
@@ -54,196 +43,121 @@ trait SitacModel extends org.daum.common.genmodel.SitacContainer {
 
 
   def addInterventionTypes(interventionTypes : org.daum.common.genmodel.CodeSinistre) {
-    interventionTypes.setEContainer(this,Some(()=>{this.removeInterventionTypes(interventionTypes)}))
-    this.interventionTypes.append(interventionTypes)
+    this.interventionTypes.add(interventionTypes)
   }
 
-  def addAllInterventionTypes(interventionTypes : List[org.daum.common.genmodel.CodeSinistre]) {
-    interventionTypes.foreach{ elem => addInterventionTypes(elem)}
+  def addAllInterventionTypes(interventionTypes : java.util.List[org.daum.common.genmodel.CodeSinistre]) {
+    interventionTypes.addAll(interventionTypes)
   }
 
   def removeInterventionTypes(interventionTypes : org.daum.common.genmodel.CodeSinistre) {
-    if(this.interventionTypes.size != 0 && this.interventionTypes.indexOf(interventionTypes) != -1 ) {
-      this.interventionTypes.remove(this.interventionTypes.indexOf(interventionTypes))
-      interventionTypes.setEContainer(null,None)
+    if(this.interventionTypes.size != 0 ) {
+      this.interventionTypes.remove(interventionTypes)
     }
   }
 
   def removeAllInterventionTypes() {
-    this.interventionTypes.foreach{ elem => removeInterventionTypes(elem)}
+    this.interventionTypes.clear()
   }
 
-  def getInterventions : List[org.daum.common.genmodel.Intervention] = {
-    interventions.toList
+  def getInterventions : java.util.List[org.daum.common.genmodel.Intervention] = {
+    interventions
   }
   def getInterventionsForJ : java.util.List[org.daum.common.genmodel.Intervention] = {
-    import scala.collection.JavaConversions._
     interventions
   }
 
-  def setInterventions(interventions : List[org.daum.common.genmodel.Intervention] ) {
+  def setInterventions(interventions : java.util.List[org.daum.common.genmodel.Intervention] ) {
     if(this.interventions!= interventions){
       this.interventions.clear()
-      this.interventions.insertAll(0,interventions)
-      interventions.foreach{el=>
-        el.setEContainer(this,Some(()=>{this.removeInterventions(el)}))
-      }
+      this.interventions.addAll(interventions)
     }
 
   }
 
   def addInterventions(interventions : org.daum.common.genmodel.Intervention) {
-    interventions.setEContainer(this,Some(()=>{this.removeInterventions(interventions)}))
-    this.interventions.append(interventions)
+    this.interventions.add(interventions)
   }
 
-  def addAllInterventions(interventions : List[org.daum.common.genmodel.Intervention]) {
-    interventions.foreach{ elem => addInterventions(elem)}
+  def addAllInterventions(interventions : java.util.List[org.daum.common.genmodel.Intervention]) {
+    interventions.addAll(interventions)
   }
 
-  def removeInterventions(interventions : org.daum.common.genmodel.Intervention) {
-    if(this.interventions.size != 0 && this.interventions.indexOf(interventions) != -1 ) {
-      this.interventions.remove(this.interventions.indexOf(interventions))
-      interventions.setEContainer(null,None)
+  def removeIntervention(intervention : org.daum.common.genmodel.Intervention) {
+    if(this.interventions.size != 0 ) {
+      this.interventions.remove(intervention)
     }
   }
 
   def removeAllInterventions() {
-    this.interventions.foreach{ elem => removeInterventions(elem)}
+    this.interventions.clear()
   }
 
-  def getPersonnes : List[org.daum.common.genmodel.Personne] = {
-    personnes.toList
+  def getPersonnes : java.util.List[org.daum.common.genmodel.Personne] = {
+    personnes
   }
   def getPersonnesForJ : java.util.List[org.daum.common.genmodel.Personne] = {
-    import scala.collection.JavaConversions._
     personnes
   }
 
-  def setPersonnes(personnes : List[org.daum.common.genmodel.Personne] ) {
+  def setPersonnes(personnes : java.util.List[org.daum.common.genmodel.Personne] ) {
     if(this.personnes!= personnes){
       this.personnes.clear()
-      this.personnes.insertAll(0,personnes)
-      personnes.foreach{el=>
-        el.setEContainer(this,Some(()=>{this.removePersonnes(el)}))
-      }
+      this.personnes.addAll(personnes)
     }
 
   }
 
   def addPersonnes(personnes : org.daum.common.genmodel.Personne) {
-    personnes.setEContainer(this,Some(()=>{this.removePersonnes(personnes)}))
-    this.personnes.append(personnes)
+    this.personnes.add(personnes)
   }
 
-  def addAllPersonnes(personnes : List[org.daum.common.genmodel.Personne]) {
-    personnes.foreach{ elem => addPersonnes(elem)}
+  def addAllPersonnes(personnes : java.util.ArrayList[org.daum.common.genmodel.Personne]) {
+    personnes.addAll(personnes)
   }
 
-  def removePersonnes(personnes : org.daum.common.genmodel.Personne) {
-    if(this.personnes.size != 0 && this.personnes.indexOf(personnes) != -1 ) {
-      this.personnes.remove(this.personnes.indexOf(personnes))
-      personnes.setEContainer(null,None)
+  def removePersonne(personne : org.daum.common.genmodel.Personne) {
+    if(this.personnes.size != 0 ) {
+      this.personnes.remove(personne)
     }
   }
 
   def removeAllPersonnes() {
-    this.personnes.foreach{ elem => removePersonnes(elem)}
+    this.personnes.clear()
   }
 
-  def getTypeActions : List[org.daum.common.genmodel.ActionType] = {
-    typeActions.toList
+  def getTypeActions : java.util.List[org.daum.common.genmodel.ActionType] = {
+    typeActions
   }
   def getTypeActionsForJ : java.util.List[org.daum.common.genmodel.ActionType] = {
-    import scala.collection.JavaConversions._
     typeActions
   }
 
-  def setTypeActions(typeActions : List[org.daum.common.genmodel.ActionType] ) {
+  def setTypeActions(typeActions : java.util.ArrayList[org.daum.common.genmodel.ActionType] ) {
     if(this.typeActions!= typeActions){
       this.typeActions.clear()
-      this.typeActions.insertAll(0,typeActions)
-      typeActions.foreach{el=>
-        el.setEContainer(this,Some(()=>{this.removeTypeActions(el)}))
-      }
+      this.typeActions.addAll(typeActions)
     }
 
   }
 
   def addTypeActions(typeActions : org.daum.common.genmodel.ActionType) {
-    typeActions.setEContainer(this,Some(()=>{this.removeTypeActions(typeActions)}))
-    this.typeActions.append(typeActions)
+    this.typeActions.add(typeActions)
   }
 
-  def addAllTypeActions(typeActions : List[org.daum.common.genmodel.ActionType]) {
-    typeActions.foreach{ elem => addTypeActions(elem)}
+  def addAllTypeActions(typeActions : java.util.List[org.daum.common.genmodel.ActionType]) {
+    typeActions.addAll(typeActions)
   }
 
   def removeTypeActions(typeActions : org.daum.common.genmodel.ActionType) {
     if(this.typeActions.size != 0 && this.typeActions.indexOf(typeActions) != -1 ) {
       this.typeActions.remove(this.typeActions.indexOf(typeActions))
-      typeActions.setEContainer(null,None)
     }
   }
 
   def removeAllTypeActions() {
-    this.typeActions.foreach{ elem => removeTypeActions(elem)}
+    this.typeActions.clear();
   }
-  def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
-    val selfObjectClone = SitacFactory.createSitacModel
-    subResult.put(this,selfObjectClone)
-    this.getInterventionTypes.foreach{ sub =>
-      sub.getClonelazy(subResult)
-    }
 
-    this.getInterventions.foreach{ sub =>
-      sub.getClonelazy(subResult)
-    }
-
-    this.getPersonnes.foreach{ sub =>
-      sub.getClonelazy(subResult)
-    }
-
-    this.getTypeActions.foreach{ sub =>
-      sub.getClonelazy(subResult)
-    }
-
-  }
-  def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : SitacModel = {
-    val clonedSelfObject = addrs.get(this).asInstanceOf[org.daum.common.genmodel.SitacModel]
-    this.getInterventionTypes.foreach{sub =>
-      clonedSelfObject.addInterventionTypes(addrs.get(sub).asInstanceOf[org.daum.common.genmodel.CodeSinistre])
-    }
-
-    this.getInterventions.foreach{sub =>
-      clonedSelfObject.addInterventions(addrs.get(sub).asInstanceOf[org.daum.common.genmodel.Intervention])
-    }
-
-    this.getPersonnes.foreach{sub =>
-      clonedSelfObject.addPersonnes(addrs.get(sub).asInstanceOf[org.daum.common.genmodel.Personne])
-    }
-
-    this.getTypeActions.foreach{sub =>
-      clonedSelfObject.addTypeActions(addrs.get(sub).asInstanceOf[org.daum.common.genmodel.ActionType])
-    }
-
-    this.getInterventionTypes.foreach{ sub =>
-      sub.resolve(addrs)
-    }
-
-      this.getInterventions.foreach{ sub =>
-      sub.resolve(addrs)
-    }
-
-    this.getPersonnes.foreach{ sub =>
-      sub.resolve(addrs)
-    }
-
-    this.getTypeActions.foreach{ sub =>
-      sub.resolve(addrs)
-    }
-
-    clonedSelfObject
-  }
 
 }

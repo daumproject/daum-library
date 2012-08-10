@@ -1,63 +1,51 @@
 package org.daum.common.genmodel;
 
-/**
- * Created by Ecore Model Generator.
- * @authors: Gregory NAIN, Fouquet Francois
- * Date: 04 juil. 12 Time: 09:48
- * Meta-Model:NS_URI=http://sitactest/1.0
- */
+
 trait PositionCivil extends org.daum.common.genmodel.SitacContainer with org.daum.common.genmodel.Position {
-		private var nomRue : java.lang.String = ""
+  private var nomRue : java.lang.String = ""
 
-		private var cp : java.lang.String = ""
+  private var cp : java.lang.String = ""
 
-		private var numeroRue : java.lang.String = ""
+  private var numeroRue : java.lang.String = ""
 
-		private var pays : java.lang.String = ""
+  private var pays : java.lang.String = ""
 
 
-		def getNomRue : java.lang.String = {
-			nomRue
-		}
+  override def toString: String = {
+    ""+nomRue+" "+cp
+  }
 
-		def setNomRue(nomRue : java.lang.String) {
-			this.nomRue = nomRue
-		}
+  def getNomRue : java.lang.String = {
+    nomRue
+  }
 
-		def getCp : java.lang.String = {
-			cp
-		}
+  def setNomRue(nomRue : java.lang.String) {
+    this.nomRue = nomRue
+  }
 
-		def setCp(cp : java.lang.String) {
-			this.cp = cp
-		}
+  def getCp : java.lang.String = {
+    cp
+  }
 
-		def getNumeroRue : java.lang.String = {
-			numeroRue
-		}
+  def setCp(cp : java.lang.String) {
+    this.cp = cp
+  }
 
-		def setNumeroRue(numeroRue : java.lang.String) {
-			this.numeroRue = numeroRue
-		}
+  def getNumeroRue : java.lang.String = {
+    numeroRue
+  }
 
-		def getPays : java.lang.String = {
-			pays
-		}
+  def setNumeroRue(numeroRue : java.lang.String) {
+    this.numeroRue = numeroRue
+  }
 
-		def setPays(pays : java.lang.String) {
-			this.pays = pays
-		}
-	override def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
-		val selfObjectClone = SitacFactory.createPositionCivil
-		selfObjectClone.setNomRue(this.getNomRue)
-		selfObjectClone.setCp(this.getCp)
-		selfObjectClone.setNumeroRue(this.getNumeroRue)
-		selfObjectClone.setPays(this.getPays)
-		subResult.put(this,selfObjectClone)
-	}
-	override def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : PositionCivil = {
-		val clonedSelfObject = addrs.get(this).asInstanceOf[org.daum.common.genmodel.PositionCivil]
-		clonedSelfObject
-	}
+  def getPays : java.lang.String = {
+    pays
+  }
+
+  def setPays(pays : java.lang.String) {
+    this.pays = pays
+  }
+
 
 }

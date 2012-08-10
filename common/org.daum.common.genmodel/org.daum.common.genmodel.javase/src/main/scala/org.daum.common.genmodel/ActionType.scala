@@ -24,14 +24,4 @@ trait ActionType extends org.daum.common.genmodel.SitacContainer {
   def setCode(code : java.lang.String) {
     this.code = code
   }
-  def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
-    val selfObjectClone = SitacFactory.createActionType
-    selfObjectClone.setCode(this.getCode)
-    subResult.put(this,selfObjectClone)
-  }
-  def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : ActionType = {
-    val clonedSelfObject = addrs.get(this).asInstanceOf[org.daum.common.genmodel.ActionType]
-    clonedSelfObject
-  }
-
 }

@@ -21,15 +21,15 @@ trait Materiel extends org.daum.common.genmodel.SitacContainer {
     id
   }
 
-  private var posRef : Option[org.daum.common.genmodel.Position] = null
+  private var posRef : org.daum.common.genmodel.Position = null
 
-  private var posTarget : Option[org.daum.common.genmodel.Position] = null
+  private var posTarget : org.daum.common.genmodel.Position = null
 
-  def getPosRef : Option[org.daum.common.genmodel.Position] = {
+  def getPosRef : org.daum.common.genmodel.Position = {
     posRef
   }
 
-  def getPosTarget : Option[org.daum.common.genmodel.Position] = {
+  def getPosTarget : org.daum.common.genmodel.Position = {
     posTarget
   }
 
