@@ -15,6 +15,7 @@
     </parent>
 
     <properties>
+        <android.home>$ANDROID_ROOT</android.home>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
         <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
@@ -22,7 +23,7 @@
 
     <modules>
         <module>../org.daum.library.android.demos</module>
-       <module>../org.daum.library.android.fakeDemo</module>
+        <!--<module>../org.daum.library.android.fakeDemo</module>-->
         <module>../org.daum.library.android.ormH</module>
         <module>../org.daum.library.android.ehcache</module>
         <module>../org.daum.library.android.replica</module>
