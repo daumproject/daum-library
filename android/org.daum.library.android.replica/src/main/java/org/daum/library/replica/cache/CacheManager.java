@@ -90,7 +90,7 @@ public class CacheManager implements ICacheManger
 
             } else
             {
-                history.put(((AMessage)o).getUuid(),1);
+                history.put(((AMessage)o).getUuid(),0);
                 if(o instanceof Update)
                 {
                     // first
@@ -136,52 +136,45 @@ public class CacheManager implements ICacheManger
                         if(!cluster.getCurrentNode().isSynchronized())
                         {
 
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run()
+                            try
+                            {
+                                logger.info(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest+" "+storeSnapshot.getSnapshot().size());
+                                /*
+                            ByteArrayInputStream bais = new ByteArrayInputStream(storeSnapshot.getBytes());
+                            GZIPInputStream gzipIn = new GZIPInputStream(bais);
+
+                            ObjectInputStream objectIn = new ObjectInputStream(gzipIn);
+                            snapshot  = ( List<Update>) objectIn.readObject();
+                            objectIn.close();
+                                */
+                                for(Update msg: storeSnapshot.getSnapshot())
                                 {
-
-                                    try
-                                    {
-                                        logger.debug(" Receive snapshot from "+ storeSnapshot.source+" to "+ storeSnapshot.dest+" "+storeSnapshot.getSnapshot().size());
-                                         /*
-                                        ByteArrayInputStream bais = new ByteArrayInputStream(storeSnapshot.getBytes());
-                                        GZIPInputStream gzipIn = new GZIPInputStream(bais);
-
-                                        ObjectInputStream objectIn = new ObjectInputStream(gzipIn);
-                                        snapshot  = ( List<Update>) objectIn.readObject();
-                                        objectIn.close();
-                                            */
-                                        for(Update msg: storeSnapshot.getSnapshot())
-                                        {
-                                            Cache cache = getCache(msg.cache);
-                                            cache.localDispatch(msg);
-                                        }
-
-                                        // notify is syncEvent
-                                        SyncEvent syncEvent = new SyncEvent();
-                                        // todo add node
-                                        cluster.getChannel().write(syncEvent);
-                                        cluster.getCurrentNode().setSynchronized();
-
-                                        double duree = (System.currentTimeMillis() - cluster.getStart())  / 1000;
-
-                                        logger.info(cluster.getCurrentNode().getNodeID()+" isSynchronized in "+duree+" secondes size="+ storeSnapshot.getSnapshot().size());
-                                    }catch (Exception e)
-                                    {
-                                        try
-                                        {
-                                            Thread.sleep(5000);
-                                        } catch (InterruptedException e1) {
-                                            e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                                        }
-                                        logger.error("Snapshot ",e);
-                                        cluster.getCurrentNode().setSynchronized(false);
-                                        cluster.synchronize();
-                                    }
-
+                                    Cache cache = getCache(msg.cache);
+                                    cache.localDispatch(msg);
                                 }
-                            }).start();
+
+                                // notify is syncEvent
+                                SyncEvent syncEvent = new SyncEvent();
+                                // todo add node
+                                cluster.getChannel().write(syncEvent);
+                                cluster.getCurrentNode().setSynchronized();
+
+                                double duree = (System.currentTimeMillis() - cluster.getStart())  / 1000;
+
+                                logger.info(cluster.getCurrentNode().getNodeID()+" isSynchronized in "+duree+" secondes size="+ storeSnapshot.getSnapshot().size());
+                            }catch (Exception e)
+                            {
+                                try
+                                {
+                                    Thread.sleep(5000);
+                                } catch (InterruptedException e1) {
+                                    e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                                }
+                                logger.error("Snapshot ",e);
+                                cluster.getCurrentNode().setSynchronized(false);
+                                cluster.synchronize();
+                            }
+
 
 
                         }
@@ -227,16 +220,16 @@ public class CacheManager implements ICacheManger
 
                                 logger.info("Snapshot is created for "+ command.source+" "+current_snapshot.size());
 
-                                  /*
-                                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                                GZIPOutputStream gzipOut = new GZIPOutputStream(baos);
-                                ObjectOutputStream objectOut = new ObjectOutputStream(gzipOut);
-                                objectOut.writeObject(current_snapshot);
-                                objectOut.close();
-                                   */
+                                /*
+                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                             GZIPOutputStream gzipOut = new GZIPOutputStream(baos);
+                             ObjectOutputStream objectOut = new ObjectOutputStream(gzipOut);
+                             objectOut.writeObject(current_snapshot);
+                             objectOut.close();
+                                */
 
                                 Snapshot storeSnapshot = new Snapshot();
-                            //    storeSnapshot.setBytes(baos.toByteArray());
+                                //    storeSnapshot.setBytes(baos.toByteArray());
                                 storeSnapshot.setSnapshot(current_snapshot);
                                 storeSnapshot.source = cluster.getCurrentNode();
                                 storeSnapshot.dest =   command.source;
@@ -260,8 +253,10 @@ public class CacheManager implements ICacheManger
 
     public void remoteDisptach(final Update update)
     {
-        logger.debug("remoteDisptach "+update.cache);
+
         update.source = cluster.getCurrentNode();
+        logger.debug("remoteDisptach "+update);
+
         cluster.getChannel().write(update);
         // remoteDisptachManager.addUpdate(update);
 

@@ -123,23 +123,17 @@ public class PopulateReplica extends AbstractComponentType {
                         agentERWAN.setPassword("edaubert");
                         sitacModel.addPersonnes(agentERWAN);
 
-                        Agent agentMaxime = SitacFactory.createAgent();
-                        agentMaxime.setNom("TRICOIRE");
-                        agentMaxime.setPrenom("Maxime");
-                        agentMaxime.setMatricule("mtricoire");
-                        agentMaxime.setPassword("mtricoire");
-                        sitacModel.addPersonnes(agentMaxime);
 
                         Agent agentjed = SitacFactory.createAgent();
                         agentjed.setNom("DARTOIS");
                         agentjed.setPrenom("JEAN-EMILE");
-                        agentjed.setMatricule("jedartois");
-                        agentjed.setPassword("jedartois");
+                        agentjed.setMatricule("jed");
+                        agentjed.setPassword("jed");
                         sitacModel.addPersonnes(agentjed);
 
                         Personne requerant = SitacFactory.createPersonne();
-                        requerant.setNom("Nom requerant");
-                        requerant.setPrenom("Prenom requerant");
+                        requerant.setNom("Exemple Nom requerant");
+                        requerant.setPrenom("Exemple Prenom requerant");
 
                         Personne vitc1 = SitacFactory.createPersonne();
                         vitc1.setNom("Nom victime1");
@@ -160,9 +154,9 @@ public class PopulateReplica extends AbstractComponentType {
                         position.setLat(-1638336);
 
 
-                        interventionfake.setPosition(new Some((Position)position));
+                        interventionfake.setPosition(position);
 
-                        interventionfake.setRequerant(new Some(requerant));
+                        interventionfake.setRequerant(requerant);
 
                         interventionfake.addVictimes(vitc1);
                         interventionfake.addVictimes(vitc2);
@@ -178,18 +172,17 @@ public class PopulateReplica extends AbstractComponentType {
                         Moyens   moyens = SitacFactory.createMoyens();
                         moyens.addAgent(agentERWAN);
                         moyens.addAgent(agentjed);
-                        moyens.addAgent(agentMaxime);
                         moyens.addMateriel(fpt);
                         moyens.addMateriel(fpt2);
 
 
 
                         Detachement detachement = SitacFactory.createDetachement();
-                        detachement.setChef(new Some((agentnoel)));
+                        detachement.setChef((agentnoel));
 
 
                         Affectation affectation = SitacFactory.createAffectation();
-                        affectation.setMoyen(new Some(moyens));
+                        affectation.setMoyen(moyens);
                         detachement.addAffectation(affectation);
 
 

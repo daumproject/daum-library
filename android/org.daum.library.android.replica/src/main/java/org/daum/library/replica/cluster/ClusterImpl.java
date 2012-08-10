@@ -38,7 +38,7 @@ public class ClusterImpl implements  ICluster,Runnable{
     private Channel chanel;
     private  Thread theartbeat = null;
     private  ICacheManger cacheManger=null;
-    private  final int freqHearBeat = 3000;
+    private  final int freqHearBeat = 15000;
     private double start;
     private String path_disk="";
     private DB db=null;
@@ -202,6 +202,7 @@ public class ClusterImpl implements  ICluster,Runnable{
 
     public void remoteReceived(Message o)
     {
+
         cacheManger.processingMSG(o);
     }
 

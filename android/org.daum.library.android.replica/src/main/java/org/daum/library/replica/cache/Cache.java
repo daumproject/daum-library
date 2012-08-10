@@ -65,6 +65,7 @@ public class Cache extends StoreMap<Object,VersionedValue>
                 VersionedValue old = super.get(key);
                 if(old == null)
                 {
+                    // new version
                     e.event = StoreEvent.ADD;
                     updated.setObject(value);
                     e.setVersionedValue(updated);
@@ -99,7 +100,7 @@ public class Cache extends StoreMap<Object,VersionedValue>
             if(cacheManger.getCluster().isDiskPersitence()){
                 db.rollback();
             }
-
+             logger.error("put ",e);
             return null;
         }
     }
@@ -161,6 +162,9 @@ public class Cache extends StoreMap<Object,VersionedValue>
                         disk.remove(replica.key.toString());
                     }
                 }
+            }else {
+
+                logger.error(" Error "+replica);
             }
 
         } catch (Exception e)

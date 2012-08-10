@@ -13,6 +13,7 @@ import java.io.Serializable;
  */
 public class Node implements INode,Serializable {
 
+    private static final long serialVersionUID = 352981891516L;
     private String nodeID= "";
     private boolean isSynchronized = false;
     private volatile long lastTickTime;

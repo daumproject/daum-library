@@ -31,4 +31,8 @@ public class Snapshot extends AMessage {
    public void setSnapshot(List<Update> snapshot) {
        this.snapshot = snapshot;
    }
+
+    public String toString(){
+      return "Snapshot src="+getSourceNode()+" dest="+getDestNode();
+    }
 }

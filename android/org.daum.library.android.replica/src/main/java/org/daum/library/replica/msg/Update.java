@@ -38,4 +38,8 @@ public class Update extends AMessage {
     public void setCache(String cache) {
         this.cache = cache;
     }
+
+    public String toString(){
+        return "Update "+event+" "+cache+" from "+getSourceNode();
+    }
 }

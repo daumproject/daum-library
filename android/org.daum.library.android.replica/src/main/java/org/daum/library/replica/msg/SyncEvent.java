@@ -13,6 +13,7 @@ import java.io.Serializable;
  */
 public class SyncEvent implements Message,Serializable
 {
+    private static final long serialVersionUID = 251516L;
     private Node node;
     /**
      * Get the node with which the synchronization was made
@@ -24,5 +25,10 @@ public class SyncEvent implements Message,Serializable
 
     public void setNode(Node node) {
         this.node = node;
+    }
+
+
+    public String toString(){
+        return "SyncEvent "+getNode();
     }
 }
