@@ -3,11 +3,11 @@ package org.daum.javase.webportal.client;
 import com.smartgwt.client.types.Alignment;
 import com.smartgwt.client.types.DragAppearance;
 import com.smartgwt.client.widgets.Img;
-import org.daum.javase.webportal.shared.Agent;
+import org.daum.javase.webportal.shared.AgentDTO;
 
 public class Firefighter extends Img {
 
-    private Agent agent;
+    private AgentDTO agent;
 	
 	 public Firefighter() {  
          setWidth(48);  
@@ -18,18 +18,18 @@ public class Firefighter extends Img {
          setDragAppearance(DragAppearance.TARGET);  
      }
 	 
-	 public Firefighter(Agent agent) {
+	 public Firefighter(AgentDTO agent) {
          this();
          setAgent(agent);
          setSrc("bandeBlanche.jpg");
          setTitle(this.agent.getMatricule());
      }
 
-    public Agent getAgent() {
+    public AgentDTO getAgent() {
         return agent;
     }
 
-    public void setAgent(Agent agent) {
+    public void setAgent(AgentDTO agent) {
         this.agent = agent;
     }
 }

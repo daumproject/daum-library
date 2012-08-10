@@ -1,18 +1,13 @@
-package org.daum.javase.webportal.dto;
+package org.daum.javase.webportal.adapter;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
 import org.daum.common.genmodel.*;
-import org.daum.common.genmodel.impl.AgentImpl;
 import org.daum.common.genmodel.impl.InterventionImpl;
-import org.daum.javase.webportal.shared.Agent;
-import org.daum.javase.webportal.shared.Detachement;
-import org.daum.javase.webportal.shared.Intervention;
+import org.daum.javase.webportal.shared.InterventionDTO;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.Some;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,12 +30,14 @@ public class AdapteurIntervention {
         this.factory = factory;
     }
 
-    public Intervention saveIntervention(Intervention intervention){
+    public InterventionDTO saveIntervention(InterventionDTO intervention){
         PersistenceSession session = null;
         org.daum.common.genmodel.Intervention interventionSitac = sharedInterventionToSitac(intervention);
         try {
             session = factory.getSession();
             session.save(interventionSitac);
+
+
             intervention.setId(interventionSitac.getNumeroIntervention());
             //TODO session.lock();
             //TODO session.unlock();
@@ -54,9 +51,11 @@ public class AdapteurIntervention {
         return intervention;
     }
 
-    public org.daum.common.genmodel.Intervention sharedInterventionToSitac(Intervention intervention) {
-        org.daum.common.genmodel.Intervention interventionSitac = null;
-        interventionSitac = SitacFactory.createIntervention();
+    public org.daum.common.genmodel.Intervention sharedInterventionToSitac(InterventionDTO intervention)
+    {
+        System.out.println(intervention);
+        org.daum.common.genmodel.Intervention interventionSitac = SitacFactory.createIntervention();
+
         AdapteurPersonne adapteurPersonne = new AdapteurPersonne(factory);
         AdapteurDetachement adapteurDetachement = new AdapteurDetachement(factory);
 
@@ -80,16 +79,16 @@ public class AdapteurIntervention {
         return interventionSitac;
     }
 
-    public List<Intervention> getAllIntervention(){
+    public List<InterventionDTO> getAllIntervention(){
 
         PersistenceSession session = null;
-        List<Intervention> listeIntervention = new ArrayList<Intervention>();
+        List<InterventionDTO> listeIntervention = new ArrayList<InterventionDTO>();
         try {
             session = factory.getSession();
             Map<String, InterventionImpl> interventions = session.getAll(InterventionImpl.class);
             for(Map.Entry<String, InterventionImpl> entry : interventions.entrySet()) {
                 InterventionImpl interventionSitac = entry.getValue();
-                Intervention interventionTemp = new Intervention();
+                InterventionDTO interventionTemp = new InterventionDTO();
                 interventionTemp.setId(interventionSitac.getNumeroIntervention());
                 interventionTemp.setDescription(interventionSitac.getDescription());
                 interventionTemp.setIdRequerant(interventionSitac.getRequerant().getId());

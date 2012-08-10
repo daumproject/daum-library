@@ -9,13 +9,13 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * Time: 12:04
  * To change this template use File | Settings | File Templates.
  */
-public class Personne implements IsSerializable {
+public class PersonneDTO implements IsSerializable {
 
     private String id;
     private String nom;
     private String prenom;
 
-    public Personne(){
+    public PersonneDTO(){
 
     }
 

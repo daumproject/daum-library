@@ -1,10 +1,8 @@
 package org.daum.javase.webportal.client;
 
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.widgets.Label;
-import com.smartgwt.client.widgets.events.CloseClientEvent;
 import com.smartgwt.client.widgets.form.DynamicForm;
 import com.smartgwt.client.widgets.form.fields.ButtonItem;
 import com.smartgwt.client.widgets.form.fields.FormItem;
@@ -15,15 +13,15 @@ import com.smartgwt.client.widgets.form.fields.events.ClickEvent;
 import com.smartgwt.client.widgets.form.fields.events.ClickHandler;
 import com.google.gwt.core.client.GWT;
 import com.smartgwt.client.widgets.layout.HLayout;
-import org.daum.javase.webportal.shared.Agent;
+import org.daum.javase.webportal.shared.AgentDTO;
 
 
 public class AgentForm extends HLayout{
 
-    private final AuthentificationServiceAsync loginService = GWT.create(AuthentificationService.class);
+    private final WebServiceAsync loginService = GWT.create(WebService.class);
     private Label labelAjoutSucces = new Label("Agent ajoute avec succes");
     private Label labelAjoutFail = new Label("Probleme lors de l'ajout de l'agent");
-    private Agent agentEdited;
+    private AgentDTO agentEdited;
     private DynamicForm form;
     private TextItem nomItem, prenomItem, matriculeItem;
     private PasswordItem passwordItem;
@@ -81,7 +79,7 @@ public class AgentForm extends HLayout{
                     String matricule = matriculeItem.getValueAsString();
                     String password = passwordItem.getValueAsString();
 
-                    loginService.createAgent(nom, prenom, matricule, password, new AsyncCallback<Agent>() {
+                    loginService.createAgent(nom, prenom, matricule, password, new AsyncCallback<AgentDTO>() {
                         @Override
                         public void onFailure(Throwable throwable) {
                             labelAjoutSucces.setVisible(false);
@@ -89,7 +87,7 @@ public class AgentForm extends HLayout{
                         }
 
                         @Override
-                        public void onSuccess(Agent agent) {
+                        public void onSuccess(AgentDTO agent) {
                             labelAjoutFail.setVisible(false);
                             labelAjoutSucces.setVisible(true);
                         }
@@ -106,7 +104,7 @@ public class AgentForm extends HLayout{
         this.draw();
     }
 
-    public AgentForm(Agent agent){
+    public AgentForm(AgentDTO agent){
         agentEdited = agent;
 
         form = new DynamicForm();
@@ -160,14 +158,14 @@ public class AgentForm extends HLayout{
                 }
 
                 if(form.validate()){
-                    Agent agentEditedTemp = new Agent();
+                    AgentDTO agentEditedTemp = new AgentDTO();
                     agentEditedTemp.setId(agentEdited.getId());
                     agentEditedTemp.setNom(nomItem.getValueAsString());
                     agentEditedTemp.setPrenom(prenomItem.getValueAsString());
                     agentEditedTemp.setMatricule(matriculeItem.getValueAsString());
                     agentEditedTemp.setPassword(passwordItem.getValueAsString());
 
-                    loginService.editAgent(agentEditedTemp, new AsyncCallback<Agent>() {
+                    loginService.editAgent(agentEditedTemp, new AsyncCallback<AgentDTO>() {
                         @Override
                         public void onFailure(Throwable throwable) {
                             labelAjoutSucces.setVisible(false);
@@ -175,7 +173,7 @@ public class AgentForm extends HLayout{
                         }
 
                         @Override
-                        public void onSuccess(Agent agent) {
+                        public void onSuccess(AgentDTO agent) {
                             labelAjoutFail.setVisible(false);
                             labelAjoutSucces.setVisible(true);
                         }

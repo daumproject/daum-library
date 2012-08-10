@@ -48,7 +48,7 @@ public class P2pClient
 
         }
         catch(Exception ioException){
-            logger.warn("The node '"+remoteNodeName+"' is not available on "+adr+":"+port);
+            logger.debug("The node '"+remoteNodeName+"' is not available on "+adr+":"+port);
         }
         finally{
             //4: Closing connection

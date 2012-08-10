@@ -9,12 +9,12 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * Time: 11:50
  * To change this template use File | Settings | File Templates.
  */
-public class Affectation implements IsSerializable {
+public class AffectationDTO implements IsSerializable {
 
     private String id;
     private String idMoyen;
 
-    public Affectation(){
+    public AffectationDTO(){
 
     }
 

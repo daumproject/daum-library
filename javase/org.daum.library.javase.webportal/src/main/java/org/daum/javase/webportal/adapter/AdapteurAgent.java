@@ -1,8 +1,8 @@
-package org.daum.javase.webportal.dto;
+package org.daum.javase.webportal.adapter;
 
 import org.daum.common.genmodel.SitacFactory;
 import org.daum.common.genmodel.impl.AgentImpl;
-import org.daum.javase.webportal.shared.Agent;
+import org.daum.javase.webportal.shared.AgentDTO;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
@@ -31,11 +31,11 @@ public class AdapteurAgent {
     }
 
 
-    public void sitacFactoryAgentToWebportalAgent(Agent agent){
+    public void sitacFactoryAgentToWebportalAgent(AgentDTO agent){
 
     }
 
-    public org.daum.common.genmodel.Agent webPortalAgentToSitacAgent(Agent agentShared){
+    public org.daum.common.genmodel.Agent webPortalAgentToSitacAgent(AgentDTO agentShared){
         org.daum.common.genmodel.Agent agentSitac = null;
         agentSitac = SitacFactory.createAgent();
         agentSitac.setNom(agentShared.getNom());
@@ -45,7 +45,7 @@ public class AdapteurAgent {
         return agentSitac;
     }
 
-    public Agent saveAgent(Agent agentShared){
+    public AgentDTO saveAgent(AgentDTO agentShared){
         PersistenceSession session = null;
         org.daum.common.genmodel.Agent agentSitac = webPortalAgentToSitacAgent(agentShared);
         try {
@@ -63,7 +63,7 @@ public class AdapteurAgent {
         return agentShared;
     }
 
-    public Agent editAgent(Agent agentShared){
+    public AgentDTO editAgent(AgentDTO agentShared){
         PersistenceSession session = null;
         org.daum.common.genmodel.Agent agentSitac = null;
         try {
@@ -85,8 +85,8 @@ public class AdapteurAgent {
         return getAgentSharedFromSitacAgent(agentSitac);
     }
 
-    public Agent getAgentSharedFromSitacAgent(org.daum.common.genmodel.Agent agentSitac){
-        Agent agentShared = new Agent();
+    public AgentDTO getAgentSharedFromSitacAgent(org.daum.common.genmodel.Agent agentSitac){
+        AgentDTO agentShared = new AgentDTO();
         agentShared.setId(agentSitac.getId());
         agentShared.setNom(agentSitac.getNom());
         agentShared.setPrenom(agentSitac.getPrenom());
@@ -95,14 +95,14 @@ public class AdapteurAgent {
         return agentShared;
     }
 
-    public Agent getAgentSharedFromId(String idSitacAgent){
+    public AgentDTO getAgentSharedFromId(String idSitacAgent){
         PersistenceSession session = null;
         org.daum.common.genmodel.Agent agentSitac = null;
-        Agent agentShared = null;
+        AgentDTO agentShared = null;
         try {
             session = factory.getSession();
             agentSitac = session.get(AgentImpl.class, idSitacAgent);
-            agentShared = new Agent();
+            agentShared = new AgentDTO();
             agentShared.setId(agentSitac.getId());
             agentShared.setNom(agentSitac.getNom());
             agentShared.setPrenom(agentSitac.getPrenom());
@@ -117,15 +117,15 @@ public class AdapteurAgent {
         return agentShared;
     }
 
-    public List<Agent> getAllAgentFromSitac(){
+    public List<AgentDTO> getAllAgentFromSitac(){
         PersistenceSession session = null;
-        List<Agent> listeAgents = new ArrayList<Agent>();
+        List<AgentDTO> listeAgents = new ArrayList<AgentDTO>();
         try {
             session = factory.getSession();
             Map<String, AgentImpl> agents = session.getAll(AgentImpl.class);
             for(Map.Entry<String, AgentImpl> entry : agents.entrySet()) {
                 AgentImpl agentSitac = entry.getValue();
-                Agent agentTemp = new Agent();
+                AgentDTO agentTemp = new AgentDTO();
                 agentTemp.setId(agentSitac.getId());
                 agentTemp.setNom(agentSitac.getNom());
                 agentTemp.setPrenom(agentSitac.getPrenom());
@@ -145,7 +145,7 @@ public class AdapteurAgent {
     public void deleteAgent(String id){
         PersistenceSession session = null;
         org.daum.common.genmodel.Agent agentSitac = null;
-        Agent agentShared = null;
+        AgentDTO agentShared = null;
         try {
             session = factory.getSession();
             agentSitac = session.get(AgentImpl.class, id);

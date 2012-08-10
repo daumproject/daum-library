@@ -1,7 +1,6 @@
 package org.daum.javase.webportal.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.types.Alignment;
@@ -9,17 +8,16 @@ import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Label;
 import com.smartgwt.client.widgets.events.ClickEvent;
 import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.layout.VStack;
-import org.daum.javase.webportal.shared.Agent;
+import org.daum.javase.webportal.shared.AgentDTO;
 
 import java.util.List;
 
 public class AgentDragnDrop extends VLayout{
 
-    private final AuthentificationServiceAsync loginService = GWT
-            .create(AuthentificationService.class);
+    private final WebServiceAsync loginService = GWT
+            .create(WebService.class);
 
     private VStack vStack;
     private Firefighter fireFighter;
@@ -44,14 +42,14 @@ public class AgentDragnDrop extends VLayout{
         vStack.setCanAcceptDrop(true);  
         vStack.setAnimateMembers(true);  
         vStack.setDropLineThickness(4);
-        loginService.getAllAgent(new AsyncCallback<List<Agent>>() {
+        loginService.getAllAgent(new AsyncCallback<List<AgentDTO>>() {
             @Override
             public void onFailure(Throwable throwable) {
                 throwable.printStackTrace();
             }
 
             @Override
-            public void onSuccess(List<Agent> agents) {
+            public void onSuccess(List<AgentDTO> agents) {
                 for(int i=0 ; i<agents.size(); i++){
                     fireFighter = new Firefighter(agents.get(i));
                     fireFighter.setID(agents.get(i).getId());

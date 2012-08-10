@@ -48,7 +48,7 @@ import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-import org.daum.javase.webportal.shared.Agent;
+import org.daum.javase.webportal.shared.AgentDTO;
 
 public class GridPompierTest extends VLayout{
 
@@ -56,8 +56,8 @@ public class GridPompierTest extends VLayout{
     private ListGridRecord rollOverRecord;
     private ListGrid pompierGrid;
     private PompierData pompierData= new PompierData();
-    private final AuthentificationServiceAsync loginService = GWT
-            .create(AuthentificationService.class);
+    private final WebServiceAsync loginService = GWT
+            .create(WebService.class);
     private Window windowEdit;
 
 
@@ -83,7 +83,7 @@ public class GridPompierTest extends VLayout{
                     editImg.setWidth(16);
                     editImg.addClickHandler(new ClickHandler() {
                         public void onClick(ClickEvent event) {
-                            loginService.getAgent(rollOverRecord.getAttribute("id"), new AsyncCallback<Agent>() {
+                            loginService.getAgent(rollOverRecord.getAttribute("id"), new AsyncCallback<AgentDTO>() {
 
                                 @Override
                                 public void onFailure(Throwable throwable) {
@@ -91,7 +91,7 @@ public class GridPompierTest extends VLayout{
                                 }
 
                                 @Override
-                                public void onSuccess(Agent agent) {
+                                public void onSuccess(AgentDTO agent) {
                                     AgentForm agentForm = new AgentForm(agent);
                                     windowEdit = new Window();
                                     windowEdit.setWidth("30%");

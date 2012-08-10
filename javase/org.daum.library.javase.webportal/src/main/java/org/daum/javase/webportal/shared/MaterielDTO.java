@@ -9,11 +9,11 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * Time: 12:02
  * To change this template use File | Settings | File Templates.
  */
-public class Materiel implements IsSerializable {
+public class MaterielDTO implements IsSerializable {
 
     private String id;
 
-    public Materiel(){
+    public MaterielDTO(){
 
     }
 

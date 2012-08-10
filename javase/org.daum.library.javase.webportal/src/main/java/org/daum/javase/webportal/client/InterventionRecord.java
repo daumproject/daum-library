@@ -1,8 +1,7 @@
 package org.daum.javase.webportal.client;
 
 import com.smartgwt.client.widgets.grid.ListGridRecord;
-import org.daum.javase.webportal.shared.Agent;
-import org.daum.javase.webportal.shared.Intervention;
+import org.daum.javase.webportal.shared.InterventionDTO;
 
 public class InterventionRecord extends ListGridRecord {
 
@@ -14,7 +13,7 @@ public class InterventionRecord extends ListGridRecord {
 		setCode(code);
 	}
 
-    public InterventionRecord(Intervention intervention){
+    public InterventionRecord(InterventionDTO intervention){
         setId(intervention.getId());
         setCode(intervention.getCodeSinistre());
         setAdresse(intervention.getAdresse());

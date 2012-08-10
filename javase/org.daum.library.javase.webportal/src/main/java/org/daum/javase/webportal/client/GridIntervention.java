@@ -1,22 +1,12 @@
 package org.daum.javase.webportal.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.smartgwt.client.types.Alignment;
-import com.smartgwt.client.util.BooleanCallback;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
-import com.smartgwt.client.widgets.ImgButton;
-import com.smartgwt.client.widgets.Window;
-import com.smartgwt.client.widgets.events.ClickEvent;
-import com.smartgwt.client.widgets.events.ClickHandler;
-import com.smartgwt.client.widgets.events.CloseClientEvent;
 import com.smartgwt.client.widgets.grid.ListGrid;
 import com.smartgwt.client.widgets.grid.ListGridField;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 import com.smartgwt.client.widgets.layout.HLayout;
 import com.smartgwt.client.widgets.layout.VLayout;
-import org.daum.javase.webportal.shared.Agent;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,7 +21,7 @@ public class GridIntervention extends VLayout {
         private ListGrid grilleIntervention;
         private ListGridRecord rollOverRecord;
         private InterventionData interventionData = new InterventionData();
-        private final AuthentificationServiceAsync loginService = GWT.create(AuthentificationService.class);
+        private final WebServiceAsync loginService = GWT.create(WebService.class);
 
     public GridIntervention() {
         grilleIntervention = new ListGrid() {

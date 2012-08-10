@@ -1,11 +1,9 @@
 package org.daum.javase.webportal.server;
 
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import org.daum.javase.webportal.dto.*;
+import org.daum.javase.webportal.adapter.*;
+import org.daum.javase.webportal.client.WebService;
 import org.daum.javase.webportal.shared.*;
-import org.daum.javase.webportal.client.AuthentificationService;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,18 +21,18 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 
-public class AuthentificationServiceImpl extends RemoteServiceServlet implements AuthentificationService {
+public class ServiceImpl extends RemoteServiceServlet implements WebService {
     private PersistenceSessionFactoryImpl factory;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
 
-    public AuthentificationServiceImpl(PersistenceSessionFactoryImpl factory){
+    public ServiceImpl(PersistenceSessionFactoryImpl factory){
         this.factory = factory;
     }
 
     @Override
-    public Agent createAgent(String nom, String prenom, String matricule, String password) {
-        Agent agent = new Agent(nom,prenom,matricule,password);
+    public AgentDTO createAgent(String nom, String prenom, String matricule, String password) {
+        AgentDTO agent = new AgentDTO(nom,prenom,matricule,password);
         AdapteurAgent adapteurAgent = new AdapteurAgent(factory);
         agent = adapteurAgent.saveAgent(agent);
         return agent;
@@ -43,8 +41,8 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
     @Override
     public boolean authenticateAgent(String matricule, String password)
     {
-        List<Agent> listeAgents = getAllAgent();
-        for (Agent a : listeAgents) {
+        List<AgentDTO> listeAgents = getAllAgent();
+        for (AgentDTO a : listeAgents) {
             if (a.getMatricule().equals(matricule) && a.getPassword().equals(password)) {
                 /*Agent agent = new Agent();
                 agent.setMatricule(matricule);
@@ -58,19 +56,19 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
         return false;
     }
 
-    private Agent getAgentAlreadyFromSession() {
-        Agent agent = null;
+    private AgentDTO getAgentAlreadyFromSession() {
+        AgentDTO agent = null;
         HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
         HttpSession session = httpServletRequest.getSession();
         Object userObj = session.getAttribute("agent");
-        if (userObj != null && userObj instanceof Agent) {
-            agent = (Agent) userObj;
+        if (userObj != null && userObj instanceof AgentDTO) {
+            agent = (AgentDTO) userObj;
         }
         return agent;
     }
 
 
-    private void storeAgentInSession(Agent agent) {
+    private void storeAgentInSession(AgentDTO agent) {
         HttpServletRequest httpServletRequest = this.getThreadLocalRequest();
         HttpSession session = httpServletRequest.getSession();
         session.setAttribute("agent", agent);
@@ -88,28 +86,28 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
-    public Agent loginFromSessionServer() {
-        Agent agent = getAgentAlreadyFromSession();
+    public AgentDTO loginFromSessionServer() {
+        AgentDTO agent = getAgentAlreadyFromSession();
         return agent;
     }
 
     @Override
-    public List<Agent> getAllAgent() {
+    public List<AgentDTO> getAllAgent() {
         AdapteurAgent adapteurAgent = new AdapteurAgent(factory);
         return adapteurAgent.getAllAgentFromSitac();
     }
 
     @Override
-    public Agent editAgent(Agent agent) {
+    public AgentDTO editAgent(AgentDTO agent) {
         AdapteurAgent adapteurAgent = new AdapteurAgent(factory);
         agent = adapteurAgent.editAgent(agent);
         return agent;
     }
 
     @Override
-    public Agent getAgent(String id) {
+    public AgentDTO getAgent(String id) {
         AdapteurAgent adapteurAgent = new AdapteurAgent(factory);
-        Agent agent =  adapteurAgent.getAgentSharedFromId(id);
+        AgentDTO agent =  adapteurAgent.getAgentSharedFromId(id);
         return agent;
     }
 
@@ -120,21 +118,22 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
     }
 
     @Override
-    public Intervention createIntervention(String description, Personne requerant, String codePostal, String adresse, List<String> listeIdAgent) {
+    public InterventionDTO createIntervention(String description, PersonneDTO requerant, String codePostal, String adresse, List<String> listeIdAgent) {
+
         AdapteurPersonne adapteurPersonne = new AdapteurPersonne(factory);
         adapteurPersonne.savePersonne(requerant);
 
         AdapteurMoyens adapteurMoyens = new AdapteurMoyens(factory);
-        Moyens moyens = new Moyens();
+        MoyensDTO moyens = new MoyensDTO();
         moyens.setListeIdAgent(listeIdAgent);
         adapteurMoyens.saveMoyens(moyens);
 
-        Affectation affectation = new Affectation();
+        AffectationDTO affectation = new AffectationDTO();
         affectation.setIdMoyen(moyens.getId());
         AdapteurAffectation adapteurAffectation = new AdapteurAffectation(factory);
         adapteurAffectation.saveAffectation(affectation);
 
-        Detachement detachement = new Detachement();
+        DetachementDTO detachement = new DetachementDTO();
         detachement.addIdAffectation(affectation.getId());
 
         //TODO
@@ -142,17 +141,19 @@ public class AuthentificationServiceImpl extends RemoteServiceServlet implements
         AdapteurDetachement adapteurDetachement = new AdapteurDetachement(factory);
         adapteurDetachement.saveDetachement(detachement);
 
-        Intervention intervention = new Intervention();
+        InterventionDTO intervention = new InterventionDTO();
         intervention.setDescription(description);
         intervention.setIdDetachement(detachement.getId());
-        AdapteurIntervention adapteurIntervention = new AdapteurIntervention(factory);
+
         intervention.setIdRequerant(requerant.getId());
+        AdapteurIntervention adapteurIntervention = new AdapteurIntervention(factory);
+
 
         return adapteurIntervention.saveIntervention(intervention);
     }
 
     @Override
-    public List<Intervention> getAllIntervention() {
+    public List<InterventionDTO> getAllIntervention() {
         AdapteurIntervention adapteurIntervention = new AdapteurIntervention(factory);
         return adapteurIntervention.getAllIntervention();
     }

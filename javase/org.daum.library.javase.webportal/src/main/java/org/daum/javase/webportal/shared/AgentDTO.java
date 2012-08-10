@@ -9,7 +9,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * Time: 16:13
  * To change this template use File | Settings | File Templates.
  */
-public class Agent implements IsSerializable {
+public class AgentDTO implements IsSerializable {
 
     private String id;
     private String nom;
@@ -20,11 +20,11 @@ public class Agent implements IsSerializable {
     private boolean isLogged;
 
 
-    public Agent(){
+    public AgentDTO(){
 
     }
 
-    public Agent(String nom, String prenom, String matricule, String password){
+    public AgentDTO(String nom, String prenom, String matricule, String password){
         this.nom = nom;
         this.prenom = prenom;
         this.matricule = matricule;

@@ -1,19 +1,13 @@
-package org.daum.javase.webportal.dto;
+package org.daum.javase.webportal.adapter;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-import org.daum.common.genmodel.Affectation;
-import org.daum.common.genmodel.Agent;
 import org.daum.common.genmodel.SitacFactory;
-import org.daum.common.genmodel.impl.AffectationImpl;
 import org.daum.common.genmodel.impl.DetachementImpl;
-import org.daum.javase.webportal.shared.Detachement;
+import org.daum.javase.webportal.shared.DetachementDTO;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.Some;
-import scala.collection.immutable.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,7 +26,7 @@ public class AdapteurDetachement {
         this.factory = factory;
     }
 
-    public Detachement saveDetachement(Detachement detachement){
+    public DetachementDTO saveDetachement(DetachementDTO detachement){
         PersistenceSession session = null;
         org.daum.common.genmodel.Detachement detachementSitac = sharedDetachementToSitac(detachement);
         try {
@@ -51,7 +45,7 @@ public class AdapteurDetachement {
         return detachement;
     }
 
-    public org.daum.common.genmodel.Detachement sharedDetachementToSitac(Detachement detachement) {
+    public org.daum.common.genmodel.Detachement sharedDetachementToSitac(DetachementDTO detachement) {
         org.daum.common.genmodel.Detachement detachementSitac = null;
         detachementSitac = SitacFactory.createDetachement();
         AdapteurAgent adapteurAgent = new AdapteurAgent(factory);

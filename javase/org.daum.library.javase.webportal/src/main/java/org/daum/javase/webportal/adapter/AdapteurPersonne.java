@@ -1,10 +1,8 @@
-package org.daum.javase.webportal.dto;
+package org.daum.javase.webportal.adapter;
 
 import org.daum.common.genmodel.SitacFactory;
-import org.daum.common.genmodel.impl.AgentImpl;
 import org.daum.common.genmodel.impl.PersonneImpl;
-import org.daum.javase.webportal.shared.Agent;
-import org.daum.javase.webportal.shared.Personne;
+import org.daum.javase.webportal.shared.PersonneDTO;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
@@ -28,7 +26,7 @@ public class AdapteurPersonne {
         this.factory = factory;
     }
 
-    public Personne savePersonne(Personne personneShared){
+    public PersonneDTO savePersonne(PersonneDTO personneShared){
         PersistenceSession session = null;
         org.daum.common.genmodel.Personne personneSitac = personneSharedToPersonneSitac(personneShared);
         try {
@@ -46,7 +44,7 @@ public class AdapteurPersonne {
         return personneShared;
     }
 
-    private org.daum.common.genmodel.Personne personneSharedToPersonneSitac(Personne personneShared) {
+    private org.daum.common.genmodel.Personne personneSharedToPersonneSitac(PersonneDTO personneShared) {
         org.daum.common.genmodel.Personne personneSitac = null;
         personneSitac = SitacFactory.createPersonne();
         personneSitac.setNom(personneShared.getNom());

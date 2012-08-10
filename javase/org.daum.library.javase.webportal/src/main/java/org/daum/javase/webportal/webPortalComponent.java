@@ -1,18 +1,13 @@
-package org.daum.javase.webportal.server;
+package org.daum.javase.webportal;
 
 import org.daum.common.genmodel.SitacFactory;
-import org.daum.common.genmodel.impl.AgentImpl;
-import org.daum.javase.webportal.client.AdministrationForm;
+import org.daum.javase.webportal.server.ServiceImpl;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
 import org.daum.library.replica.listener.ChangeListener;
-import org.daum.library.replica.listener.PropertyChangeEvent;
-import org.daum.library.replica.listener.PropertyChangeListener;
-import org.daum.library.replica.listener.SyncListener;
-import org.daum.library.replica.msg.SyncEvent;
 import org.kevoree.ContainerRoot;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
@@ -20,9 +15,6 @@ import org.kevoree.library.javase.webserver.*;
 import org.kevoree.library.javase.webserver.servlet.LocalServletRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.collection.immutable.List;
-
-import javax.servlet.ServletContextListener;
 
 /**
  * Created with IntelliJ IDEA.
@@ -70,7 +62,7 @@ public class webPortalComponent extends ParentAbstractPage {
             @Override
             public void modelUpdated() {
                 initormh();
-                servletRepository.registerServlet("/ihmwebportal/authentifService", new AuthentificationServiceImpl(factory));
+                servletRepository.registerServlet("/ihmwebportal/authentifService", new ServiceImpl(factory));
             }
         });
 

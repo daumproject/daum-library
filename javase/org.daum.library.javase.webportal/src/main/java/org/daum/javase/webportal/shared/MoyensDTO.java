@@ -11,13 +11,13 @@ import java.util.List;
  * Time: 11:49
  * To change this template use File | Settings | File Templates.
  */
-public class Moyens implements IsSerializable {
+public class MoyensDTO implements IsSerializable {
 
     private String id;
     private List<String> listeIdAgent;
     private List<String> listeIdMateriel;
 
-    public Moyens(){
+    public MoyensDTO(){
 
     }
 

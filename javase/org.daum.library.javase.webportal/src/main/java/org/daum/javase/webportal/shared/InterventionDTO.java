@@ -12,7 +12,7 @@ import java.util.List;
  * Time: 11:27
  * To change this template use File | Settings | File Templates.
  */
-public class Intervention implements IsSerializable {
+public class InterventionDTO implements IsSerializable {
 
     private String id;
     private String adresse;
@@ -25,7 +25,7 @@ public class Intervention implements IsSerializable {
     private String idDetachement;
     private String description;
 
-    public Intervention(){
+    public InterventionDTO(){
 
     }
 
@@ -111,5 +111,9 @@ public class Intervention implements IsSerializable {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String toString(){
+        return   ""+adresse+" "+ codePostal+" "+ville+" "+codeSinistre+" "+description;
     }
 }

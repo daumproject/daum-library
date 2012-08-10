@@ -1,6 +1,6 @@
 package org.daum.javase.webportal.client;
 
-import org.daum.javase.webportal.shared.Agent;
+import org.daum.javase.webportal.shared.AgentDTO;
 import com.smartgwt.client.widgets.grid.ListGridRecord;
 
 public class PompierRecord extends ListGridRecord {  
@@ -13,7 +13,7 @@ public class PompierRecord extends ListGridRecord {
 		setPrenom(prenom);
 	}  
 	
-	public PompierRecord(Agent agent){
+	public PompierRecord(AgentDTO agent){
         setId(agent.getId());
 	    setNom(agent.getNom());
         setPrenom(agent.getPrenom());

@@ -1,20 +1,14 @@
-package org.daum.javase.webportal.dto;
+package org.daum.javase.webportal.adapter;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
-import org.daum.common.genmodel.Personne;
-import org.daum.common.genmodel.PositionCivil;
 import org.daum.common.genmodel.SitacFactory;
 import org.daum.common.genmodel.impl.AgentImpl;
 import org.daum.common.genmodel.impl.MoyensImpl;
-import org.daum.javase.webportal.shared.Agent;
-import org.daum.javase.webportal.shared.Intervention;
-import org.daum.javase.webportal.shared.Moyens;
+import org.daum.javase.webportal.shared.MoyensDTO;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.Some;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,7 +29,7 @@ public class AdapteurMoyens {
 
 
 
-    public Moyens saveMoyens(Moyens moyens){
+    public MoyensDTO saveMoyens(MoyensDTO moyens){
         PersistenceSession session = null;
         org.daum.common.genmodel.Moyens moyensSitac = sharedMoyensToSitac(moyens);
         try {
@@ -53,7 +47,7 @@ public class AdapteurMoyens {
         return moyens;
     }
 
-    private org.daum.common.genmodel.Moyens sharedMoyensToSitac(Moyens moyens) {
+    private org.daum.common.genmodel.Moyens sharedMoyensToSitac(MoyensDTO moyens) {
         PersistenceSession session = null;
         org.daum.common.genmodel.Moyens moyensSitac = null;
         moyensSitac = SitacFactory.createMoyens();

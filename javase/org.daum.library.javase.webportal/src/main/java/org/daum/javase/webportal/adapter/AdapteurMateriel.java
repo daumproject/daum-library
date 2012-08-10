@@ -1,8 +1,6 @@
-package org.daum.javase.webportal.dto;
+package org.daum.javase.webportal.adapter;
 
-import org.daum.common.genmodel.SitacFactory;
-import org.daum.common.genmodel.Vehicule;
-import org.daum.javase.webportal.shared.Materiel;
+import org.daum.javase.webportal.shared.MaterielDTO;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
@@ -26,7 +24,7 @@ public class AdapteurMateriel {
         this.factory = factory;
     }
 
-    public Materiel saveMateriel(Materiel materiel){
+    public MaterielDTO saveMateriel(MaterielDTO materiel){
         //TODO
         return null;
     }

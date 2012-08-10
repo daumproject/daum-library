@@ -1,7 +1,6 @@
 package org.daum.javase.webportal.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.widgets.IButton;
@@ -19,7 +18,7 @@ public class AdministrationForm extends VLayout{
     private GridIntervention gridIntervention;
     private AgentForm formulaireAgent;
     private IButton boutonAdministration,boutonLoggout;
-    private final AuthentificationServiceAsync loginService = GWT.create(AuthentificationService.class);
+    private final WebServiceAsync loginService = GWT.create(WebService.class);
 
 
 	public AdministrationForm(){

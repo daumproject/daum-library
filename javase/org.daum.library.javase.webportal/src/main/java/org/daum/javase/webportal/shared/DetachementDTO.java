@@ -12,13 +12,13 @@ import java.util.List;
  * Time: 11:49
  * To change this template use File | Settings | File Templates.
  */
-public class Detachement implements IsSerializable {
+public class DetachementDTO implements IsSerializable {
 
     private String id;
     private List<String> listeIdAffectation = new ArrayList<String>();
     private String idChef;
 
-    public Detachement(){
+    public DetachementDTO(){
 
     }
 

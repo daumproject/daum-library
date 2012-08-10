@@ -1,16 +1,13 @@
-package org.daum.javase.webportal.dto;
+package org.daum.javase.webportal.adapter;
 
-import org.daum.common.genmodel.Moyens;
 import org.daum.common.genmodel.SitacFactory;
 import org.daum.common.genmodel.impl.AffectationImpl;
-import org.daum.javase.webportal.shared.Affectation;
+import org.daum.javase.webportal.shared.AffectationDTO;
 import org.daum.library.ormH.persistence.PersistenceSession;
 import org.daum.library.ormH.persistence.PersistenceSessionFactoryImpl;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.Option;
-import scala.Some;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,7 +26,7 @@ public class AdapteurAffectation {
         this.factory = factory;
     }
 
-    public Affectation saveAffectation(Affectation affectation){
+    public AffectationDTO saveAffectation(AffectationDTO affectation){
         PersistenceSession session = null;
         org.daum.common.genmodel.Affectation affectationSitac = sharedAffectationToSitac(affectation);
         try {
@@ -47,7 +44,7 @@ public class AdapteurAffectation {
         return affectation;
     }
 
-    public org.daum.common.genmodel.Affectation sharedAffectationToSitac(Affectation affectation) {
+    public org.daum.common.genmodel.Affectation sharedAffectationToSitac(AffectationDTO affectation) {
         PersistenceSession session = null;
         org.daum.common.genmodel.Affectation affectationSitac = null;
         affectationSitac = SitacFactory.createAffectation();

@@ -1,16 +1,12 @@
 package org.daum.javase.webportal.client;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.smartgwt.client.types.TitleOrientation;
 import com.smartgwt.client.util.EventHandler;
-import com.smartgwt.client.util.SC;
 import com.smartgwt.client.widgets.Canvas;
 import com.smartgwt.client.widgets.IButton;
 import com.smartgwt.client.widgets.Label;
-import com.smartgwt.client.widgets.events.DragMoveEvent;
-import com.smartgwt.client.widgets.events.DragMoveHandler;
 import com.smartgwt.client.widgets.events.DropEvent;
 import com.smartgwt.client.widgets.events.DropHandler;
 import com.smartgwt.client.widgets.form.DynamicForm;
@@ -19,9 +15,8 @@ import com.smartgwt.client.widgets.form.fields.TextAreaItem;
 import com.smartgwt.client.widgets.form.fields.TextItem;
 import com.smartgwt.client.widgets.layout.VLayout;
 import com.smartgwt.client.widgets.layout.VStack;
-import org.daum.javase.webportal.shared.Agent;
-import org.daum.javase.webportal.shared.Intervention;
-import org.daum.javase.webportal.shared.Personne;
+import org.daum.javase.webportal.shared.InterventionDTO;
+import org.daum.javase.webportal.shared.PersonneDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +24,7 @@ import java.util.List;
 
 public class InterventionForm extends VLayout{
 
-	private final AuthentificationServiceAsync loginService = GWT
-			.create(AuthentificationService.class);
+	private final WebServiceAsync loginService = GWT.create(WebService.class);
     private TextItem itemCodeSinitre,itemNomRequerant,itemPrenomRequerant,itemVille,itemCp,itemAdresse;
     private List<String> listeIdAgent = new ArrayList<String>();
     private Label labelAjoutSucces = new Label("Intervention créée avec succes");
@@ -135,10 +129,10 @@ public class InterventionForm extends VLayout{
 
                         String description = itemDescription.getValueAsString();
 
-                        Personne requerant = new Personne();
+                        PersonneDTO requerant = new PersonneDTO();
                         requerant.setNom(itemNomRequerant.getValueAsString());
 
-                        loginService.createIntervention(description, requerant, codePostal, adresse, listeIdAgent, new AsyncCallback<Intervention>(){
+                        loginService.createIntervention(description, requerant, codePostal, adresse, listeIdAgent, new AsyncCallback<InterventionDTO>(){
 
                                 @Override
                                 public void onFailure(Throwable throwable) {
@@ -148,7 +142,7 @@ public class InterventionForm extends VLayout{
                                 }
 
                                 @Override
-                                public void onSuccess(Intervention intervention) {
+                                public void onSuccess(InterventionDTO intervention) {
                                     labelNoAgent.setVisible(false);
                                     labelAjoutSucces.setVisible(true);
                                     labelAjoutFail.setVisible(false);

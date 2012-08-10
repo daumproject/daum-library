@@ -2,7 +2,6 @@ package org.daum.javase.webportal.client;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.smartgwt.client.types.VerticalAlignment;
 import com.smartgwt.client.widgets.IButton;
@@ -16,8 +15,8 @@ import com.smartgwt.client.widgets.layout.VLayout;
 
 public class AuthentiForm extends VLayout{
 
-    private final AuthentificationServiceAsync loginService = GWT
-            .create(AuthentificationService.class);
+    private final WebServiceAsync loginService = GWT
+            .create(WebService.class);
 
     private TextItem matriculeItem;
     private PasswordItem passwordItem;
