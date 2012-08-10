@@ -52,7 +52,7 @@ public class AdapteurAffectation {
         org.daum.common.genmodel.Affectation affectationSitac = null;
         affectationSitac = SitacFactory.createAffectation();
         AdapteurMoyens adapteurMoyens = new AdapteurMoyens(factory);
-        affectationSitac.setMoyen(new Some(adapteurMoyens.getMoyens(affectation.getIdMoyen())));
+        affectationSitac.setMoyen(adapteurMoyens.getMoyens(affectation.getIdMoyen()));
         return affectationSitac;
     }
 

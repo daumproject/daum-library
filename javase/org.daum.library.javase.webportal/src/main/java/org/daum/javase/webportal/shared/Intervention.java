@@ -25,7 +25,6 @@ public class Intervention implements IsSerializable {
     private String idDetachement;
     private String description;
 
-
     public Intervention(){
 
     }

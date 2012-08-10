@@ -24,13 +24,6 @@ public class InterventionData {
 
     }
 
-  /*  public PompierRecord[] getNewRecords() {
-        pompierRecords = new PompierRecord[1];
-        pompierRecords[0] = new PompierRecord(new Agent("test","test","test","test"));
-        return pompierRecords;
-    }  */
-
-
     public InterventionRecord[] getInterventionRecords(ListGrid grilleIntervention) {
         this.grille = grilleIntervention;
         loginService.getAllIntervention(new AsyncCallback<List<Intervention>>() {
@@ -42,7 +35,8 @@ public class InterventionData {
             @Override
             public void onSuccess(List<Intervention> interventions) {
                 interventionRecord = new InterventionRecord[interventions.size()];
-                for (int i = 0; i < interventions.size(); i++) {
+                for (int i = 0; i < interventions.size(); i++)
+                {
                     interventionRecord[i] = new InterventionRecord(interventions.get(i));
                 }
                 grille.setData(interventionRecord);

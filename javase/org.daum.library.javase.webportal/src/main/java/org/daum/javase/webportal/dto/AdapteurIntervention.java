@@ -60,7 +60,7 @@ public class AdapteurIntervention {
         AdapteurPersonne adapteurPersonne = new AdapteurPersonne(factory);
         AdapteurDetachement adapteurDetachement = new AdapteurDetachement(factory);
 
-         interventionSitac.setRequerant(new Some(adapteurPersonne.getPersonne(intervention.getIdRequerant())));
+         interventionSitac.setRequerant(adapteurPersonne.getPersonne(intervention.getIdRequerant()));
 
         for(String idDetachement : intervention.getListeIdDetachement()){
             interventionSitac.addDetachements(adapteurDetachement.getDetachement(idDetachement));
@@ -71,7 +71,7 @@ public class AdapteurIntervention {
         positionCivil.setNomRue(intervention.getAdresse());
 
 
-        interventionSitac.setPosition(new Some(positionCivil));
+        interventionSitac.setPosition(positionCivil);
         for(String idVictime : intervention.getListeIdVictime()){
             interventionSitac.addVictimes(adapteurPersonne.getPersonne(idVictime));
         }
@@ -92,7 +92,7 @@ public class AdapteurIntervention {
                 Intervention interventionTemp = new Intervention();
                 interventionTemp.setId(interventionSitac.getNumeroIntervention());
                 interventionTemp.setDescription(interventionSitac.getDescription());
-                interventionTemp.setIdRequerant(interventionSitac.getRequerant().get().getId());
+                interventionTemp.setIdRequerant(interventionSitac.getRequerant().getId());
                 listeIntervention.add(interventionTemp);
             }
         } catch (PersistenceException e) {

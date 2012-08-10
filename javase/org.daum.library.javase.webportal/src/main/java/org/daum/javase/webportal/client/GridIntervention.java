@@ -31,8 +31,7 @@ public class GridIntervention extends VLayout {
         private ListGrid grilleIntervention;
         private ListGridRecord rollOverRecord;
         private InterventionData interventionData = new InterventionData();
-        private final AuthentificationServiceAsync loginService = GWT
-                .create(AuthentificationService.class);
+        private final AuthentificationServiceAsync loginService = GWT.create(AuthentificationService.class);
 
     public GridIntervention() {
         grilleIntervention = new ListGrid() {
@@ -47,19 +46,19 @@ public class GridIntervention extends VLayout {
                     rollOverCanvas.setHeight(22);
                 }
                 return rollOverCanvas;
-
             }
         };
-
 
         grilleIntervention.setShowRollOverCanvas(true);
         grilleIntervention.setWidth100();
         grilleIntervention.setHeight100();
         grilleIntervention.setShowAllRecords(true);
 
-        ListGridField idField = new ListGridField("id", "Id");
+        ListGridField idField = new ListGridField("code", "Code Sinistre");
         ListGridField codeSinistreField = new ListGridField("description", "Description");
-        grilleIntervention.setFields(idField,codeSinistreField);
+        ListGridField adr = new ListGridField("adresse", "Adresse");
+
+        grilleIntervention.setFields(idField,adr,codeSinistreField);
         grilleIntervention.setCanResizeFields(true);
         refreshGrille();
         this.addChild(grilleIntervention);

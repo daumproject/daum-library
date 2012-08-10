@@ -55,10 +55,10 @@ public class AdministrationForm extends VLayout{
         TabSet theTabs = new TabSet();  
         theTabs.setWidth100();
         theTabs.setHeight100();
-          
+       /*
         Tab materielTab = new Tab();  
         materielTab.setTitle("Gestion du materiel");   
-        materielTab.setPane(new MaterielForm());  
+        materielTab.setPane(new MaterielForm());  */
   
         final Tab agentTab = new Tab();
         agentTab.setTitle("Liste des Agents");
@@ -93,9 +93,10 @@ public class AdministrationForm extends VLayout{
             }
         });
           
-        theTabs.setTabs(materielTab, agentTab, ajoutAgentTab,interventionTab);
+       // theTabs.setTabs(materielTab, agentTab, ajoutAgentTab,interventionTab);
 
-        
+        theTabs.setTabs(agentTab, ajoutAgentTab,interventionTab);
+
         this.setWidth100();
         this.setHeight100();
         this.setMembersMargin(10);

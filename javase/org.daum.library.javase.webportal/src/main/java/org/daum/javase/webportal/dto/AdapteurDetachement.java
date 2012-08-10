@@ -55,7 +55,7 @@ public class AdapteurDetachement {
         org.daum.common.genmodel.Detachement detachementSitac = null;
         detachementSitac = SitacFactory.createDetachement();
         AdapteurAgent adapteurAgent = new AdapteurAgent(factory);
-        detachementSitac.setChef(new Some(adapteurAgent.getAgent(detachement.getIdChef())));
+        detachementSitac.setChef(adapteurAgent.getAgent(detachement.getIdChef()));
         AdapteurAffectation adapteurAffectation = new AdapteurAffectation(factory);
         for(String idAffecation : detachement.getListeIdAffectation()){
             detachementSitac.addAffectation(adapteurAffectation.getAffectation(idAffecation));
