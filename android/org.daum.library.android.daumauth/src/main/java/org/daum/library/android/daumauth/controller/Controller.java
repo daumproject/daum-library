@@ -94,9 +94,11 @@ public class Controller implements IController, IControllerListener {
     private ArrayList<String> retrieveInterventionsItemized() {
         ArrayList<String> items = new ArrayList<String>();
         interventions = interventionEngine.getInterventions();
-        for (Intervention i : interventions) {
-            Personne req = i.getRequerant().get();
-            items.add(i.getPosition().get().toString()+" "+req.getNom()+" - "+req.getPrenom());
+        for (Intervention i : interventions)
+        {
+            Personne req = i.getRequerant();
+            items.add("["+req.getPrenom()+" "+req.getNom()+"]"+i.getCode() +" "+ i.getDescription()+i.getPosition());
+
         }
         return items;
     }
