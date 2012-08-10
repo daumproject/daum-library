@@ -16,15 +16,6 @@
         <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
     </parent>
 
-    <dependencies>
-        <dependency>
-            <groupId>p2psockets</groupId>
-            <artifactId>p2psockets-core</artifactId>
-            <version>1.1.2</version>
-        </dependency>
-    </dependencies>
-
-
     <build>
         <plugins>
             <plugin>

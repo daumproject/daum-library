@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import scala.Option;
 
 import java.io.*;
+import java.util.concurrent.Semaphore;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,6 +27,7 @@ public class P2pSock extends AbstractChannelFragment {
     private P2pServer server;
     private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
     private Thread t_server;
+    private Semaphore sender = new Semaphore(1);
         @Start
     public void startp()
     {
@@ -34,7 +36,7 @@ public class P2pSock extends AbstractChannelFragment {
             t_server = new Thread(server);
             t_server.start();
         } catch (Exception e) {
-            e.printStackTrace();
+        logger.error("Starting ",e);
         }
 
     }
@@ -65,22 +67,27 @@ public class P2pSock extends AbstractChannelFragment {
 
 
 
-
-
       @Override
     public ChannelFragmentSender createSender (final String remoteNodeName, final String remoteChannelName) {
         return new ChannelFragmentSender() {
             @Override
             public Object sendMessageToRemote (Message message) {
-                try {
+                try
+                {
+
+                    sender.acquire();
                     if (!message.getPassedNodes().contains(getNodeName())) {
                         message.getPassedNodes().add(getNodeName());
                     }
-                    P2pClient client = new P2pClient(getAddress(remoteNodeName), parsePortNumber(remoteNodeName));
+                    message.setDestNodeName(remoteNodeName);
+                  //   logger.warn("Sending msg to "+remoteNodeName+" "+message.getContent());
+                    P2pClient client = new P2pClient(remoteNodeName,getAddress(remoteNodeName), parsePortNumber(remoteNodeName));
                     client.send(message);
                     //    clientBootStrap.connect(new InetSocketAddress(getAddress(remoteNodeName),parsePortNumber(remoteNodeName)));
-                } catch (IOException e) {
-                    logger.debug("Error while sending message to " + remoteNodeName + "-" + remoteChannelName);
+                } catch (Exception e) {
+                    logger.error("Error while sending message to " + remoteNodeName + "-" + remoteChannelName);
+                }finally {
+                    sender.release();
                 }
                 return null;
             }

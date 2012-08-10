@@ -8,20 +8,25 @@ package org.daum.library.p2pSock;
  * To change this template use File | Settings | File Templates.
  */
 import org.kevoree.framework.message.Message;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.net.*;
 public class P2pClient
 {
-    Socket requestSocket;
-    ObjectOutputStream out;
-    ObjectInputStream in;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private Socket requestSocket;
+    private ObjectOutputStream out;
+    private ObjectInputStream in;
     private String adr;
     private int port;
+    private String remoteNodeName ="";
 
-    public P2pClient(String adr, int port){
+    public P2pClient(String remoteNodeName,String adr, int port){
         this.adr = adr;
         this.port = port;
+        this.remoteNodeName = remoteNodeName;
     }
 
     void send(Message msg)
@@ -34,14 +39,16 @@ public class P2pClient
             out = new ObjectOutputStream(requestSocket.getOutputStream());
 
             out.writeObject(msg);
+
+            /*  RichJSONObject c = new RichJSONObject(msg);
+
+            out.writeUTF(c.toJSON());*/
             out.flush();
             out.reset();
+
         }
-        catch(UnknownHostException unknownHost){
-            System.err.println("You are trying to connect to an unknown host!");
-        }
-        catch(IOException ioException){
-            ioException.printStackTrace();
+        catch(Exception ioException){
+            logger.warn("The node '"+remoteNodeName+"' is not available on "+adr+":"+port);
         }
         finally{
             //4: Closing connection

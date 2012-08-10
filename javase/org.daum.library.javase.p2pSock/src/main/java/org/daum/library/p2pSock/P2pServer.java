@@ -22,7 +22,6 @@ public class P2pServer  implements Runnable{
     protected ExecutorService threadPool =            Executors.newFixedThreadPool(50);
     private P2pSock p2pSock;
 
-
     public P2pServer(P2pSock p2pSock,int port){
         this.serverPort = port;
         this.p2pSock = p2pSock;
