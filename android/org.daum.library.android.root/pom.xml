@@ -15,7 +15,6 @@
     </parent>
 
     <properties>
-        <android.home>$ANDROID_ROOT</android.home>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
         <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
