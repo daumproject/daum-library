@@ -20,6 +20,11 @@
             <artifactId>org.daum.extra.jdbm3.javase.root</artifactId>
             <version>1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.daum.common.genmodel.javase</groupId>
+            <artifactId>org.daum.common.genmodel.javase.root</artifactId>
+         <version>1.2-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
