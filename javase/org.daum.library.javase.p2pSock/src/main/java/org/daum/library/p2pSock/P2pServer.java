@@ -67,6 +67,7 @@ public class P2pServer  implements Runnable{
     private void openServerSocket() {
         try {
             this.serverSocket = new ServerSocket(this.serverPort);
+
         } catch (IOException e) {
             throw new RuntimeException("Cannot open port 8080", e);
         }

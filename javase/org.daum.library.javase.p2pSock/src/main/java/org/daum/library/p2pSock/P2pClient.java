@@ -29,8 +29,7 @@ public class P2pClient
         this.remoteNodeName = remoteNodeName;
     }
 
-    void send(Message msg)
-    {
+    void send(Message msg) throws Exception {
         try
         {
             requestSocket = new Socket(adr, port);
@@ -48,7 +47,8 @@ public class P2pClient
 
         }
         catch(Exception ioException){
-            logger.debug("The node '"+remoteNodeName+"' is not available on "+adr+":"+port);
+            logger.debug("The node '" + remoteNodeName + "' is not available on " + adr + ":" + port);
+            throw new Exception(ioException);
         }
         finally{
             //4: Closing connection
