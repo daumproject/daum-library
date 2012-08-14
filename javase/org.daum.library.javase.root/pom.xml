@@ -26,10 +26,11 @@
         <module>../org.daum.library.javase.webportal</module>
         <module>../org.daum.library.javase.webtests</module>
         <module>../org.daum.library.javase.moyensmonitor</module>
-        <module>../org.daum.library.javase.fakeDemo</module>
+
         <module>../org.daum.library.javase.tileServer</module>
         <module>../org.daum.library.javase.p2pSock</module>
-        <!--<module>../org.daum.library.javase.kestrelChannels</module>
+        <!--       <module>../org.daum.library.javase.fakeDemo</module>
+                <module>../org.daum.library.javase.kestrelChannels</module>
 -->
     </modules>
 
@@ -69,7 +70,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+
                 <configuration>
                     <source>1.6</source>
                     <target>1.6</target>

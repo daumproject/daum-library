@@ -8,6 +8,8 @@ package org.daum.library.p2pSock;
  * To change this template use File | Settings | File Templates.
  */
 
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.*;
 import java.util.concurrent.ExecutorService;
@@ -19,8 +21,9 @@ public class P2pServer  implements Runnable{
     protected ServerSocket serverSocket = null;
     protected boolean      isStopped    = false;
     protected Thread       runningThread= null;
-    protected ExecutorService threadPool =            Executors.newFixedThreadPool(50);
+    protected ExecutorService threadPool = Executors.newFixedThreadPool(50);
     private P2pSock p2pSock;
+    private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public P2pServer(P2pSock p2pSock,int port){
         this.serverPort = port;
@@ -28,7 +31,8 @@ public class P2pServer  implements Runnable{
     }
 
     public void run(){
-        synchronized(this){
+        synchronized(this)
+        {
             this.runningThread = Thread.currentThread();
         }
         openServerSocket();
@@ -37,17 +41,17 @@ public class P2pServer  implements Runnable{
             try {
                 clientSocket = this.serverSocket.accept();
             } catch (IOException e) {
-                if(isStopped()) {
-                    System.out.println("Server Stopped.") ;
+                if(isStopped())
+                {
+                    logger.debug("Server Stopped ",e);
                     return;
                 }
-                throw new RuntimeException(
-                        "Error accepting client connection", e);
+                throw new RuntimeException("Error accepting client connection", e);
             }
             this.threadPool.execute( new WorkerRunnable(p2pSock,clientSocket,"Thread Pooled Server"));
         }
         this.threadPool.shutdown();
-        System.out.println("Server Stopped.") ;
+        logger.debug("Server Stopped ");
     }
 
 
@@ -55,7 +59,8 @@ public class P2pServer  implements Runnable{
         return this.isStopped;
     }
 
-    public synchronized void stop(){
+    public synchronized void stop()
+    {
         this.isStopped = true;
         try {
             this.serverSocket.close();
@@ -64,7 +69,8 @@ public class P2pServer  implements Runnable{
         }
     }
 
-    private void openServerSocket() {
+    private void openServerSocket()
+    {
         try {
             this.serverSocket = new ServerSocket(this.serverPort);
 

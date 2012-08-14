@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.daum.library.android.sitac</artifactId>
     <name>Daum :: Library :: Android :: Sitac</name>
-    <version>1.8.3-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
 
 
     <parent>

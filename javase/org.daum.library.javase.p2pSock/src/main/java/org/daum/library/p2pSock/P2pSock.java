@@ -57,8 +57,15 @@ public class P2pSock extends AbstractChannelFragment {
 
     @Stop
     public void stopp(){
-        t_server.interrupt();
-        backupOnError.stopProcess();
+        if(server !=null){
+            server.stop();
+        }
+        if(t_server != null){
+            t_server.interrupt();
+        }
+        if(backupOnError != null){
+            backupOnError.stopProcess();
+        }
     }
 
     @Update
@@ -150,6 +157,9 @@ public class P2pSock extends AbstractChannelFragment {
                 .getStringNetworkProperties(this.getModelService().getLastModel(), remoteNodeName, org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP()));
         if (ipOption.isDefined()) {
             ip = ipOption.get();
+        } else
+        {
+            logger.error("You forgot to define an ip address for "+remoteNodeName);
         }
         return ip;
     }

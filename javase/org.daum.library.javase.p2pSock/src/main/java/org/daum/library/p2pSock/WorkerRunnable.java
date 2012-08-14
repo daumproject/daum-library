@@ -31,22 +31,23 @@ public class WorkerRunnable implements Runnable{
     }
 
     public void run() {
-        try {
+        try
+        {
             InputStream input  = clientSocket.getInputStream();
             OutputStream output = clientSocket.getOutputStream();
             ObjectInputStream  in = new ObjectInputStreamImpl(input,p2pSock);
             Message  msg = (Message)in.readObject();
 
             /*
-
-            String json=    in.readUTF()
-            RichString richString = new RichString(json);
-          Message msg =  richString.fromJSON(Message.class);
+                String json=    in.readUTF()
+                RichString richString = new RichString(json);
+                Message msg =  richString.fromJSON(Message.class);
              */
+
             if (!msg.getPassedNodes().contains(p2pSock.getNodeName())) {
                 msg.getPassedNodes().add(p2pSock.getNodeName());
             }
-           // logger.debug("Reiceive msg to  "+msg.getDestNodeName());
+            // logger.debug("Reiceive msg to  "+msg.getDestNodeName());
             p2pSock.remoteDispatch(msg);
 
             output.close();
