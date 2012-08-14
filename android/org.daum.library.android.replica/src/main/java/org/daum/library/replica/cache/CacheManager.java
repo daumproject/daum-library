@@ -21,14 +21,11 @@ public class CacheManager implements ICacheManger
     //   //private LRUMap<String, Cache> store = new LRUMap<String,Cache>(1000);
     private HashMap<String,Integer> history = new HashMap<String,Integer>();
     private ICluster cluster;
-    private NotifyUpdate notifyUpdate;  // notify from local
-    private NotifyUpdate r_notifyUpdate;  // notify from remote
+
 
     public CacheManager(ICluster cluster)
     {
         this.cluster = cluster;
-         notifyUpdate = new NotifyUpdate();
-        r_notifyUpdate = new NotifyUpdate();
     }
 
     public ICluster getCluster() {
@@ -106,7 +103,7 @@ public class CacheManager implements ICacheManger
                         getCache(update.cache).localDispatch(update);
 
                         //notify update from remote
-
+                        NotifyUpdate notifyUpdate = new NotifyUpdate();
                         notifyUpdate.setId(update.getKey());
                         notifyUpdate.setCache(update.cache);
                         notifyUpdate.setEvent(update.getEvent());
@@ -264,17 +261,12 @@ public class CacheManager implements ICacheManger
         // remoteDisptachManager.addUpdate(update);
 
         // notify an update from local
-
-        r_notifyUpdate.setId(update.getKey());
-        r_notifyUpdate.setCache(update.cache);
-        r_notifyUpdate.setEvent(update.getEvent());
-        r_notifyUpdate.setNode(update.getSourceNode());
+        NotifyUpdate notifyUpdate = new NotifyUpdate();
+        notifyUpdate.setId(update.getKey());
+        notifyUpdate.setCache(update.cache);
+        notifyUpdate.setEvent(update.getEvent());
+        notifyUpdate.setNode(update.getSourceNode());
 
         cluster.getChannel().write(notifyUpdate);
     }
-
-
-
-
-
 }

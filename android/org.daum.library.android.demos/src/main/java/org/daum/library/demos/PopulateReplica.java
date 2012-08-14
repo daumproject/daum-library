@@ -132,34 +132,15 @@ public class PopulateReplica extends AbstractComponentType {
                         sitacModel.addPersonnes(agentjed);
 
                         Personne requerant = SitacFactory.createPersonne();
-                        requerant.setNom("Exemple Nom requerant");
-                        requerant.setPrenom("Exemple Prenom requerant");
-
-                        Personne vitc1 = SitacFactory.createPersonne();
-                        vitc1.setNom("Nom victime1");
-                        vitc1.setPrenom("Prenom victime1");
-
-                        Personne vitc2 = SitacFactory.createPersonne();
-                        vitc2.setNom("Nom victime2");
-                        vitc2.setPrenom("Prenom victime2");
-
-                        session.save(vitc1);
-
+                        requerant.setNom("Fouquet");
+                        requerant.setPrenom("François");
 
 
                         Intervention interventionfake =SitacFactory.createIntervention();
 
-                        GpsPoint position = SitacFactory.createGpsPoint();
-                        position.setLong(4811534);
-                        position.setLat(-1638336);
-
-
-                        interventionfake.setPosition(position);
-
                         interventionfake.setRequerant(requerant);
 
-                        interventionfake.addVictimes(vitc1);
-                        interventionfake.addVictimes(vitc2);
+
 
 
                         Vehicule fpt2 =SitacFactory.createVehicule();
@@ -187,8 +168,21 @@ public class PopulateReplica extends AbstractComponentType {
 
 
                         interventionfake.addDetachements(detachement);
+                        interventionfake.setDescription("l y a une voiture en flammes sur le bas coté ! L'homme est visiblement encore au volant de sa voiture  ");
+                                                 CodeSinistre codeSinistre = SitacFactory.createInterventionType();
+                        codeSinistre.setCode("332");
 
+                        interventionfake.setType(codeSinistre);
                         sitacModel.addInterventions(interventionfake);
+
+
+                        GpsPoint position = SitacFactory.createGpsPoint();
+                        position.setLong(4811534);
+                        position.setLat(-1638336);
+
+
+                        interventionfake.setPosition(position);
+
 
                         session.save(sitacModel);
 
