@@ -49,15 +49,4 @@ trait Personne extends org.daum.common.genmodel.SitacContainer {
   }
 
 
-  def getClonelazy(subResult : java.util.IdentityHashMap[Object,Object]): Unit = {
-    val selfObjectClone = SitacFactory.createPersonne
-    selfObjectClone.setNom(this.getNom)
-    selfObjectClone.setPrenom(this.getPrenom)
-    subResult.put(this,selfObjectClone)
-  }
-  def resolve(addrs : java.util.IdentityHashMap[Object,Object]) : Personne = {
-    val clonedSelfObject = addrs.get(this).asInstanceOf[org.daum.common.genmodel.Personne]
-    clonedSelfObject
-  }
-
 }

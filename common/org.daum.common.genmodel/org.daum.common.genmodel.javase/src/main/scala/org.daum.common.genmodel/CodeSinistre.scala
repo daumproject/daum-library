@@ -20,4 +20,8 @@ trait CodeSinistre extends org.daum.common.genmodel.SitacContainer {
 		def setCode(code : java.lang.String) {
 			this.code = code
 		}
+
+  override def toString: String = {
+    ""+code
+  }
 }
