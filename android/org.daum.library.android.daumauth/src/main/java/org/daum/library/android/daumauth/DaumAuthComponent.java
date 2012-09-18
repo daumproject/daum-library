@@ -104,6 +104,11 @@ public class DaumAuthComponent extends AbstractComponentType       implements On
             }
 
             @Override
+            public boolean afterLocalUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return true;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
             public void modelUpdated() {
                 uiService.getRootActivity().runOnUiThread(new Runnable() {
                     @Override

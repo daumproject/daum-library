@@ -77,6 +77,11 @@ public class MessagesComponent extends AbstractComponentType       implements IM
             }
 
             @Override
+            public boolean afterLocalUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return true;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
             public void modelUpdated() {
                 try {
                     ReplicaService replicatingService = getPortByName("service", ReplicaService.class);

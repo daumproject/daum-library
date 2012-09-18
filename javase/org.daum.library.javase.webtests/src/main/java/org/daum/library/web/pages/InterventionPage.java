@@ -66,6 +66,12 @@ public class InterventionPage extends AbstractPage implements Observer {
             }
 
             @Override
+            public boolean afterLocalUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return true;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+
+            @Override
             public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
                 return true;
             }

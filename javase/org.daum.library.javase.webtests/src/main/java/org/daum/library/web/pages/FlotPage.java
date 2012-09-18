@@ -48,6 +48,11 @@ public class FlotPage extends AbstractPage
             }
 
             @Override
+            public boolean afterLocalUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                return true;  //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
             public void modelUpdated() {
                 logger.debug("Request Ws Demand");
                 getPortByName("ws", WsHandler.class).addHandler("/flotpage", webSocketChannel);
