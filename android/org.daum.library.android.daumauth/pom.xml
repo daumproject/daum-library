@@ -3,12 +3,12 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>org.daum.library.android.daumauth</artifactId>
     <name>Daum :: Library :: Android :: Daumauth</name>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.2-SNAPSHOT</version>
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
         <groupId>org.daum.library.android</groupId>
-        <version>1.8.4</version>
+        <version>1.8.5</version>
         <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
 

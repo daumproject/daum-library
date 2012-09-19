@@ -5,13 +5,13 @@
     <groupId>org.daum.library.android</groupId>
     <artifactId>org.daum.library.android.fakeDemo</artifactId>
     <name>DAUM :: Library :: Android :: FakeDemo</name>
-    <version>1.3-SNAPSHOT</version>
+    <version>1.4-SNAPSHOT</version>
 
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
         <groupId>org.daum.library.android</groupId>
-        <version>1.8.4</version>
+        <version>1.8.5</version>
         <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
 
