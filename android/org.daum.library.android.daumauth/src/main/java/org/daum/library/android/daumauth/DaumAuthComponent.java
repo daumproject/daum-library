@@ -245,11 +245,11 @@ public class DaumAuthComponent extends AbstractComponentType       implements On
 
         // kevScript model for SITAC, Moyens & Messages
         engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
-                "org.daum.library.android/org.daum.library.android.sitac/1.8.3-SNAPSHOT'");
+                "org.daum.library.android/org.daum.library.android.sitac/1.3-SNAPSHOT'");
         engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
-                "org.daum.library.android/org.daum.library.android.messages/1.8.2-SNAPSHOT'");
+                "org.daum.library.android/org.daum.library.android.messages/1.3-SNAPSHOT'");
         engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
-                "org.daum.library.android/org.daum.library.android.moyens/1.8.2-SNAPSHOT'");
+                "org.daum.library.android/org.daum.library.android.moyens/1.3-SNAPSHOT'");
 
         engine.append("addComponent sitacComp@{nodeName} : SITACComponent {mapProvider='{tileServer}',interNum='{interNum}'}");
         engine.append("addComponent moyensComp@{nodeName} : MoyensComponent {interNum='{interNum}'}");

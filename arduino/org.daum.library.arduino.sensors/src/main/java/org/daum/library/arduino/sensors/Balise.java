@@ -16,7 +16,7 @@ import org.kevoree.tools.arduino.framework.ArduinoGenerator;
 @Library(name = "Arduino")
 @ComponentType
 @Provides({
-        @ProvidedPort(name = "razor", type = PortType.MESSAGE),
+        @ProvidedPort(name = "heart", type = PortType.MESSAGE),
         @ProvidedPort(name = "temp", type = PortType.MESSAGE)
 })
 @Requires({
@@ -43,16 +43,42 @@ public class Balise extends AbstractPeriodicArduinoComponent
     }
 
 
-    @Port(name = "razor")
+    @Port(name = "heart")
     public void inputRazor(Object o)
     {
+        /*
+        getGenerator().appendNativeStatement("int value = atoi(msg->value);");
+        getGenerator().appendNativeStatement("if(value < 50){  ");
+
+
+        getGenerator().declareStaticKMessage("msg2","t");
+        getGenerator().appendNativeStatement("msg2->value = \"tick\";");
+        getGenerator().sendKMessage("msg2","light");
+        getGenerator().freeStaticKMessage("msg2");
+
+
+        getGenerator().appendNativeStatement("}");    */
 
     }
 
     @Port(name = "temp")
     public void inputtemp(Object o)
     {
+        getGenerator().appendNativeStatement("int value = atoi(msg->value);");
 
+        getGenerator().appendNativeStatement("if(value > 27){  ");
+
+        getGenerator().declareStaticKMessage("msg","t");
+        getGenerator().appendNativeStatement("msg->value = \"tick\";");
+        getGenerator().sendKMessage("msg","light");
+        getGenerator().freeStaticKMessage("msg");
+/*
+        getGenerator().declareStaticKMessage("msg2","t");
+        getGenerator().appendNativeStatement("msg2->value = \"tick\";");
+        getGenerator().sendKMessage("msg2","tone");
+        getGenerator().freeStaticKMessage("msg2");
+  */
+        getGenerator().appendNativeStatement("}");
     }
 
     @Override
