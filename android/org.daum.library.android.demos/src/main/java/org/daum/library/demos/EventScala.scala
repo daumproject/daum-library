@@ -11,25 +11,31 @@ import scala.actors.Actor.actor
 import scala.actors.Actor.loop
 import scala.actors.Actor.react
 import scala.concurrent.ops.spawn
+import actors.Actor
+
 object EventScala extends  App{
 
   case class Event(index: Int)
 
   test()
   def test() {
-    val consumer = actor {
+    val consumer = new Actor {
       var count = 0l
-      val start = System.currentTimeMillis()
-      loop {
-        react {
-          case Event(c) => count += 1
-          case "End" =>
-            val end = System.currentTimeMillis()
-            println("Scala AVG:" + count * 1000.0 / (end - start))
-            exit()
+      val startV = System.currentTimeMillis()
+      def act() {
+        while (true) {
+          receive {
+            case Event(c) => count += 1
+            case "End" =>
+              val end = System.currentTimeMillis()
+              println("Scala AVG:" + count * 1000.0 / (end - startV))
+              exit()
+          }
         }
       }
+
     }
+    consumer.start
     var running = true;
     for (i <- 0 to 1) {
       {
@@ -41,7 +47,7 @@ object EventScala extends  App{
         }
       }
     }
-    Thread.sleep(5000)
+    Thread.sleep(10000)
     running = false
   }
 

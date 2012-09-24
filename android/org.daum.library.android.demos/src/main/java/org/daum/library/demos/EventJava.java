@@ -52,18 +52,23 @@ public class EventJava {
             while (running) {
                 queue.add(new Event(1));
             }
-            queue.add(sentinel);
+
         }
     }
 
     static void test() throws InterruptedException {
         ExecutorService pool = Executors.newCachedThreadPool();
-        pool.submit(new Consumer());
+
+        ExecutorService pool2 = Executors.newSingleThreadExecutor();
+
+        pool2.submit(new Consumer());
         pool.execute(new Producer());
         pool.execute(new Producer());
-        Thread.sleep(5000);
+        Thread.sleep(10000);
         running = false;
+        queue.add(sentinel);
         pool.shutdown();
+        pool2.shutdown();
     }
 
     public static void main(String[] args) throws InterruptedException {
