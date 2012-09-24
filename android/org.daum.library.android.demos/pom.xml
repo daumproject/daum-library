@@ -29,7 +29,38 @@
             <artifactId>org.daum.common.genmodel.android.root</artifactId>
             <version>1.2-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.typesafe.akka</groupId>
+            <artifactId>akka-actor</artifactId>
+            <version>2.0.3</version>
+        </dependency>
+
     </dependencies>
+
+
+
+    <repositories>
+        <repository>
+            <id>SonatypeSnapshotRepo</id>
+            <name>Sonatype Snapshot Repo</name>
+            <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>TwitterPublicRepo</id>
+            <name>Twitter Public Repo</name>
+            <url>http://maven.twttr.com/</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>TypesafeRepo</id>
+            <name>Typesafe Repo</name>
+            <url>http://repo.typesafe.com/typesafe/releases/</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+
 
     <build>
         <plugins>
