@@ -133,12 +133,15 @@ public class P2pSock extends AbstractChannelFragment {
                         }
                         message.setDestNodeName(remoteNodeName);
 
-                        P2pClient client = new P2pClient(remoteNodeName,getAddress(remoteNodeName), parsePortNumber(remoteNodeName));
+                        String adr =    getAddress(remoteNodeName);
+                        int port =     parsePortNumber(remoteNodeName);
+
+                        P2pClient client = new P2pClient(remoteNodeName,adr, port);
                         client.send(message);
                     }
 
                 } catch (Exception e) {
-                    logger.warn("Error while sending message to " + remoteNodeName + "-" + remoteChannelName);
+                    logger.warn("Error while sending message to " + remoteNodeName + "-" + getAddress(remoteNodeName));
                     if(getDictionary().get("replay").toString().equals("true")){
                         backupOnError.enqueue(message);
                     }
@@ -151,15 +154,13 @@ public class P2pSock extends AbstractChannelFragment {
             }
         };
     }
-    public String getAddress (String remoteNodeName) {
-        String ip = "127.0.0.1";
-        Option<String> ipOption = NetworkHelper.getAccessibleIP(KevoreePropertyHelper
-                .getStringNetworkProperties(this.getModelService().getLastModel(), remoteNodeName, org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP()));
-        if (ipOption.isDefined()) {
-            ip = ipOption.get();
-        } else
-        {
-            logger.error("You forgot to define an ip address for or  "+remoteNodeName+" is not reachable");
+
+    public String getAddress(String remoteNodeName)
+    {
+        String ip = KevoreePlatformHelper.getProperty(this.getModelService().getLastModel(), remoteNodeName,
+                org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP());
+        if (ip == null || ip.equals("")) {
+            ip = "127.0.0.1";
         }
         return ip;
     }
