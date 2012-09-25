@@ -244,12 +244,25 @@ public class DaumAuthComponent extends AbstractComponentType       implements On
         engine.addVariable("tileServer",getDictionary().get("tileServer").toString());
 
         // kevScript model for SITAC, Moyens & Messages
+        /*
+        engine.append("merge 'mvn:http://192.168.1.123/repository/!" +
+                "org.daum.library.android/org.daum.library.android.sitac/1.4'");
+
+        engine.append("merge 'mvn:http://192.168.1.123/repository/!" +
+                "org.daum.library.android/org.daum.library.android.messages/1.4'");
+        engine.append("merge 'mvn:http://192.168.1.123/repository/!" +
+                "org.daum.library.android/org.daum.library.android.moyens/1.4'");
+
+           */
+
+         // kevScript model for SITAC, Moyens & Messages
         engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
                 "org.daum.library.android/org.daum.library.android.sitac/1.3-SNAPSHOT'");
         engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
                 "org.daum.library.android/org.daum.library.android.messages/1.3-SNAPSHOT'");
         engine.append("merge 'mvn:http://maven.kevoree.org/daum/snapshots!" +
                 "org.daum.library.android/org.daum.library.android.moyens/1.3-SNAPSHOT'");
+
 
         engine.append("addComponent sitacComp@{nodeName} : SITACComponent {mapProvider='{tileServer}',interNum='{interNum}'}");
         engine.append("addComponent moyensComp@{nodeName} : MoyensComponent {interNum='{interNum}'}");

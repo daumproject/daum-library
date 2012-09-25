@@ -159,7 +159,7 @@ public class P2pSock extends AbstractChannelFragment {
             ip = ipOption.get();
         } else
         {
-            logger.error("You forgot to define an ip address for "+remoteNodeName);
+            logger.error("You forgot to define an ip address for or  "+remoteNodeName+" is not reachable");
         }
         return ip;
     }
