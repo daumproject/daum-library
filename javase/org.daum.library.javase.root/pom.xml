@@ -29,6 +29,7 @@
 
         <module>../org.daum.library.javase.tileServer</module>
         <module>../org.daum.library.javase.p2pSock</module>
+        <module>../org.daum.library.javase.repositoryManager</module>
         <!--       <module>../org.daum.library.javase.fakeDemo</module>
                 <module>../org.daum.library.javase.kestrelChannels</module>
 -->
