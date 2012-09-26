@@ -1,4 +1,4 @@
-package org.daum.library.demos;
+package org.daum.library.sensors;
 
 import java.io.Serializable;
 import java.util.ArrayList;

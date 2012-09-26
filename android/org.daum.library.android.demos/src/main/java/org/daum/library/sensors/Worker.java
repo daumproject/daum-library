@@ -1,8 +1,7 @@
-package org.daum.library.demos;
+package org.daum.library.sensors;
 
 import org.kevoree.framework.message.Message;
 
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 /**

@@ -1,4 +1,4 @@
-package org.daum.library.demos;
+package org.daum.library.sensors;
 
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;

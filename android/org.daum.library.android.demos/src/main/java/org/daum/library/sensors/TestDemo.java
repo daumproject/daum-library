@@ -1,4 +1,4 @@
-package org.daum.library.demos;
+package org.daum.library.sensors;
 
 import org.daum.library.ormH.annotations.Generated;
 import org.daum.library.ormH.annotations.Id;

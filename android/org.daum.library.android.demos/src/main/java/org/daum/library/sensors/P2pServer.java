@@ -1,4 +1,4 @@
-package org.daum.library.demos;
+package org.daum.library.sensors;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +17,6 @@ import java.io.ObjectInputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

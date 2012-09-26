@@ -1,4 +1,4 @@
-package org.daum.library.demos;
+package org.daum.library.sensors;
 
 import org.daum.common.genmodel.*;
 import org.daum.common.genmodel.impl.*;
@@ -14,7 +14,6 @@ import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.Some;
 
 
 /**
