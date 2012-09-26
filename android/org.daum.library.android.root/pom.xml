@@ -32,6 +32,7 @@
         <module>../org.daum.library.android.messages</module>
         <module>../org.daum.library.android.daumauth</module>
         <module>../org.daum.library.android.p2pSock</module>
+        <module>../org.daum.library.android.sensors</module>
     </modules>
 
     <dependencies>
