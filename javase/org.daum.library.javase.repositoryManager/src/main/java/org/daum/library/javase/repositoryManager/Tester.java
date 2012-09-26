@@ -12,6 +12,7 @@ import org.eclipse.jetty.server.nio.SelectChannelConnector;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,17 +25,24 @@ public class Tester {
 
 
     public static void  main(String argv[]) throws Exception {
-
-
+             /*
         Server server = new Server();
         SelectChannelConnector connector = new SelectChannelConnector();
         connector.setPort(8080);
         server.addConnector(connector);
 
-        HttpProxyMojo httpProxyMojo = new HttpProxyMojo();
+        DownloadRepository k = new DownloadRepository();
+
+        k.setId("kev-release");
+        k.setUrl("maven.kevoree.org/release");
+
+        List<DownloadRepository> repositories = new ArrayList<DownloadRepository>();
+
+        repositories.add(k);
 
 
-        DownloadRequestHandler requestHandler = new DownloadRequestHandler(httpProxyMojo);
+
+        DownloadRequestHandler requestHandler = new DownloadRequestHandler(repositories);
 
 
 
@@ -44,8 +52,7 @@ public class Tester {
 
         server.start();
         server.join();
-
-
+                           */
 
 
 
