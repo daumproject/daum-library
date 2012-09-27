@@ -8,6 +8,29 @@
 
     <packaging>uexe</packaging>
 
+
+    <dependencies>
+
+
+        <dependency>
+            <groupId>org.daum.extra.javase</groupId>
+            <artifactId>org.daum.extra.javase.commonsio</artifactId>
+            <version>2.4</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.kevoree.tools</groupId>
+            <artifactId>org.kevoree.tools.javase.framework</artifactId>
+            <version>1.8.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kevoree.tools</groupId>
+            <artifactId>org.kevoree.tools.annotation.api</artifactId>
+            <version>1.8.5</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

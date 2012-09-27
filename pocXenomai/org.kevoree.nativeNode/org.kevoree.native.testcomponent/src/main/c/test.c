@@ -1,7 +1,9 @@
 #include "../../../../../org.kevoree.nativeNode/org.kevoree.nativeNode.native/src/main/c/component.h"
 #include <stdio.h>
 
+void output_port(void *input);
 
+/*@Start*/
 int start()
 {
 	fprintf(stderr,"Component starting \n");
@@ -9,30 +11,34 @@ int start()
 
 }
 
-
+/*@Stop */
 int stop()
 {
     fprintf(stderr,"Component stoping \n");
+
 }
 
-
+/*@Update */
 int update()
 {
     fprintf(stderr,"Component updating \n");
+
+}
+
+
+//@Port(name = "input_port")
+void input_port(void *input)
+{
+
 }
 
 
  /********************** TODO GENERATE STUB  *******************/
 
-void input_port(void *input) {
-output_port(input);
-}
 
 void output_port(void *input) {
  process_output(0,input);
 }
-
-
 
 
 void dispatch(int port,int id_queue) {
@@ -40,7 +46,6 @@ void dispatch(int port,int id_queue) {
   if(msg !=NULL)  {
 
     switch(port)
-
     {
 			 case 0:
 					 input_port(msg->value);

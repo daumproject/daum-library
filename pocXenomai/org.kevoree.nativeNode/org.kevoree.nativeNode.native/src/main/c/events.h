@@ -13,7 +13,7 @@
 #include <arpa/inet.h>
 
 
-#define FILE_ATTENTE 15
+#define FILE_ATTENTE 50
 
  typedef enum
    {
