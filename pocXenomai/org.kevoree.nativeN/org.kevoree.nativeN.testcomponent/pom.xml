@@ -1,0 +1,64 @@
+<project>
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.kevoree.nativeN</groupId>
+    <artifactId>org.kevoree.nativeN.testcomponent</artifactId>
+    <version>1.1-SNAPSHOT</version>
+
+    <packaging>uexe</packaging>
+
+
+    <dependencies>
+
+
+        <dependency>
+            <groupId>org.daum.extra.javase</groupId>
+            <artifactId>org.daum.extra.javase.commonsio</artifactId>
+            <version>2.4</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.kevoree.tools</groupId>
+            <artifactId>org.kevoree.tools.javase.framework</artifactId>
+            <version>1.8.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kevoree.tools</groupId>
+            <artifactId>org.kevoree.tools.annotation.api</artifactId>
+            <version>1.8.5</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                    <compilerProvider>generic-classic</compilerProvider>
+                    <compilerExecutable>gcc</compilerExecutable>
+                    <linkerExecutable>gcc</linkerExecutable>
+
+                    <compilerStartOptions>
+                        <compilerStartOption>-W -O2 -Wall -g  -I.</compilerStartOption>
+                    </compilerStartOptions>
+
+                    <sources>
+                        <source>
+                            <directory>src/main/c</directory>
+                            <fileNames>
+                                <fileName>test.c</fileName>
+                            </fileNames>
+                        </source>
+                    </sources>
+                    <linkerEndOptions>
+                        <linkerEndOption> -lpthread</linkerEndOption>
+                    </linkerEndOptions>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
