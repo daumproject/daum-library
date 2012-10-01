@@ -26,6 +26,13 @@ trait Personne extends org.daum.common.genmodel.SitacContainer {
     posTarget
   }
 
+  def setposRef(posRef : org.daum.common.genmodel.Position) {
+    this.posRef = posRef
+  }
+
+  def setposTarget(posTarget : org.daum.common.genmodel.Position) {
+    this.posTarget = posTarget
+  }
 
   def getNom : java.lang.String = {
     nom
