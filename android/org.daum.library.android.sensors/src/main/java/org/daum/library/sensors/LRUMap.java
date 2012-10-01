@@ -22,6 +22,14 @@ public class LRUMap<T, U> implements ILRUMap {
         this.lruKeys = new LinkedList<T>();
     }
 
+    public U getLast(){
+        if(lruKeys.size() > 0){
+        T lru = lruKeys.get(0);
+        return    cache.get(lru);
+        }else {
+            return null;
+        }
+    }
      public int size()
      {
         return lruKeys.size();
