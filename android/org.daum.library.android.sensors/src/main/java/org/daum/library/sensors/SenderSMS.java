@@ -53,10 +53,19 @@ public class SenderSMS   extends AbstractComponentType {
     {
         if( o instanceof  SMS)
         {
-            String SENT = "SMS_SENT";
-            SmsManager sms = SmsManager.getDefault();
-            PendingIntent sentPI = PendingIntent.getBroadcast(UIServiceHandler.getUIService().getRootActivity(), 0, new Intent(SENT), 0);
-            sms.sendTextMessage(((SMS)o).getNumber(), null,((SMS)o).getMsg(), sentPI, null);
+
+
+            SMS current = ((SMS)o);
+
+            if(current.getNumber().length()>= 4)
+            {
+                SmsManager.getDefault().sendTextMessage(current.getNumber(), null, current.getMsg(), null, null);
+                System.out.println("SENT "+current.getNumber());
+            }else {
+                System.err.println("the phone number is wrong");
+            }
+
+
         }   else
         {
             System.err.println("the message need to class of SMS");

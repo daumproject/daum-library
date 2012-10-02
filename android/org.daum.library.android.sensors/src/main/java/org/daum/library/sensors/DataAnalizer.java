@@ -191,6 +191,17 @@ public class DataAnalizer  extends AbstractComponentType {
 
                         t.cancel();
                         t2.cancel();
+
+
+                        String phonen = getDictionary().get("phoneNumber").toString();
+                        System.out.println("Sending msg to "+phonen);
+                        SMS t = new SMS();
+                        t.setNumber(phonen);
+                        String msg = "Alert from agent "+getDictionary().get("idAgent").toString();
+                        t.setMsg(msg);
+
+
+
                         uiService.getRootActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -209,15 +220,6 @@ public class DataAnalizer  extends AbstractComponentType {
                                                 getPortByName("alert", MessagePort.class).process(position.getLast());
                                             }
 
-                                            String phonen = getDictionary().get("phoneNumber").toString();
-
-                                            if(phonen.length() >0 )
-                                            {
-                                                SMS t = new SMS();
-                                                t.setNumber(phonen);
-                                                String msg = "Alert from agent "+getDictionary().get("idAgent").toString();
-                                                t.setMsg(msg);
-                                            }
 
                                             try
                                             {

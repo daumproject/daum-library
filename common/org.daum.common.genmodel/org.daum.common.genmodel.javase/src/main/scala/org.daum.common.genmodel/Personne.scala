@@ -13,7 +13,6 @@ trait Personne extends org.daum.common.genmodel.SitacContainer {
   private var nom : java.lang.String = ""
   private var prenom : java.lang.String = ""
 
-
   private var posRef : org.daum.common.genmodel.Position = null
 
   private var posTarget : org.daum.common.genmodel.Position = null

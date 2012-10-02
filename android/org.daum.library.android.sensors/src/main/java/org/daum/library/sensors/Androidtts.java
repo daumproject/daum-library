@@ -34,7 +34,7 @@ public class Androidtts extends AbstractComponentType {
 
     @Start
     public void start() {
-        UIServiceHandler.getUIService().getRootActivity().setRequestedOrientation ( UIServiceHandler.getUIService().getRootActivity().getRequestedOrientation());
+        UIServiceHandler.getUIService().getRootActivity().setRequestedOrientation ( ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         updateFromDictionnary();
 
         // The OnInitListener (second argument) is called after initialization completes.
