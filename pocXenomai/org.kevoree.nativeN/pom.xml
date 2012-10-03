@@ -4,14 +4,15 @@
   <groupId>org.kevoree</groupId>
   <artifactId>org.kevoree.nativeN</artifactId>
   <version>1.1-SNAPSHOT</version>
-  <name>Native Node root</name>
+    <name>Kevoree :: Tools :: Native Root</name>
 
   <packaging>pom</packaging>
+
   <modules>
-    <module>org.kevoree.nativeN.api</module>
-    <module>org.kevoree.nativeN.core</module>
+      <module>org.kevoree.nativeN.core</module>
+    <module>org.kevoree.nativeN.framework</module>
       <module>org.kevoree.nativeN.testcomponent</module>
-      <module>org.kevoree.nativeN.mavenplugin</module>
+      <module>org.kevoree.tools.native.mavenplugin</module>
   </modules>
 
   <build>
@@ -25,5 +26,38 @@
     </pluginManagement>
   </build>
 
+
+    <distributionManagement>
+        <repository>
+            <id>maven2.kevoree.release</id>
+            <url>http://maven.kevoree.org/archiva/repository/release/</url>
+        </repository>
+        <snapshotRepository>
+            <id>maven2.kevoree.snapshots</id>
+            <url>http://maven.kevoree.org/archiva/repository/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>kevoree-libs-release-local</id>
+            <url>http://maven.kevoree.org/release</url>
+        </repository>
+        <repository>
+            <id>kevoree-snapshots</id>
+            <url>http://maven.kevoree.org/snapshots</url>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>plugin.kevoree-github</id>
+            <url>http://maven.kevoree.org/release</url>
+        </pluginRepository>
+        <pluginRepository>
+            <id>plugin.kevoree-snapshots</id>
+            <url>http://maven.kevoree.org/snapshots</url>
+        </pluginRepository>
+    </pluginRepositories>
 
 </project>

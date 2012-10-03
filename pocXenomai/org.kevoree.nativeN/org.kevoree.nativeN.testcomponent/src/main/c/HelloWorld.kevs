@@ -1,0 +1,9 @@
+tblock
+{
+    createComponentType HelloWorld @ Native
+    addInPortType input_port : Message : optional =>  HelloWorld
+    addInPortType input_port2 : Message : optional =>  HelloWorld
+
+    addOutPortType output_port : Message : optional=>  HelloWorld
+    addOutPortType output_port2 : Message : optional=>  HelloWorld
+}
