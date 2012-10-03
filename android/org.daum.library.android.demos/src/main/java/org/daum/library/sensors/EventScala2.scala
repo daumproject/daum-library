@@ -13,7 +13,7 @@ import akka.actor.{Props, ActorSystem, Actor}
 
 
 object EventScala2 extends App {
-
+   /*
   case class Event(index: Int)
 
   test()
@@ -55,5 +55,5 @@ object EventScala2 extends App {
     running = false
   }
 
-
+    */
 }

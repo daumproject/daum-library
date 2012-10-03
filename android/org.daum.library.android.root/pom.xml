@@ -51,6 +51,8 @@
             <artifactId>org.kevoree.tools.android.framework</artifactId>
             <version>${kevoree.version}</version>
         </dependency>
+
+
     </dependencies>
 
     <build>

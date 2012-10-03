@@ -1,13 +1,6 @@
 package org.daum.library.sensors;
 
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.telephony.SmsManager;
+
 import org.daum.common.genmodel.SMS;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.annotation.*;
@@ -51,15 +44,15 @@ public class SenderSMS   extends AbstractComponentType {
     @Port(name = "message")
     public void sms(Object o)
     {
+        System.out.println(o);
         if( o instanceof  SMS)
         {
-
 
             SMS current = ((SMS)o);
 
             if(current.getNumber().length()>= 4)
             {
-                SmsManager.getDefault().sendTextMessage(current.getNumber(), null, current.getMsg(), null, null);
+                android.telephony.gsm.SmsManager.getDefault().sendTextMessage(current.getNumber(), null, current.getMsg(), null, null);
                 System.out.println("SENT "+current.getNumber());
             }else {
                 System.err.println("the phone number is wrong");

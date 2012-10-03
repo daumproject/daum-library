@@ -68,8 +68,8 @@ public class DataAnalizer  extends AbstractComponentType {
     private KevoreeAndroidService uiService = null;
     private float mDistance = 0;
     private float  mStepLength = 100;
-    private float lastDistanceP =-1;
-    private float lastDistanceA =-1;
+    private float lastDistanceP =0;
+    private float lastDistanceA =0;
     private Timer t;
     private Timer t2;
     private boolean  alert = false;
@@ -95,12 +95,7 @@ public class DataAnalizer  extends AbstractComponentType {
 
         amanager.setStreamVolume(AudioManager.STREAM_RING, Integer.parseInt(getDictionary().get("volume").toString()) , AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
         amanager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, Integer.parseInt(getDictionary().get("volume").toString()), AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
-        amanager.setStreamVolume(AudioManager.STREAM_MUSIC, Integer.parseInt(getDictionary().get("volume").toString()) , AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
-
-        t = new Timer();
-        t2 = new Timer();
-        t.schedule(new preAlert(),0, (Integer.parseInt(getDictionary().get("preAlertTimer").toString()) * 1000));
-        t2.schedule(new AlertDetection(),0,(Integer.parseInt(getDictionary().get("alertTimer").toString()) * 1000));
+        amanager.setStreamVolume(AudioManager.STREAM_MUSIC, Integer.parseInt(getDictionary().get("volume").toString()), AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
 
 
         getModelService().registerModelListener(new ModelListener() {
@@ -137,7 +132,17 @@ public class DataAnalizer  extends AbstractComponentType {
                                 configuration.setStore(store);
                                 factory = configuration.getPersistenceSessionFactory();
 
+
                                 getPortByName("speech", MessagePort.class).process("The system is started");
+
+                                t = new Timer();
+                                t2 = new Timer();
+
+                                t.schedule(new preAlert(),4000, (Integer.parseInt(getDictionary().get("preAlertTimer").toString()) * 1000));
+                                t2.schedule(new AlertDetection(),5000,(Integer.parseInt(getDictionary().get("alertTimer").toString()) * 1000));
+
+
+
                             } catch (PersistenceException e) {
                                 Log.e(TAG, "Error on component startup", e);
                             }
@@ -173,14 +178,13 @@ public class DataAnalizer  extends AbstractComponentType {
         public void run()
         {
 
+
             if(mDistance <= lastDistanceP){
                 if(alert)
                 {
                     try
                     {
-                        Thread.sleep(5000);
-
-                        getPortByName("speech", MessagePort.class).process("if you do still not move, a alert will be sent");
+                        getPortByName("speech", MessagePort.class).process("if you do still not move, an alert will be sent");
 
                         Thread.sleep(8000);
 
@@ -192,15 +196,15 @@ public class DataAnalizer  extends AbstractComponentType {
                         t.cancel();
                         t2.cancel();
 
-
                         String phonen = getDictionary().get("phoneNumber").toString();
+
                         System.out.println("Sending msg to "+phonen);
                         SMS t = new SMS();
                         t.setNumber(phonen);
-                        String msg = "Alert from agent "+getDictionary().get("idAgent").toString();
+                        String msg = "alert:"+getDictionary().get("idAgent").toString()+":position="+position.getLast();
                         t.setMsg(msg);
 
-
+                        getPortByName("alert", MessagePort.class).process(t);
 
                         uiService.getRootActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -253,7 +257,7 @@ public class DataAnalizer  extends AbstractComponentType {
                 if(!alert)
                 {
                     getPortByName("vibreur", MessagePort.class).process("tick");
-                    getPortByName("speech", MessagePort.class).process("The system has detected that you have not moved ,      How do you feel?");
+                    getPortByName("speech", MessagePort.class).process("The system has detected that you have not moved ,      How are you ?");
                 }
                 alert  = true;
             } else

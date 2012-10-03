@@ -73,7 +73,7 @@ public class Androidtts extends AbstractComponentType {
     public void triggerText(final Object textMsg) {
         try {
             mTts.speak(textMsg.toString(),
-                    TextToSpeech.QUEUE_ADD, // Drop all pending entries in the playback queue.
+                    TextToSpeech.QUEUE_FLUSH, // Drop all pending entries in the playback queue.
                     null);
         }   catch (Exception e){
             e.printStackTrace();
