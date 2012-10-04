@@ -30,6 +30,7 @@
  	EV_STOP,
      EV_UPDATE,
  	EV_PORT_INPUT,
+ 	EV_PORT_OUTPUT
    } Type;
 
  typedef struct Events

@@ -2,18 +2,19 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.kevoree.extra</groupId>
-        <artifactId>org.kevoree.extra.fota.native</artifactId>
+        <groupId>org.kevoree.nativeN</groupId>
+        <artifactId>org.kevoree.nativeN.core</artifactId>
         <version>1.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.kevoree.extra</groupId>
-    <artifactId>org.kevoree.extra.fota.native.osx</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <groupId>org.kevoree.nativeN.core</groupId>
+    <artifactId>org.kevoree.nativeN.core.osx</artifactId>
+    <version>1.0-SNAPSHOT</version>
 
-    <name>native OSX</name>
+    <name>Kevoree :: Tools :: Native OSX </name>
 
     <packaging>so</packaging>
+
 
     <properties>
         <platform>osx</platform>
@@ -24,11 +25,13 @@
         <platform.jni>jnilib</platform.jni>
     </properties>
 
+
+
     <dependencies>
         <dependency>
-            <groupId>org.kevoree.extra</groupId>
-            <artifactId>org.kevoree.extra.fota.api</artifactId>
-            <version>1.1-SNAPSHOT</version>
+            <groupId>org.kevoree.nativeN</groupId>
+            <artifactId>org.kevoree.nativeN.framework</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
@@ -36,20 +39,12 @@
 
         <plugins>
             <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>native-maven-plugin</artifactId>
                 <extensions>true</extensions>
                 <configuration>
                     <!--  trigger javah -->
-                    <javahOS>osx</javahOS>
+                    <javahOS>linux</javahOS>
 
                     <compilerProvider>generic-classic</compilerProvider>
 
@@ -57,21 +52,23 @@
                     <linkerExecutable>cc</linkerExecutable>
 
                     <sources>
+
                         <source>
                             <directory>${platform.jdk.include.dir}</directory>
                         </source>
                         <source>
                             <directory>../src/main/c</directory>
                             <fileNames>
-                                <fileName>fota.c</fileName>
                                 <fileName>native.c</fileName>
                             </fileNames>
                         </source>
                     </sources>
 
-
+                    <linkerEndOptions>
+                        <linkerEndOption> -lpthread</linkerEndOption>
+                    </linkerEndOptions>
                     <linkerStartOptions>
-                        <linkerStartOption> -shared -fPIC -Wl -lpthread </linkerStartOption>
+                        <linkerStartOption>-shared -lc</linkerStartOption>
                     </linkerStartOptions>
 
                 </configuration>
@@ -82,13 +79,13 @@
                         <id>javah</id>
                         <phase>generate-sources</phase>
                         <configuration>
-                            <javahOS>osx</javahOS>
+                            <!-- <javahOS>linux</javahOS>  -->
                             <javahProvider>default</javahProvider>
                             <javahOutputDirectory>${project.build.directory}/custom-javah</javahOutputDirectory>
                             <workingDirectory>${basedir}</workingDirectory>
                             <javahOutputFileName>nativelib.h</javahOutputFileName>
                             <javahClassNames>
-                                <javahClassName>org.kevoree.fota.Nativelib</javahClassName>
+                                <javahClassName>org.kevoree.nativeN.core.NativeJNI</javahClassName>
                             </javahClassNames>
                         </configuration>
                         <goals>
@@ -97,28 +94,10 @@
                     </execution>
                 </executions>
 
-
-                <plugin>
-                    <artifactId>maven-antrun-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <phase>install</phase>
-                            <configuration>
-                                <tasks>
-                                    <copy tofile="../../org.kevoree.fota.api/src/main/resources/osx/native.so">
-                                        <fileset file="${project.build.directory}/org.kevoree.extra.fota.native.osx.so"/>
-                                    </copy>
-
-                                </tasks>
-                            </configuration>
-                            <goals>
-                                <goal>run</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-
             </plugin>
+
+
+
 
         </plugins>
     </build>
