@@ -1,3 +1,12 @@
+/**
+ * Created by jed
+ * User: jedartois@gmail.com
+ * Date: 03/10/12
+ * Time: 11:47
+ */
+ #ifndef EVENTS_H
+ #define EVENTS_H
+
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
@@ -11,6 +20,7 @@
 #include <netdb.h>
 #include <string.h>
 #include <arpa/inet.h>
+#include <unistd.h>
 
 
 #define FILE_ATTENTE 50
@@ -20,7 +30,6 @@
  	EV_STOP,
      EV_UPDATE,
  	EV_PORT_INPUT,
- 	EV_PORT_OUTPUT
    } Type;
 
  typedef struct Events
@@ -91,7 +100,7 @@ typedef struct _Publisher {
 
 int createEventBroker(EventBroker *eventbroker)
 {
-      pid_t  pid;
+   //   pid_t  pid;
       struct sockaddr_in adr ;
       socklen_t          lgradr ;
        Events ev;
@@ -150,10 +159,7 @@ int createEventBroker(EventBroker *eventbroker)
 */
 int createPublisher(Publisher *publisher)
 {
-	unsigned short     port;
 	int ok;
-	port = 0;
-
  	((publisher)->socket) = socket(AF_INET, SOCK_STREAM, 0);
    	if(((publisher)->socket) == -1){ 	  return -1; }
 
@@ -302,6 +308,7 @@ int send_event(Publisher publisher,Events ev)
       if(createPublisher (&publisher) == -1)
        {
          publisher.socket = -1;
+         return -1;
         }
     }
 
@@ -309,13 +316,11 @@ int send_event(Publisher publisher,Events ev)
     {
      if(send (publisher.socket, &ev, sizeof (Events),0)< 0)
          {
-
+                         	fprintf(stderr,"send_event");
+                         	return -1;
            }
     }
-
-
-
-
-
-
+    return 0;
 }
+
+ #endif

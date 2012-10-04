@@ -1,3 +1,10 @@
+/**
+ * Created by jed
+ * User: jedartois@gmail.com
+ * Date: 03/10/12
+ * Time: 11:47
+ */
+
 #ifndef QUEUE_H
 #define QUEUE_H
 
@@ -38,7 +45,7 @@ int init_queue();
 
 int init_queue()
 {
-    int rc;
+   // int rc;
     int msgqid = msgget(IPC_PRIVATE, MSGPERM|IPC_CREAT|IPC_EXCL);
      if (msgqid < 0)
      {
@@ -113,7 +120,7 @@ kmessage* dequeue(int msgqid)
   int rc = msgrcv(msgqid, msg, sizeof(msg->value), 0,0);
     if (rc < 0)
     {
-     perror( "dequeue" );
+      perror( "dequeue" );
       fprintf(stderr,"msgrcv failed, rc=%d\n", rc);
       free(msg);
       return NULL;

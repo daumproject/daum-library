@@ -1,3 +1,10 @@
+/**
+ * Created by jed
+ * User: jedartois@gmail.com
+ * Date: 03/10/12
+ * Time: 11:47
+ */
+
 #include <jni.h>
 #include <nativelib.h>
 #include <stdio.h>

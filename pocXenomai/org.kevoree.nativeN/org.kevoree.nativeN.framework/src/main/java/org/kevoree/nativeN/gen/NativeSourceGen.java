@@ -66,21 +66,21 @@ public class NativeSourceGen implements  INativeSourceGen {
                 "{\n" +
                 "\tfprintf(stderr,\"Component starting \\n\");\n" +
                 "\n" +
-                "\n" +
+                "return 0;\n" +
                 "}\n" +
                 "\n" +
                 "/*@Stop */\n" +
                 "int stop()\n" +
                 "{\n" +
                 "    fprintf(stderr,\"Component stoping \\n\");\n" +
-                "\n" +
+                "return 0;\n" +
                 "}\n" +
                 "\n" +
                 "/*@Update */\n" +
                 "int update()\n" +
                 "{\n" +
                 "    fprintf(stderr,\"Component updating \\n\");\n" +
-                " \n" +
+                " return 0;\n" +
                 "}\n");
 
         return gen.toString();
@@ -91,7 +91,7 @@ public class NativeSourceGen implements  INativeSourceGen {
         StringBuilder gen = new StringBuilder();
         for (String name : ouputs_ports.keySet()){
 
-            gen.append("void "+name+"(void *input);\n");
+            gen.append("extern void "+name+"(void *input);\n");
         }
 
         return gen.toString();

@@ -1,5 +1,14 @@
+
+/**
+ * Created by jed
+ * User: jedartois@gmail.com
+ * Date: 03/10/12
+ * Time: 11:47
+ */
+
 #ifndef COMPONENT_H
 #define COMPONENT_H
+
 #include <sys/ipc.h>
 #include <sys/shm.h>
 #include <stdlib.h>
@@ -9,9 +18,12 @@
 #include "kqueue.h"
 #include "events.h"
 
+#define LENGHT_MAX_NAME_PORT 32
+#define NUMBER_PORTS 100
+
 typedef struct _port
 {
-  char name[32];
+  char name[LENGHT_MAX_NAME_PORT];
   int id;
 } Ports;
 
@@ -20,9 +32,9 @@ typedef struct _context
   int pid;
   int pid_jvm;
   int inputs_count;
-  Ports inputs[100];
+  Ports inputs[NUMBER_PORTS];
   int outputs_count;
-  Ports outputs[100];
+  Ports outputs[NUMBER_PORTS];
   void (*start) (void);
   void (*stop) (void);
   void (*update) (void);
@@ -52,10 +64,6 @@ void notify(Events ev)
                  ctx->dispatch (ev.id_port,ctx->inputs[ev.id_port].id);
         break;
 
-        case EV_PORT_OUTPUT:
-
-        break;
-
         case EV_UPDATE:
               ctx->update ();
         break;
@@ -67,6 +75,7 @@ void notify(Events ev)
               if (destroy_queue (ctx->inputs[i].id) != 0)
             {
               //error
+              	fprintf(stderr,"destroy_queue INPUT %s \n",ctx->inputs[i].name);
             }
             }
           for (i = 0; i < ctx->outputs_count; i++)
@@ -74,6 +83,7 @@ void notify(Events ev)
               if (destroy_queue (ctx->outputs[i].id) != 0)
             {
               //error
+              fprintf(stderr,"destroy_queue OUTPUT %s \n",ctx->inputs[i].name);
             }
             }
 
@@ -88,6 +98,7 @@ void notify(Events ev)
 
 void *   t_broker (void *p)
 {
+  p = NULL;
   createEventBroker (&component_event_broker);
   pthread_exit (NULL);
 }
@@ -126,7 +137,7 @@ int bootstrap (key_t key,int port_event_broker)
     {
       return -1;
     }
-
+  return 0;
 }
 
 

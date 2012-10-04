@@ -5,8 +5,9 @@
     <groupId>org.kevoree.nativeN</groupId>
     <artifactId>org.kevoree.nativeN.testcomponent</artifactId>
     <version>1.1-SNAPSHOT</version>
-    <name>Kevoree :: Tools :: Native DemoC</name>
+    <name>Kevoree :: DEMO :: Native Component</name>
     <packaging>uexe</packaging>
+
 
     <build>
         <plugins>
@@ -28,9 +29,9 @@
                     <sources>
                         <source>
                             <directory>src/main/c</directory>
-                            <fileNames>
-                                <fileName>HelloWorld.c</fileName>
-                            </fileNames>
+                         <includes>
+                             <include>**/*.c</include>
+                         </includes>
                         </source>
                     </sources>
                     <linkerEndOptions>
