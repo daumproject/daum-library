@@ -135,13 +135,17 @@ public class P2pSock extends AbstractChannelFragment {
 
                         String adr =    getAddress(remoteNodeName);
                         int port =     parsePortNumber(remoteNodeName);
+                         if(adr.length() >0){
+                             P2pClient client = new P2pClient(remoteNodeName,adr, port);
+                             client.send(message);
+                         }else {
+                             logger.warn("You need to specify an adress to "+remoteNodeName);
+                         }
 
-                        P2pClient client = new P2pClient(remoteNodeName,adr, port);
-                        client.send(message);
                     }
 
                 } catch (Exception e) {
-                    logger.warn("Error while sending message to " + remoteNodeName + "-" + getAddress(remoteNodeName));
+                    logger.debug("Error while sending message to " + remoteNodeName + "-" + getAddress(remoteNodeName));
                     if(getDictionary().get("replay").toString().equals("true")){
                         backupOnError.enqueue(message);
                     }
@@ -160,7 +164,7 @@ public class P2pSock extends AbstractChannelFragment {
         String ip = KevoreePlatformHelper.getProperty(this.getModelService().getLastModel(), remoteNodeName,
                 org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP());
         if (ip == null || ip.equals("")) {
-            ip = "127.0.0.1";
+            ip = "";
         }
         return ip;
     }
