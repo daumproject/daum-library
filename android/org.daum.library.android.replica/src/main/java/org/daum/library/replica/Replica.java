@@ -31,8 +31,8 @@ import org.slf4j.LoggerFactory;
 @Library(name = "JavaSE", names = {"Android"})
 @ComponentType
 @Requires({
-        @RequiredPort(name = "broadcast", type = PortType.MESSAGE,optional = true),
-        @RequiredPort(name = "notification", type = PortType.MESSAGE,optional = true)
+        @RequiredPort(name = "broadcast", type = PortType.MESSAGE,optional = true,theadStrategy = ThreadStrategy.THREAD_QUEUE),
+        @RequiredPort(name = "notification", type = PortType.MESSAGE,optional = true,theadStrategy = ThreadStrategy.THREAD_QUEUE)
 })
 @DictionaryType({
         @DictionaryAttribute(name = "synchronize", defaultValue = "true", optional = true,vals={"true","false"}) ,
@@ -40,7 +40,7 @@ import org.slf4j.LoggerFactory;
         @DictionaryAttribute(name = "path_disk", defaultValue = "/tmp/replica", optional = true)
 })
 @Provides({
-        @ProvidedPort(name = "remote", type = PortType.MESSAGE) ,
+        @ProvidedPort(name = "remote", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.THREAD_QUEUE) ,
         @ProvidedPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class)
 })
 public class Replica extends AbstractComponentType implements ReplicaService {

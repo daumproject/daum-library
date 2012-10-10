@@ -6,10 +6,10 @@ import org.kevoree.framework.AbstractComponentType;
 
 @Library(name = "JavaSE", names = {"Android"})
 @Provides({
-        @ProvidedPort(name = "consume", type = PortType.MESSAGE)
+        @ProvidedPort(name = "consume", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.SHARED_THREAD)
 })
 @DictionaryType({
-        @DictionaryAttribute(name = "duree", defaultValue = "5", optional = true)
+        @DictionaryAttribute(name = "duree", defaultValue = "1", optional = true)
 })
 @ComponentType
 public class HelloConsumerComponent extends AbstractComponentType {

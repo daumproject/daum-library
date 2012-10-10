@@ -184,9 +184,12 @@ public class DataAnalizer  extends AbstractComponentType {
                 {
                     try
                     {
-                        getPortByName("speech", MessagePort.class).process("if you do still not move, an alert will be sent");
-
-                        Thread.sleep(8000);
+                        if(mDistance <= lastDistanceP)
+                        {
+                            Thread.sleep(5000);
+                            getPortByName("speech", MessagePort.class).process("if you do still not move, an alert will be sent");
+                            Thread.sleep(8000);
+                        }
 
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -213,7 +216,6 @@ public class DataAnalizer  extends AbstractComponentType {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        //To change body of implemented methods use File | Settings | File Templates.
 
                                         while(true)
                                         {
@@ -223,7 +225,6 @@ public class DataAnalizer  extends AbstractComponentType {
                                             if(position != null && position.getLast() != null){
                                                 getPortByName("alert", MessagePort.class).process(position.getLast());
                                             }
-
 
                                             try
                                             {
@@ -251,9 +252,7 @@ public class DataAnalizer  extends AbstractComponentType {
     class preAlert extends TimerTask {
         public void run()
         {
-
             if(mDistance <= lastDistanceA){
-
                 if(!alert)
                 {
                     getPortByName("vibreur", MessagePort.class).process("tick");
@@ -264,9 +263,7 @@ public class DataAnalizer  extends AbstractComponentType {
             {
                 alert  = false;
             }
-
             lastDistanceA =  mDistance;
-
         }
     }
 

@@ -8,12 +8,13 @@ package org.daum.library.sensors
  * To change this template use File | Settings | File Templates.
  */
 
-import scala.concurrent.ops.spawn
-import akka.actor.{Props, ActorSystem, Actor}
+
 
 
 object EventScala2 extends App {
    /*
+   import scala.concurrent.ops.spawn
+import akka.actor.{Props, ActorSystem, Actor}
   case class Event(index: Int)
 
   test()
