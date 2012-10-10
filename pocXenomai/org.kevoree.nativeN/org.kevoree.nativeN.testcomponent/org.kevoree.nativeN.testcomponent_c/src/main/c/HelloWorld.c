@@ -1,22 +1,23 @@
 #include "HelloWorld.h"
 
 extern void output_port(void *input);
-extern void output_port2(void *input);
 
 /* @Port(name = "input_port") */
 void input_port(void *input) {
 // USE INPUT
-}
-
-/* @Port(name = "input_port2") */
-void input_port2(void *input) {
-// USE INPUT
+output_port(input);
 }
 
 /*@Start*/
 int start()
 {
 	fprintf(stderr,"Component starting \n");
+
+	while(1){
+
+	  output_port("HELLO FROM C !!!");
+	usleep(1000*1000);
+	}
 
 return 0;
 }
@@ -25,7 +26,6 @@ return 0;
 int stop()
 {
     fprintf(stderr,"Component stoping \n");
-
 return 0;
 }
 
@@ -33,6 +33,5 @@ return 0;
 int update()
 {
     fprintf(stderr,"Component updating \n");
-
  return 0;
 }

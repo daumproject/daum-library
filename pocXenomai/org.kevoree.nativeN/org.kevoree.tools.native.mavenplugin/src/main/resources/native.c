@@ -1,3 +1,10 @@
+/**
+ * Created by jed
+ * User: jedartois@gmail.com
+ * Date: 03/10/12
+ * Time: 11:47
+ */
+
 #include <jni.h>
 #include <nativelib.h>
 #include <stdio.h>
@@ -19,8 +26,9 @@ JavaVM *g_vm;
 jobject g_obj;
 jmethodID g_mid;
 
-Publisher     native_event_publisher;
-EventBroker   native_event_broker;
+Publisher   p_event_udp;
+Publisher   p_event_tcp;
+
 int alive=0;
 
 void   process (char *queue, void *msg)
@@ -141,30 +149,19 @@ void native_notify(Events ev)
     }
 }
 
-void *   t_native_broker (void *p)
-{
-  createEventBroker (&native_event_broker);
-  pthread_exit (NULL);
-}
+
 
 
 JNIEXPORT jint JNICALL Java_org_kevoree_nativeN_core_NativeJNI_init (JNIEnv * env, jobject obj, jint key,jint port)
 {
-  /*
-   native_event_broker.port = 8086;
-   native_event_broker.dispatch = &native_notify;
 
+ p_event_tcp.port = port;
+ p_event_tcp.socket = -1;
+ strcpy (p_event_tcp.hostname, "127.0.0.1");
 
-  pthread_t t_event_broker;
-
-  if (pthread_create (&t_event_broker, NULL, &t_native_broker, NULL) != 0)
-    {
-      return -1;
-    }
-        */
- native_event_publisher.port = port;
- native_event_publisher.socket = -1;
- strcpy (native_event_publisher.hostname, "127.0.0.1");
+  p_event_udp.port = port+1;
+  p_event_udp.socket = -1;
+  strcpy (p_event_udp.hostname, "127.0.0.1");
 
   // create memory shared
   shmid = shmget (key, sizeof (Context), IPC_CREAT | S_IRUSR | S_IWUSR);
@@ -206,7 +203,7 @@ Java_org_kevoree_nativeN_core_NativeJNI_start (JNIEnv * env, jobject obj,
       return -1;
     case 0:
       sprintf (cipckey, "%d", key);
-      sprintf(port,"%d", native_event_publisher.port );
+      sprintf(port,"%d", p_event_tcp.port );
       if (execl (n_path_binary, n_path_binary, cipckey,port, NULL) != 0)
 	{
 	  perror ("execlp");
@@ -223,19 +220,25 @@ Java_org_kevoree_nativeN_core_NativeJNI_start (JNIEnv * env, jobject obj,
 JNIEXPORT jint JNICALL   Java_org_kevoree_nativeN_core_NativeJNI_stop (JNIEnv * env, jobject obj,
 					    jint key)
 {
-
   ctx = (Context *) ptr_mem_partagee;
-  alive =0;
-  Events      ev;
-  ev.ev_type = EV_STOP;
+  if(ctx !=NULL)
+  {
+    alive =0;
+    Events      ev;
+    ev.ev_type = EV_STOP;
 
-  send_event(native_event_publisher,ev);
+    send_event_tcp(p_event_tcp,ev);
 
+    shmdt (ptr_mem_partagee);	/* detach segment */
+    /* Deallocate the shared memory segment.  */
+    shmctl (shmid, IPC_RMID, 0);
 
-  shmdt (ptr_mem_partagee);	/* detach segment */
-  /* Deallocate the shared memory segment.  */
-  shmctl (shmid, IPC_RMID, 0);
-  return 0;
+      return 0;
+  } else
+  {
+  return -1;
+  }
+
 }
 
 
@@ -248,7 +251,7 @@ Java_org_kevoree_nativeN_core_NativeJNI_update (JNIEnv * env, jobject obj,
   Events      ev;
   ev.ev_type = EV_UPDATE;
 
-    send_event(native_event_publisher,ev);
+    send_event_tcp(p_event_tcp,ev);
 }
 
 
@@ -282,27 +285,30 @@ JNIEXPORT jint JNICALL Java_org_kevoree_nativeN_core_NativeJNI_enqueue (JNIEnv *
 {
   ctx = (Context *) ptr_mem_partagee;
 
-  if(ctx != NULL){
-
+  if(ctx != NULL)
+  {
      const char *n_value = (*env)->GetStringUTFChars (env, msg, 0);
       kmessage kmsg;
       kmsg.type = 1;
       strcpy (kmsg.value, n_value);
 
-      enqueue (ctx->inputs[id_port].id, kmsg);
+      if(enqueue (ctx->inputs[id_port].id, kmsg) == 0)
+      {
 
-      Events      ev;
-      ev.ev_type = EV_PORT_INPUT;
-      ev.id_port =   id_port;
+             Events      ev;
+             ev.ev_type = EV_PORT_INPUT;
+             ev.id_port =   id_port;
+               send_event_udp(p_event_udp,ev);
 
-        send_event(native_event_publisher,ev);
-
-
+      }
+       else
+      {
+      return -1;
+      }
       return 0;
 
   } else
   {
-
   return -1;
   }
 

@@ -14,7 +14,7 @@ import java.util.List;
 public class FileManager {
 
 
-    public static Byte[] load(InputStream reader) throws IOException {
+    public static byte[] load(InputStream reader) throws IOException {
         int c;
         ArrayList<Byte> tab = new ArrayList<Byte>();
         while((c = reader.read()) != -1) {
@@ -22,8 +22,7 @@ public class FileManager {
         }
         if (reader!=null)
             reader.close();
-        Byte[] data = tab.toArray(new Byte[tab.size()]);
-        return data;
+        return toByteArray(tab);
     }
 
     public static String copyFileFromStream( InputStream inputStream , String path, String targetName) throws IOException {

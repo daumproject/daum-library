@@ -21,23 +21,23 @@ public class NativeManager {
 
     protected EventListenerList listenerList = new EventListenerList();
     private NativeJNI nativeHandler;
-    private String path;
+    private String path_uexe;
     private  int key;
     private LinkedHashMap<String,Integer> inputs_ports =new LinkedHashMap<String, Integer>();
     private LinkedHashMap<String,Integer> ouputs_ports = new LinkedHashMap<String, Integer>();
 
-    private KevScriptLoader loader = new KevScriptLoader();
+   // private KevScriptLoader loader = new KevScriptLoader();
 
-    public NativeManager(final int key, int port, final String path ,String path_kevScript) throws KevScriptEngineException {
+    public NativeManager(final int key, int port,final String componentName,final String path_uexe ,ContainerRoot model) throws KevScriptEngineException {
         this.key = key;
-        this.path =path;
+        this.path_uexe =path_uexe;
         nativeHandler = new NativeJNI(this);
         nativeHandler.configureCL();
         nativeHandler.init(key,port);
-
+      /*
         ContainerRoot model =  loader.loadKevScript(path_kevScript);
         String componentName = path_kevScript.substring(path_kevScript.lastIndexOf("/")+1,path_kevScript.length()).replace(".kevs","");
-
+         */
         for(TypeDefinition type :  model.getTypeDefinitionsForJ())
         {
             if(type instanceof ComponentType)
@@ -65,18 +65,20 @@ public class NativeManager {
 
 
 
-    public  void start() throws Exception {
+    public  boolean start() throws Exception {
 
-        if(nativeHandler.start(key,path) != 0){
-
+        if(nativeHandler.start(key, path_uexe) < 0)
+        {
+          return false;
         }
         //todo check started  remove sleep
         Thread.sleep(2000);
+        return true;
     }
 
     public void stop() throws InterruptedException
     {
-        Thread.sleep(2000);
+        Thread.sleep(3000);
         nativeHandler.stop(key);
     }
 
@@ -115,12 +117,12 @@ public class NativeManager {
 
 
 
-    public void enqueue(String port,String msg)
+    public boolean push(String port, String msg)
     {
         if(nativeHandler.enqueue(key,inputs_ports.get(port),msg) != 0){
-            //error
-            System.out.println("error");
+            return  false;
         }
+        return  true;
     }
 }
 

@@ -97,6 +97,7 @@ public class NativeSourceGen implements  INativeSourceGen {
         return gen.toString();
     }
 
+
     public String generateStepCompile(){
         StringBuilder gen = new StringBuilder();
 
@@ -108,22 +109,28 @@ public class NativeSourceGen implements  INativeSourceGen {
             gen.append("}\n");
 
         }
-
-        gen.append("void dispatch(int port,int id_queue) {\n");
-        gen.append(" kmessage *msg = dequeue(id_queue);\n");
-        gen.append("  if(msg !=NULL)  {\n\n" +
-                "    switch(port)\n\n" +
-                "    {\n");
+        gen.append("void dispatch(int port,int id_queue)\n" +
+                "{\n" +
+                "    kmessage *msg = NULL;\n" +
+                "    do\n" +
+                "    {\n" +
+                "          msg = dequeue(id_queue);\n" +
+                "          if(msg !=NULL)\n" +
+                "          {\n" +
+                "             switch(port)\n" +
+                "             {");
 
         for (String name : inputs_ports.keySet()){
             gen.append("\t\t\t case "+inputs_ports.get(name)+":\n");
             gen.append("\t\t\t\t\t "+name+"(msg->value);\n");
             gen.append("\t\t\t break;\n");
         }
-        gen.append("   }\n" +
-                "   }\n" +
-                "}\n");
 
+        gen.append("                     }\n" +
+                "                     }\n" +
+                "\n" +
+                "    } while(msg != NULL);\n" +
+                "}");
 
         gen.append("int main (int argc,char *argv[])\n" +
                 "{\n" +
@@ -150,7 +157,6 @@ public class NativeSourceGen implements  INativeSourceGen {
     }
 
 
-
     public int create_input(String name)
     {
         inputs_ports.put(name,inputs_ports.size());
@@ -162,6 +168,74 @@ public class NativeSourceGen implements  INativeSourceGen {
         ouputs_ports.put(name,ouputs_ports.size());
         return ouputs_ports.size();
     }
+
+
+
+    public String gen_bridge_ProvidedPort(){
+        StringBuilder gen = new StringBuilder();
+        int count=0;
+        gen.append("@Provides({");
+        for (String name : inputs_ports.keySet()){
+            gen.append(" @ProvidedPort(name = \""+name+"\", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.THREAD_QUEUE)");
+            if(count < inputs_ports.size()-1) {
+                gen.append(",\n");
+            } else {
+                gen.append("\n");
+            }
+
+            count++;
+        }
+        gen.append("})");
+
+        return gen.toString();
+    }
+
+
+    public String gen_bridge_RequiredPort(){
+        StringBuilder gen = new StringBuilder();
+        int count=0;
+        gen.append("@Requires({");
+        for (String name : ouputs_ports.keySet()){
+            gen.append(" @RequiredPort(name = \""+name+"\", type = PortType.MESSAGE,optional = true,theadStrategy = ThreadStrategy.THREAD_QUEUE)");
+            if(count < ouputs_ports.size()-1) {
+                gen.append(",\n");
+            } else {
+                gen.append("\n");
+            }
+
+            count++;
+        }
+        gen.append("})");
+
+        return gen.toString();
+    }
+
+    public String gen_bridge_Ports(){
+
+        StringBuilder gen = new StringBuilder();
+
+        for (String name : inputs_ports.keySet())
+        {
+
+            gen.append( "    @Port(name = \""+name+"\")\n" +
+                    "    public void "+name+"(Object o)\n" +
+                    "    {\n" +
+                    "        if(nativeManager != null)\n" +
+                    "        {\n" +
+                    "            nativeManager.push(\""+name+"\",o.toString());\n" +
+                    "            \n" +
+                    "        }   else \n" +
+                    "        {\n" +
+                    "            System.err.println(\"Error processing message\");\n" +
+                    "        }\n" +
+                    "    }");
+        }
+
+
+
+        return  gen.toString();
+    }
+
 
 
 }

@@ -2,26 +2,23 @@
 void output_port(void *input) {
  process_output(0,input);
 }
-void output_port2(void *input) {
- process_output(1,input);
-}
-void dispatch(int port,int id_queue) {
- kmessage *msg = dequeue(id_queue);
-  if(msg !=NULL)  {
-
-    switch(port)
-
+void dispatch(int port,int id_queue)
+{
+    kmessage *msg = NULL;
+    do
     {
-			 case 0:
+          msg = dequeue(id_queue);
+          if(msg !=NULL)
+          {
+             switch(port)
+             {			 case 0:
 					 input_port(msg->value);
 			 break;
-			 case 1:
-					 input_port2(msg->value);
-			 break;
-   }
-   }
-}
-int main (int argc,char *argv[])
+                     }
+                     }
+
+    } while(msg != NULL);
+}int main (int argc,char *argv[])
 {
    	if(argc >2)
     {

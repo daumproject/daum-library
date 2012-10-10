@@ -1,4 +1,3 @@
-
 /**
  * Created by jed
  * User: jedartois@gmail.com
@@ -15,8 +14,10 @@
 #include <sys/shm.h>
 #include <sys/stat.h>
 #include <pthread.h>
+
 #include "kqueue.h"
-#include "events.h"
+#include "events_udp.h"
+#include "events_tcp.h"
 
 #define LENGHT_MAX_NAME_PORT 32
 #define NUMBER_PORTS 100
@@ -52,7 +53,8 @@ int register_update (void *fn);
 int register_trigger_port (void *fn);
 
 Context *ctx;
-EventBroker component_event_broker;
+EventBroker event_broker_tcp;
+EventBroker event_broker_udp;
 //Publisher component_event_publisher;
 
 void notify(Events ev)
@@ -88,7 +90,8 @@ void notify(Events ev)
             }
 
           ctx->stop ();
-          close(component_event_broker.sckServer);
+          close(event_broker_tcp.sckServer);
+          close(event_broker_udp.sckServer);
           exit (0);
         break;
 
@@ -96,29 +99,41 @@ void notify(Events ev)
 }
 
 
-void *   t_broker (void *p)
+void *   t_broker_tcp (void *p)
 {
   p = NULL;
-  createEventBroker (&component_event_broker);
+  fprintf(stderr,"createEventBroker_tcp %d \n",event_broker_tcp.port);
+
+  createEventBroker_tcp (&event_broker_tcp);
+  pthread_exit (NULL);
+}
+
+void *   t_broker_udp (void *p)
+{
+  p = NULL;
+    fprintf(stderr,"event_broker_udp %d \n",event_broker_udp.port);
+
+  createEventBroker_udp (&event_broker_udp);
   pthread_exit (NULL);
 }
 
 
 int bootstrap (key_t key,int port_event_broker)
 {
-  int shmid;
-  void *ptr_mem_partagee;
-  pthread_t t_event_broker;
+   int shmid;
+   void *ptr_mem_partagee;
+   pthread_t t_event_broker_tcp;
+   pthread_t t_event_broker_udp;
 
   /* create memory shared   */
-  shmid = shmget (key, sizeof (Context), S_IRUSR | S_IWUSR);
-  if (shmid < 0)
+   shmid = shmget (key, sizeof (Context), S_IRUSR | S_IWUSR);
+   if (shmid < 0)
     {
       perror ("shmid");
       return -1;
     }
 
-  if ((ptr_mem_partagee = shmat (shmid, NULL, 0)) == (void *) -1)
+    if ((ptr_mem_partagee = shmat (shmid, NULL, 0)) == (void *) -1)
     {
       perror ("shmat");
       exit (1);
@@ -126,16 +141,20 @@ int bootstrap (key_t key,int port_event_broker)
     ctx = (Context *) ptr_mem_partagee;
     ctx->pid = getpid ();
 
-    component_event_broker.port = port_event_broker;
-    component_event_broker.dispatch = &notify;
-  /*
-    component_event_publisher.port = 8086;
-    component_event_publisher.socket = -1;
-    strcpy (component_event_publisher.hostname, "127.0.0.1");  */
+    event_broker_tcp.port = port_event_broker;
+    event_broker_tcp.dispatch = &notify;
 
-  if (pthread_create (&t_event_broker, NULL, &t_broker, NULL) != 0)
+    event_broker_udp.port = port_event_broker+1;
+    event_broker_udp.dispatch = &notify;
+
+    if (pthread_create (&t_event_broker_tcp, NULL, &t_broker_tcp, NULL) != 0)
     {
       return -1;
+    }
+
+    if (pthread_create (&t_event_broker_udp, NULL, &t_broker_udp, NULL) != 0)
+    {
+       return -1;
     }
   return 0;
 }

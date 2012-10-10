@@ -32,6 +32,7 @@
           len = sizeof(cliaddr);
           n = recvfrom(sockfd,&ev,sizeof(Events),0,(struct sockaddr *)&cliaddr,&len);
           eventbroker->dispatch(ev);
+          usleep(1000);
        }
        return 0;
    }
