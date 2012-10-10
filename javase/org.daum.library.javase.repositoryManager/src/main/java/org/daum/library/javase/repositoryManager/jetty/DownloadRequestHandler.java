@@ -84,54 +84,8 @@ public class DownloadRequestHandler extends AbstractHandler{
         }
     }
 
-
-    protected Wagon connectToWagonRepository(Repository repository) {
-        try {
-            String wagonHint = repository.getProtocol().toLowerCase(Locale.ENGLISH);
-            Wagon wagon = wagonProvider.lookup(wagonHint);
-            wagon.connect(repository, getAuthenticationInfo(repository.getId()));
-            return wagon;
-        } catch (Exception e) {
-            getLog().warn("Unable to connect to wagon repository ["+repository.getId()+":"+repository.getUrl()+"]: "+e.getMessage(), e);
-            return null;
-        }
-    }
-    protected File downloadSingleFile(VirtualRepository virtualRepository,String artifactPath) {
-        for (Repository repository : virtualRepository.getIgnoredRepositories()) {
-            Wagon wagon = connectToWagonRepository(repository);
-            if(wagon!=null){
-                try {
-                    if (wagon.resourceExists(artifactPath)) {
-                        getLog().info("Artifact ["+artifactPath+"] already existing in repository ["+repository.getId()+"]");
-                        return null;
-                    }
-                } catch (Exception e) {
-                    getLog().warn("Check ignored repo for ["+artifactPath+"] failed: "+e.getMessage());
-                }
-            }
-        }
-
-    protected File downloadResource(VirtualRepository virtualRepository, String artifactPath) throws IOException {
-        if(artifactPath.length()>0){
-            artifactPath=artifactPath.substring(1);
-        }
-
-            File requestedFile = new File(virtualRepository.getStorageBase(), artifactPath);
-            if(requestedFile.isFile()){
-                if(virtualRepository.getCacheSeconds()<=0 || (System.currentTimeMillis()-requestedFile.lastModified()-virtualRepository.getCacheSeconds()<=0)){
-                    return requestedFile;
-                }
-            }
-            requestedFile = downloadSingleFile(virtualRepository,artifactPath);
-            return requestedFile;
-
-    }
-
-
-
     public void handle(String target, Request baseRequest,   			HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
-
 
         File resource =null;
 

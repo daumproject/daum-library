@@ -53,6 +53,9 @@ public class WorkerRunnable implements Runnable{
             output.close();
             input.close();
 
+            if(clientSocket !=null)
+                clientSocket.close();
+
         } catch (Exception e) {
             //report exception somewhere.
             e.printStackTrace();

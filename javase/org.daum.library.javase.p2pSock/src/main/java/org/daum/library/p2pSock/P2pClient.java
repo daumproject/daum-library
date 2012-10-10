@@ -33,7 +33,7 @@ public class P2pClient
         try
         {
             requestSocket = new Socket(adr, port);
-         //   System.out.println("Connected to localhost in port 2004");
+            //   System.out.println("Connected to localhost in port 2004");
             //2. get Input and Output streams
             out = new ObjectOutputStream(requestSocket.getOutputStream());
 
@@ -54,8 +54,10 @@ public class P2pClient
             //4: Closing connection
             try
             {
-               if(requestSocket !=null)
-                requestSocket.close();
+                if(requestSocket !=null)
+                    requestSocket.close();
+                if(out != null)
+                    out.close();
             }
             catch(IOException ioException){
                 ioException.printStackTrace();

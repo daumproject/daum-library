@@ -38,17 +38,27 @@ public class P2pServer  implements Runnable{
         openServerSocket();
         while(! isStopped()){
             Socket clientSocket = null;
-            try {
+            try
+            {
                 clientSocket = this.serverSocket.accept();
+
+                this.threadPool.execute( new WorkerRunnable(p2pSock,clientSocket,"Thread Pooled Server"));
+
             } catch (IOException e) {
                 if(isStopped())
                 {
                     logger.debug("Server Stopped ",e);
                     return;
                 }
-                throw new RuntimeException("Error accepting client connection", e);
+                logger.warn("Error accepting client connection", e);
+                if(clientSocket != null)
+                    try {
+                        clientSocket.close();
+                    } catch (IOException e1) {
+
+                    }
             }
-            this.threadPool.execute( new WorkerRunnable(p2pSock,clientSocket,"Thread Pooled Server"));
+
         }
         this.threadPool.shutdown();
         logger.debug("Server Stopped ");
