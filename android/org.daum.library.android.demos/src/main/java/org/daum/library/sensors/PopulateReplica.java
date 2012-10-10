@@ -98,7 +98,7 @@ public class PopulateReplica extends AbstractComponentType {
             public void modelUpdated() {
                 init();
 
-                if(called == false)
+                if(called == false && factory !=null)
                 {
                 PersistenceSession session = null;
                 try

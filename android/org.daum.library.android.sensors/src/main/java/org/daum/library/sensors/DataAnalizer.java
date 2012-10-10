@@ -45,13 +45,18 @@ import java.util.TimerTask;
 @Provides({
         @ProvidedPort(name = "step", type = PortType.MESSAGE),
         @ProvidedPort(name = "position",type = PortType.MESSAGE) ,
-        @ProvidedPort(name = "notify", type = PortType.MESSAGE)
+        @ProvidedPort(name = "notify", type = PortType.MESSAGE),
+        @ProvidedPort(name = "motion", type = PortType.MESSAGE)
 })
 @Requires({
         @RequiredPort(name = "speech", type = PortType.MESSAGE,optional = true),
         @RequiredPort(name = "vibreur", type = PortType.MESSAGE,optional = true),
         @RequiredPort(name = "alert", type = PortType.MESSAGE,optional = true),
-        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true)
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true),
+        @RequiredPort(name = "distance", type = PortType.MESSAGE,optional = true)  ,
+        @RequiredPort(name = "x", type = PortType.MESSAGE,optional = true),
+        @RequiredPort(name = "y", type = PortType.MESSAGE,optional = true),
+        @RequiredPort(name = "z", type = PortType.MESSAGE,optional = true)
 })
 @DictionaryType({
         @DictionaryAttribute(name = "idAgent", defaultValue = "jedartois"),
@@ -150,6 +155,16 @@ public class DataAnalizer  extends AbstractComponentType {
 
 
                     });    }
+            }
+
+            @Override
+            public void preRollback(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void postRollback(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                //To change body of implemented methods use File | Settings | File Templates.
             }
         });
 
@@ -272,10 +287,22 @@ public class DataAnalizer  extends AbstractComponentType {
     @Update
     public void update(){
         mStepLength = Float.parseFloat(getDictionary().get("mStepLength").toString());
-        if(t != null )
-            t.schedule(new preAlert(),0, (Integer.parseInt(getDictionary().get("preAlertTimer").toString()) * 1000));
-        if(t2 != null)
-            t2.schedule(new AlertDetection(),0, (Integer.parseInt(getDictionary().get("alertTimer").toString()) * 1000));
+        if(t != null ){
+            t.cancel();
+            t.purge();
+        }
+        t = new Timer();
+        t.schedule(new preAlert(),0, (Integer.parseInt(getDictionary().get("preAlertTimer").toString()) * 1000));
+
+        if(t2 != null)  {
+            t2.cancel();
+            t2.purge();
+        }
+
+        t2 = new Timer();
+        t2.schedule(new AlertDetection(),0, (Integer.parseInt(getDictionary().get("alertTimer").toString()) * 1000));
+
+
         if(amanager != null){
             amanager.setStreamVolume(AudioManager.STREAM_RING, Integer.parseInt(getDictionary().get("volume").toString()) , AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
             amanager.setStreamVolume(AudioManager.STREAM_NOTIFICATION, Integer.parseInt(getDictionary().get("volume").toString()), AudioManager.FLAG_SHOW_UI + AudioManager.FLAG_PLAY_SOUND);
@@ -289,9 +316,26 @@ public class DataAnalizer  extends AbstractComponentType {
         //getPortByName("speach", MessagePort.class).process("a step is detected");
         mDistance += (float)   mStepLength/100;
         System.out.println("distance "+mDistance);
+        getPortByName("distance", MessagePort.class).process(mDistance);
     }
 
 
+
+
+    @Port(name = "motion")
+    public void motion(Object o)
+    {
+         if(o instanceof  org.daum.common.genmodel.Motion){
+
+             org.daum.common.genmodel.Motion t = (org.daum.common.genmodel.Motion)o;
+
+             getPortByName("x", MessagePort.class).process( t.getX());
+             getPortByName("y", MessagePort.class).process( t.getY());
+             getPortByName("z", MessagePort.class).process( t.getZ());
+         }
+
+
+    }
     @Port(name = "position")
     public void position(Object o)
     {

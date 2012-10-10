@@ -73,7 +73,8 @@ public class P2pServer  implements Runnable{
     {
         this.isStopped = true;
         try {
-            this.serverSocket.close();
+            if(serverSocket != null)
+                this.serverSocket.close();
         } catch (IOException e) {
             throw new RuntimeException("Error closing server", e);
         }
