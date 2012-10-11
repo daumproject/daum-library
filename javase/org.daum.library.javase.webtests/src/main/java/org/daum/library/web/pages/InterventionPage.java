@@ -82,6 +82,16 @@ public class InterventionPage extends AbstractPage implements Observer {
                 logger.debug("Request Ws Demand");
                 getPortByName("ws", WsHandler.class).addHandler("/intervention",webSocketChannel);
             }
+
+            @Override
+            public void preRollback(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void postRollback(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
         });
 
         webSocketChannel.getNotifyConnection().addObserver(this);

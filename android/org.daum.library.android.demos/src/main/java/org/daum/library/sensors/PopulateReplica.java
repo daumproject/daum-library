@@ -207,6 +207,16 @@ public class PopulateReplica extends AbstractComponentType {
                     called = true;
             }
             }
+
+            @Override
+            public void preRollback(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void postRollback(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
         });
 
 
