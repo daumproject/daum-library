@@ -32,7 +32,7 @@ import org.slf4j.LoggerFactory;
 @ComponentType
 @Requires({
         @RequiredPort(name = "broadcast", type = PortType.MESSAGE,optional = true,theadStrategy = ThreadStrategy.SHARED_THREAD),
-        @RequiredPort(name = "notification", type = PortType.MESSAGE,optional = true,theadStrategy = ThreadStrategy.SHARED_THREAD)
+        @RequiredPort(name = "notification", type = PortType.MESSAGE,optional = true,theadStrategy = ThreadStrategy.NONE)
 })
 @DictionaryType({
         @DictionaryAttribute(name = "synchronize", defaultValue = "true", optional = true,vals={"true","false"}) ,

@@ -65,6 +65,16 @@ public class MoyensMonitorComponent extends AbstractComponentType {
                     logger.error(TAG, "error start compo", e);
                 }
             }
+
+            @Override
+            public void preRollback(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
+
+            @Override
+            public void postRollback(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+                //To change body of implemented methods use File | Settings | File Templates.
+            }
         });
     }
 
