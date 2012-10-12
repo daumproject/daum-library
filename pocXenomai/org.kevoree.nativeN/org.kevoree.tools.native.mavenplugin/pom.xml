@@ -14,7 +14,7 @@
     </parent>
 
     <properties>
-        <kevoree.version>1.8.8-SNAPSHOT</kevoree.version>
+        <kevoree.version>1.8.9-SNAPSHOT</kevoree.version>
     </properties>
 
 
@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.kevoree.nativeN</groupId>
             <artifactId>org.kevoree.nativeN.framework</artifactId>
-            <version>1.2-SNAPSHOT</version>
+            <version>1.3-SNAPSHOT</version>
         </dependency>
 
         <dependency>

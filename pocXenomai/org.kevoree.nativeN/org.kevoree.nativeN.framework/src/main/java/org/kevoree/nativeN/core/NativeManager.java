@@ -64,7 +64,6 @@ public class NativeManager {
     }
 
 
-
     public  boolean start() throws Exception {
 
         if(nativeHandler.start(key, path_uexe) < 0)
@@ -78,7 +77,7 @@ public class NativeManager {
 
     public void stop() throws InterruptedException
     {
-        Thread.sleep(3000);
+       // Thread.sleep(3000);
         nativeHandler.stop(key);
     }
 

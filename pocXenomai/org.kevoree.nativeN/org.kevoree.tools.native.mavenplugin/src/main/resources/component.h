@@ -36,9 +36,9 @@ typedef struct _context
   Ports inputs[NUMBER_PORTS];
   int outputs_count;
   Ports outputs[NUMBER_PORTS];
-  void (*start) (void);
-  void (*stop) (void);
-  void (*update) (void);
+  int (*start) ();
+  int (*stop) ();
+  int (*update) ();
   void (*dispatch) (int id_port,int id_queue);
 } Context;
 
@@ -47,10 +47,6 @@ int start ();
 int stop ();
 int update ();
 int alive_component = 0;
-int register_start (void *fn);
-int register_stop (void *fn);
-int register_update (void *fn);
-int register_trigger_port (void *fn);
 
 Context *ctx;
 EventBroker event_broker_tcp;
@@ -93,6 +89,10 @@ void notify(Events ev)
           close(event_broker_tcp.sckServer);
           close(event_broker_udp.sckServer);
           exit (0);
+        break;
+
+        case EV_PORT_OUTPUT:
+              // ignore
         break;
 
     }
@@ -164,44 +164,10 @@ void  process_output (int id_output, void *n_value)
 {
 	  kmessage kmsg;
 	  kmsg.type = 1;
-	  strcpy (kmsg.value, n_value);
+	  strcpy (kmsg.value,(const char*) n_value);
 	  enqueue (ctx->outputs[id_output].id, kmsg);
-     /*
-	  Events      ev;
-      ev.ev_type = EV_PORT_OUTPUT;
-      ev.id_queue =   ctx->outputs[id_output].id;
-      send_event(component_event_publisher,ev);   */
 }
 
-int
-register_start (void *fn)
-{
-  ctx->start = fn;
-  return 0;
-};
 
-
-int
-register_stop (void *fn)
-{
-  ctx->stop = fn;
-  return 0;
-};
-
-
-int
-register_update (void *fn)
-{
-  ctx->update = fn;
-  return 0;
-};
-
-
-int
-register_dispatch (void *fn)
-{
-  ctx->dispatch = fn;
-  return 0;
-};
 
 #endif

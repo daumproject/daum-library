@@ -44,7 +44,7 @@ public class MavenHelper {
     }
 
 
-    public static  void createPom(String path_template,Model model,MavenProject project,String path ) throws IOException {
+    public static  void createPom(String path_template,Model model,MavenProject project,String path,String name ) throws IOException {
 
         String pom_component = new String(FileManager.load(GenerateFilesMojo.class.getClassLoader().getResourceAsStream(path_template)));
 
@@ -54,7 +54,7 @@ public class MavenHelper {
         pom_component= pom_component.replace("$NAME$",model.getName());
         pom_component = pom_component.replace("$VERSION_K$", KevoreeFactory.getVersion());
 
-        pom_component = pom_component.replace("$artifactId_parent$",project.getArtifactId());
+        pom_component = pom_component.replace("$artifactId_parent$",project.getArtifactId()+name);
         pom_component = pom_component.replace("$version_parent$",project.getVersion());
 
         MavenHelper.writeFile(path,pom_component,false);

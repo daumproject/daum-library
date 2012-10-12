@@ -14,6 +14,11 @@
         <module>org.kevoree.tools.native.mavenplugin</module>
     </modules>
 
+    <properties>
+        <kevoree.version>1.8.9-SNAPSHOT</kevoree.version>
+    </properties>
+
+
     <build>
         <pluginManagement>
             <plugins>

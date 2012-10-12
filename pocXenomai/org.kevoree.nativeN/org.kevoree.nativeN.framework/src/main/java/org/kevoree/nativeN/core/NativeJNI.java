@@ -46,8 +46,7 @@ public class NativeJNI extends EventObject implements NativeEventPort {
                 deleteOldFile(folder);
             }
             folder.mkdirs();
-
-
+             // todo
             String r = ""+new Random().nextInt(800);
             String absolutePath = copyFileFromStream(getPath("native.so"), folder.getAbsolutePath(),"libnative"+r+""+ getExtension());
 

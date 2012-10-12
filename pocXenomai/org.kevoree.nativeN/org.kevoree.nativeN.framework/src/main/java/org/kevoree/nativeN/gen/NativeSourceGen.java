@@ -102,7 +102,14 @@ public class NativeSourceGen implements  INativeSourceGen {
         StringBuilder gen = new StringBuilder();
 
 
-        gen.append("#include \"thirdparty/component.h\" \n");
+        gen.append("#include \"thirdparty/component.h\" \n\n\n");
+
+        for (String name : inputs_ports.keySet())
+        {
+            gen.append("void "+name+"(void *input);\n");
+        }
+
+
         for (String name : ouputs_ports.keySet()){
             gen.append("void "+name+"(void *input) {\n");
             gen.append(" process_output("+ouputs_ports.get(name)+",input);\n");
@@ -140,16 +147,12 @@ public class NativeSourceGen implements  INativeSourceGen {
                 "\t    int port=   atoi(argv[2]);\n" +
                 "\n" +
                 "\t     bootstrap(key,port);\n" +
-                "         register_start(start);\n" +
-                "         register_stop(stop);\n" +
-                "         register_update(update);\n" +
-                "         register_dispatch(dispatch);\n" +
-                "\t     ctx->start();\n" +
-                "\n" +
-                "\twhile(1)\n" +
-                "\t{\n" +
-                "        sleep(1000000);\n" +
-                "\t}\n" +
+                "        ctx->start= &start;\n" +
+                "        ctx->stop = &stop;\n" +
+                "        ctx->update   = &update;\n" +
+                "        ctx->dispatch = &dispatch;\n" +
+                "\t    ctx->start();\n  " +
+                "  pause();\n" +
                 "     }\n" +
                 "}");
 
@@ -170,22 +173,25 @@ public class NativeSourceGen implements  INativeSourceGen {
     }
 
 
-
     public String gen_bridge_ProvidedPort(){
         StringBuilder gen = new StringBuilder();
         int count=0;
-        gen.append("@Provides({");
-        for (String name : inputs_ports.keySet()){
-            gen.append(" @ProvidedPort(name = \""+name+"\", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.THREAD_QUEUE)");
-            if(count < inputs_ports.size()-1) {
-                gen.append(",\n");
-            } else {
-                gen.append("\n");
-            }
 
-            count++;
+        if(inputs_ports.size() >0 ){
+
+            gen.append("@Provides({");
+            for (String name : inputs_ports.keySet()){
+                gen.append(" @ProvidedPort(name = \""+name+"\", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.NONE)");
+                if(count < inputs_ports.size()-1) {
+                    gen.append(",\n");
+                } else {
+                    gen.append("\n");
+                }
+
+                count++;
+            }
+            gen.append("})");
         }
-        gen.append("})");
 
         return gen.toString();
     }
@@ -194,19 +200,21 @@ public class NativeSourceGen implements  INativeSourceGen {
     public String gen_bridge_RequiredPort(){
         StringBuilder gen = new StringBuilder();
         int count=0;
-        gen.append("@Requires({");
-        for (String name : ouputs_ports.keySet()){
-            gen.append(" @RequiredPort(name = \""+name+"\", type = PortType.MESSAGE,optional = true,theadStrategy = ThreadStrategy.THREAD_QUEUE)");
-            if(count < ouputs_ports.size()-1) {
-                gen.append(",\n");
-            } else {
-                gen.append("\n");
+
+        if(ouputs_ports.size() >0){
+            gen.append("@Requires({");
+            for (String name : ouputs_ports.keySet()){
+                gen.append(" @RequiredPort(name = \""+name+"\", type = PortType.MESSAGE,optional = true,theadStrategy = ThreadStrategy.NONE)");
+                if(count < ouputs_ports.size()-1) {
+                    gen.append(",\n");
+                } else {
+                    gen.append("\n");
+                }
+
+                count++;
             }
-
-            count++;
+            gen.append("})");
         }
-        gen.append("})");
-
         return gen.toString();
     }
 
@@ -216,7 +224,6 @@ public class NativeSourceGen implements  INativeSourceGen {
 
         for (String name : inputs_ports.keySet())
         {
-
             gen.append( "    @Port(name = \""+name+"\")\n" +
                     "    public void "+name+"(Object o)\n" +
                     "    {\n" +
