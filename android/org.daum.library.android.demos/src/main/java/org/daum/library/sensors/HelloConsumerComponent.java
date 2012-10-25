@@ -6,7 +6,7 @@ import org.kevoree.framework.AbstractComponentType;
 
 @Library(name = "JavaSE", names = {"Android"})
 @Provides({
-        @ProvidedPort(name = "consume", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.SHARED_THREAD)
+        @ProvidedPort(name = "consume", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.NONE)
 })
 @DictionaryType({
         @DictionaryAttribute(name = "duree", defaultValue = "1", optional = true)

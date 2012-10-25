@@ -1,3 +1,0 @@
-
- gcc -I/usr/xenomai/include testjni.c native.c  -L/usr/xenomai/lib -lnative -lxenomai -o testjni.so -shared -lc -I/usr/lib/jvm/java-6-openjdk/include/
-

@@ -8,7 +8,7 @@ import org.kevoree.framework.MessagePort;
 
 @Library(name = "JavaSE", names = {"Android"})
 @Requires({
-        @RequiredPort(name = "produce", type = PortType.MESSAGE, optional = true,theadStrategy = ThreadStrategy.SHARED_THREAD)
+        @RequiredPort(name = "produce", type = PortType.MESSAGE, optional = true,theadStrategy = ThreadStrategy.NONE)
 })
 @DictionaryType({
         @DictionaryAttribute(name = "helloProductionDelay", defaultValue = "2000", optional = true)

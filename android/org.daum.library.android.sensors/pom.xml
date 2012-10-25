@@ -12,9 +12,14 @@
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
         <groupId>org.daum.library.android</groupId>
-        <version>1.8.8</version>
+        <version>1.8.9-SNAPSHOT</version>
         <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
+
+    <properties>
+        <hxmbt.local.file>${basedir}/src/main/resources/libs/HxMBT.jar</hxmbt.local.file>
+        <kevoree.exclude>zephyr.*:*</kevoree.exclude>
+    </properties>
 
 
     <dependencies>
@@ -30,7 +35,13 @@
             <version>1.2-SNAPSHOT</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>zephyr.android</groupId>
+            <artifactId>zephyr.android.HxMBT</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${hxmbt.local.file}</systemPath>
+        </dependency>
     </dependencies>
 
     <build>
