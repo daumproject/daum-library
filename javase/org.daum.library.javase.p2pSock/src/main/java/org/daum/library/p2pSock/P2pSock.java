@@ -20,7 +20,7 @@ import java.util.concurrent.Semaphore;
  */
 
 @Library(name = "JavaSE", names = {"Android"})
-@org.kevoree.annotation.ChannelTypeFragment
+@org.kevoree.annotation.ChannelTypeFragment(theadStrategy = ThreadStrategy.SHARED_THREAD )
 @DictionaryType({
         @DictionaryAttribute(name = "port", defaultValue = "", optional = true, fragmentDependant = true) ,
         @DictionaryAttribute(name = "size_queue", defaultValue = "50", optional = false),

@@ -33,7 +33,7 @@ import org.kevoree.framework.MessagePort;
         @RequiredPort(name = "location", type = PortType.MESSAGE,optional = true)
 })
 @ComponentType
-public class PositionSensor  extends AbstractComponentType  {
+public class GpsComponent extends AbstractComponentType  {
 
 
     private LocationManager locationMgr				= null;
