@@ -46,12 +46,6 @@ public class ZephyrHM  extends AbstractComponentType {
     private static final String TAG = "ZephyrHM";
 
     /*
-    *  Layout Views
-    */
-    private TextView mTitle;
-    private TextView mStatus;
-
-    /*
     * Name of the connected device, and it's address
     */
     private String mHxMName = null;
@@ -67,13 +61,9 @@ public class ZephyrHM  extends AbstractComponentType {
      */
     private  HxmService mHxmService = null;
 
-    private  Handler mHandler=null;
-    private volatile Looper mMyLooper;
-
     @Start
     public void start()
     {
-
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -83,60 +73,6 @@ public class ZephyrHM  extends AbstractComponentType {
                 */
             Toast.makeText( UIServiceHandler.getUIService().getRootActivity(), "Bluetooth is not available or not enabled", Toast.LENGTH_LONG).show();
         }
-        UIServiceHandler.getUIService().getRootActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run()
-            {
-
-                // The Handler that gets information back from the hrm service
-                mHandler = new Handler() {
-                    @Override
-                    public void handleMessage(Message msg) {
-                        switch (msg.what) {
-                            case hxmDriver.HXM_SERVICE_MSG_STATE:
-                                Log.d(TAG, "handleMessage():  MESSAGE_STATE_CHANGE: " + msg.arg1);
-                                switch (msg.arg1) {
-                                    case hxmDriver.HXM_SERVICE_CONNECTED:
-                                        if ((mStatus != null) && (mHxMName != null)) {
-                                            // mStatus.setText(hxmDriver.connectedTo);
-                                            mStatus.append(mHxMName);
-                                        }
-                                        break;
-
-                                    case hxmDriver.HXM_SERVICE_CONNECTING:
-                                        //   mStatus.setText(hxmDriver.connecting);
-                                        break;
-
-                                    case hxmDriver.HXM_SERVICE_RESTING:
-                                        if (mStatus != null ) {
-                                            //   mStatus.setText(hxmDriver.notConnected);
-                                        }
-                                        break;
-                                }
-                                break;
-
-                            case hxmDriver.HXM_SERVICE_MSG_READ: {
-                                /*
-                                * MESSAGE_READ will have the byte buffer in tow, we take it, build an instance
-                                * of a HrmReading object from the bytes, and then display it into our view
-                                */
-                                byte[] readBuf = (byte[]) msg.obj;
-                                HrmReading hrm = new HrmReading( readBuf );
-                                hrm.displayRaw();
-                                break;
-                            }
-
-                            case hxmDriver.HXM_SERVICE_MSG_TOAST:
-                                //   Toast.makeText(getApplicationContext(), msg.getData().getString(null),Toast.LENGTH_SHORT).show();
-                                break;
-                        }
-                    }
-                };
-
-            }
-        });
-
-
 
 
         if (!mBluetoothAdapter.isEnabled()) {
@@ -145,12 +81,11 @@ public class ZephyrHM  extends AbstractComponentType {
         } else {
 
 
-
             /*
             * Setup the service that will talk with the Hxm
             */
             if (mHxmService == null)
-                setupHrm();
+                mHxmService = new HxmService( UIServiceHandler.getUIService().getRootActivity(), this);
 
             /*
             * Look for an Hxm to connect to, if none is found tell the user
@@ -162,6 +97,9 @@ public class ZephyrHM  extends AbstractComponentType {
             } else {
                 //   mStatus.setText(hxmDriver.nonePaired);
             }
+
+
+
         }
 
     }
@@ -175,19 +113,16 @@ public class ZephyrHM  extends AbstractComponentType {
     }
 
 
+    public void processReading(byte[] msg){
+        byte[] readBuf = (byte[]) msg;
+        HrmReading hrm = new HrmReading( readBuf );
+        hrm.displayRaw();
+    }
     @Update
     public void update()
     {
 
     }
-
-
-    private void setupHrm() {
-        Log.d(TAG, "setupScale:");
-        // Initialize the service to perform bluetooth connections
-        mHxmService = new HxmService( UIServiceHandler.getUIService().getRootActivity(), mHandler);
-    }
-
 
 
     private boolean getFirstConnectedHxm() {
@@ -349,7 +284,9 @@ public class ZephyrHM  extends AbstractComponentType {
             /*
             * log the contents of the HrmReading, use logcat to watch the data as it arrives
             */
-            dump();
+
+            getPortByName("heartRate", MessagePort.class).process(heartRate);
+            //  dump();
         }
 
 
@@ -413,7 +350,7 @@ public class ZephyrHM  extends AbstractComponentType {
             Log.d(TAG,"...batteryIndicator "+ ( batteryIndicator ));
             Log.d(TAG,"...heartRate "+ ( heartRate ));
 
-            getPortByName("heartRate", MessagePort.class).process(heartRate);
+
 
             Log.d(TAG, "...heartBeatNumber " + (heartBeatNumber));
             Log.d(TAG,"...shbTime1tx "+ (  hbTime1 ));
