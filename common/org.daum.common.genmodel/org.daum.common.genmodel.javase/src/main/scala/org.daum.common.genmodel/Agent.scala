@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import org.daum.library.ormH.annotations.Id
 
-trait Agent extends org.daum.common.genmodel.SitacContainer with org.daum.common.genmodel.Personne with Serializable
+trait Agent extends org.daum.common.genmodel.SitacContainer with org.daum.common.genmodel.Personne with org.daum.common.genmodel.IModel with Serializable
 {
   @Id
   private var matricule : java.lang.String = ""
