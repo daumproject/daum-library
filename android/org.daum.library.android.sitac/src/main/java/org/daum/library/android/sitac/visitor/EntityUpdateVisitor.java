@@ -2,6 +2,7 @@ package org.daum.library.android.sitac.visitor;
 
 import org.daum.library.android.sitac.view.entity.DemandEntity;
 import org.daum.library.android.sitac.view.entity.EntityFactory;
+import org.daum.library.android.sitac.view.entity.FireFighterEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
@@ -57,6 +58,26 @@ public class EntityUpdateVisitor implements IVisitor {
             e.setMessage(d.getNumber());
         }
     }
+
+
+    @Override
+    public void visit(FireFighterEntity e, IModel m) {
+        Agent a = (Agent)m;
+
+        // update the location
+        if (a.getPosRef() != null) {
+            GpsPoint p = (GpsPoint) a.getPosRef();
+            IGeoPoint geoP = new GeoPoint(p.getLat(), p.getLong());
+            e.setGeoPoint(geoP);
+        }
+
+        DatedValue val = (DatedValue) a.getCapteur("heart");
+        e.setMessage("  " + val.lastUpdate());
+
+    }
+
+
+
 
     @Override
     public void visit(IEntity e, IModel m) {

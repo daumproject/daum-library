@@ -36,7 +36,8 @@ public class SITACEngine implements IEngine {
             ArrowActionImpl.class,
             ZoneActionImpl.class,
             CibleImpl.class,
-            SourceDangerImpl.class
+            SourceDangerImpl.class,
+            AgentImpl.class
     };
 
     private PersistenceSessionFactoryImpl factory;

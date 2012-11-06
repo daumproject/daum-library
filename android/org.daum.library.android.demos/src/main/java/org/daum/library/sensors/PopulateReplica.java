@@ -110,6 +110,13 @@ public class PopulateReplica extends AbstractComponentType {
 
                         SitacModel sitacModel = SitacFactory.createSitacModel();
 
+
+
+                        GpsPoint po = SitacFactory.createGpsPoint();
+                        po.setLat(48115444);
+                        po.setLong(-1639141);
+
+
                         Agent agentnoel = SitacFactory.createAgent();
                         agentnoel.setNom("PLOUZEAU");
                         agentnoel.setPrenom("NOEL");
@@ -117,27 +124,37 @@ public class PopulateReplica extends AbstractComponentType {
                         agentnoel.setPassword("nplouzeau");
                         sitacModel.addPersonnes(agentnoel);
                         agentnoel.setAutorisation(AutorisationType.ALL);
+                        agentnoel.setposRef(po);
 
-
-
+                        GpsPoint po3 = SitacFactory.createGpsPoint();
+                        po.setLat(48115445);
+                        po.setLong(-1639141);
                         Agent agentERWAN =  SitacFactory.createAgent();
                         agentERWAN.setNom("DAUBERT");
                         agentERWAN.setPrenom("Erwan");
                         agentERWAN.setMatricule("edaubert");
                         agentERWAN.setPassword("edaubert");
                         sitacModel.addPersonnes(agentERWAN);
+                        agentERWAN.setposRef(po3);
 
+
+                        GpsPoint po2 = SitacFactory.createGpsPoint();
+                        po.setLat(48115444);
+                        po.setLong(-1639141);
 
                         Agent agentjed = SitacFactory.createAgent();
                         agentjed.setNom("DARTOIS");
                         agentjed.setPrenom("JEAN-EMILE");
                         agentjed.setMatricule("jed");
                         agentjed.setPassword("jed");
+                        agentjed.setposRef(po2);
+
+
                         sitacModel.addPersonnes(agentjed);
 
                         Personne requerant = SitacFactory.createPersonne();
-                        requerant.setNom("Fouquet");
-                        requerant.setPrenom("François");
+                        requerant.setNom("Demo");
+                        requerant.setPrenom("Demo");
 
 
                         Intervention interventionfake =SitacFactory.createIntervention();
@@ -164,6 +181,7 @@ public class PopulateReplica extends AbstractComponentType {
 
                         Detachement detachement = SitacFactory.createDetachement();
                         detachement.setChef((agentnoel));
+
 
 
                         Affectation affectation = SitacFactory.createAffectation();

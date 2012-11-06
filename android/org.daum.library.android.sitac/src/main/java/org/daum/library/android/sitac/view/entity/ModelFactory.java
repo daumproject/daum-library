@@ -18,6 +18,7 @@ public class ModelFactory implements IModelFactory {
 		else if (e instanceof DangerEntity) return build((DangerEntity) e);
 		else if (e instanceof ZoneEntity) return build((ZoneEntity) e);
 		else if (e instanceof ArrowEntity) return build((ArrowEntity) e);
+        else if (e instanceof FireFighterEntity) return build((FireFighterEntity) e);
 		else Log.w(TAG, "build("+e.getClass().getSimpleName()+") >> Don't know what to do with that dude, sorry");
 		return null;
 	}
@@ -36,7 +37,20 @@ public class ModelFactory implements IModelFactory {
         demand.setLocation(location);
 		return demand;
 	}
-	
+
+
+    private Agent build(FireFighterEntity ent)
+    {
+        IGeoPoint geoP = ent.getGeoPoint();
+        GpsPoint location = SitacFactory.createGpsPoint();
+        location.setLat(geoP.getLatitudeE6());
+        location.setLong(geoP.getLongitudeE6());
+
+        Agent d = SitacFactory.createAgent();
+        d.setposRef((Position)geoP);
+
+        return  d;
+    }
 	private SourceDanger build(DangerEntity ent) {
 		IGeoPoint geoP = ent.getGeoPoint();
         GpsPoint location = SitacFactory.createGpsPoint();

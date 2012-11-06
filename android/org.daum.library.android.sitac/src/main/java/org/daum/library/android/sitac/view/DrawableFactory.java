@@ -45,6 +45,9 @@ public class DrawableFactory {
 	public static final String ICON_UNDO_PRESSED = "/images/icon/undo_pressed.png";
 	public static final String ICON_REDO = "/images/icon/redo.png";
 	public static final String ICON_REDO_PRESSED = "/images/icon/redo_pressed.png";
+
+    public static final String ICON_FIREFIGHTER = "/images/icon/firefighter.png";
+
 	
 	public static Drawable build(Context ctx, String imgPath) {
 		try {

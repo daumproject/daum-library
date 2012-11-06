@@ -33,15 +33,20 @@ import org.kevoree.framework.MessagePort;
         @RequiredPort(name = "location", type = PortType.MESSAGE,optional = true)
 })
 @ComponentType
-public class GpsComponent extends AbstractComponentType  {
+public class GpsComponent extends AbstractComponentType  implements  Runnable {
 
 
     private LocationManager locationMgr				= null;
     private LocationListener		onLocationChange=null;
+    private Thread cthread = null;
+    GpsPoint l1 = SitacFactory.createGpsPoint();
 
     @Start
     public void start()
     {
+        cthread = new Thread(this);
+        l1.setMode(-1);
+        cthread.start();
 
         UIServiceHandler.getUIService().getRootActivity().runOnUiThread(new Runnable() {
             @Override
@@ -49,13 +54,17 @@ public class GpsComponent extends AbstractComponentType  {
 
 		onLocationChange	= new LocationListener() {
             @Override
-            public void onLocationChanged(Location location) {
-                GpsPoint l1 = SitacFactory.createGpsPoint();
+            public void onLocationChanged(Location location)
+            {
+
                 double lat =    location.getLatitude();
                 double lon =   location.getLongitude();
+                double  alt = location.getAltitude();
 
                 l1.setLat((int)(lat* 1E6));
                 l1.setLong((int) (lon * 1E6));
+                l1.setAltitude((int)alt);
+                l1.setMode(0);
 
                 getPortByName("location", MessagePort.class).process(l1);
             }
@@ -98,6 +107,23 @@ public class GpsComponent extends AbstractComponentType  {
     }
 
 
+    @Override
+    public void run() {
+      while (Thread.currentThread().isAlive()){
+
+          try
+          {
+              if(l1.getMode() != -1){
+                  getPortByName("location", MessagePort.class).process(l1);
+              }
+
+
+              Thread.sleep(2000);
+          } catch (InterruptedException e) {
+              e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+          }
+      }
+    }
 }
 
 
