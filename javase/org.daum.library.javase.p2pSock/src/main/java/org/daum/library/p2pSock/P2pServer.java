@@ -21,7 +21,7 @@ public class P2pServer  implements Runnable{
     protected ServerSocket serverSocket = null;
     protected boolean      isStopped    = false;
     protected Thread       runningThread= null;
-    protected ExecutorService threadPool = Executors.newFixedThreadPool(50);
+    protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
     private P2pSock p2pSock;
     private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
@@ -30,7 +30,8 @@ public class P2pServer  implements Runnable{
         this.p2pSock = p2pSock;
     }
 
-    public void run(){
+    public void run()
+    {
         synchronized(this)
         {
             this.runningThread = Thread.currentThread();
@@ -50,9 +51,11 @@ public class P2pServer  implements Runnable{
                     logger.debug("Server Stopped ",e);
                     return;
                 }
-                logger.warn("Error accepting client connection", e);
+                logger.debug("Error accepting client connection ",e);
+
                 if(clientSocket != null)
-                    try {
+                    try
+                    {
                         clientSocket.close();
                     } catch (IOException e1) {
 

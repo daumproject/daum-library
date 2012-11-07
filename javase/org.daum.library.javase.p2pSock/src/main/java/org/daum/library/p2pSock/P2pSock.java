@@ -1,6 +1,8 @@
 package org.daum.library.p2pSock;
 
+import org.kevoree.ContainerRoot;
 import org.kevoree.annotation.*;
+import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.*;
 import org.kevoree.framework.message.Message;
 import org.slf4j.LoggerFactory;
@@ -10,6 +12,7 @@ import java.io.*;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,7 +30,7 @@ import java.util.concurrent.Semaphore;
         @DictionaryAttribute(name = "timer", defaultValue = "2000", optional = false),
         @DictionaryAttribute(name = "replay", defaultValue = "true", optional = false, vals = {"true", "false"})
 })
-public class P2pSock extends AbstractChannelFragment {
+public class P2pSock extends AbstractChannelFragment implements ModelListener{
 
     private P2pServer server;
     private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -36,11 +39,19 @@ public class P2pSock extends AbstractChannelFragment {
     private  HashMap<String,P2pClient> cache_clients = new HashMap<String,P2pClient>();
     private  QueueMsg backupOnError ;
     private  int portServer;
+    private ContainerRoot model;
+    private class  InfoClient{
+        String adr;
+        int port;
+    }
+    private  HashMap<String,InfoClient> cache = new HashMap<String,InfoClient>();
+
     @Start
     public void startp()
     {
         try
         {
+            model = getModelService().getLastModel();
             Integer maximum_size_messaging = Integer.parseInt(getDictionary().get("size_queue").toString());
             Integer timer = Integer.parseInt(getDictionary().get("timer").toString());
             backupOnError = new QueueMsg(this,timer,maximum_size_messaging);
@@ -131,16 +142,35 @@ public class P2pSock extends AbstractChannelFragment {
                         if (!message.getPassedNodes().contains(getNodeName())) {
                             message.getPassedNodes().add(getNodeName());
                         }
+                        String adr;
+                        int port;
+                        if(cache.containsKey(remoteNodeName))
+                        {
+                            adr = cache.get(remoteChannelName).adr;
+                            port = cache.get(remoteChannelName).port;
+                        } else {
+                            adr =    getAddress(remoteNodeName);
+                            port =     parsePortNumber(remoteNodeName);
+                            InfoClient c = new InfoClient();
+                            c.adr = adr;
+                            c.port = port;
+                            cache.put(remoteChannelName,c);
+                        }
                         message.setDestNodeName(remoteNodeName);
 
-                        String adr =    getAddress(remoteNodeName);
-                        int port =     parsePortNumber(remoteNodeName);
-                         if(adr.length() >0){
-                             P2pClient client = new P2pClient(remoteNodeName,adr, port);
-                             client.send(message);
-                         }else {
-                             logger.warn("You need to specify an adress to "+remoteNodeName);
-                         }
+
+                        if(adr.length() >0){
+                            P2pClient client = new P2pClient(remoteNodeName,adr, port);
+                            client.send(message);
+                        }else
+                        {
+                            logger.warn("You need to specify an adress to "+remoteNodeName);
+                            if(cache.containsKey(remoteNodeName))
+                            {
+                                cache.remove(remoteChannelName);
+                            }
+
+                        }
 
                     }
 
@@ -161,7 +191,7 @@ public class P2pSock extends AbstractChannelFragment {
 
     public String getAddress(String remoteNodeName)
     {
-        String ip = KevoreePlatformHelper.getProperty(this.getModelService().getLastModel(), remoteNodeName,
+        String ip = KevoreePlatformHelper.getProperty(model, remoteNodeName,
                 org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP());
         if (ip == null || ip.equals("")) {
             ip = "";
@@ -173,7 +203,7 @@ public class P2pSock extends AbstractChannelFragment {
     public int parsePortNumber (String nodeName) throws IOException {
         try {
             //logger.debug("look for port on " + nodeName);
-            Option<Integer> portOption = KevoreePropertyHelper.getIntPropertyForChannel(this.getModelService().getLastModel(), this.getName(), "port", true, nodeName);
+            Option<Integer> portOption = KevoreePropertyHelper.getIntPropertyForChannel(model, this.getName(), "port", true, nodeName);
             if (portOption.isDefined()) {
                 return portOption.get();
             } else {
@@ -182,5 +212,42 @@ public class P2pSock extends AbstractChannelFragment {
         } catch (NumberFormatException e) {
             throw new IOException(e.getMessage());
         }
+    }
+
+    @Override
+    public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+        return true;
+    }
+
+    @Override
+    public boolean initUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+
+        return true;
+    }
+
+    @Override
+    public boolean afterLocalUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+
+        return true;
+    }
+
+
+
+    @Override
+    public void modelUpdated() {
+        model = getModelService().getLastModel();
+        cache.clear();
+    }
+
+    @Override
+    public void preRollback(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+    }
+
+    @Override
+    public void postRollback(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
+    }
+
+    public ContainerRoot getModel() {
+        return model;
     }
 }

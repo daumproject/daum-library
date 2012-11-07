@@ -7,7 +7,7 @@ import org.kevoree.framework.aspects.KevoreeAspects._
 
 class ChannelClassResolver(nioChannel: AbstractChannelFragment) {
   def resolve(className: String): Class[_] = {
-    val model = nioChannel.getModelService.getLastModel
+    val model = nioChannel.asInstanceOf[P2pSock].getModel
     val currentNode = model.getNodes.find(n => n.getName == nioChannel.getNodeName).get
     var resolvedClass: Class[_] = null
     nioChannel.getBindedPorts.foreach {
