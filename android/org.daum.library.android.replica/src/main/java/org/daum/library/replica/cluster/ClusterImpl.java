@@ -38,7 +38,7 @@ public class ClusterImpl implements  ICluster,Runnable{
     private Channel chanel;
     private  Thread theartbeat = null;
     private  ICacheManger cacheManger=null;
-    private  final int freqHearBeat = 10000;
+    private  final int freqHearBeat = 800;
     private double start;
     private String path_disk="";
     private DB db=null;

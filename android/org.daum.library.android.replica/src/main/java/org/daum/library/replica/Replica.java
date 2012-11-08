@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 })
 @DictionaryType({
         @DictionaryAttribute(name = "synchronize", defaultValue = "true", optional = true,vals={"true","false"}) ,
-        @DictionaryAttribute(name = "diskPersitence", defaultValue = "true", optional = true,vals={"true","false"}) ,
+        @DictionaryAttribute(name = "diskPersitence", defaultValue = "false", optional = true,vals={"true","false"}) ,
         @DictionaryAttribute(name = "path_disk", defaultValue = "/tmp/replica", optional = true)
 })
 @Provides({
