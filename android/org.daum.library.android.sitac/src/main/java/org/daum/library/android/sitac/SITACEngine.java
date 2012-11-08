@@ -97,18 +97,18 @@ public class SITACEngine implements IEngine {
                             switch (e.getEvent()) {
                                 case ADD:
                                     m = (IModel) session.get(c, e.getId());
-                                    logger.debug(TAG, "Replica Event: ADD "+m);
+                                    logger.debug(TAG+ " Replica Event: ADD "+m);
                                     listener.onAdd(m);
                                     break;
 
                                 case DELETE:
-                                    logger.debug(TAG, "Replica Event: DELETE "+e.getId());
+                                    logger.debug(TAG+" Replica Event: DELETE "+e.getId());
                                     listener.onDelete((String) e.getId());
                                     break;
 
                                 case UPDATE:
                                     m = (IModel) session.get(c, e.getId());
-                                    logger.debug(TAG, "Replica Event: UPDATE "+m);
+                                    logger.debug(TAG+ " Replica Event: UPDATE "+m);
                                     listener.onUpdate(m);
                                     break;
                             }
