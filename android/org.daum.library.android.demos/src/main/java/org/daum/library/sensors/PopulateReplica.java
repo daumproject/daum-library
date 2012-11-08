@@ -113,8 +113,9 @@ public class PopulateReplica extends AbstractComponentType {
 
 
                         GpsPoint po = SitacFactory.createGpsPoint();
-                        po.setLat(48115444);
+                        po.setLat(48119444);
                         po.setLong(-1639141);
+
 
 
                         Agent agentnoel = SitacFactory.createAgent();
@@ -126,21 +127,11 @@ public class PopulateReplica extends AbstractComponentType {
                         agentnoel.setAutorisation(AutorisationType.ALL);
                         agentnoel.setposRef(po);
 
-                        GpsPoint po3 = SitacFactory.createGpsPoint();
-                        po.setLat(48115445);
-                        po.setLong(-1639141);
-                        Agent agentERWAN =  SitacFactory.createAgent();
-                        agentERWAN.setNom("DAUBERT");
-                        agentERWAN.setPrenom("Erwan");
-                        agentERWAN.setMatricule("edaubert");
-                        agentERWAN.setPassword("edaubert");
-                        sitacModel.addPersonnes(agentERWAN);
-                        agentERWAN.setposRef(po3);
 
 
                         GpsPoint po2 = SitacFactory.createGpsPoint();
-                        po.setLat(48115444);
-                        po.setLong(-1639141);
+                        po2.setLat(48115444);
+                        po2.setLong(-1639181);
 
                         Agent agentjed = SitacFactory.createAgent();
                         agentjed.setNom("DARTOIS");
@@ -172,7 +163,6 @@ public class PopulateReplica extends AbstractComponentType {
 
 
                         Moyens   moyens = SitacFactory.createMoyens();
-                        moyens.addAgent(agentERWAN);
                         moyens.addAgent(agentjed);
                         moyens.addMateriel(fpt);
                         moyens.addMateriel(fpt2);
@@ -190,7 +180,7 @@ public class PopulateReplica extends AbstractComponentType {
 
 
                         interventionfake.addDetachements(detachement);
-                        interventionfake.setDescription("l y a une voiture en flammes sur le bas coté ! L'homme est visiblement encore au volant de sa voiture  ");
+                        interventionfake.setDescription("il y a une voiture en flammes sur le bas coté ! L'homme est visiblement encore au volant de sa voiture  ");
                                                  CodeSinistre codeSinistre = SitacFactory.createInterventionType();
                         codeSinistre.setCode("332");
 
