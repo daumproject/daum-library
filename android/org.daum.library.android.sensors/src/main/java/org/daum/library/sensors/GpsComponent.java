@@ -113,7 +113,7 @@ public class GpsComponent extends AbstractComponentType  implements  Runnable {
 
           try
           {
-              if(l1.getMode() != -1){
+              if(l1.getMode() != -1 && l1.getLat() != 0 && l1.getLong() != 0){
                   getPortByName("location", MessagePort.class).process(l1);
               }
 

@@ -64,6 +64,10 @@ public class ZephyrHM  extends AbstractComponentType {
     @Start
     public void start()
     {
+        connect();
+    }
+
+    public  void connect(){
 
         mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
@@ -99,7 +103,6 @@ public class ZephyrHM  extends AbstractComponentType {
             }
 
 
-
         }
 
     }
@@ -112,6 +115,18 @@ public class ZephyrHM  extends AbstractComponentType {
 
     }
 
+    public void connectLost()
+    {
+        if(mHxmService !=null)
+            mHxmService.stop();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+        }
+        connect();
+    }
 
     public void processReading(byte[] msg){
         byte[] readBuf = (byte[]) msg;
@@ -219,7 +234,7 @@ public class ZephyrHM  extends AbstractComponentType {
         byte crc;
         byte etx;
 
-        public HrmReading (byte[] buffer) {
+        public  HrmReading (byte[] buffer) {
             int bufferIndex = 0;
 
             Log.d ( TAG, "HrmReading being built from byte buffer");

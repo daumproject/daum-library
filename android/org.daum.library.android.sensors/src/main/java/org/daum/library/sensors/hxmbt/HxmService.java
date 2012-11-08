@@ -225,6 +225,7 @@ public class HxmService {
         Log.d(TAG, "BEGIN connectionFailed");
 
         setState( hxmDriver.HXM_SERVICE_RESTING);
+        zephyrhm.connectLost();
 
         Log.d(TAG, "END connectionFailed");
 
@@ -233,8 +234,11 @@ public class HxmService {
     /*
      * Indicate that the connection was lost and notify the UI Activity.
      */
-    private void connectionLost() {
+    private void connectionLost()
+    {
         setState( hxmDriver.HXM_SERVICE_RESTING);
+        Log.d(TAG, "END connectionFailed");
+        zephyrhm.connectLost();
     }
 
 
