@@ -41,13 +41,13 @@ public class ModelFactory implements IModelFactory {
 
     private Agent build(FireFighterEntity ent)
     {
-        IGeoPoint geoP = ent.getGeoPoint();
         GpsPoint location = SitacFactory.createGpsPoint();
-        location.setLat(geoP.getLatitudeE6());
-        location.setLong(geoP.getLongitudeE6());
+        location.setLat(ent.getGeoPoint().getLatitudeE6());
+        location.setLong(ent.getGeoPoint().getLongitudeE6());
 
         Agent d = SitacFactory.createAgent();
-        d.setposRef((Position)geoP);
+
+        d.setposRef((Position)location);
 
         return  d;
     }

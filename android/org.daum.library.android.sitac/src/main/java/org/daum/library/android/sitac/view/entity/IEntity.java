@@ -7,10 +7,13 @@ import org.osmdroid.views.MapView;
 
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
+import pythagoras.d.Circle;
 
 public interface IEntity extends IObservable, IElement {
-	
-	public enum State {
+
+
+
+    public enum State {
 		/** default entity state; mark the entity as "not saved into any engine" */
 		NEW,
 		/**  mark the entity as "saved into one engine" */
@@ -132,4 +135,14 @@ public interface IEntity extends IObservable, IElement {
      * @return true if it has enough data to draw itself
      */
     public boolean isDrawable();
+
+    /**
+     * tells if the user has selected the entity
+     * @return   true if selected
+     */
+    public boolean  isSelected();
+    public void   setSelected(boolean  e);
+
+    public void drawCircle(Canvas c,MapView mapView,boolean e);
+
 }

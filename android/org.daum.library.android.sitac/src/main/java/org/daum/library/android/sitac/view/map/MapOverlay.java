@@ -2,9 +2,14 @@ package org.daum.library.android.sitac.view.map;
 
 import java.util.ArrayList;
 
+import android.graphics.Point;
+import android.os.Vibrator;
 import org.daum.library.android.sitac.listener.OnOverlayEventListener;
 import org.daum.library.android.sitac.view.entity.AbstractShapedEntity;
+import org.daum.library.android.sitac.view.entity.ArrowEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
+import org.daum.library.android.sitac.view.entity.ZoneEntity;
+import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Overlay;
@@ -22,14 +27,15 @@ public class MapOverlay extends Overlay {
 	private OnOverlayEventListener listener;
 	private Paint paint;
 	private ArrayList<IEntity> entities;
-	
+	private  Vibrator move =   null;
+
 	public MapOverlay(Context context) {
 		super(context);
 		this.paint = new Paint();
 		this.paint.setColor(Color.CYAN);
 		this.paint.setAntiAlias(true);
 		this.paint.setStrokeWidth(7);
-		
+        move = (Vibrator) UIServiceHandler.getUIService().getRootActivity().getSystemService(Context.VIBRATOR_SERVICE);
 		this.entities = new ArrayList<IEntity>();
 	}
 
@@ -40,26 +46,55 @@ public class MapOverlay extends Overlay {
 	}
 	
 	@Override
-	public boolean onLongPress(MotionEvent e, MapView mapView) {
-		if (listener != null) {			
-			IGeoPoint geoP = mapView.getProjection().fromPixels(e.getX(), e.getY());
-			IEntity ent;
-			for (int i = entities.size()-1; i>= 0; i--) {
-				ent = entities.get(i);
-				if (ent.containsPoint(geoP, mapView)) {
-					listener.onEntitySelected(ent);
-					return true;
-				}
-			}
+	public boolean onTouchEvent(MotionEvent e, MapView mapView) {
+		if (listener != null) {
+          boolean  found =false;
+            int eventaction = e.getAction();
+
+            switch (eventaction )
+            {
+                case MotionEvent.ACTION_DOWN:
+
+                    IGeoPoint geoP = mapView.getProjection().fromPixels(e.getX(), e.getY());
+                    IEntity ent;
+                    for (int i = entities.size()-1; i>= 0; i--) {
+                        ent = entities.get(i);
+                        if (ent.containsPoint(geoP, mapView)) {
+                            ent.setSelected(true);
+                            move.vibrate(20);
+                            listener.onEntitySelected(ent);
+                            found = true;
+                        }  else
+                        {
+                            ent.setSelected(false);
+                        }
+                    }
+                    if(found){
+                        return true;
+                    }
+
+                    break;
+            }
+
+
 		}
-		return super.onLongPress(e, mapView);
+		return super.onTouchEvent(e, mapView);
 	}
 
 	@Override
 	protected void draw(Canvas canvas, MapView mapV, boolean shadow) {
 		if (!shadow) {
-			for (IEntity ent : entities) {
-				if (ent.isDrawable()) ent.draw(canvas, mapV);
+			for (IEntity ent : entities)
+            {
+				if (ent.isDrawable()){
+                    ent.draw(canvas, mapV);
+                    if(ent.isSelected())
+                    {
+                        if(!(ent instanceof ArrowEntity) && !(ent instanceof ZoneEntity)){
+                            ent.drawCircle(canvas,mapV,true);
+                        }
+                    }
+                }
 			}
 		}
 	}

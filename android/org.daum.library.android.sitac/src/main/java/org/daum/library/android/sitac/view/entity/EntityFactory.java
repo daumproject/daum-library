@@ -60,7 +60,8 @@ public class EntityFactory implements IEntityFactory {
             GpsPoint gps = (GpsPoint) d.getPosRef();
             IGeoPoint geoP = new GeoPoint(gps.getLat(), gps.getLong());
             e.setGeoPoint(geoP);
-        } else {
+        } else
+        {
             logger.warn(TAG, "FireFighterEntity have no position");
         }
         return  e;

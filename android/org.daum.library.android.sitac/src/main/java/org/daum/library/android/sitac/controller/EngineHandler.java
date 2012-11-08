@@ -2,6 +2,7 @@ package org.daum.library.android.sitac.controller;
 
 import java.util.*;
 
+import org.daum.common.genmodel.impl.AgentImpl;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.android.sitac.view.SITACMapView;
 import org.daum.library.android.sitac.view.SITACMenuView;
@@ -40,19 +41,22 @@ public class EngineHandler implements OnEngineStateChangeListener {
 
     @Override
     public void onAdd(IModel m) {
-        logger.debug(TAG, "onAdd(IModel)");
+        logger.debug(TAG+" onAdd(IModel) "+m);
+        if(m instanceof AgentImpl){
+            logger.debug(TAG+" onAdd(IModel) "+((AgentImpl) m).getMatricule()+" "+((AgentImpl) m).getPosRef());
+        }
         processModel(m);
     }
 
     @Override
     public void onUpdate(IModel m) {
-        logger.debug(TAG, "onUpdate(IModel) "+m);
+        logger.debug(TAG+ " onUpdate(IModel) "+m);
         processModel(m);
     }
 
     @Override
     public void onUpdateAll(ArrayList<IModel> data) {
-        logger.debug(TAG, "onUpdateAll(ArrayList<IModel>)");
+        logger.debug(TAG+ " onUpdateAll(ArrayList<IModel>)");
         mapView.deleteAllEntities();
         menuView.deleteAllEntities();
         modelMap.clear();
@@ -75,24 +79,24 @@ public class EngineHandler implements OnEngineStateChangeListener {
 
     @Override
     public void onDelete(String id) {
-        logger.debug(TAG, "onDelete(IModel)");
+        logger.debug(TAG+" onDelete(IModel)");
         IEntity e = getEntityWithModelId(id);
         if (e != null) delete(e);
     }
 
     @Override
     public void onReplicaSynced(ArrayList<IModel> data) {
-        logger.debug(TAG, "onReplicaSynced(ArrayList<IModel>)");
+        logger.debug(TAG+ " onReplicaSynced(ArrayList<IModel>)");
         for (IModel m : data) onUpdate(m);
     }
 
     private void add(IModel m) {
-        logger.debug(TAG, "add(IModel) with brand new entity");
+        logger.debug(TAG+" add(IModel) with brand new entity");
         IEntity e = factory.build(m);
         modelMap.put(e, m);
         e.setState(IEntity.State.SAVED);
 
-        logger.debug(TAG, "add entity to the mapView (and menuView if necessary)");
+        logger.debug(TAG+" add entity to the mapView (and menuView if necessary)");
         if (e.getGeoPoint() == null && e instanceof DemandEntity) {
             // in case its a DemandEntity that has no location on map, add it to the menu
             menuView.addEntityWithNoLocation((DemandEntity) e);
@@ -101,7 +105,7 @@ public class EngineHandler implements OnEngineStateChangeListener {
     }
 
     private void update(IModel m) {
-        logger.debug(TAG, "update(IModel)");
+        logger.debug(TAG+ " update(IModel)");
         IEntity e = getEntityWithModel(m);
         modelMap.put(e, m); // update model in modelMap
         e.setState(IEntity.State.SAVED);
@@ -116,7 +120,7 @@ public class EngineHandler implements OnEngineStateChangeListener {
     }
 
     private void delete(IEntity e) {
-        logger.debug(TAG, "delete(IEntity)");
+        logger.debug(TAG+" delete(IEntity)");
         modelMap.remove(e);
         mapView.deleteEntity(e);
     }

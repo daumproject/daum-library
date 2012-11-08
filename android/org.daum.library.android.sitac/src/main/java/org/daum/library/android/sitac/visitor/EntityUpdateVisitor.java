@@ -7,6 +7,8 @@ import org.daum.library.android.sitac.view.entity.IEntity;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.GeoPoint;
 import org.daum.common.genmodel.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * EntityUpdateVisitor handles entities updates.
@@ -24,6 +26,7 @@ import org.daum.common.genmodel.*;
  */
 public class EntityUpdateVisitor implements IVisitor {
 
+    private static final Logger logger = LoggerFactory.getLogger(EntityUpdateVisitor.class);
     private static final String TAG = "EntityUpdateVisitor";
 
     @Override
@@ -62,7 +65,9 @@ public class EntityUpdateVisitor implements IVisitor {
 
     @Override
     public void visit(FireFighterEntity e, IModel m) {
+
         Agent a = (Agent)m;
+        logger.debug(TAG+ " visiting FireFighterEntity "+a.getMatricule()+" "+a.getPosRef());
 
         // update the location
         if (a.getPosRef() != null) {
@@ -81,10 +86,15 @@ public class EntityUpdateVisitor implements IVisitor {
 
     @Override
     public void visit(IEntity e, IModel m) {
+
+        logger.debug(TAG+ " visiting "+e);
+
         if (m.getLocation() != null) {
             GpsPoint p = m.getLocation();
             IGeoPoint geoP = new GeoPoint(p.getLat(), p.getLong());
             e.setGeoPoint(geoP);
         }
+
+
     }
 }
