@@ -59,6 +59,17 @@ public class UIHandler implements OnOverlayEventListener, OnSelectedEntityEventL
 		}
 	}
 
+    @Override
+    public void setCenterItemMap(IEntity item) {
+
+        if(item.getGeoPoint() != null){
+            mapView.setCenter(item.getGeoPoint());
+        } else {
+            System.err.print("setCenterItemMap ");
+        }
+
+    }
+
     public void setEngine(IEngine engine) {
         this.modelEngine = engine;
     }

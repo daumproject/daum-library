@@ -1,6 +1,16 @@
 package org.daum.library.sensors;
 
 
+import android.util.Log;
+import org.kevoree.ContainerRoot;
+import org.kevoree.annotation.*;
+import org.kevoree.api.service.core.handler.ModelListener;
+import org.kevoree.framework.AbstractComponentType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+
 /**
  * Created with IntelliJ IDEA.
  * User: jed
@@ -19,4 +29,7 @@ public class Tester {
 
 
     }
+
+
+
 }

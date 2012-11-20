@@ -137,11 +137,11 @@ public class ReaderDaum extends AbstractComponentType implements Runnable {
                     if (temp.getMatricule().equals(getDictionary().get("agent").toString())) {
 
                         DatedValueImpl value1 = (DatedValueImpl) temp.getCapteurs().get("heartmonitor");
-                        if(value1 != null && value1.lastUpdate() != null)
-                        {
-                        double value =  (Double)value1.getValues().get(value1.lastUpdate());
+                        if(value1 != null && value1.lastUpdate() != 0)
+                        {   /*
+                            double value =  (double)value1.getValues().get(value1.lastUpdate());
                             String format = "hm="+value;
-                            getPortByName("value", MessagePort.class).process(format);
+                            getPortByName("value", MessagePort.class).process(format);  */
                         }
 
 

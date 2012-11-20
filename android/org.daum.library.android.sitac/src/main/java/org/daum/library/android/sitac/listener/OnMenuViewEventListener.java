@@ -10,4 +10,9 @@ public interface OnMenuViewEventListener {
 	 * @param item a relevant new entity according to the selected menuItem
 	 */
 	void onMenuItemSelected(IEntity item);
+
+
+
+
+    void setCenterItemMap(IEntity item);
 }

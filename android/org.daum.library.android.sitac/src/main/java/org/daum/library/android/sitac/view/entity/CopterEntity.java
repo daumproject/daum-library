@@ -7,31 +7,20 @@ import org.daum.library.android.sitac.visitor.IVisitor;
 /**
  * Created with IntelliJ IDEA.
  * User: jed
- * Date: 05/11/12
- * Time: 13:36
+ * Date: 19/11/12
+ * Time: 15:11
  * To change this template use File | Settings | File Templates.
  */
-public class FireFighterEntity extends AbstractEntity
-{
-    private boolean destroyable = false;
+public class CopterEntity extends AbstractEntity {
 
-    public FireFighterEntity(Drawable icon, String type) {
+
+    public CopterEntity(Drawable icon, String type) {
         super(icon, type);
-        setSelectable(false);
+        setSelectable(true);
     }
 
     @Override
     public void accept(IVisitor visitor, IModel m) {
-        visitor.visit(this, m);
+        //To change body of implemented methods use File | Settings | File Templates.
     }
-
-    public void destroy() {
-        this.destroyable = true;
-        notifyObservers();
-    }
-
-    public boolean isDestroyable() {
-        return destroyable;
-    }
-
 }

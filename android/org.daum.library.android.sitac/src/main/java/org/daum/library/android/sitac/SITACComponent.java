@@ -1,6 +1,7 @@
 package org.daum.library.android.sitac;
 
 import android.util.Log;
+
 import org.daum.library.android.sitac.controller.ISITACController;
 import org.daum.library.android.sitac.engine.IEngine;
 import org.daum.library.android.sitac.view.SITACView;
@@ -56,9 +57,19 @@ public class SITACComponent extends AbstractComponentType {
     @Start
     public void start() {
         uiService = UIServiceHandler.getUIService();
-
+        Log.e(TAG, "START SITAC");
         initUI();
+           /*
+        SerialMavLinkHandler test = new SerialMavLinkHandler(uiService.getRootActivity());
 
+        test.getMavLinkReader().addEventListener(new MavLinkEventListener() {
+            @Override
+            public void incomingMSG(MavLinkEvent mavLinkEvent) {
+                System.out.println(mavLinkEvent);
+                Log.d(TAG, "Error while initializing persistence in engine"+mavLinkEvent.getMsg());
+            }
+        });
+               */
         getModelService().registerModelListener(new ModelListener() {
             @Override
             public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
@@ -123,6 +134,7 @@ public class SITACComponent extends AbstractComponentType {
 
     @Stop
     public void stop() {
+        Log.e(TAG, "STOP SITAC");
         uiService.remove(view);
     }
 

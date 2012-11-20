@@ -4,7 +4,7 @@
     <groupId>org.daum.library.javase</groupId>
     <artifactId>org.daum.library.javase.tileServer</artifactId>
     <name>DAUM :: Library :: JavaSE :: Tile Server</name>
-    <version>1.2-SNAPSHOT</version>
+    <version>1.3</version>
     <description>Tile Server</description>
 
     <parent>

@@ -7,7 +7,7 @@
     <groupId>org.daum.library.android</groupId>
     <artifactId>org.daum.library.android.replica</artifactId>
     <name>DAUM :: Library :: Android  :: Replica</name>
-    <version>2.2-SNAPSHOT</version>
+    <version>2.3</version>
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>

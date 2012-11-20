@@ -5,8 +5,9 @@ import java.util.*;
 import org.daum.common.genmodel.impl.AgentImpl;
 import org.daum.library.android.sitac.listener.OnEngineStateChangeListener;
 import org.daum.library.android.sitac.view.SITACMapView;
-import org.daum.library.android.sitac.view.SITACMenuView;
+import org.daum.library.android.sitac.view.SITACMenuLayout;
 import org.daum.library.android.sitac.view.entity.DemandEntity;
+import org.daum.library.android.sitac.view.entity.FireFighterEntity;
 import org.daum.library.android.sitac.view.entity.IEntity;
 import org.daum.library.android.sitac.view.entity.IEntityFactory;
 
@@ -28,7 +29,7 @@ public class EngineHandler implements OnEngineStateChangeListener {
     private static final Logger logger = LoggerFactory.getLogger(EngineHandler.class);
 
 	private SITACMapView mapView;
-	private SITACMenuView menuView;
+	private SITACMenuLayout menuView;
 	private IEntityFactory factory;
     private IVisitor visitor;
 	private Map<IEntity, IModel> modelMap;
@@ -90,7 +91,8 @@ public class EngineHandler implements OnEngineStateChangeListener {
         for (IModel m : data) onUpdate(m);
     }
 
-    private void add(IModel m) {
+    private void add(IModel m)
+    {
         logger.debug(TAG+" add(IModel) with brand new entity");
         IEntity e = factory.build(m);
         modelMap.put(e, m);
@@ -100,6 +102,11 @@ public class EngineHandler implements OnEngineStateChangeListener {
         if (e.getGeoPoint() == null && e instanceof DemandEntity) {
             // in case its a DemandEntity that has no location on map, add it to the menu
             menuView.addEntityWithNoLocation((DemandEntity) e);
+        }
+
+        if(e instanceof FireFighterEntity)
+        {
+            menuView.addEntityFirefighter((FireFighterEntity)e);
         }
         mapView.addEntity(e);
     }
@@ -158,7 +165,7 @@ public class EngineHandler implements OnEngineStateChangeListener {
         return null;
     }
 
-    public void registerMenuView(SITACMenuView menuView) {
+    public void registerMenuView(SITACMenuLayout menuView) {
 		this.menuView = menuView;
 	}
 

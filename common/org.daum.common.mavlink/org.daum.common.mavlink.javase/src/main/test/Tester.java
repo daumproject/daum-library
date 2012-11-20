@@ -53,7 +53,7 @@ public class Tester {
 
     public static void  main(String argv[]) throws Exception {
 
-                  System.out.println(calcFT232hBaudBaseToDiv(57600,48000000));
+        System.out.println(calcFT232hBaudBaseToDiv(57600,48000000));
         System.out.println(calcFT232hBaudBaseToDiv(57600,120000000));
 
 
@@ -90,9 +90,11 @@ public class Tester {
         m.addEventListener(new MavLinkEventListener() {
             @Override
             public void incomingMSG(MavLinkEvent evt) {
-             System.out.println("EV : "+evt.getMsg());
+                System.out.println("EV : "+evt.getMsg());
             }
         });
+
+
 
 
         Thread.sleep(10000000);

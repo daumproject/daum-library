@@ -4,7 +4,7 @@ import java.util.Hashtable;
 
 import org.daum.library.android.sitac.engine.IEngine;
 import org.daum.library.android.sitac.view.SITACMapView;
-import org.daum.library.android.sitac.view.SITACMenuView;
+import org.daum.library.android.sitac.view.SITACMenuLayout;
 import org.daum.library.android.sitac.view.SITACSelectedEntityView;
 import org.daum.library.android.sitac.view.entity.EntityFactory;
 import org.daum.library.android.sitac.view.entity.IEntity;
@@ -89,7 +89,7 @@ public class SITACController implements ISITACController {
 		engineHandler.registerMapView(mapView);
 	}
 	
-	public void registerMenuView(SITACMenuView menuView) {
+	public void registerMenuView(SITACMenuLayout menuView) {
 		engineHandler.registerMenuView(menuView);
 	}
 	

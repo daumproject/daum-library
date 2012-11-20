@@ -84,6 +84,10 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
     {
         try
         {
+
+            cache.clear();
+            model = getModelService().getLastModel();
+
             if (portServer != parsePortNumber(getNodeName()))
             {
                 stopp();
@@ -235,8 +239,8 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
 
     @Override
     public void modelUpdated() {
-        model = getModelService().getLastModel();
         cache.clear();
+        model = getModelService().getLastModel();
     }
 
     @Override

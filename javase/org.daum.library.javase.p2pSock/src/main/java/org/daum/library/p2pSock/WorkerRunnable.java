@@ -22,7 +22,6 @@ public class WorkerRunnable implements Runnable{
     protected Socket clientSocket = null;
     protected String serverText   = null;
     private P2pSock p2pSock;
-    private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public WorkerRunnable(P2pSock p2pSock,Socket clientSocket, String serverText) {
         this.clientSocket = clientSocket;
@@ -37,13 +36,6 @@ public class WorkerRunnable implements Runnable{
             OutputStream output = clientSocket.getOutputStream();
             ObjectInputStream  in = new ObjectInputStreamImpl(input,p2pSock);
             Message  msg = (Message)in.readObject();
-
-            /*
-                String json=    in.readUTF()
-                RichString richString = new RichString(json);
-                Message msg =  richString.fromJSON(Message.class);
-             */
-
             if (!msg.getPassedNodes().contains(p2pSock.getNodeName())) {
                 msg.getPassedNodes().add(p2pSock.getNodeName());
             }

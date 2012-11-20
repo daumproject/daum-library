@@ -1,6 +1,5 @@
 package org.daum.library.sensors;
 
-import android.util.Log;
 import org.daum.common.genmodel.*;
 import org.daum.common.genmodel.impl.AgentImpl;
 import org.daum.common.genmodel.impl.GpsPointImpl;
@@ -143,7 +142,7 @@ public class ManagerFireFighter  extends AbstractComponentType {
                 }
 
             } catch (PersistenceException e) {
-                Log.e(TAG, "PersistenceException ", e);
+                logger.error(TAG, "PersistenceException ", e);
             }
 
         }
@@ -171,18 +170,18 @@ public class ManagerFireFighter  extends AbstractComponentType {
                             values.addValue(heart);
                             s.update(agent);
                             s.close();
-                            Log.e(TAG,"update heart "+agent.getMatricule()+" "+values.lastUpdate());
+                            logger.error("update heart "+agent.getMatricule()+" "+values.lastUpdate());
                         }   else
                         {
-                            Log.e(TAG, "The Agent is not available  "+getDictionary().get("idAgent").toString());
+                            logger.error("The Agent is not available  "+getDictionary().get("idAgent").toString());
                         }
                     }  else {
-                        Log.d(TAG, "The factory is not available");
+                        logger.error( "The factory is not available");
                     }
 
 
                 } catch (PersistenceException e) {
-                    Log.e(TAG, "PersistenceException ", e);
+                    logger.error("PersistenceException ", e);
                 }  finally {
                     if(s != null){
                         s.close();
@@ -212,12 +211,12 @@ public class ManagerFireFighter  extends AbstractComponentType {
                         s.update(agent);
                         logger.debug("update pos "+agent.getMatricule()+" "+agent.getPosRef());
                     }  else         {
-                        Log.e(TAG, "The Agent is not available  "+getDictionary().get("idAgent").toString());
+                        logger.error("The Agent is not available  "+getDictionary().get("idAgent").toString());
                     }
 
 
                 } catch (PersistenceException e) {
-                    Log.e(TAG, "PersistenceException ", e);
+                    logger.error( "PersistenceException ", e);
                 } finally
                 {
                     if(s !=null)
@@ -228,7 +227,7 @@ public class ManagerFireFighter  extends AbstractComponentType {
 
             }
         }else {
-            Log.e(TAG, "Factor is null");
+            logger.error("Factor is null");
         }
     }
 }

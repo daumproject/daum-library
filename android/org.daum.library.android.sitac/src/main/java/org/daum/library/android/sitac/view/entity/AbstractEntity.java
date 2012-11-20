@@ -44,11 +44,13 @@ public abstract class AbstractEntity implements IEntity {
     protected Circle bounds;
     protected Paint paint;
     protected boolean  selected =false;
+    protected boolean isSelectable=true;
     Paint circlePaint = new Paint();
 
     public AbstractEntity(Drawable icon, String type) {
         this(icon, type, "");
     }
+
 
     public AbstractEntity(Drawable icon, String type, String message) {
         this.icon = icon;
@@ -59,10 +61,6 @@ public abstract class AbstractEntity implements IEntity {
         this.paint.setTextSize(13);
         this.bounds = new Circle();
         this.state = State.NEW;
-
-
-
-
         this.observable = new MyObservable();
     }
 
@@ -134,9 +132,9 @@ public abstract class AbstractEntity implements IEntity {
         {
             circlePaint.setAntiAlias(true);
             //fill region
-            circlePaint.setColor(Color.RED);
-            circlePaint.setAlpha(90);
-            circlePaint.setStyle(Paint.Style.FILL);
+            circlePaint.setColor(Color.MAGENTA);
+            circlePaint.setAlpha(95);
+            circlePaint.setStyle(Style.FILL_AND_STROKE);
 
             c.drawCircle(p.x, p.y, (float)bounds.radius(), circlePaint);
         } else {
@@ -151,7 +149,7 @@ public abstract class AbstractEntity implements IEntity {
     public boolean containsPoint(IGeoPoint geoP, MapView mapView)
     {
         Point p = mapView.getProjection().toMapPixels(geoP, null);
-        if(bounds.contains(p.x, p.y)){
+        if(bounds.contains(p.x, p.y) && isSelectable ==true){
             return true;
         }  else
         {
@@ -166,6 +164,15 @@ public abstract class AbstractEntity implements IEntity {
     public void   setSelected(boolean  e){
          selected = e;
     }
+
+    public boolean isSelectable() {
+        return isSelectable;
+    }
+
+    public void setSelectable(boolean selectable) {
+        isSelectable = selectable;
+    }
+
     @Override
     public String getType() {
         return type;

@@ -11,7 +11,7 @@ public class SITACView extends RelativeLayout {
 	private Context ctx;
 	private SITACController sitacCtrl;
 	private SITACMapView mapView;
-	private SITACMenuView menuView;
+	private SITACMenuLayout menuView;
 	private SITACSelectedEntityView selectedEntityView;
 
 	public SITACView(Context context) {
@@ -26,7 +26,7 @@ public class SITACView extends RelativeLayout {
 	private void initUI() {
 		mapView = new SITACMapView(ctx);
 		sitacCtrl.registerMapView(mapView);
-		menuView = new SITACMenuView(ctx);
+		menuView = new SITACMenuLayout(ctx);
 		sitacCtrl.registerMenuView(menuView);
 		selectedEntityView = new SITACSelectedEntityView(ctx);
 		sitacCtrl.registerSelectedEntityView(selectedEntityView);
@@ -37,7 +37,7 @@ public class SITACView extends RelativeLayout {
 
 		addView(mapView, new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		addView(menuView);
-		
+
 		RelativeLayout.LayoutParams entityParams = new RelativeLayout.LayoutParams(
 				LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
 		entityParams.addRule(ALIGN_PARENT_TOP);
