@@ -27,9 +27,9 @@ import org.slf4j.LoggerFactory;
 @Library(name = "JavaSE", names = {"Android"})
 @ComponentType
 @Requires({
-        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = false) })
-public class PopulateReplica extends AbstractComponentType {
-
+        @RequiredPort(name = "service", type = PortType.SERVICE, className = ReplicaService.class, optional = true) })
+public class PopulateReplica extends AbstractComponentType
+{
     public PersistenceConfiguration configuration=null;
     private PersistenceSessionFactoryImpl factory=null;
     private ReplicaService replicaService =  null;
@@ -100,120 +100,138 @@ public class PopulateReplica extends AbstractComponentType {
 
                 if(called == false && factory !=null)
                 {
-                PersistenceSession session = null;
-                try
-                {
-                    session = factory.getSession();
-
-                    if(session != null)
+                    PersistenceSession session = null;
+                    try
                     {
+                        session = factory.getSession();
 
-                        SitacModel sitacModel = SitacFactory.createSitacModel();
+                        if(session != null)
+                        {
 
-
-
-                        GpsPoint po = SitacFactory.createGpsPoint();
-                        po.setLat(48119444);
-                        po.setLong(-1639141);
+                            SitacModel sitacModel = SitacFactory.createSitacModel();
 
 
 
-                        Agent agentnoel = SitacFactory.createAgent();
-                        agentnoel.setNom("PLOUZEAU");
-                        agentnoel.setPrenom("NOEL");
-                        agentnoel.setMatricule("nplouzeau");
-                        agentnoel.setPassword("nplouzeau");
-                        sitacModel.addPersonnes(agentnoel);
-                        agentnoel.setAutorisation(AutorisationType.ALL);
-                        agentnoel.setposRef(po);
+                            GpsPoint po = SitacFactory.createGpsPoint();
+                            po.setLat(48120282);
+                            po.setLong(-1650592);
 
 
 
-                        GpsPoint po2 = SitacFactory.createGpsPoint();
-                        po2.setLat(48115444);
-                        po2.setLong(-1639181);
-
-                        Agent agentjed = SitacFactory.createAgent();
-                        agentjed.setNom("DARTOIS");
-                        agentjed.setPrenom("JEAN-EMILE");
-                        agentjed.setMatricule("jed");
-                        agentjed.setPassword("jed");
-                        agentjed.setposRef(po2);
-
-
-                        sitacModel.addPersonnes(agentjed);
-
-                        Personne requerant = SitacFactory.createPersonne();
-                        requerant.setNom("Demo");
-                        requerant.setPrenom("Demo");
-
-
-                        Intervention interventionfake =SitacFactory.createIntervention();
-
-                        interventionfake.setRequerant(requerant);
+                            Agent agentnoel = SitacFactory.createAgent();
+                            agentnoel.setNom("PLOUZEAU");
+                            agentnoel.setPrenom("NOEL");
+                            agentnoel.setMatricule("nplouzeau");
+                            agentnoel.setPassword("nplouzeau");
+                            sitacModel.addPersonnes(agentnoel);
+                            agentnoel.setAutorisation(AutorisationType.ALL);
+                            agentnoel.setposRef(po);
 
 
 
-
-                        Vehicule fpt2 =SitacFactory.createVehicule();
-                        fpt2.setVehiculeType(VehiculeType.FPT);
-
-                        Vehicule fpt =SitacFactory.createVehicule();
-                        fpt.setVehiculeType(VehiculeType.FPT);
+                            GpsPoint po2 = SitacFactory.createGpsPoint();
+                            po2.setLat(48115411);
+                            po2.setLong(-1648253);
 
 
-                        Moyens   moyens = SitacFactory.createMoyens();
-                        moyens.addAgent(agentjed);
-                        moyens.addMateriel(fpt);
-                        moyens.addMateriel(fpt2);
+                            Agent agentjed = SitacFactory.createAgent();
+                            agentjed.setNom("DARTOIS");
+                            agentjed.setPrenom("JEAN-EMILE");
+                            agentjed.setMatricule("jed");
+                            agentjed.setPassword("jed");
+                            agentjed.setposRef(po2);
+
+                            sitacModel.addPersonnes(agentjed);
+
+                            GpsPoint po3 = SitacFactory.createGpsPoint();
+                            po3.setLat(48118892);
+                            po3.setLong(-1638275);
+
+
+                            Agent agentolivier = SitacFactory.createAgent();
+                            agentolivier.setNom("Barais");
+                            agentolivier.setPrenom("Olivier");
+                            agentolivier.setMatricule("obarais");
+                            agentolivier.setPassword("barias");
+                            agentolivier.setposRef(po3);
+
+
+                            sitacModel.addPersonnes(agentolivier);
+
+                            Personne requerant = SitacFactory.createPersonne();
+                            requerant.setNom("Demo");
+                            requerant.setPrenom("Demo");
+
+
+                            Intervention interventionfake =SitacFactory.createIntervention();
+
+                            interventionfake.setRequerant(requerant);
 
 
 
-                        Detachement detachement = SitacFactory.createDetachement();
-                        detachement.setChef((agentnoel));
+
+
+                            Vehicule fpt2 =SitacFactory.createVehicule();
+                            fpt2.setVehiculeType(VehiculeType.FPT);
+
+                            Vehicule fpt =SitacFactory.createVehicule();
+                            fpt.setVehiculeType(VehiculeType.FPT);
+
+
+                            Moyens   moyens = SitacFactory.createMoyens();
+                            moyens.addAgent(agentjed);
+                            moyens.addAgent(agentolivier);
+                            moyens.addMateriel(fpt);
+                            moyens.addMateriel(fpt2);
 
 
 
-                        Affectation affectation = SitacFactory.createAffectation();
-                        affectation.setMoyen(moyens);
-                        detachement.addAffectation(affectation);
+
+                            Detachement detachement = SitacFactory.createDetachement();
+                            detachement.setChef((agentnoel));
 
 
-                        interventionfake.addDetachements(detachement);
-                        interventionfake.setDescription("il y a une voiture en flammes sur le bas coté ! L'homme est visiblement encore au volant de sa voiture  ");
-                                                 CodeSinistre codeSinistre = SitacFactory.createInterventionType();
-                        codeSinistre.setCode("332");
 
-                        interventionfake.setType(codeSinistre);
-                        sitacModel.addInterventions(interventionfake);
+                            Affectation affectation = SitacFactory.createAffectation();
+                            affectation.setMoyen(moyens);
+                            detachement.addAffectation(affectation);
 
 
-                        GpsPoint position = SitacFactory.createGpsPoint();
-                        position.setLong(4811534);
-                        position.setLat(-1638336);
+                            interventionfake.addDetachements(detachement);
+                            interventionfake.setDescription("il y a une voiture en flammes sur le bas coté ! L'homme est visiblement encore au volant de sa voiture  ");
+                            CodeSinistre codeSinistre = SitacFactory.createInterventionType();
+                            codeSinistre.setCode("332");
+
+                            interventionfake.setType(codeSinistre);
+                            sitacModel.addInterventions(interventionfake);
 
 
-                        interventionfake.setPosition(position);
+                            GpsPoint position = SitacFactory.createGpsPoint();
+                            position.setLong(4811534);
+                            position.setLat(-1638336);
 
 
-                        session.save(sitacModel);
+                            interventionfake.setPosition(position);
 
 
-                        logger.warn("Agent size => "+session.getAll(AgentImpl.class).size());
+                            session.save(sitacModel);
+
+
+                            logger.debug("Agent size => "+session.getAll(AgentImpl.class).size());
+
+                        }
+                    } catch (PersistenceException ex)
+                    {
+                        logger.error("",ex);
+                        replicaService = null;
+                    }
+                    finally
+                    {
+                        if (session != null) session.close();
 
                     }
-                } catch (PersistenceException ex)
-                {
-                    logger.error("",ex);
-                    replicaService = null;
-                }
-                finally
-                {
-                    if (session != null) session.close();
-
-                }
                     called = true;
-            }
+                }
             }
 
             @Override

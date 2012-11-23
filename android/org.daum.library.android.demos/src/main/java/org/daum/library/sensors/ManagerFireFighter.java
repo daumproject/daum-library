@@ -170,10 +170,10 @@ public class ManagerFireFighter  extends AbstractComponentType {
                             values.addValue(heart);
                             s.update(agent);
                             s.close();
-                            logger.error("update heart "+agent.getMatricule()+" "+values.lastUpdate());
+                            logger.debug("update heart "+agent.getMatricule()+" "+values.lastUpdate());
                         }   else
                         {
-                            logger.error("The Agent is not available  "+getDictionary().get("idAgent").toString());
+                            logger.debug("The Agent is not available  "+getDictionary().get("idAgent").toString());
                         }
                     }  else {
                         logger.error( "The factory is not available");
