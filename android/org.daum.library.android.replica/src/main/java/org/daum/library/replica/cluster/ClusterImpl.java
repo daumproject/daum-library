@@ -44,7 +44,7 @@ public class ClusterImpl implements  ICluster,Runnable{
     private DB db=null;
     private boolean diskPersitence =false;
 
-    public ClusterImpl(Node current, Channel chanel,boolean diskPersitence,String pathdisk)
+    public ClusterImpl(Node current, Channel chanel,boolean diskPersitence,boolean first,String pathdisk)
     {
         alive = true;
         this.currentNode = current;
@@ -52,6 +52,14 @@ public class ClusterImpl implements  ICluster,Runnable{
         theartbeat = new Thread(this);
         cacheManger = new CacheManager(this);
         this.diskPersitence = diskPersitence;
+
+        if(first)
+        {
+            currentNode.setSynchronized(true);
+        }else
+        {
+            currentNode.setSynchronized(false);
+        }
 
         // adding node id
         setPath_disk(pathdisk+File.separator+current.getNodeID()+File.separator);
@@ -100,21 +108,21 @@ public class ClusterImpl implements  ICluster,Runnable{
             for(String key_cache :   db.getCollections().keySet())
             {
                 logger.debug("Reading cache from diskPersitence "+key_cache);
-               try
-               {
-                   Cache cache =      cacheManger.getCache(key_cache) ;
-                   SortedMap<String,VersionedValue> disk = (SortedMap<String, VersionedValue>) db.getCollections().get(key_cache);
+                try
+                {
+                    Cache cache =      cacheManger.getCache(key_cache) ;
+                    SortedMap<String,VersionedValue> disk = (SortedMap<String, VersionedValue>) db.getCollections().get(key_cache);
 
-                   for(Object key_row : disk.keySet())
-                   {
-                       logger.debug("Reading object from diskPersitence "+key_row);
+                    for(Object key_row : disk.keySet())
+                    {
+                        logger.debug("Reading object from diskPersitence "+key_row);
 
-                       cache.put(key_row,disk.get(key_row));
-                   }
-               }catch (Exception e)
-               {
+                        cache.put(key_row,disk.get(key_row));
+                    }
+                }catch (Exception e)
+                {
                     logger.warn("Restore from disk ",e);
-               }
+                }
 
             }
         }
@@ -213,37 +221,28 @@ public class ClusterImpl implements  ICluster,Runnable{
             public void run()
             {
 
-                while (getNodesOfCluster().isEmpty() && alive == true && !Thread.currentThread().isInterrupted())
+                while (synchronizedNodesInCluster() != true && alive == true && !Thread.currentThread().isInterrupted() )
                 {
-                    logger.debug("Waiting to discovery nodes..."+getNodesOfCluster());
+                    logger.debug("Waiting for discovering nodes..."+getNodesOfCluster());
                     try
                     {
                         Thread.sleep(freqHearBeat*2);
-                    } catch (InterruptedException e) {
+                    } catch (InterruptedException e)
+                    {
                         //ignore
                     }
                 }
 
                 Long min =Long.MAX_VALUE;
                 Node nodeReqSnapshot=null;
-                boolean sync = synchronizedNodesInCluster();
 
-                for( Node node : nodesOfCluster){
-
+                for( Node node : nodesOfCluster)
+                {
                     if(!currentNode.equals(node))
                     {
-                        if(sync)
+                        if(node.getLastTickTime() < min && node.isSynchronized())
                         {
-                            if(node.getLastTickTime() < min && node.isSynchronized())
-                            {
-                                nodeReqSnapshot = node;
-                            }
-                        } else
-                        {
-                            if(node.getLastTickTime() < min)
-                            {
-                                nodeReqSnapshot = node;
-                            }
+                            nodeReqSnapshot = node;
                         }
                     }
                 }

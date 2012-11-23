@@ -37,6 +37,7 @@ import org.slf4j.LoggerFactory;
 @DictionaryType({
         @DictionaryAttribute(name = "synchronize", defaultValue = "true", optional = true,vals={"true","false"}) ,
         @DictionaryAttribute(name = "diskPersitence", defaultValue = "false", optional = true,vals={"true","false"}) ,
+        @DictionaryAttribute(name = "first", defaultValue = "false", optional = true,vals={"true","false"}) ,
         @DictionaryAttribute(name = "path_disk", defaultValue = "/tmp/replica", optional = true)
 })
 @Provides({
@@ -56,10 +57,12 @@ public class Replica extends AbstractComponentType implements ReplicaService {
         Node node = new Node(getNodeName());
         try
         {
+
+            Boolean  first = Boolean.parseBoolean(getDictionary().get("first").toString());
             Boolean  synchronize = Boolean.parseBoolean(getDictionary().get("synchronize").toString());
             Boolean  diskPersitence = Boolean.parseBoolean(getDictionary().get("diskPersitence").toString());
             String path_disk =       getDictionary().get("path_disk").toString();
-            cluster = new ClusterImpl(node,kChannel,diskPersitence,path_disk);
+            cluster = new ClusterImpl(node,kChannel,diskPersitence,first,path_disk);
             if(synchronize)
             {
                 // request synchronize
