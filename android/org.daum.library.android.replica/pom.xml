@@ -6,13 +6,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.daum.library.android</groupId>
     <artifactId>org.daum.library.android.replica</artifactId>
-    <name>DAUM :: Library :: Android  :: Replica</name>
+    <name>DAUM :: Library :: Android  ::  Replica</name>
     <version>2.3</version>
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
         <groupId>org.daum.library.android</groupId>
-        <version>1.8.9-SNAPSHOT</version>
+        <version>1.8.9</version>
         <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
 
