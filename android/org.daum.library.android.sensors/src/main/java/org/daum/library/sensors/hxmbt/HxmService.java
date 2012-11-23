@@ -183,11 +183,13 @@ public class HxmService {
 
         if (mConnectThread != null) {
             mConnectThread.cancel();
+            mConnectThread.interrupt();
             mConnectThread = null;
         }
 
         if (mConnectedThread != null) {
             mConnectedThread.cancel();
+            mConnectedThread.interrupt();
             mConnectedThread = null;
         }
 

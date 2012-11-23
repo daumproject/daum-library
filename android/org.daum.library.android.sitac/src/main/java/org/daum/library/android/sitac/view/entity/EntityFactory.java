@@ -85,8 +85,13 @@ public class EntityFactory implements IEntityFactory {
         }
 
         DangerEntity e = new DangerEntity(icon, name);
-        IGeoPoint geoP = new GeoPoint(d.getLocation().getLat(), d.getLocation().getLong());
-        e.setGeoPoint(geoP);
+        if(d != null)
+        {
+            IGeoPoint geoP = new GeoPoint(d.getLocation().getLat(), d.getLocation().getLong());
+            e.setGeoPoint(geoP);
+        }else {
+            logger.warn(TAG, "SourceDanger have no position");
+        }
         return e;
     }
 

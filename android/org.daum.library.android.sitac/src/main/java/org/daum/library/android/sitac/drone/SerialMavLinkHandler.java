@@ -1,5 +1,5 @@
 package org.daum.library.android.sitac.drone;
-
+  /*
 import android.app.Activity;
 import eu.powet.android.serialUSB.*;
 import org.daum.common.mavlink.handler.ByteFIFO;
@@ -7,7 +7,7 @@ import org.daum.common.mavlink.handler.JMAVLinkReader;
 import org.daum.common.mavlink.messages.MAVLinkMessage;
 
 import java.io.IOException;
-
+*/
 /**
  * Created with IntelliJ IDEA.
  * User: jed
@@ -17,6 +17,7 @@ import java.io.IOException;
  */
 public class SerialMavLinkHandler implements IMavLink
 {
+    /*
     private ByteFIFO fifo = new ByteFIFO();
     private JMAVLinkReader parser = null;
     private ISerial usb_serial=null;
@@ -67,7 +68,7 @@ public class SerialMavLinkHandler implements IMavLink
     public JMAVLinkReader getMavLinkReader()
     {
         return parser;
-    }
+    }  */
 
 }
 

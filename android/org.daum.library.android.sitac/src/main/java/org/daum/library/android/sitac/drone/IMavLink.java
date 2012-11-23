@@ -1,10 +1,10 @@
 package org.daum.library.android.sitac.drone;
-
+       /*
 import org.daum.common.mavlink.handler.JMAVLinkReader;
 import org.daum.common.mavlink.messages.MAVLinkMessage;
 
 import java.io.IOException;
-
+  */
 /**
  * Created with IntelliJ IDEA.
  * User: jed
@@ -14,8 +14,9 @@ import java.io.IOException;
  */
 public interface IMavLink
 {
+    /*
     public void write(MAVLinkMessage msg) throws IOException;
     public void shutdown();
-    public JMAVLinkReader getMavLinkReader();
+    public JMAVLinkReader getMavLinkReader();    */
 
 }

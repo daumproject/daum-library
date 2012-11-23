@@ -292,7 +292,16 @@ public class SITACMenuLayout extends RelativeLayout implements Observer {
     }
 
 
-    public void addEntityFirefighter(FireFighterEntity e){
+    public void addEntityFirefighter(FireFighterEntity e)
+    {
+        // TODO
+        for(IExpandableMenuItem c :agents)
+        {
+            if(c.getEntity().getType().equals(e.getType()))
+            {
+                return;
+            }
+        }
         IExpandableMenuItem item = new ExpandableMenuItem(e.getIcon(),e.getType(),e);
         agents.add(item);
         e.addObserver(this);

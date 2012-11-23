@@ -63,7 +63,7 @@ public class SITACMapView extends RelativeLayout implements Observer {
 
         mapCtrl.setZoom(18);
 
-        GeoPoint gPt = new GeoPoint(48.11534,-1.638336); // default location at IRISA
+        GeoPoint gPt = new GeoPoint(48.120282,-1.650592); // default location at IRISA
         mapCtrl.setCenter(gPt);
 
         addView(mapView, params);

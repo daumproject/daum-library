@@ -117,15 +117,14 @@ public class ZephyrHM  extends AbstractComponentType {
 
     public void connectLost()
     {
-        if(mHxmService !=null)
-            mHxmService.stop();
-
-        try {
-            Thread.sleep(2000);
+        stop();
+        try
+        {
+            Thread.sleep(5000);
         } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
-        connect();
+        start();
     }
 
     public void processReading(byte[] msg){
