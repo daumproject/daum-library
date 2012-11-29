@@ -2,10 +2,8 @@ package org.daum.library.sensors;
 
 
 import org.daum.common.genmodel.SMS;
-import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
-import org.kevoree.framework.MessagePort;
 
 /**
  * Created with IntelliJ IDEA.

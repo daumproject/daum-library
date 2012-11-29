@@ -1,10 +1,7 @@
 package org.daum.library.sensors;
 
 import android.content.Context;
-import android.content.Intent;
 import android.media.AudioManager;
-import android.speech.RecognizerIntent;
-import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import org.daum.common.genmodel.Agent;
 import org.daum.common.genmodel.Position;

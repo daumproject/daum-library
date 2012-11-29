@@ -1,31 +1,16 @@
 package org.daum.library.sensors;
 
 import android.bluetooth.BluetoothAdapter;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.*;
 import org.daum.library.sensors.hxmbt.HxmService;
-import org.daum.library.sensors.hxmbt.hxmDriver;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Set;
 
 import android.bluetooth.*;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.*;
 import org.kevoree.framework.MessagePort;
 

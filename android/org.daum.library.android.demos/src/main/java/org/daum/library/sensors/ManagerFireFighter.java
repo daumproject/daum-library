@@ -13,11 +13,9 @@ import org.kevoree.ContainerRoot;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.AbstractComponentType;
-import org.kevoree.framework.MessagePort;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
 import java.util.Map;
 
 /**
