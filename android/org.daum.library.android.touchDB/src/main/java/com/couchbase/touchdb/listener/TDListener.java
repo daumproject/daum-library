@@ -1,4 +1,4 @@
-package com.couchbase.listener;
+package com.couchbase.touchdb.listener;
 
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -50,7 +50,13 @@ public class TDListener implements Runnable {
     }
 
     public void stop() {
-        httpServer.notifyStop();
+        if(httpServer !=null)
+            httpServer.notifyStop();
+        if(thread !=null)
+            thread.interrupt();
+        if(handlerThread !=null)
+            handlerThread.quit();
+
     }
 
     public void onServerThread(Runnable r) {

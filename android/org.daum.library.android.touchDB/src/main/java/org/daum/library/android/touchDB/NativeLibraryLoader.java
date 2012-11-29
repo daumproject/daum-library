@@ -1,17 +1,21 @@
 package org.daum.library.android.touchDB;
 
+import android.util.Log;
 import org.kevoree.kcl.KevoreeJarClassLoader;
 import java.io.*;
+import java.net.URL;
+import java.util.Random;
 
 /**
  * Created with IntelliJ IDEA.
  * User: jed
  * Date: 29/11/12
  * Time: 11:39
- * To change this template use File | Settings | File Templates.
  */
 public class NativeLibraryLoader implements INativeLoader {
 
+
+    private static final String TAG = "NativeLibraryLoader";
 
     public  void deleteOldFile(File folder) {
         if (folder.isDirectory()) {
@@ -83,39 +87,34 @@ public class NativeLibraryLoader implements INativeLoader {
     public boolean load() {
         try
         {
+            Log.d(TAG, "Loading TDCollateJSON");
             String absolutePath= "";
             String libname = "libcom_couchbase_touchdb_TDCollateJSON.so";
-
-            File folder = new File(System.getProperty("java.io.tmpdir") + File.separator + "CTouchDB");
-            if (!folder.exists())
+            File folder = new File(System.getProperty("java.io.tmpdir") + File.separator + "CTouchDBLibraries");
+            if (folder.exists())
             {
-                folder.mkdirs();
+                deleteOldFile(folder);
             }
+            folder.mkdirs();
             File filelib = new File(folder.getAbsolutePath()+File.separator+libname);
-            if(!filelib.exists()){
-                 absolutePath = copyFileFromStream("libs/armeabi/libcom_couchbase_touchdb_TDCollateJSON.so", folder.getAbsolutePath(),"libcom_couchbase_touchdb_TDCollateJSON.so");
-            } else {
-                // todo check CRC
-                absolutePath = filelib.getAbsolutePath();
-            }
-
-            if(getClass().getClassLoader() instanceof KevoreeJarClassLoader){
-
+            // load the librairy with a different name - Bad approach :-) dalvik don't unload library in CL !!!
+            String bad_approch = ""+new Random().nextInt(60000);
+            absolutePath = copyFileFromStream("libs/armeabi/libcom_couchbase_touchdb_TDCollateJSON.so", folder.getAbsolutePath(),bad_approch+"libcom_couchbase_touchdb_TDCollateJSON.so");
+            if(getClass().getClassLoader() instanceof KevoreeJarClassLoader)
+            {
                 KevoreeJarClassLoader  classLoader = (KevoreeJarClassLoader) getClass().getClassLoader();
                 classLoader.addNativeMapping("TDCollateJSON",absolutePath);
-                ClassLoader current = Thread.currentThread().getContextClassLoader();
-                Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
                 System.loadLibrary("TDCollateJSON");
-                Thread.currentThread().setContextClassLoader(current);
-
             } else
             {
                 System.err.println("Failback on System global load");
                 System.load(absolutePath);
             }
+
             return true;
         } catch (Exception e) {
             e.printStackTrace();
+
             return  false;
         }
     }

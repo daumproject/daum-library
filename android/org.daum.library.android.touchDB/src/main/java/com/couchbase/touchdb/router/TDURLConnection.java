@@ -338,7 +338,7 @@ class Header {
     public Map<String, List<String>> getFieldMap() {
         Map<String, List<String>> result = new TreeMap<String, List<String>>(
                 String.CASE_INSENSITIVE_ORDER); // android-changed
-        for (Entry<String, LinkedList<String>> next : keyTable
+        for (Map.Entry<String, LinkedList<String>> next : keyTable
                 .entrySet()) {
             List<String> v = next.getValue();
             result.put(next.getKey(), Collections.unmodifiableList(v));

@@ -7,5 +7,8 @@ package org.daum.library.android.touchDB;
  * Time: 11:40
  * To change this template use File | Settings | File Templates.
  */
-public class INativeLoader {
+public interface INativeLoader {
+
+    public boolean load();
+    public boolean unload();
 }

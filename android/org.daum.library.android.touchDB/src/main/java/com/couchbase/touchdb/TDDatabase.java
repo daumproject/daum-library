@@ -41,6 +41,7 @@ import android.os.HandlerThread;
 import android.os.Looper;
 import android.util.Log;
 
+import com.couchbase.touchdb.TDDatabase.TDContentOptions;
 import com.couchbase.touchdb.replicator.TDPuller;
 import com.couchbase.touchdb.replicator.TDPusher;
 import com.couchbase.touchdb.replicator.TDReplicator;
@@ -2505,7 +2506,7 @@ class TDValidationContextImpl implements TDValidationContext {
     @Override
     public TDRevision getCurrentRevision() {
         if(currentRevision != null) {
-            database.loadRevisionBody(currentRevision, EnumSet.noneOf(TDDatabase.TDContentOptions.class));
+            database.loadRevisionBody(currentRevision, EnumSet.noneOf(TDContentOptions.class));
         }
         return currentRevision;
     }

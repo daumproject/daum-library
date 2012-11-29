@@ -7,7 +7,7 @@ import java.net.URLStreamHandlerFactory;
 
 public class TDURLStreamHandlerFactory implements URLStreamHandlerFactory {
 
-    public static final String SCHEME = "com/couchbase/touchdb";
+    public static final String SCHEME = "touchdb";
 
     @Override
     public URLStreamHandler createURLStreamHandler(String protocol) {

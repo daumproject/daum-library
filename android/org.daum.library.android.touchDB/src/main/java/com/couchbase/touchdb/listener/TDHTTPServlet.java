@@ -1,4 +1,4 @@
-package com.couchbase.listener;
+package com.couchbase.touchdb.listener;
 
 import java.io.IOException;
 import java.io.InputStream;

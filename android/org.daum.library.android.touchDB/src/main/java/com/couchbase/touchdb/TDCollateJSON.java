@@ -2,8 +2,10 @@ package com.couchbase.touchdb;
 
 import java.text.Collator;
 
+
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+
 
 public class TDCollateJSON {
 
@@ -24,8 +26,10 @@ public class TDCollateJSON {
     public static native char testEscape(String source);
     public static native int testDigitToInt(int digit);
 
-    static {
-        System.loadLibrary("com_couchbase_touchdb_TDCollateJSON");
+  /*
+    static
+    {
+        System.loadLibrary("TDCollateJSON");
     }
-
+          */
 }
