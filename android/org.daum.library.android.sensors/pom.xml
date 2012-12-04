@@ -23,6 +23,13 @@
 
 
     <dependencies>
+
+        <dependency>
+            <groupId>org.daum.extra.android</groupId>
+            <artifactId>org.daum.extra.android.lightcouch</artifactId>
+            <version>0.0.6-SNAPSHOT</version>
+        </dependency>
+
         <dependency>
             <groupId>org.daum.library.android</groupId>
             <artifactId>org.daum.library.android.ormH</artifactId>

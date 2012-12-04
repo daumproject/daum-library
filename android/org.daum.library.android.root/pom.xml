@@ -34,6 +34,7 @@
         <module>../org.daum.library.android.p2pSock</module>
         <module>../org.daum.library.android.sensors</module>
         <module>../org.daum.library.android.couchDB</module>
+        <module>../org.daum.library.android.touchDB</module>
     </modules>
 
     <dependencies>
