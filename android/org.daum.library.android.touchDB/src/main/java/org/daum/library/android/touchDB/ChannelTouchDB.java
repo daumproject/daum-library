@@ -25,7 +25,7 @@ import java.util.HashMap;
  * Time: 15:04
  * To change this template use File | Settings | File Templates.
  */
-@Library(name = "JavaSE", names = {"Android"})
+@Library(name = "Android")
 @DictionaryType({
         @DictionaryAttribute(name = "dbname", defaultValue = "jed", optional = false, fragmentDependant = false),
         @DictionaryAttribute(name = "refresh", defaultValue = "2000", optional = false, fragmentDependant = false),
@@ -47,12 +47,6 @@ public class ChannelTouchDB extends AbstractChannelFragment implements Runnable
         t_current = new Thread(this);
         t_current.start();
     }
-    public String getBaseUri(String host,int port){
-
-        return "http://"+host+":"+port;
-    }
-
-
     @Stop
     public void stop()
     {
@@ -60,7 +54,6 @@ public class ChannelTouchDB extends AbstractChannelFragment implements Runnable
             t_current.interrupt();
         }
     }
-
 
     public  void update_remote_couchDB(){
         synchronized (mastersCOUCHDB) {
@@ -106,32 +99,30 @@ public class ChannelTouchDB extends AbstractChannelFragment implements Runnable
         } catch (InterruptedException ignore) {
 
         }
-
+        ArrayList<String> cluster =  new ArrayList<String>();
 
         while (Thread.currentThread().isAlive())
         {
-            ArrayList<String> cluster =  new ArrayList<String>();
-
-            synchronized (mastersCOUCHDB) {
+            cluster.clear();
+            synchronized (mastersCOUCHDB)
+            {
                 cluster.addAll(mastersCOUCHDB);
             }
-
             for (String remoteCouchDBNodeName : cluster)
+            {
+                try
                 {
-                    try
-                    {
-                        String db = getDictionary().get("dbname").toString();
-                        CouchDbClient couchDB_local = new CouchDbClient(db,true,"http",getAddress(getNodeName()),8888,"","");
-                        CouchDbClient couchDB_remote = new CouchDbClient(db,true,"http",getAddress(remoteCouchDBNodeName),8888,"","");
-                        // replicate
-                        couchDB_local.replicator().replicatorDB(couchDB_remote,false);
+                    String db = getDictionary().get("dbname").toString();
+                    CouchDbClient couchDB_local = new CouchDbClient(db,true,"http",getAddress(getNodeName()),8888,"","");
+                    CouchDbClient couchDB_remote = new CouchDbClient(db,true,"http",getAddress(remoteCouchDBNodeName),8888,"","");
+                    // replicate
+                    couchDB_local.replicator().replicatorDB(couchDB_remote,false);
 
-                    } catch (Exception e)
-                    {
-                        logger.debug("TouchDB instance on "+remoteCouchDBNodeName+" is not available");
-                    }
+                } catch (Exception e)
+                {
+                    logger.debug("TouchDB instance on "+remoteCouchDBNodeName+" is not available");
                 }
-
+            }
             try
             {
                 Thread.sleep(Integer.parseInt(getDictionary().get("refresh").toString()));
