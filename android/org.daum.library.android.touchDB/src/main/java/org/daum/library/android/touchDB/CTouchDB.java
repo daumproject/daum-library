@@ -20,6 +20,9 @@ import java.io.*;
 @DictionaryType({
         @DictionaryAttribute(name = "port", defaultValue = "8888", optional = false)
 })
+@Requires({
+        @RequiredPort(name = "cluster", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.NONE, optional = true)
+})
 @ComponentType
 public class CTouchDB extends AbstractComponentType
 {
