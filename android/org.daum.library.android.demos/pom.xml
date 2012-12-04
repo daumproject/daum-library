@@ -7,7 +7,7 @@
     <artifactId>org.daum.library.android.demos</artifactId>
     <name>DAUM :: Library :: Android :: Demos</name>
     <version>1.7</version>
-
+    <packaging>jar</packaging>
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
@@ -29,12 +29,19 @@
             <artifactId>org.daum.common.genmodel.android.root</artifactId>
             <version>1.3</version>
         </dependency>
-      <!--
+
         <dependency>
-            <groupId>com.typesafe.akka</groupId>
-            <artifactId>akka-actor</artifactId>
-            <version>2.0.3</version>
-        </dependency>   -->
+            <groupId>org.ektorp</groupId>
+            <artifactId>org.ektorp.android</artifactId>
+            <version>1.3.1-SNAPSHOT</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.daum.extra.android</groupId>
+            <artifactId>org.daum.extra.android.lightcouch</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
     </dependencies>
 

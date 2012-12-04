@@ -1,6 +1,14 @@
 package org.daum.library.sensors;
 
 
+import org.daum.library.sensors.pojo.Victime;
+import org.lightcouch.CouchDbClient;
+import org.lightcouch.Response;
+
+import java.net.MalformedURLException;
+import java.util.Date;
+
+
 /**
  * Created with IntelliJ IDEA.
  * User: jed
@@ -10,21 +18,83 @@ package org.daum.library.sensors;
  */
 public class Tester {
 
-    public static void  main (String argv[])
-    {
+    public static void  main (String argv[]) throws MalformedURLException {
+        /*
+        HttpClient httpClient = new StdHttpClient.Builder()
+                .url("http://192.168.1.113:8888")
+                .build();
+
+
+        CouchDbInstance dbInstance = new StdCouchDbInstance(httpClient);
+        CouchDbConnector db = new StdCouchDbConnector("mydatabase", dbInstance);
+
+        db.createDatabaseIfNotExists();
 
 
 
-       /*      Fota fota = new Fota("*", Board.ATMEGA328);
-        Byte[] intel = FotaHelpers.read_file("/home/jed/githubJED/FOTAA/src/main/resources/programTest/test.hex");
-        System.out.println(intel.length);
-        fota.upload(intel);
-            System.loadLibrary("eu.powet.fota.native.nux32");
 
-        fota.close();
-         */
+      db.create(t);
+                       */
+
+
+        long duree,start;
+        // public CouchDbClient(java.lang.String dbName, boolean createDbIfNotExist, java.lang.String protocol, java.lang.String host, int port, java.lang.String username, java.lang.String password) { /* compiled code */ }
+        Victime t = new Victime();
+        t.state = Victime.STATES.ALIVE;
+        t.date = new Date();
+        t.prenom = "jean-emile";
+        t.nom = "DARTOIS";
+
+        /*      */
+        CouchDbClient dbClient = new CouchDbClient("jed2",true,"http","192.168.1.113",8888,"","");
+
+        CouchDbClient dbClient2 = new CouchDbClient("jed2",true,"http","192.168.1.121",8888,"","");
+
+
+
+
+
+
+        int nb = 10;
+        int counter = 0;
+
+        start= System.currentTimeMillis();
+        for(int i=0;i<nb;i++){
+
+            t.prenom = "jean-emile "+i;
+
+            Response c= dbClient.save(t);
+
+            Victime t2 =  null;
+
+            do {
+                try
+                {
+                    t2 = dbClient2.find(Victime.class, c.getId());
+                }catch (Exception e){
+                    //ignore
+
+                }
+            }  while (t2 == null) ;
+
+
+            if(t2.prenom.equals(t.prenom)){
+                counter++;
+            }
+
+        }
+
+        System.out.println(counter);
+
+
+        duree = (System.currentTimeMillis() - start)  / 1000;
+        System.out.println("Duree ="+duree);
+
 
 
 
     }
+
+
+
 }

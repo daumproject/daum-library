@@ -11,8 +11,14 @@ import java.util.Date;
  */
 public class Victime {
 
-    public String id;
+
+    private String _id;
+    private String _rev;
+
+    public String nom;
+    public String prenom;
     public Date date;
+
 
     public  STATES state;
 
@@ -22,4 +28,26 @@ public class Victime {
         DYING
     }
 
+
+    public String get_id() {
+        return _id;
+    }
+
+    public String get_rev() {
+        return _rev;
+    }
+
+    public void set_id(String _id) {
+        this._id = _id;
+    }
+
+    public void set_rev(String _rev) {
+        this._rev = _rev;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Victime [_id=" + _id + ", _rev=" + _rev + "]";
+    }
 }
