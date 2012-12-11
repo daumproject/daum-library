@@ -28,7 +28,7 @@ import java.util.HashMap;
 @Library(name = "Android")
 @DictionaryType({
         @DictionaryAttribute(name = "dbname", defaultValue = "jed", optional = false, fragmentDependant = false),
-        @DictionaryAttribute(name = "refresh", defaultValue = "2000", optional = false, fragmentDependant = false),
+        @DictionaryAttribute(name = "refresh", defaultValue = "9000", optional = false, fragmentDependant = false),
         @DictionaryAttribute(name = "login", defaultValue = "", optional = false, fragmentDependant = false),
         @DictionaryAttribute(name = "password", defaultValue = "", optional = false, fragmentDependant = false),
         @DictionaryAttribute(name = "protocol", defaultValue = "", optional = false, fragmentDependant = false,vals={"http","https"})
