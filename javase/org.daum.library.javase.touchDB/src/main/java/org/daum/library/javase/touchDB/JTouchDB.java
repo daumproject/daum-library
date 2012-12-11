@@ -1,4 +1,4 @@
-package org.daum.library.android.touchDB;
+package org.daum.library.javase.touchDB;
 
 
 import com.couchbase.touchdb.TDServer;
@@ -19,29 +19,27 @@ import java.io.*;
  */
 @Library(name = "JavaSE", names = {"Android"})
 @DictionaryType({
-        @DictionaryAttribute(name = "port", defaultValue = "8888", optional = false)
+        @DictionaryAttribute(name = "port", defaultValue = "8888", optional = false),
+        @DictionaryAttribute(name = "path", defaultValue = "/tmp/", optional = false),
 })
 @Requires({
         @RequiredPort(name = "cluster", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.NONE, optional = true)
 })
 @ComponentType
-public class CTouchDB extends AbstractComponentType
+public class JTouchDB extends AbstractComponentType
 {
     private TDListener listener;
-    private static final String TAG ="CTouchDB";
+    private static final String TAG ="JTouchDB";
     private  TDServer server = null;
-    private NativeLibraryLoader nativeLibraryLoader= null;
     private Integer port=8888;
     private Logger logger = LoggerFactory.getLogger(getClass());
+
     @Start
     public void start()
     {
         try
         {
-            nativeLibraryLoader = new NativeLibraryLoader();
-            nativeLibraryLoader.load();
-       //     Context ctx =     UIServiceHandler.getUIService().getRootActivity();   ctx.getFilesDir().getAbsolutePath();
-            String filesDir ="TODO";
+            String filesDir =getDictionary().get("path").toString();
             server = new TDServer(filesDir);
             port = Integer.parseInt(getDictionary().get("port").toString());
             listener = new TDListener(server, port);
@@ -63,9 +61,6 @@ public class CTouchDB extends AbstractComponentType
             if(listener !=null){
                 listener.stop();
             }
-            if(nativeLibraryLoader !=null){
-                nativeLibraryLoader.unload();
-            }
         } catch (Exception e) {
             logger.error(TAG, "Unable to stop CTouchDB", e);
         }
@@ -78,7 +73,7 @@ public class CTouchDB extends AbstractComponentType
       int port_tmp =  port = Integer.parseInt(getDictionary().get("port").toString());
         if(port != port_tmp)
         {
-            logger.debug(TAG, "Port change need update CTouchDB");
+            logger.debug(TAG, "Port change need update JTouchDB");
             stop();
             start();
         }
