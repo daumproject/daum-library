@@ -46,9 +46,9 @@ public class Tester {
         t.nom = "DARTOIS";
 
         /*      */
-        CouchDbClient dbClient = new CouchDbClient("jed2",true,"http","192.168.1.113",8888,"","");
+        CouchDbClient dbClient = new CouchDbClient("eifniefjie",true,"http","192.168.1.113",8888,"","");
 
-        CouchDbClient dbClient2 = new CouchDbClient("jed2",true,"http","192.168.1.121",8888,"","");
+        CouchDbClient dbClient2 = new CouchDbClient("eifniefjie",true,"http","192.168.1.121",8888,"","");
 
 
 
