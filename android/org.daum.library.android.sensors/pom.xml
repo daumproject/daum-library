@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.daum.extra.android</groupId>
             <artifactId>org.daum.extra.android.lightcouch</artifactId>
-            <version>0.0.6-SNAPSHOT</version>
+            <version>1.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
