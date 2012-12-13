@@ -19,11 +19,11 @@ import java.io.*;
  */
 @Library(name = "JavaSE", names = {"Android"})
 @DictionaryType({
-        @DictionaryAttribute(name = "port", defaultValue = "8888", optional = false),
+        @DictionaryAttribute(name = "portdb", defaultValue = "8888", optional = false),
         @DictionaryAttribute(name = "path", defaultValue = "/tmp/", optional = false),
 })
-@Requires({
-        @RequiredPort(name = "cluster", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.NONE, optional = true)
+@Provides({
+        @ProvidedPort(name = "cluster", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.NONE)
 })
 @ComponentType
 public class JTouchDB extends AbstractComponentType
@@ -41,7 +41,7 @@ public class JTouchDB extends AbstractComponentType
         {
             String filesDir =getDictionary().get("path").toString();
             server = new TDServer(filesDir);
-            port = Integer.parseInt(getDictionary().get("port").toString());
+            port = Integer.parseInt(getDictionary().get("portdb").toString());
             listener = new TDListener(server, port);
             listener.start();
         } catch (Exception e) {
@@ -70,13 +70,18 @@ public class JTouchDB extends AbstractComponentType
     @Update
     public void update()
     {
-      int port_tmp =  port = Integer.parseInt(getDictionary().get("port").toString());
+      int port_tmp =  port = Integer.parseInt(getDictionary().get("portdb").toString());
         if(port != port_tmp)
         {
             logger.debug(TAG, "Port change need update JTouchDB");
             stop();
             start();
         }
+    }
+
+    @Port(name = "cluster")
+    public void enterthevoid(Object e){
+
     }
 
 
