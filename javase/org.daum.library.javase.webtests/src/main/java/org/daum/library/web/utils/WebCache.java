@@ -48,16 +48,15 @@ public class WebCache {
         }
 
 
-    public static String getAddress (ContainerRoot model,String remoteNodeName)
-    {
-        String ip = "127.0.0.1";
-        Option<String> ipOption = NetworkHelper.getAccessibleIP(KevoreePropertyHelper
-                .getStringNetworkProperties(model, remoteNodeName, org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP()));
+    public static String getAddress(ContainerRoot model,String remoteNodeName) {
+        Option<String> ipOption = NetworkHelper.getAccessibleIP(KevoreePropertyHelper.getNetworkProperties(model, remoteNodeName, org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP()));
         if (ipOption.isDefined()) {
-            ip = ipOption.get();
+            return ipOption.get();
+        } else {
+            return "";
         }
-        return ip;
     }
+
 
 
     public static  String apply(ContainerRoot model,String nodename,String page)

@@ -29,7 +29,6 @@ import java.io.*;
 public class JTouchDB extends AbstractComponentType
 {
     private TDListener listener;
-    private static final String TAG ="JTouchDB";
     private  TDServer server = null;
     private Integer port=8888;
     private Logger logger = LoggerFactory.getLogger(getClass());
@@ -45,7 +44,7 @@ public class JTouchDB extends AbstractComponentType
             listener = new TDListener(server, port);
             listener.start();
         } catch (Exception e) {
-            logger.error(TAG, "Unable to create CTouchDB", e);
+            logger.error("Unable to create CTouchDB", e);
         }
     }
 
@@ -62,7 +61,7 @@ public class JTouchDB extends AbstractComponentType
                 listener.stop();
             }
         } catch (Exception e) {
-            logger.error(TAG, "Unable to stop CTouchDB", e);
+            logger.error("Unable to stop CTouchDB", e);
         }
     }
 
@@ -70,13 +69,9 @@ public class JTouchDB extends AbstractComponentType
     @Update
     public void update()
     {
-      int port_tmp =  port = Integer.parseInt(getDictionary().get("port_db").toString());
-        if(port != port_tmp)
-        {
-            logger.debug(TAG, "Port change need update JTouchDB");
-            stop();
-            start();
-        }
+        stop();
+        start();
+
     }
 
     @Port(name = "cluster")
