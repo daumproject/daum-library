@@ -7,12 +7,9 @@ import org.daum.library.ormH.api.PersistenceSessionStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.None;
 import scala.Some;
-import scala.collection.mutable.ListBuffer;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 

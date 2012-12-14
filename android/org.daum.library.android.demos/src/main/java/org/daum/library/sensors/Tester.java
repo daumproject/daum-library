@@ -1,12 +1,8 @@
 package org.daum.library.sensors;
 
 
-import org.daum.library.sensors.pojo.Victime;
-import org.lightcouch.CouchDbClient;
-import org.lightcouch.Response;
 
-import java.net.MalformedURLException;
-import java.util.Date;
+
 
 
 /**
@@ -18,8 +14,14 @@ import java.util.Date;
  */
 public class Tester {
 
-    public static void  main (String argv[]) throws MalformedURLException {
+    public static void  main (String argv[])   {
         /*
+
+import org.daum.library.sensors.pojo.Victime;
+import org.lightcouch.CouchDbClient;
+import org.lightcouch.Response;
+import java.net.MalformedURLException;
+import java.util.Date;
         HttpClient httpClient = new StdHttpClient.Builder()
                 .url("http://192.168.1.113:8888")
                 .build();

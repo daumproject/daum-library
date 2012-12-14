@@ -71,9 +71,7 @@ public class syncTouchDB extends AbstractChannelFragment
             {
                 try
                 {
-                    logger.warn("local "+src.adr+" "+src.port);
-
-                    if(src.adr.length() == 0)
+                     if(src.adr.length() == 0)
                     {
                         logger.warn("You have define an address "+getNodeName());
                     }
@@ -89,11 +87,11 @@ public class syncTouchDB extends AbstractChannelFragment
                                 {
                                     logger.warn("You have define an address "+getNodeName());
                                 }
-                                logger.warn("remote "+dest.adr+" "+dest.port);
+
                                 remote =  new CouchDbClient(dbname,true,protocol,dest.adr,dest.port,login,password);
 
                                 HttpResponse response=null;
-                                logger.warn(evt+" sync from "+local.getDBUri()+" to "+remote.getDBUri());
+                                logger.warn("Sync from "+local.getDBUri()+" to "+remote.getDBUri());
                                 if(evt == ACTION.ADD)
                                 {
                                     response = local.replicator().cancelreplicatorTouchDB(remote);
