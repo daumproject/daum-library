@@ -168,7 +168,7 @@ public class syncTouchDB extends AbstractChannelFragment
             ContainerNode node = (ContainerNode) binding.getPort().eContainer().eContainer();
             ComponentInstance instance = (ComponentInstance)binding.getPort().eContainer();
 
-            Integer port = Integer.parseInt(KevoreePropertyHelper.getProperty(instance, "port_db",true,node.getName()).get());
+            Integer port = Integer.parseInt(KevoreePropertyHelper.getProperty(instance, "port_db", false, null).get());
 
             TouchDBInstance in = new TouchDBInstance();
             in.adr = getAddress(node.getName());
