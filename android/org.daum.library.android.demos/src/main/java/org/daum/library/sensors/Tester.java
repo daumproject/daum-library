@@ -34,18 +34,18 @@ public class Tester {
 
 
       db.create(t);
-                       */
+
 
 
         long duree,start;
-        // public CouchDbClient(java.lang.String dbName, boolean createDbIfNotExist, java.lang.String protocol, java.lang.String host, int port, java.lang.String username, java.lang.String password) { /* compiled code */ }
+
         Victime t = new Victime();
         t.state = Victime.STATES.ALIVE;
         t.date = new Date();
         t.prenom = "jean-emile";
         t.nom = "DARTOIS";
 
-        /*      */
+
         CouchDbClient dbClient = new CouchDbClient("eifniefjie",true,"http","192.168.1.113",8888,"","");
 
         CouchDbClient dbClient2 = new CouchDbClient("eifniefjie",true,"http","192.168.1.121",8888,"","");
@@ -91,7 +91,7 @@ public class Tester {
         System.out.println("Duree ="+duree);
 
 
-
+    */
 
     }
 
