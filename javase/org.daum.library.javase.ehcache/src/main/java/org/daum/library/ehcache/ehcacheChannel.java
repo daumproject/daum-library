@@ -6,11 +6,11 @@ import org.kevoree.Group;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractChannelFragment;
 import org.kevoree.framework.ChannelFragmentSender;
-import org.kevoree.framework.KevoreeFragmentPropertyHelper;
 import org.kevoree.framework.KevoreePlatformHelper;
 import org.kevoree.framework.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import scala.Option;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -114,13 +114,5 @@ public class ehcacheChannel extends AbstractChannelFragment implements Runnable 
     }
 
 
-    public int getport(String nodeName,String port) throws IOException {
-        try {
-            //logger.debug("look for port on " + nodeName);
-            return KevoreeFragmentPropertyHelper.getIntPropertyFromFragmentChannel(getModelService().getLastModel(), getName(), port, nodeName);
-        } catch (NumberFormatException e)
-        {
-            throw new IOException(e.getMessage());
-        }
-    }
+
 }
