@@ -20,7 +20,7 @@ import java.io.*;
 @Library(name = "JavaSE", names = {"Android"})
 @DictionaryType({
         @DictionaryAttribute(name = "port_db", defaultValue = "8888", optional = false),
-        @DictionaryAttribute(name = "path", defaultValue = "/tmp/", optional = false),
+        @DictionaryAttribute(name = "path", defaultValue = "", optional = false),
 })
 @Provides({
         @ProvidedPort(name = "cluster", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.NONE)
