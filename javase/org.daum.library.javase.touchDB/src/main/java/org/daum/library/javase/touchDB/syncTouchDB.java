@@ -91,7 +91,7 @@ public class syncTouchDB extends AbstractChannelFragment
                                 remote =  new CouchDbClient(dbname,true,protocol,dest.adr,dest.port,login,password);
 
                                 HttpResponse response=null;
-                                logger.warn("Sync from "+local.getDBUri()+" to "+remote.getDBUri());
+                                logger.info("Sync from "+local.getDBUri()+" to "+remote.getDBUri());
                                 if(evt == ACTION.ADD)
                                 {
                                     response = local.replicator().cancelreplicatorTouchDB(remote);
@@ -127,7 +127,7 @@ public class syncTouchDB extends AbstractChannelFragment
                     requestSync(ACTION.ADD);
                     try
                     {
-                        Thread.sleep(8000);
+                        Thread.sleep(Integer.parseInt(getDictionary().get("refresh").toString()));
                     } catch (InterruptedException e1) {
 
                     }
@@ -171,7 +171,6 @@ public class syncTouchDB extends AbstractChannelFragment
             TouchDBInstance in = new TouchDBInstance();
             in.adr = getAddress(node.getName());
             in.port = port;
-            logger.warn(in.toString());
             current.add(in);
 
         }
