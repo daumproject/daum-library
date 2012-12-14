@@ -1,5 +1,6 @@
 package org.daum.library.p2pSock;
 
+import org.kevoree.Channel;
 import org.kevoree.ContainerRoot;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
@@ -204,19 +205,25 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
     }
 
 
-    public int parsePortNumber (String nodeName) throws IOException {
-        try {
-            //logger.debug("look for port on " + nodeName);
-            Option<Integer> portOption = KevoreePropertyHelper.getIntPropertyForChannel(model, this.getName(), "port", true, nodeName);
+
+    public int parsePortNumber (String nodeName) {
+        Option<Channel> channelOption = getModelService().getLastModel().findByQuery("hubs[" + getName() + "]", Channel.class);
+        int port = 8000;
+        if (channelOption.isDefined()) {
+            Option<String> portOption = KevoreePropertyHelper.getProperty(channelOption.get(), "port", true, nodeName);
             if (portOption.isDefined()) {
-                return portOption.get();
-            } else {
-                return 9000;
+                try {
+                    port = Integer.parseInt(portOption.get());
+                } catch (NumberFormatException e) {
+                    logger.warn("Attribute \"port\" of {} is not an Integer, default value ({}) is used.", getName(), port);
+                }
             }
-        } catch (NumberFormatException e) {
-            throw new IOException(e.getMessage());
+        } else {
+            logger.warn("There is no channel named {}, default value ({}) is used.", getName(), port);
         }
+        return port;
     }
+
 
     @Override
     public boolean preUpdate(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
