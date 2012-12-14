@@ -3,7 +3,6 @@ package org.daum.library.sensors;
 import android.app.Activity;
 import android.view.View;
 import android.widget.*;
-import org.daum.library.sensors.pojo.Victime;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
@@ -71,7 +70,7 @@ public class Victimes extends AbstractComponentType {
         button.setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+            /*
                 Victime t1 = new Victime();
                 t1.id = rfid_tag.getText().toString();
                 t1.date = new Date();
@@ -89,7 +88,7 @@ public class Victimes extends AbstractComponentType {
 
 
                 System.out.println(response.getRev());
-
+                        */
 
 
             }

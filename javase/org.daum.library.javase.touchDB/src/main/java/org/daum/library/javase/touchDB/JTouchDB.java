@@ -19,7 +19,7 @@ import java.io.*;
  */
 @Library(name = "JavaSE", names = {"Android"})
 @DictionaryType({
-        @DictionaryAttribute(name = "portdb", defaultValue = "8888", optional = false),
+        @DictionaryAttribute(name = "port_db", defaultValue = "8888", optional = false),
         @DictionaryAttribute(name = "path", defaultValue = "/tmp/", optional = false),
 })
 @Provides({
@@ -41,7 +41,7 @@ public class JTouchDB extends AbstractComponentType
         {
             String filesDir =getDictionary().get("path").toString();
             server = new TDServer(filesDir);
-            port = Integer.parseInt(getDictionary().get("portdb").toString());
+            port = Integer.parseInt(getDictionary().get("port_db").toString());
             listener = new TDListener(server, port);
             listener.start();
         } catch (Exception e) {
@@ -70,7 +70,7 @@ public class JTouchDB extends AbstractComponentType
     @Update
     public void update()
     {
-      int port_tmp =  port = Integer.parseInt(getDictionary().get("portdb").toString());
+      int port_tmp =  port = Integer.parseInt(getDictionary().get("port_db").toString());
         if(port != port_tmp)
         {
             logger.debug(TAG, "Port change need update JTouchDB");
