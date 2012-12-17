@@ -35,6 +35,7 @@
         <module>../org.daum.library.android.sensors</module>
         <module>../org.daum.library.android.couchDB</module>
         <module>../org.daum.library.android.touchDB</module>
+        <module>../org.daum.library.android.jtouchdb</module>
     </modules>
 
     <dependencies>
