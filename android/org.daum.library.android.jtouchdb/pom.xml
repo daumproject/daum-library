@@ -67,11 +67,13 @@
             <artifactId>org.daum.extra.android.lightcouch</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>com.couchbase</groupId>
-            <artifactId>com.couchbase.touchdb</artifactId>
-            <version>1.6-SNAPSHOT</version>
+            <artifactId>com.couchbase.jtouchdb</artifactId>
+            <version>0.5-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
