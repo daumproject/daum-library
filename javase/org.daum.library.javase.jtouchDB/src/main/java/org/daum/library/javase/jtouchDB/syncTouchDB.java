@@ -6,6 +6,8 @@ import org.kevoree.ContainerNode;
 import org.kevoree.MBinding;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.*;
+import org.kevoree.framework.KevoreePropertyHelper;
+import org.kevoree.framework.NetworkHelper;
 import org.kevoree.framework.message.Message;
 import org.lightcouch.CouchDbClient;
 import org.slf4j.Logger;
