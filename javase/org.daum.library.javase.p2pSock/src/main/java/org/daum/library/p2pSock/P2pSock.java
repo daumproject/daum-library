@@ -5,6 +5,8 @@ import org.kevoree.ContainerRoot;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.framework.*;
+import org.kevoree.framework.KevoreePlatformHelper;
+import org.kevoree.framework.KevoreePropertyHelper;
 import org.kevoree.framework.message.Message;
 import org.slf4j.LoggerFactory;
 import scala.Option;
@@ -193,7 +195,7 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
             }
         };
     }
-
+ /* 1.9.0-SNAPSHOT
     public String getAddress(String remoteNodeName)
     {
         String ip = KevoreePlatformHelper.getProperty(model, remoteNodeName,
@@ -222,6 +224,32 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
             logger.warn("There is no channel named {}, default value ({}) is used.", getName(), port);
         }
         return port;
+    }
+         */
+
+ public String getAddress(String remoteNodeName)
+ {
+     String ip = KevoreePlatformHelper.getProperty(model, remoteNodeName,
+             org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP());
+     if (ip == null || ip.equals("")) {
+         ip = "";
+     }
+     return ip;
+ }
+
+
+    public int parsePortNumber (String nodeName) throws IOException {
+        try {
+            //logger.debug("look for port on " + nodeName);
+            Option<Integer> portOption = KevoreePropertyHelper.getIntPropertyForChannel(model, this.getName(), "port", true, nodeName);
+            if (portOption.isDefined()) {
+                return portOption.get();
+            } else {
+                return 9000;
+            }
+        } catch (NumberFormatException e) {
+            throw new IOException(e.getMessage());
+        }
     }
 
 
