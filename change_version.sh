@@ -1,1 +1,1 @@
- mvn versions:set -DnewVersion=1.8.9 -DgenerateBackupPoms=false
+ mvn versions:set -DnewVersion=1.9.0-SNAPSHOT -DgenerateBackupPoms=false
