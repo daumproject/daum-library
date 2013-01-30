@@ -96,12 +96,12 @@ public class syncTouchDB extends AbstractChannelFragment
                                 logger.info("Sync from " + local.getDBUri() + " to " + remote.getDBUri());
                                 response = local.replicator().addreplicatorTouchDB(remote,true);
 
-                            } else
+                            }
+                            else
                             {
                                 logger.info("Remove from " + local.getDBUri() + " to " + remote.getDBUri());
                                 response = local.replicator().cancelreplicatorTouchDB(remote);
                             }
-
                         }
                     }
 
@@ -162,10 +162,18 @@ public class syncTouchDB extends AbstractChannelFragment
 
             Integer port = Integer.parseInt(KevoreePropertyHelper.getProperty(instance, "port_db", false, null).get());
 
-            TouchDBInstance in = new TouchDBInstance();
-            in.adr = getAddress(node.getName());
-            in.port = port;
-            current.add(in);
+            String address = getAddress(node.getName());
+            if(address.length() > 0)
+            {
+                TouchDBInstance in = new TouchDBInstance();
+                in.adr = address;
+                in.port = port;
+                current.add(in);
+            }
+            else
+            {
+                logger.error("The "+node.getName()+"  has no IP address, it will be ignored.");
+            }
 
         }
         return current;
