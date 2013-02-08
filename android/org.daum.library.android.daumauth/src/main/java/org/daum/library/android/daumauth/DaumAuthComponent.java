@@ -86,6 +86,7 @@ public class DaumAuthComponent extends AbstractComponentType       implements On
     @Start
     public void start() {
         uiService = UIServiceHandler.getUIService();
+
         int value = Integer.parseInt(getDictionary().get("connTimeout").toString());
         if (value >= 0) connTimeout = value;
         else logger.warn(TAG, "Dictionary connTimeout value must be >= 0 (set to default: "+CONNECTION_TIMEOUT+")");
@@ -225,6 +226,29 @@ public class DaumAuthComponent extends AbstractComponentType       implements On
 
     }
 
+    private Channel retrieveChannelInstance(String s) {
+
+        Channel channel = null;
+        ContainerRoot root = getModelService().getLastModel();
+
+        for (ContainerNode node:root.getNodes()) {
+            if (node.getName().equals(getNodeName())) {
+                for(ComponentInstance component:node.getComponents()) {
+                    if(component.getTypeDefinition().getName().equals(s)) {
+                        for (org.kevoree.Port p:component.getRequired()) {
+                            for (MBinding binding:p.getBindings()) {
+                                channel = binding.getHub();
+                                return channel;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        return channel;
+    }
+
     private void generateModel(Intervention inter) throws Exception {
         KevScriptEngine engine = getKevScriptEngineFactory().createKevScriptEngine();
 
@@ -234,14 +258,15 @@ public class DaumAuthComponent extends AbstractComponentType       implements On
         ContainerRoot currentModel = getModelService().getLastModel();
         ContainerNode contNode = ((ContainerNode) getModelElement().eContainer());
 
-        for (ComponentInstance component : contNode.getComponentsForJ()) {
+        for (ComponentInstance component : contNode.getComponents()) {
             // TODO maybe find a better way to do this ?
             if (component.getTypeDefinition().getName().equals("Replica")) {
                 GenerateModelHelper gmHelper = new GenerateModelHelper();
+                /* TODO FIX KEVOREE 2.0.0-SNAPSHOT
                 Option<String> optionService = gmHelper.findChannel(component.getName(), "service", getNodeName(), currentModel);
                 replicaServiceChanName = optionService.get();
                 Option<String> optionNotify = gmHelper.findChannel(component.getName(), "notification", getNodeName(), currentModel);
-                replicaNotifChanName = optionNotify.get();
+                replicaNotifChanName = optionNotify.get();     */
             }
         }
 

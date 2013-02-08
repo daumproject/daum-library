@@ -209,10 +209,13 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
 
 
     public int parsePortNumber (String nodeName) {
-        Option<Channel> channelOption = getModelService().getLastModel().findByQuery("hubs[" + getName() + "]", Channel.class);
+        Channel channelOption = null;
+
+        channelOption =  getModelService().getLastModel().findByQuery("hubs[" + getName() + "]", Channel.class);
+
         int port = 8000;
-        if (channelOption.isDefined()) {
-            Option<String> portOption = KevoreePropertyHelper.getProperty(channelOption.get(), "port", true, nodeName);
+        if (channelOption !=  null) {
+            Option<String> portOption = KevoreePropertyHelper.getProperty(channelOption, "port", true, nodeName);
             if (portOption.isDefined()) {
                 try {
                     port = Integer.parseInt(portOption.get());

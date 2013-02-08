@@ -1,0 +1,32 @@
+{
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.logger/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.fakeDomo/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.authentication/{kevoree.version}'
+
+merge 'mvn:org.daum.library.android/org.daum.library.android.daumauth/1.0.1-SNAPSHOT'
+merge 'mvn:org.daum.library.android/org.daum.library.android.replica/2.2-SNAPSHOT'
+
+addNode node0:AndroidNode {
+    addComponent DaumAuthC361@node0 : DaumAuthComponent {}
+    addComponent Replica134@node0 : Replica {}
+    addChannel defMSG729 : defMSG {}
+    addChannel SocketCha582 : SocketChannel {port='9595',maximum_size_messaging='50',timer='2000'}
+    addChannel defSERVIC983 : defSERVICE {}
+    bind Replica134.notification@node0 => defMSG729
+    bind DaumAuthC361.notify@node0 => defMSG729
+    bind Replica134.remote@node0 => SocketCha582
+    bind Replica134.broadcast@node0 => SocketCha582
+    bind DaumAuthC361.service@node0 => defSERVIC983
+    bind Replica134.service@node0 => defSERVIC983
+    updateDictionary defMSG729
+    updateDictionary SocketCha582 {port='9595'}@node0
+    updateDictionary defSERVIC983
+    updateDictionary DaumAuthC361@node0
+    updateDictionary Replica134@node0
+}
+}

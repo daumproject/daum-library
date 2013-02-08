@@ -5,12 +5,12 @@
     <groupId>org.daum.library.android</groupId>
     <artifactId>org.daum.library.android.jtouchdb</artifactId>
     <name>DAUM :: Library :: Android :: jtouchdb</name>
-    <version>1.3-SNAPSHOT</version>
+    <version>2.0.0-SNAPSHOT</version>
 
     <parent>
         <artifactId>org.daum.library.android.root</artifactId>
         <groupId>org.daum.library.android</groupId>
-        <version>1.9.0-SNAPSHOT</version>
+        <version>2.0.0-SNAPSHOT</version>
         <relativePath>../org.daum.library.android.root/pom.xml</relativePath>
     </parent>
 

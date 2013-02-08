@@ -154,7 +154,7 @@ public class syncTouchDB extends AbstractChannelFragment
     {
         ArrayList<TouchDBInstance> current=new ArrayList<TouchDBInstance>();
 
-        for (MBinding binding : getModelElement().getBindingsForJ())
+        for (MBinding binding : getModelElement().get_bindings())
         {
 
             ContainerNode node = (ContainerNode) binding.getPort().eContainer().eContainer();

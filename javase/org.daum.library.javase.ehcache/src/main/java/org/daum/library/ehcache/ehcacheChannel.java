@@ -1,16 +1,18 @@
 package org.daum.library.ehcache;
 
+
 import org.kevoree.ContainerNode;
 import org.kevoree.ContainerRoot;
 import org.kevoree.Group;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractChannelFragment;
 import org.kevoree.framework.ChannelFragmentSender;
+
 import org.kevoree.framework.KevoreePlatformHelper;
 import org.kevoree.framework.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.Option;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -102,10 +104,10 @@ public class ehcacheChannel extends AbstractChannelFragment implements Runnable 
 
     public List<String> getAllNodes () {
         ContainerRoot model = this.getModelService().getLastModel();
-        for (Object o : model.getGroupsForJ()) {
+        for (Object o : model.get_groups_java_cache()) {
             Group g = (Group) o;
             List<String> peers = new ArrayList<String>(g.getSubNodes().size());
-            for (ContainerNode node : g.getSubNodesForJ()) {
+            for (ContainerNode node : g.getSubNodes()) {
                 peers.add(node.getName());
             }
             return peers;
