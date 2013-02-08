@@ -35,6 +35,7 @@
         <module>../org.daum.library.javase.jtouchDB</module>
         <!--          <module>../org.daum.library.javase.webportal</module>
             <module>../org.daum.library.javase.kestrelChannels</module>      -->
+        <module>../org.daum.library.javase.copterManager</module>
 
     </modules>
 

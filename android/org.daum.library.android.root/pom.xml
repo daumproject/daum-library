@@ -37,6 +37,7 @@
         <module>../org.daum.library.android.sensors</module>
         <module>../org.daum.library.android.couchDB</module>
         <module>../org.daum.library.android.jtouchdb</module>
+        <module>../org.daum.library.android.copter</module>
     </modules>
 
     <dependencies>
@@ -55,7 +56,6 @@
             <artifactId>org.kevoree.tools.android.framework</artifactId>
             <version>${kevoree.version}</version>
         </dependency>
-
 
     </dependencies>
 
