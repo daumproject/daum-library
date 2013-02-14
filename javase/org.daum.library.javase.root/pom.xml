@@ -23,9 +23,6 @@
     <modules>
         <module>../org.daum.library.javase.demos</module>
         <module>../org.daum.library.javase.ehcache</module>
-        <module>../org.daum.library.javase.replica</module>
-        <module>../org.daum.library.javase.ormH</module>
-
         <module>../org.daum.library.javase.webtests</module>
         <module>../org.daum.library.javase.moyensmonitor</module>
 

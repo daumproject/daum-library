@@ -9,6 +9,7 @@ import android.os.Bundle;
 import org.kevoree.android.framework.helper.UIServiceHandler;
 import org.kevoree.android.framework.service.KevoreeAndroidService;
 import org.kevoree.annotation.*;
+import org.kevoree.extra.marshalling.RichJSONObject;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
 import org.slf4j.Logger;
@@ -59,20 +60,29 @@ public class FollowMe extends AbstractComponentType {
             @Override
             public void onLocationChanged(Location location)
             {
-                double lat =    location.getLatitude();
-                double lon =   location.getLongitude();
-                float accuracy = location.getAccuracy();
-                float altitude = Float.parseFloat(getDictionary().get("altitude").toString());
-                float safety_distance = Float.parseFloat(getDictionary().get("safety_distance").toString());
+
 
                 try
                 {
                     if(Boolean.parseBoolean(getDictionary().get("enable").toString()))
                     {
-                        String json = "{"+addJson("lat",lat)+addJson("lon",lon)+addJson("accuracy",accuracy)+addJson("altitude",altitude)+addJson("safety_distance",safety_distance)+"}";
+                        double lat =    location.getLatitude();
+                        double lon =   location.getLongitude();
+                        float accuracy = location.getAccuracy();
+                        float altitude = Float.parseFloat(getDictionary().get("altitude").toString());
+                        float safety_distance = Float.parseFloat(getDictionary().get("safety_distance").toString());
 
+                        Follower f = new Follower();
+
+                        f.lat = ""+lat;
+                        f.lon = ""+lon;
+                        f.accuracy = ""+accuracy;
+                        f.altitude = ""+altitude;
+                        f.safety_distance = ""+safety_distance;
+
+                        RichJSONObject t = new RichJSONObject(f);
                         //{ "firstName":"John" , "lastName":"Doe" }
-                        getPortByName("followme", MessagePort.class).process(json);
+                        getPortByName("followme", MessagePort.class).process(t.toJSON());
                     }
                 }   catch (Exception e)
                 {

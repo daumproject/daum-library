@@ -62,9 +62,9 @@
             <version>1.2-SNAPSHOT</version>
         </dependency>
         <dependency>
-            <groupId>org.daum.library.javase</groupId>
-            <artifactId>org.daum.library.javase.ormH</artifactId>
-            <version>2.3</version>
+            <groupId>org.daum.corelibrary.javase</groupId>
+            <artifactId>org.daum.corelibrary.javase.ormH</artifactId>
+            <version>2.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
