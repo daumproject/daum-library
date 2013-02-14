@@ -3,12 +3,14 @@
 <head>
 
     <title>Followers</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 
     <style type="text/css" title="currentStyle">
         @import "media/css/demo_page.css";
         @import "media/css/demo_table.css";
     </style>
-
     <script type="text/javascript" language="javascript" src="media/js/jquery-1.7.2.js"></script>
     <script type="text/javascript" language="javascript" src="media/js/dataTables.js"></script>
     <script type="text/javascript" language="javascript" src="media/js/dataTablesHelper.js"></script>
@@ -17,7 +19,7 @@
 
 
 
-<body>
+<body onload="initialiser()">
 
 <div id="text">
 
@@ -28,18 +30,16 @@
         <table cellpadding="0" cellspacing="0" border="0" class="display" id="followers">
             <thead>
             <tr>
-                <th>ID</th>
-                <th>latitude</th>
-                <th>longitude</th>
-                <th>accuracy</th>
-                <th>altitude</th>
-                <th>safetydistance</th>
-                <th>isfollowed</th>
-                <th></th>
+                <th>ID Firefighter</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+                <th>Accuracy</th>
+                <th>Altitude</th>
+                <th>Safety Distance</th>
+                <th>Is Followed</th>
             </tr>
             </thead>
             <tbody>
-
             </tbody>
 
         </table>
@@ -49,24 +49,67 @@
 </div>
 
 
+
 <script type="text/javascript" charset="utf-8">
 
+    var carte;
+    var followers = new Array();
+    function initialiser() {
+        var latlng = new google.maps.LatLng(48.12107,-1.610556);
+        var options = {
+            center: latlng,
+            zoom: 10,
+            mapTypeId: google.maps.MapTypeId.ROADMAP
+        };
+        carte = new google.maps.Map(document.getElementById("carte"), options);
+
+
+    }
+
+    function update_follower(lat,lon,txt)
+    {
+        var found = false;
+        for(var m in followers)
+        {
+
+            if(m.title == txt)
+            {
+                var latLng = new google.maps.LatLng(lat,lon);
+                m.position =latLng ;
+                found = true;
+                alert(found);
+            }
+        }
+        if(!found)
+        {
+            var latLng = new google.maps.LatLng(lat,lon);
+            var marker = new google.maps.Marker({
+                position : latLng,
+                map      : carte,
+                title    : txt
+            });
+
+          //  followers.push(marker);
+        }
+    }
+
     $(document).ready(function() {
-    $('#followers').dataTable( {
-    "aoColumns": [
-    { "bVisible":    true },
-    null,
-    null,
-    null,
-            null,
-            null
-    ] } );
+        $('#followers').dataTable( {
+            "aoColumns": [
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            ] } );
 
     } );
 
     function showMessage(text)
     {
-    document.getElementById('text').innerHTML = text;
+        document.getElementById('text').innerHTML = text;
     }
 
     var ws = new WebSocket('ws://$ip$:8082/followmanager');
@@ -74,13 +117,13 @@
 
     ws.onopen = function()
     {
-    showMessage('Connected!');
+        showMessage('Connected!');
 
     };
 
     ws.onclose = function()
     {
-    showMessage('Lost connection');
+        showMessage('Lost connection');
 
     };
 
@@ -90,36 +133,53 @@
         var oTable = $('#followers').dataTable();
         var request=data.split("$")
         var cmd =  request[0];
-
-        if(cmd == 'ADD')
+           if(cmd == 'ADD')
         {
             var obj = jQuery.parseJSON(request[1]);
 
-
-
             oTable.fnAddData( [
-                    obj.followerid,
+                obj.idfollower,
                 obj.lat,
                 obj.lon,
                 obj.accuracy,
-            obj.altitude,
-            obj.safety_distance]
+                obj.altitude,
+                obj.safety_distance,
+                obj.isfollowed]
             );
+
+            var lat = parseInt(obj.lat)/1000000;
+            var lon = parseInt(obj.lon)/1000000;
+
+            update_follower(lat,lon,obj.idfollower);
 
         }else if(cmd =='UPDATE')
         {
             var obj = jQuery.parseJSON(request[1]);
-            var rowID = findRowIndexUsingCol(obj.numeroIntervention,'#moyens',0);
-            oTable.fnUpdate([obj.numeroIntervention,obj.type,obj.gh_crm,obj.gh_engage],rowID);
+            var rowID = findRowIndexUsingCol(obj.idfollower,'#followers',0);
+            oTable.fnUpdate([obj.idfollower,
+                obj.lat,
+                obj.lon,
+                obj.accuracy,
+                obj.altitude,
+                obj.safety_distance,
+                obj.isfollowed],rowID);
+
+            var lat = parseInt(obj.lat)/1000000;
+            var lon = parseInt(obj.lon)/1000000;
+
+            update_follower(lat,lon,obj.idfollower);
 
         }else if(cmd =='DELETE')
         {
-            var rowID = findRowIndexUsingCol(request[1],'#moyens',0);
+            var rowID = findRowIndexUsingCol(obj.idfollower,'#followers',0);
+            alert(rowID)
             oTable.fnDeleteRow(rowID);
         }
     }
 
 </script>
+
+<div id="carte" style="width:100%; height:100%"></div>
 
 </body>
 

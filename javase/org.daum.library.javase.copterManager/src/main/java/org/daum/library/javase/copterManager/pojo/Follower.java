@@ -9,11 +9,13 @@ package org.daum.library.javase.copterManager.pojo;
  */
 public class Follower {
 
-    public  String idfollower;
+    public String idfollower;
     public String lat;
     public String lon;
     public String altitude;
     public String safety_distance;
     public String accuracy;
+    public Boolean isfollowed;
+    public Action a;
 
 }

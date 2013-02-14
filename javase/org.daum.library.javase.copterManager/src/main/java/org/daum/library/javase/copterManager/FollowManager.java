@@ -1,5 +1,6 @@
 package org.daum.library.javase.copterManager;
 
+import org.daum.library.javase.copterManager.pojo.Action;
 import org.daum.library.javase.copterManager.pojo.Follower;
 import org.daum.library.javase.copterManager.ws.WebSocketChannel;
 import org.daum.library.javase.copterManager.ws.WsHandler;
@@ -38,7 +39,6 @@ public class FollowManager extends AbstractPage  implements Observer {
     private  Follower current;
     private HashMap<String,Follower> list =  new HashMap<String, Follower>();
     private WebSocketChannel webSocketChannel = new WebSocketChannel();
-
 
     @Start
     public void  start()
@@ -99,21 +99,36 @@ public class FollowManager extends AbstractPage  implements Observer {
     {
 
         Follower f = JacksonSerializer.convFromJSON(json.toString()).fromJSON(Follower.class);
-
+        f.isfollowed  = false;
 
         String current_followerId = getDictionary().get("current").toString();
 
-        if(current_followerId.length() > 0)
+        if(current_followerId != null && current_followerId.length() > 0)
         {
 
             if(f.idfollower.equals(current_followerId))
             {
-              // new position
-
+                f.isfollowed  = true;
             }
-
         }
-        list.put(f.idfollower,f);
+
+
+        if(f.a == Action.ADD){
+            list.put(f.idfollower,f);
+
+        }else if(f.a == Action.UPDATE){
+
+            if(!list.containsKey(f.idfollower)){
+                   f.a = Action.ADD;
+            }
+            list.put(f.idfollower,f);
+        } else if(f.a == Action.DELETE){
+            list.remove(f.idfollower);
+        }
+        System.out.println(f.a+" "+f.idfollower);
+        RichJSONObject t = new RichJSONObject(f);
+         webSocketChannel.broadcast(f.a + "$" + t.toJSON());
+
     }
 
 
@@ -127,20 +142,13 @@ public class FollowManager extends AbstractPage  implements Observer {
     @Override
     public void update(Observable observable, Object connection) {
 
-        System.out.println(connection);
+        //System.out.println(connection);
+
         loadAll((WebSocketConnection) connection);
     }
 
 
-    public String createJsonFollower(String id,double  lat,double lon,int accuracy,int altitude,int safety_distance)   {
-        String json = "{"+addJson("followerid",id)+","+addJson("lat",lat)+","+addJson("lon",lon)+","+addJson("accuracy",accuracy)+","+addJson("altitude",altitude)+","+addJson("safety_distance",safety_distance)+"}";
 
-        return  json;
-
-    }
-    public String addJson(Object id,Object value){
-        return "\""+id+"\""+":"+"\""+value+"\"";
-    }
 
     public Follower parseJsonFollower(String json){
         Follower follower = new Follower();
@@ -158,7 +166,7 @@ public class FollowManager extends AbstractPage  implements Observer {
 
                 RichJSONObject t = new RichJSONObject(list.get(key));
 
-                ((WebSocketConnection)connection).send("ADD" + "$" + t.toJSON());
+                ((WebSocketConnection)connection).send(Action.ADD + "$" + t.toJSON());
 
             }
 
