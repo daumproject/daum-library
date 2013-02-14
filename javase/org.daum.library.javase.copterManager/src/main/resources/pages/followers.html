@@ -2,7 +2,7 @@
 
 <head>
 
-    <title>Interventions DAUM</title>
+    <title>Followers</title>
 
     <style type="text/css" title="currentStyle">
         @import "media/css/demo_page.css";
@@ -25,13 +25,16 @@
 
 <div id="container">
     <div id="demo">
-        <table cellpadding="0" cellspacing="0" border="0" class="display" id="interventions">
+        <table cellpadding="0" cellspacing="0" border="0" class="display" id="followers">
             <thead>
             <tr>
                 <th>ID</th>
-                <th>Nom</th>
-                <th>Prénom</th>
-                <th>matricule</th>
+                <th>latitude</th>
+                <th>longitude</th>
+                <th>accuracy</th>
+                <th>altitude</th>
+                <th>safetydistance</th>
+                <th>isfollowed</th>
                 <th></th>
             </tr>
             </thead>
@@ -45,17 +48,18 @@
 
 </div>
 
-<button type="submit" class="button positive" onclick="'">&nbsp;Creer un Agent</button>
 
 <script type="text/javascript" charset="utf-8">
 
     $(document).ready(function() {
-    $('#interventions').dataTable( {
+    $('#followers').dataTable( {
     "aoColumns": [
-    { "bVisible":    false },
+    { "bVisible":    true },
     null,
     null,
-    null
+    null,
+            null,
+            null
     ] } );
 
     } );
@@ -65,7 +69,7 @@
     document.getElementById('text').innerHTML = text;
     }
 
-    var ws = new WebSocket('ws://$ip$:8082/jed');
+    var ws = new WebSocket('ws://$ip$:8082/followmanager');
     showMessage('Connecting...');
 
     ws.onopen = function()
@@ -82,7 +86,37 @@
 
     ws.onmessage = function(evt)
     {
+        var data = evt.data;
+        var oTable = $('#followers').dataTable();
+        var request=data.split("$")
+        var cmd =  request[0];
 
+        if(cmd == 'ADD')
+        {
+            var obj = jQuery.parseJSON(request[1]);
+
+
+
+            oTable.fnAddData( [
+                    obj.followerid,
+                obj.lat,
+                obj.lon,
+                obj.accuracy,
+            obj.altitude,
+            obj.safety_distance]
+            );
+
+        }else if(cmd =='UPDATE')
+        {
+            var obj = jQuery.parseJSON(request[1]);
+            var rowID = findRowIndexUsingCol(obj.numeroIntervention,'#moyens',0);
+            oTable.fnUpdate([obj.numeroIntervention,obj.type,obj.gh_crm,obj.gh_engage],rowID);
+
+        }else if(cmd =='DELETE')
+        {
+            var rowID = findRowIndexUsingCol(request[1],'#moyens',0);
+            oTable.fnDeleteRow(rowID);
+        }
     }
 
 </script>
