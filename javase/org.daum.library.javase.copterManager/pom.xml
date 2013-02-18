@@ -22,11 +22,19 @@
             <version>${kevoree.version}</version>
         </dependency>
 
+
+        <dependency>
+            <groupId>org.daum.common.follower</groupId>
+            <artifactId>org.daum.common.follower</artifactId>
+            <version>${kevoree.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.webbitserver</groupId>
             <artifactId>webbit</artifactId>
             <version>0.4.7</version>
         </dependency>
+
+
 
 
         <dependency>

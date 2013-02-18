@@ -1,7 +1,8 @@
 package org.daum.library.javase.copterManager;
 
-import org.daum.library.javase.copterManager.pojo.Action;
-import org.daum.library.javase.copterManager.pojo.Follower;
+
+import org.daum.common.follower.Action;
+import org.daum.common.follower.Follower;
 import org.daum.library.javase.copterManager.ws.WebSocketChannel;
 import org.daum.library.javase.copterManager.ws.WsHandler;
 import org.kevoree.ContainerRoot;
@@ -36,7 +37,7 @@ import java.util.Observer;
 @ComponentType
 public class FollowManager extends AbstractPage  implements Observer {
 
-    private  Follower current;
+    private Follower current;
     private HashMap<String,Follower> list =  new HashMap<String, Follower>();
     private WebSocketChannel webSocketChannel = new WebSocketChannel();
 
@@ -84,8 +85,10 @@ public class FollowManager extends AbstractPage  implements Observer {
 
     }
     @Stop
-    public void stop() {
-
+    public void stop()
+    {
+        logger.debug("Remove Ws Demand");
+        getPortByName("ws", WsHandler.class).removeHandler("/followmanager");
     }
 
     @Update
@@ -119,15 +122,15 @@ public class FollowManager extends AbstractPage  implements Observer {
         }else if(f.a == Action.UPDATE){
 
             if(!list.containsKey(f.idfollower)){
-                   f.a = Action.ADD;
+                f.a = Action.ADD;
             }
             list.put(f.idfollower,f);
         } else if(f.a == Action.DELETE){
             list.remove(f.idfollower);
         }
-        System.out.println(f.a+" "+f.idfollower);
+
         RichJSONObject t = new RichJSONObject(f);
-         webSocketChannel.broadcast(f.a + "$" + t.toJSON());
+        webSocketChannel.broadcast(f.a + "$" + t.toJSON());
 
     }
 
@@ -135,6 +138,7 @@ public class FollowManager extends AbstractPage  implements Observer {
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse) {
         String page = new String(WebCache.load("pages/followers.html"));
+
         kevoreeHttpResponse.setContent(WebCache.apply(getModelService().getLastModel(),getNodeName(),page));
         return kevoreeHttpResponse;
     }

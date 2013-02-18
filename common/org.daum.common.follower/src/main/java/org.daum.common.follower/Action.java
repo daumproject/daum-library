@@ -1,4 +1,4 @@
-package org.daum.library.javase.copterManager.pojo;
+package org.daum.common.follower;
 
 /**
  * Created with IntelliJ IDEA.

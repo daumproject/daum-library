@@ -1,4 +1,3 @@
-
  {
 addRepo "http://maven.kevoree.org/release"
 addRepo "http://maven.kevoree.org/archiva/repository/daum/snapshots"
@@ -10,22 +9,23 @@ addRepo "http://maven.kevoree.org/snapshots"
 addRepo "http://repo.typesafe.com/typesafe/releases/"
 addRepo "http://maven.kevoree.org/daum/snapshots"
 addRepo "http://maven.kevoree.org/archiva/repository/release/"
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.defaultChannels/2.0.0-SNAPSHOT'
 merge 'mvn:org.daum.library.javase/org.daum.library.javase.copterManager/2.0.0-SNAPSHOT'
 merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.javaseNode/2.0.0-SNAPSHOT'
-merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.defaultChannels/2.0.0-SNAPSHOT'
 merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.webserver.spray/2.0.0-SNAPSHOT'
 merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.jexxus/2.0.0-SNAPSHOT'
 addNode node0:JavaSENode
+updateDictionary node0{}
  {
+  addComponent FakeFollo549@node0 : FakeFollower {distance='15',id='jed'}
   addComponent WsServer650@node0 : WsServer {port='8092'}
   addComponent Resources407@node0 : ResourcesPage {urlpattern='/media/**'}
   addComponent SprayWebS142@node0 : SprayWebServer {}
   addComponent FollowMan511@node0 : FollowManager {urlpattern='/',current='jed'}
-  addComponent FakeFollo594@node0 : FakeFollower {id='jed'}
+addChannel defMSG251 : defMSG {}
 addChannel defSERVIC618 : defSERVICE {}
 addChannel defMSG472 : defMSG {}
 addChannel defMSG867 : defMSG {}
-addChannel defMSG251 : defMSG {}
 bind FollowMan511.request@node0 => defMSG472
 bind SprayWebS142.handler@node0 => defMSG472
 bind FollowMan511.content@node0 => defMSG867
@@ -35,16 +35,16 @@ bind Resources407.request@node0 => defMSG472
 bind WsServer650.service@node0 => defSERVIC618
 bind FollowMan511.ws@node0 => defSERVIC618
 bind FollowMan511.followmeuser@node0 => defMSG251
-bind FakeFollo594.location@node0 => defMSG251
+bind FakeFollo549.location@node0 => defMSG251
+updateDictionary defMSG251 
 updateDictionary defSERVIC618 
 updateDictionary defMSG472 
 updateDictionary defMSG867 
-updateDictionary defMSG251 
+updateDictionary FakeFollo549@node0 
 updateDictionary WsServer650@node0 
 updateDictionary Resources407@node0 
 updateDictionary SprayWebS142@node0 
 updateDictionary FollowMan511@node0 
-updateDictionary FakeFollo594@node0 
 }
 
 addGroup group1208104496:BasicGroup

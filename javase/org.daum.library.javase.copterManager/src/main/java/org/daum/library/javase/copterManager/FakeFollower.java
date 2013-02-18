@@ -1,7 +1,8 @@
 package org.daum.library.javase.copterManager;
 
-import org.daum.library.javase.copterManager.pojo.Action;
-import org.daum.library.javase.copterManager.pojo.Follower;
+
+import org.daum.common.follower.Action;
+import org.daum.common.follower.Follower;
 import org.kevoree.annotation.*;
 import org.kevoree.extra.marshalling.RichJSONObject;
 import org.kevoree.framework.AbstractComponentType;
@@ -18,7 +19,11 @@ import org.kevoree.framework.MessagePort;
 @Requires({
         @RequiredPort(name = "location", type = PortType.MESSAGE,optional = true)
 })
-@org.kevoree.annotation.DictionaryType({@org.kevoree.annotation.DictionaryAttribute(name = "id", defaultValue = "jed",optional = true)})
+@org.kevoree.annotation.DictionaryType
+        ({
+                @org.kevoree.annotation.DictionaryAttribute(name = "id", defaultValue = "jed",optional = true),
+                @org.kevoree.annotation.DictionaryAttribute(name = "distance", defaultValue = "5",optional = true)
+        })
 @ComponentType
 public class FakeFollower extends AbstractComponentType implements  Runnable {
 
@@ -124,7 +129,7 @@ public class FakeFollower extends AbstractComponentType implements  Runnable {
 
             try
             {
-                randomPoint(1);
+                randomPoint(Integer.parseInt(getDictionary().get("distance").toString()));
                 location.accuracy  = ""+Random(0,3);
                 location.a = Action.UPDATE;
                 RichJSONObject t = new RichJSONObject(location);
@@ -134,7 +139,9 @@ public class FakeFollower extends AbstractComponentType implements  Runnable {
 
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
-                e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+                if(alive){
+                    e.printStackTrace();
+                }
             }
         }
     }
