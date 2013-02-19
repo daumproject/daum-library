@@ -24,8 +24,8 @@
 
 
         <dependency>
-            <groupId>org.daum.common.follower</groupId>
-            <artifactId>org.daum.common.follower</artifactId>
+            <groupId>org.daum.common.followermodel</groupId>
+            <artifactId>org.daum.common.followermodel</artifactId>
             <version>${kevoree.version}</version>
         </dependency>
         <dependency>

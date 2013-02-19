@@ -1,8 +1,10 @@
 package org.daum.library.javase.copterManager;
 
 
-import org.daum.common.follower.Action;
-import org.daum.common.follower.Follower;
+import org.daum.common.followermodel.Event;
+import org.daum.common.followermodel.Follower;
+import org.daum.common.followermodel.Message;
+import org.daum.library.javase.copterManager.cache.MemCache;
 import org.daum.library.javase.copterManager.ws.WebSocketChannel;
 import org.daum.library.javase.copterManager.ws.WsHandler;
 import org.kevoree.ContainerRoot;
@@ -109,69 +111,57 @@ public class FollowManager extends AbstractPage  implements Observer {
         if(current_followerId != null && current_followerId.length() > 0)
         {
 
-            if(f.idfollower.equals(current_followerId))
+            if(f.id.equals(current_followerId))
             {
                 f.isfollowed  = true;
             }
         }
 
 
-        if(f.a == Action.ADD){
-            list.put(f.idfollower,f);
+        if(f.event == Event.ADD){
+            list.put(f.id,f);
 
-        }else if(f.a == Action.UPDATE){
+        }else if(f.event == Event.UPDATE){
 
-            if(!list.containsKey(f.idfollower)){
-                f.a = Action.ADD;
+            if(!list.containsKey(f.id)){
+                f.event = Event.ADD;
             }
-            list.put(f.idfollower,f);
-        } else if(f.a == Action.DELETE){
-            list.remove(f.idfollower);
+            list.put(f.id, f);
+        } else if(f.event == Event.DELETE){
+            list.remove(f.id);
         }
 
         RichJSONObject t = new RichJSONObject(f);
-        webSocketChannel.broadcast(f.a + "$" + t.toJSON());
+        webSocketChannel.broadcast(t.toJSON());
 
     }
 
 
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse) {
-        String page = new String(WebCache.load("pages/followers.html"));
+        String page = new String(MemCache.getRessource("pages/followers.html"));
 
-        kevoreeHttpResponse.setContent(WebCache.apply(getModelService().getLastModel(),getNodeName(),page));
+        kevoreeHttpResponse.setContent(page);
         return kevoreeHttpResponse;
     }
 
     @Override
     public void update(Observable observable, Object connection) {
-
-        //System.out.println(connection);
-
         loadAll((WebSocketConnection) connection);
     }
 
-
-
-
-    public Follower parseJsonFollower(String json){
-        Follower follower = new Follower();
-
-        return follower;
-
-    }
 
     public void loadAll(WebSocketConnection connection){
 
         try
         {
 
-            for(String key : list.keySet()) {
-
-                RichJSONObject t = new RichJSONObject(list.get(key));
-
-                ((WebSocketConnection)connection).send(Action.ADD + "$" + t.toJSON());
-
+            for(String key : list.keySet())
+            {
+                Message data = list.get(key);
+                data.event = Event.ADD;
+                RichJSONObject t = new RichJSONObject(data);
+                ((WebSocketConnection)connection).send(t.toJSON());
             }
 
 

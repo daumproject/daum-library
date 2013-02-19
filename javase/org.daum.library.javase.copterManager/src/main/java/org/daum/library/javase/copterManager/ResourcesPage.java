@@ -1,6 +1,7 @@
 package org.daum.library.javase.copterManager;
 
 
+import org.daum.library.javase.copterManager.cache.MemCache;
 import org.kevoree.annotation.ComponentType;
 import org.kevoree.library.javase.webserver.AbstractPage;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
@@ -21,7 +22,7 @@ public class ResourcesPage extends AbstractPage {
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse)
     {
         String url = kevoreeHttpRequest.getUrl().replace(getDictionary().get("urlpattern").toString().replace("*",""),"");
-        kevoreeHttpResponse.setRawContent(WebCache.load(url));
+        kevoreeHttpResponse.setRawContent(MemCache.getRessource(url));
         return kevoreeHttpResponse;
     }
 }

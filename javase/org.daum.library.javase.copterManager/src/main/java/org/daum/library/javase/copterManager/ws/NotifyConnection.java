@@ -13,8 +13,6 @@ import java.util.Observable;
  */
 public class NotifyConnection extends Observable {
 
-
-
     public void notifyConnection(WebSocketConnection connection)
     {
         setChanged();

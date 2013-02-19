@@ -33,16 +33,23 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
     private WebServer webServer = null;
     private WebSocketChannel webSocketChannel = null;
     private Logger logger = LoggerFactory.getLogger(this.getClass());
-     private HashMap<String,BaseWebSocketHandler> wspages = new HashMap<String, BaseWebSocketHandler>();
+    private HashMap<String,BaseWebSocketHandler> wspages = new HashMap<String, BaseWebSocketHandler>();
+    private int port;
 
     @Start
     public void start(){
-
+        port= Integer.parseInt(getDictionary().get("port").toString());
     }
-    @Update
-    public void update(){
-        // todo update port
 
+    @Update
+    public void update()
+    {
+        if(Integer.parseInt(getDictionary().get("port").toString()) != port){
+            webServer.stop();
+            webServer = null;
+            port= Integer.parseInt(getDictionary().get("port").toString());
+            webServer = WebServers.createWebServer(port);
+        }
     }
 
 
@@ -55,6 +62,31 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
     }
 
 
+    public void startWebSock(){
+        webServer = WebServers.createWebServer(port);
+        for(String key : wspages.keySet())
+        {
+            webServer.add(key,wspages.get(key));
+        }
+        webServer.start();
+    }
+
+    public void stopWebSock(){
+        if(webServer != null)
+        {
+            webServer.stop();
+            try
+            {
+                // todo improve  hack ws
+                Thread.sleep(5000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        // todo check is stopped
+        webServer = null;
+    }
+
     @Port(name = "service", method = "addHandler")
     @Override
     public void addHandler(String name,BaseWebSocketHandler webSocketChannel){
@@ -63,32 +95,8 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
         if(!wspages.containsKey(name))
         {
             wspages.put(name,webSocketChannel);
-
-            if(webServer != null)
-            {
-                webServer.stop();
-                try
-                {
-                    // todo improve
-                    Thread.sleep(4000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-                }
-            }
-               // todo check is stopped
-            webServer = null;
-
-            // todo port
-
-            webServer = WebServers.createWebServer(8082);
-
-            for(String key : wspages.keySet())
-            {
-                webServer.add(key,wspages.get(key));
-            }
-
-            webServer.start();
-
+            stopWebSock();
+            startWebSock();
 
         }else
         {
@@ -104,9 +112,9 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
     public void removeHandler(String name)
     {
         wspages.remove(name);
-
-        // todo remove restart
-
+        logger.warn("Removing WS " + name);
+        stopWebSock();
+        startWebSock();
     }
 
 

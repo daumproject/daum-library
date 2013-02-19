@@ -1,8 +1,8 @@
 package org.daum.library.javase.copterManager;
 
 
-import org.daum.common.follower.Action;
-import org.daum.common.follower.Follower;
+import org.daum.common.followermodel.Event;
+import org.daum.common.followermodel.Follower;
 import org.kevoree.annotation.*;
 import org.kevoree.extra.marshalling.RichJSONObject;
 import org.kevoree.framework.AbstractComponentType;
@@ -28,7 +28,7 @@ import org.kevoree.framework.MessagePort;
 public class FakeFollower extends AbstractComponentType implements  Runnable {
 
 
-    private Follower location = new Follower();
+    private Follower firefighter = new Follower();
     private Thread cthread = null;
     private boolean alive = false;
     @Start
@@ -36,13 +36,13 @@ public class FakeFollower extends AbstractComponentType implements  Runnable {
         // random base on RENNES
         double lat =    48.115683+ (Math.random() * 0.1 );
         double lon =         -1.664286+ (Math.random() * 0.1);
-        location.lat= ""+ (int)(lat* 1E6);
-        location.lon = ""+  (int)(lon* 1E6);
-        location.idfollower = getDictionary().get("id").toString();
-        location.accuracy = "3";
-        location.altitude= "10";
-        location.safety_distance = "5";
-        location.a = Action.UPDATE;
+        firefighter.lat=(int)(lat* 1E6);
+        firefighter.lon =  (int)(lon* 1E6);
+        firefighter.id = getDictionary().get("id").toString();
+        firefighter.accuracy = 3;
+        firefighter.altitude= 10;
+        firefighter.safety_distance = 5;
+        firefighter.event = Event.UPDATE;
         cthread = new Thread(this);
         alive = true;
         cthread.start();
@@ -98,11 +98,11 @@ public class FakeFollower extends AbstractComponentType implements  Runnable {
             height =  distance * Math.sin(deg2rad2(yaw-270));
         }
 
-        lat  =(Double.parseDouble(location.lat) /1E6)+ meters2degrees_lat(height);
-        lon = (Double.parseDouble(location.lon) /1E6)+  meters2degrees_lon(width);
+        lat  = firefighter.lat /1E6+ meters2degrees_lat(height);
+        lon = firefighter.lon /1E6+  meters2degrees_lon(width);
 
-        location.lat= ""+ (int)(lat* 1E6);
-        location.lon = ""+  (int)(lon* 1E6);
+        firefighter.lat=  (int)(lat* 1E6);
+        firefighter.lon =  (int)(lon* 1E6);
 
     }
 
@@ -114,10 +114,10 @@ public class FakeFollower extends AbstractComponentType implements  Runnable {
         try {
             cthread.join();
         } catch (InterruptedException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
-        location.a = Action.DELETE;
-        RichJSONObject t = new RichJSONObject(location);
+        firefighter.event = Event.DELETE;
+        RichJSONObject t = new RichJSONObject(firefighter);
         getPortByName("location", MessagePort.class).process(t.toJSON());
 
     }
@@ -130,11 +130,11 @@ public class FakeFollower extends AbstractComponentType implements  Runnable {
             try
             {
                 randomPoint(Integer.parseInt(getDictionary().get("distance").toString()));
-                location.accuracy  = ""+Random(0,3);
-                location.a = Action.UPDATE;
-                RichJSONObject t = new RichJSONObject(location);
-
-
+                firefighter.accuracy  = Random(0,3);
+                firefighter.event = Event.UPDATE;
+                firefighter.temperature  = Random(30,26);
+                firefighter.heartmonitor  = Random(60,120);
+                RichJSONObject t = new RichJSONObject(firefighter);
                 getPortByName("location", MessagePort.class).process(t.toJSON());
 
                 Thread.sleep(2000);

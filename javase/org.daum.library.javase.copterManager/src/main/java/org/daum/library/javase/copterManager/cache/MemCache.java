@@ -1,8 +1,10 @@
-package org.daum.library.javase.copterManager;
+package org.daum.library.javase.copterManager.cache;
 
 import org.kevoree.ContainerRoot;
 import org.kevoree.framework.KevoreePropertyHelper;
 import org.kevoree.framework.NetworkHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scala.Option;
 
 import java.io.ByteArrayOutputStream;
@@ -17,18 +19,30 @@ import java.util.HashMap;
  * Time: 11:18
  * To change this template use File | Settings | File Templates.
  */
-public class WebCache {
+public class MemCache
+{
+    private static Logger logger = LoggerFactory.getLogger(MemCache.class);
+    private static String no_found_message ="404";
+    private static int size_cache =   5000;
+    private static LRUMap<String,byte[]> cache = new LRUMap<String, byte[]>(size_cache);
 
-       // todo add timeout add check memory
-    private static HashMap<String,byte[]> cache = new HashMap<String, byte[]>();
-
-    public static byte[] load(String url)
+    public static byte[] getRessource(String url)
     {
+        if(cache.containsKey(url))
+        {
+            // found in memory cache
+            logger.debug("Ressource found in memory cache: " + url);
+            return  cache.get(url);
+        }  else
+        {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
             try
             {
-                InputStream res =    WebCache.class.getClassLoader().getResourceAsStream(url);
-                if(res != null){
+                InputStream res =    MemCache.class.getClassLoader().getResourceAsStream(url);
+                if(res != null)
+                {
+                    // found in disk
+                    logger.debug("Ressource found in disk : " + url);
                     int nRead;
                     byte[] data = new byte[16384];
                     while ((nRead = res.read(data, 0, data.length)) != -1) {
@@ -47,22 +61,17 @@ public class WebCache {
             return buffer.toByteArray();
         }
 
-
-    public static String getAddress(ContainerRoot model,String remoteNodeName) {
-        Option<String> ipOption = NetworkHelper.getAccessibleIP(KevoreePropertyHelper.getNetworkProperties(model, remoteNodeName, org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP()));
-        if (ipOption.isDefined()) {
-            return ipOption.get();
-        } else {
-            return "";
-        }
     }
 
 
 
-
-
-    public static  String apply(ContainerRoot model,String nodename,String page)
-    {
-        return   page.replace("$ip$",WebCache.getAddress(model,nodename));
+    public static int getSize_cache() {
+        return size_cache;
     }
+
+    public static void setSize_cache(int size_cache) {
+        MemCache.size_cache = size_cache;
+    }
+
+
 }

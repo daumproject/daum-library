@@ -2,10 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.daum.common.follower</groupId>
-    <artifactId>org.daum.common.follower</artifactId>
+    <groupId>org.daum.common.followermodel</groupId>
+    <artifactId>org.daum.common.followermodel</artifactId>
     <packaging>jar</packaging>
-    <name>DAUM :: Common :: Follower :: Root</name>
+    <name>DAUM :: Common :: follower Model :: Root</name>
     <version>2.0.0-SNAPSHOT</version>
 
     <parent>

@@ -1,4 +1,4 @@
-package org.daum.common.follower;
+package org.daum.common.followermodel;
 
 /**
  * Created with IntelliJ IDEA.
@@ -7,6 +7,6 @@ package org.daum.common.follower;
  * Time: 16:08
  * To change this template use File | Settings | File Templates.
  */
-public enum Action {
+public enum Event {
     ADD,DELETE,UPDATE
 }
