@@ -211,7 +211,7 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
     public int parsePortNumber (String nodeName) {
         Channel channelOption = null;
 
-        channelOption =  getModelService().getLastModel().findByQuery("hubs[" + getName() + "]", Channel.class);
+        channelOption =  getModelService().getLastModel().findByPath("hubs[" + getName() + "]", Channel.class);
 
         int port = 8000;
         if (channelOption !=  null) {
