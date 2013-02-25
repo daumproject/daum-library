@@ -104,8 +104,7 @@ public class ehcacheChannel extends AbstractChannelFragment implements Runnable 
 
     public List<String> getAllNodes () {
         ContainerRoot model = this.getModelService().getLastModel();
-        for (Object o : model.get_groups_java_cache()) {
-            Group g = (Group) o;
+        for (Group g : model.getGroups()) {
             List<String> peers = new ArrayList<String>(g.getSubNodes().size());
             for (ContainerNode node : g.getSubNodes()) {
                 peers.add(node.getName());

@@ -1,128 +1,44 @@
  {
-addRepo "http://maven.kevoree.org/archiva/repository/daum/snapshots"
 addRepo "http://maven.kevoree.org/release"
+addRepo "http://maven.kevoree.org/archiva/repository/daum/snapshots"
 addRepo "http://repo.maven.apache.org/maven2"
 addRepo "http://maven.kevoree.org/daum/release"
 addRepo "http://repository.jetbrains.com/all"
 addRepo "http://maven.kevoree.org/archiva/repository/snapshots/"
-addRepo "http://repo.typesafe.com/typesafe/releases/"
 addRepo "http://maven.kevoree.org/snapshots"
+addRepo "http://repo.typesafe.com/typesafe/releases/"
 addRepo "http://maven.kevoree.org/daum/snapshots"
 addRepo "http://maven.kevoree.org/archiva/repository/release/"
-merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.jexxus/2.0.0-SNAPSHOT'
 merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.defaultChannels/2.0.0-SNAPSHOT'
 merge 'mvn:org.daum.library.javase/org.daum.library.javase.copterManager/2.0.0-SNAPSHOT'
-merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.javaseNode/2.0.0-SNAPSHOT'
 merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.webserver.spray/2.0.0-SNAPSHOT'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.jexxus/2.0.0-SNAPSHOT'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.javaseNode/2.0.0-SNAPSHOT'
 addNode node0:JavaSENode
 updateDictionary node0{}
  {
   addComponent WsServer650@node0 : WsServer {port='8092'}
-  addComponent FakeFollo549@node0 : FakeFollower {distance='15',id='FakeFollo549'}
-  addComponent FakeFollo422@node0 : FakeFollower {distance='5',id='FakeFollo422'}
-  addComponent FakeFollo348@node0 : FakeFollower {distance='5',id='FakeFollo348'}
-  addComponent FakeFollo425@node0 : FakeFollower {distance='5',id='FakeFollo425'}
-  addComponent FakeFollo427@node0 : FakeFollower {distance='5',id='FakeFollo427'}
-  addComponent FakeFollo523@node0 : FakeFollower {distance='5',id='FakeFollo523'}
-  addComponent FakeFollo386@node0 : FakeFollower {distance='5',id='FakeFollo386'}
-  addComponent FakeFollo222@node0 : FakeFollower {distance='5',id='FakeFollo222'}
-  addComponent FakeFollo160@node0 : FakeFollower {distance='5',id='FakeFollo160'}
-  addComponent FakeFollo83@node0 : FakeFollower {distance='800',id='FakeFollo83'}
-  addComponent FakeFollo133@node0 : FakeFollower {distance='5',id='FakeFollo133'}
-  addComponent SprayWebS142@node0 : SprayWebServer {}
-  addComponent FakeFollo925@node0 : FakeFollower {distance='5',id='FakeFollo925'}
-  addComponent FakeFollo630@node0 : FakeFollower {}
-  addComponent FollowMan511@node0 : FollowManager {urlpattern='/',current='jed'}
-  addComponent FakeFollo111@node0 : FakeFollower {}
-  addComponent FakeFollo336@node0 : FakeFollower {}
-  addComponent FakeFollo414@node0 : FakeFollower {}
   addComponent Resources407@node0 : ResourcesPage {urlpattern='/media/**'}
-  addComponent FakeFollo410@node0 : FakeFollower {distance='5',id='FakeFollo410'}
-  addComponent FakeFollo256@node0 : FakeFollower {distance='5',id='FakeFollo256'}
-  addComponent FakeFollo217@node0 : FakeFollower {distance='5',id='FakeFollo217'}
-  addComponent FakeFollo399@node0 : FakeFollower {distance='5',id='FakeFollo399'}
-  addComponent FakeFollo686@node0 : FakeFollower {distance='5',id='martin'}
-  addComponent FakeFollo968@node0 : FakeFollower {distance='5',id='FakeFollo968'}
-  addComponent FakeFollo555@node0 : FakeFollower {distance='5',id='FakeFollo555'}
-  addComponent FakeFollo627@node0 : FakeFollower {distance='5',id='FakeFollo627'}
-  addComponent FakeFollo930@node0 : FakeFollower {distance='5',id='FakeFollo930'}
-  addComponent FakeFollo147@node0 : FakeFollower {distance='5',id='FakeFollo147'}
-  addComponent FakeFollo77@node0 : FakeFollower {distance='5',id='FakeFollo77'}
-  addComponent FakeFollo262@node0 : FakeFollower {distance='5',id='FakeFollo262'}
+  addComponent SprayWebS142@node0 : SprayWebServer {}
+  addComponent FollowMan511@node0 : FollowManager {urlpattern='/',current='jed'}
 addChannel defSERVIC618 : defSERVICE {}
-addChannel defMSG867 : defMSG {}
-addChannel defMSG222 : defMSG {}
 addChannel defMSG472 : defMSG {}
+addChannel defMSG222 : defMSG {}
 bind FollowMan511.request@node0 => defMSG472
 bind SprayWebS142.handler@node0 => defMSG472
 bind Resources407.request@node0 => defMSG472
 bind WsServer650.service@node0 => defSERVIC618
 bind FollowMan511.ws@node0 => defSERVIC618
-bind FakeFollo386.location@node0 => defMSG867
-bind FakeFollo256.location@node0 => defMSG867
-bind FakeFollo399.location@node0 => defMSG867
-bind FakeFollo147.location@node0 => defMSG867
-bind FakeFollo217.location@node0 => defMSG867
-bind FakeFollo160.location@node0 => defMSG867
-bind FakeFollo336.location@node0 => defMSG867
-bind FollowMan511.followmeuser@node0 => defMSG867
-bind FakeFollo549.location@node0 => defMSG867
 bind SprayWebS142.response@node0 => defMSG222
 bind Resources407.content@node0 => defMSG222
 bind FollowMan511.content@node0 => defMSG222
-bind FakeFollo77.location@node0 => defMSG867
-bind FakeFollo262.location@node0 => defMSG867
-bind FakeFollo930.location@node0 => defMSG867
-bind FakeFollo627.location@node0 => defMSG867
-bind FakeFollo555.location@node0 => defMSG867
-bind FakeFollo968.location@node0 => defMSG867
-bind FakeFollo410.location@node0 => defMSG867
-bind FakeFollo348.location@node0 => defMSG867
-bind FakeFollo425.location@node0 => defMSG867
-bind FakeFollo427.location@node0 => defMSG867
-bind FakeFollo523.location@node0 => defMSG867
-bind FakeFollo83.location@node0 => defMSG867
-bind FakeFollo133.location@node0 => defMSG867
-bind FakeFollo925.location@node0 => defMSG867
-bind FakeFollo630.location@node0 => defMSG867
-bind FakeFollo222.location@node0 => defMSG867
-bind FakeFollo686.location@node0 => defMSG867
 updateDictionary defSERVIC618 
-updateDictionary defMSG867 
-updateDictionary defMSG222 
 updateDictionary defMSG472 
+updateDictionary defMSG222 
 updateDictionary WsServer650@node0 
-updateDictionary FakeFollo549@node0 
-updateDictionary FakeFollo422@node0 
-updateDictionary FakeFollo348@node0 
-updateDictionary FakeFollo425@node0 
-updateDictionary FakeFollo427@node0 
-updateDictionary FakeFollo523@node0 
-updateDictionary FakeFollo386@node0 
-updateDictionary FakeFollo222@node0 
-updateDictionary FakeFollo160@node0 
-updateDictionary FakeFollo83@node0 
-updateDictionary FakeFollo133@node0 
-updateDictionary SprayWebS142@node0 
-updateDictionary FakeFollo925@node0 
-updateDictionary FakeFollo630@node0 
-updateDictionary FollowMan511@node0 
-updateDictionary FakeFollo111@node0 
-updateDictionary FakeFollo336@node0 
-updateDictionary FakeFollo414@node0 
 updateDictionary Resources407@node0 
-updateDictionary FakeFollo410@node0 
-updateDictionary FakeFollo256@node0 
-updateDictionary FakeFollo217@node0 
-updateDictionary FakeFollo399@node0 
-updateDictionary FakeFollo686@node0 
-updateDictionary FakeFollo968@node0 
-updateDictionary FakeFollo555@node0 
-updateDictionary FakeFollo627@node0 
-updateDictionary FakeFollo930@node0 
-updateDictionary FakeFollo147@node0 
-updateDictionary FakeFollo77@node0 
-updateDictionary FakeFollo262@node0 
+updateDictionary SprayWebS142@node0 
+updateDictionary FollowMan511@node0 
 }
 
 addGroup group1208104496:BasicGroup

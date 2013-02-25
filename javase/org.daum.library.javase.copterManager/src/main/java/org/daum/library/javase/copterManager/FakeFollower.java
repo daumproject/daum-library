@@ -31,6 +31,7 @@ public class FakeFollower extends AbstractComponentType implements  Runnable {
     private Follower firefighter = new Follower();
     private Thread cthread = null;
     private boolean alive = false;
+
     @Start
     public void start(){
         // random base on RENNES
