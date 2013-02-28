@@ -12,8 +12,8 @@ import org.lightcouch.Response;
  */
 public interface TouchDBService {
 
-    public CouchDbClient getDbClient(String object);
-    public <T> T find(String document,Class<T> classType, String id);
+    public CouchDbClient getDbClient(String d);
+
     public void addChangeListener(String document);
     public void removeChangeListener(String document);
 
