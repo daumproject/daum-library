@@ -1,5 +1,6 @@
 package org.daum.library.javase.jtouchDB;
 
+import org.lightcouch.CouchDbClient;
 import org.lightcouch.Response;
 
 /**
@@ -11,10 +12,18 @@ import org.lightcouch.Response;
  */
 public interface TouchDBService {
 
+    public CouchDbClient getDbClient(String object);
+    public <T> T find(String document,Class<T> classType, String id);
+    public void addChangeListener(String document);
+    public void removeChangeListener(String document);
+
+
+        /*
     public Response save(String document,Object t);
     public Response update(String document,Object t);
     public Response remove(String document,Object t);
 
-    public <T> T find(String document,Class<T> classType, String id);
+
     public <T> T findrev(String document,Class<T> classType, String id, String rev);
+    */
 }

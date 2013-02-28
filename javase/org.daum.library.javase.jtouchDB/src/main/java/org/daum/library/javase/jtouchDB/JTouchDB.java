@@ -6,14 +6,16 @@ import com.couchbase.touchdb.listener.TDListener;
 
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
-import org.lightcouch.CouchDbClient;
-import org.lightcouch.Document;
-import org.lightcouch.Response;
+import org.kevoree.framework.KevoreeMessage;
+import org.kevoree.framework.MessagePort;
+import org.lightcouch.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,24 +28,32 @@ import java.util.HashMap;
         @DictionaryAttribute(name = "port_db", defaultValue = "8888", optional = false),
         @DictionaryAttribute(name = "path", defaultValue ="",optional = false)
 })
+@Requires({
+        @RequiredPort(name = "notification", type = PortType.MESSAGE,optional = true,theadStrategy = ThreadStrategy.SHARED_THREAD)
+})
 @Provides({
         @ProvidedPort(name = "cluster", type = PortType.MESSAGE,theadStrategy = ThreadStrategy.NONE),
         @ProvidedPort(name = "service", type = PortType.SERVICE, className = TouchDBService.class)
 })
 @ComponentType
-public class JTouchDB extends AbstractComponentType  implements  TouchDBService
+public class JTouchDB extends AbstractComponentType  implements  TouchDBService,Runnable
 {
     private TDListener listener;
     private  TDServer server = null;
     private Integer port=8888;
     private Logger logger = LoggerFactory.getLogger(getClass());
     private HashMap<String,CouchDbClient> conn = new HashMap<String, CouchDbClient>();
+    private List<String> changelistener = new ArrayList<String>();
+    private HashMap<String,String> changeslogs = new HashMap<String, String>();
+    private Thread t;
+    private boolean alive = false;
 
     @Start
     public void start()
     {
         try
         {
+
             String filesDir =getDictionary().get("path").toString();
             if(filesDir.length() == 0)
             {
@@ -55,8 +65,12 @@ public class JTouchDB extends AbstractComponentType  implements  TouchDBService
                 port = Integer.parseInt(getDictionary().get("port_db").toString());
                 listener = new TDListener(server, port);
                 listener.start();
-            }
 
+
+            }
+            alive = true;
+            t = new Thread(this);
+            t.start();
         } catch (Exception e) {
             logger.error("Unable to create JTouchDB", e);
         }
@@ -68,6 +82,7 @@ public class JTouchDB extends AbstractComponentType  implements  TouchDBService
     {
         try
         {
+            alive=false;
             if(server != null){
                 server.close();
             }
@@ -98,7 +113,15 @@ public class JTouchDB extends AbstractComponentType  implements  TouchDBService
     {
         if(conn.containsKey(document))
         {
-                   return conn.get(document);
+            CouchDbClient r=null;
+            try
+            {
+               r = conn.get(document);
+            }   catch (Exception e){
+                conn.remove(document);
+                return getDb(document);
+            }
+            return r;
         }  else
         {
             boolean ok = false;
@@ -107,47 +130,87 @@ public class JTouchDB extends AbstractComponentType  implements  TouchDBService
             {
                 try
                 {
-                     t  = new CouchDbClient(document,true,"http","localhost",port,"","");
+                    t  = new CouchDbClient(document,true,"http","localhost",port,"","");
+
                     ok = true;
                 } catch (Exception e){
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException e1) {
-                        e1.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
                     }
                     e.printStackTrace();
                 }
             }   while (ok == false && t !=null);
+
+        //    addChangeListener(t);
+
             conn.put(document,t);
             return t;
 
         }
     }
-    @Port(name = "service", method = "save")
+
+    @Port(name = "service", method = "getDbClient")
     @Override
-    public Response save(String document, Object t) {
-        return   getDb(document).save(t);
+    public CouchDbClient getDbClient(String document){
+        return   getDb(document);
     }
-    @Port(name = "service", method = "update")
+    @Port(name = "service", method = "addChangeListener")
     @Override
-    public Response update(String document, Object t) {
-        return   getDb(document).update(t);
+    public void addChangeListener(String document) {
+        changelistener.add(document);
     }
-    @Port(name = "service", method = "remove")
+    @Port(name = "service", method = "removeChangeListener")
     @Override
-    public Response remove(String document, Object t) {
-        return   getDb(document).remove(t);
-    }
-    /*   */
-    @Port(name = "service", method = "find")
-    @Override
-    public <T> T find(String document, Class<T> classType, String id) {
-        return   getDb(document).find(classType, id);
+    public void removeChangeListener(String document) {
+        changelistener.remove(document);
     }
 
-    @Port(name = "service", method = "findrev")
     @Override
-    public <T> T findrev(String document, Class<T> classType, String id, String rev) {
-        return   getDb(document).find(classType, id,rev);
+    public void run()
+    {
+        while(alive)
+        {
+            for(String key :changelistener)
+            {
+                try {
+                    ChangesResult changes = getDbClient(key).changes().getChanges();
+                    String seq = getDbClient(key).changes().getChanges().getLastSeq();
+
+                    for(ChangesResult.Row r : changes.getResults() )
+                    {
+
+                        if(r.getSeq().equals( getDbClient(key).changes().getChanges().getLastSeq()))
+                        {
+                            if(changeslogs.containsKey(key))
+                            {
+                                if(!changeslogs.get(key).equals(seq))
+                                {
+                                    getPortByName("notification", MessagePort.class).process(r);
+                                }
+                            } else
+                            {
+                                getPortByName("notification", MessagePort.class).process(r);
+
+                            }
+
+                        }
+                    }
+                    changeslogs.put(key,seq);
+
+                }   catch (Exception e){
+
+                }
+
+            }
+            try
+            {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+
     }
 }
