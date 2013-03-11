@@ -1,23 +1,17 @@
 package org.daum.library.javase.copterManager.cache;
 
-import org.kevoree.ContainerRoot;
-import org.kevoree.framework.KevoreePropertyHelper;
-import org.kevoree.framework.NetworkHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.Option;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 
 /**
  * Created with IntelliJ IDEA.
  * User: jed
  * Date: 04/07/12
  * Time: 11:18
- * To change this template use File | Settings | File Templates.
  */
 public class MemCache
 {
