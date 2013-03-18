@@ -1,11 +1,7 @@
 package org.daum.library.web.utils;
 
-import org.kevoree.Channel;
 import org.kevoree.ContainerRoot;
 import org.kevoree.framework.KevoreePlatformHelper;
-import org.kevoree.framework.KevoreePropertyHelper;
-import org.kevoree.framework.NetworkHelper;
-import scala.Option;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -17,7 +13,6 @@ import java.util.HashMap;
  * User: jed
  * Date: 04/07/12
  * Time: 11:18
- * To change this template use File | Settings | File Templates.
  */
 public class WebCache {
 
