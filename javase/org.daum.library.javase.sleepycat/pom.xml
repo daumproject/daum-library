@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>org.daum.library.javase</groupId>
+    <artifactId>org.daum.library.javase.sleepycat</artifactId>
+    <name>DAUM :: Library :: JavaSE  :: SleepyCat</name>
+    <version>2.0.0-SNAPSHOT</version>
+
+    <parent>
+        <artifactId>org.daum.library.javase.root</artifactId>
+        <groupId>org.daum.library.javase</groupId>
+        <version>2.0.0-SNAPSHOT</version>
+        <relativePath>../org.daum.library.javase.root/pom.xml</relativePath>
+    </parent>
+
+
+    <dependencies>
+        <dependency>
+            <groupId>com.sleepycat</groupId>
+            <artifactId>je</artifactId>
+            <version>5.0.73</version>
+            <scope>system</scope>
+            <systemPath>/home/jed/DAUM_PROJECT/daum-library/javase/org.daum.library.javase.sleepycat/src/main/resources/je-5.0.73.jar</systemPath>
+        </dependency>
+    </dependencies>
+
+
+    <repositories>
+        <repository>
+            <id>oracleReleases</id>
+            <name>Oracle Released Java Packages</name>
+            <url>http://download.oracle.com/maven</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+
+</project>
