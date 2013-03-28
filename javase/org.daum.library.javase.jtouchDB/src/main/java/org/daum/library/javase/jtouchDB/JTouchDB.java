@@ -59,15 +59,12 @@ public class JTouchDB extends AbstractComponentType  implements  TouchDBService,
             {
                 filesDir =System.getProperty("java.io.tmpdir")+ File.separator+ "jtouchdb.default";
                 logger.warn("You have to choose a path to store sqlitedb default ="+filesDir);
-            }else
-            {
-                server = new TDServer(filesDir);
-                port = Integer.parseInt(getDictionary().get("port_db").toString());
-                listener = new TDListener(server, port);
-                listener.start();
-
-
             }
+            server = new TDServer(filesDir);
+            port = Integer.parseInt(getDictionary().get("port_db").toString());
+            listener = new TDListener(server, port);
+            listener.start();
+
             alive = true;
             t = new Thread(this);
             t.start();
@@ -116,7 +113,7 @@ public class JTouchDB extends AbstractComponentType  implements  TouchDBService,
             CouchDbClient r=null;
             try
             {
-               r = conn.get(document);
+                r = conn.get(document);
             }   catch (Exception e){
                 conn.remove(document);
                 return getDb(document);
@@ -142,7 +139,7 @@ public class JTouchDB extends AbstractComponentType  implements  TouchDBService,
                 }
             }   while (ok == false && t !=null);
 
-        //    addChangeListener(t);
+            //    addChangeListener(t);
 
             conn.put(document,t);
             return t;
