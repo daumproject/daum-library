@@ -61,22 +61,19 @@ public class Cache extends StoreMap<Object,VersionedValue>
                 e.key = key;
                 e.cache = name;
 
-                VersionedValue updated=new VersionedValue();
+                VersionedValue updated=new VersionedValue(value);
                 VersionedValue old = super.get(key);
                 if(old == null)
                 {
                     // new version
                     e.event = StoreEvent.ADD;
-                    updated.setObject(value);
-                    e.setVersionedValue(updated);
+                    updated.change(cacheManger.getCluster().getCurrentNode(),updated);
                 } else
                 {
                     // update
                     e.event = StoreEvent.UPDATE;
-                    updated.setVersion(old.getVersion());
-                    updated.updated();
-                    updated.setObject(value);
-                    e.setVersionedValue(updated);
+                    old.change(cacheManger.getCluster().getCurrentNode(),updated);
+                    e.setVersionedValue(old);
                 }
 
                 // local
@@ -133,9 +130,8 @@ public class Cache extends StoreMap<Object,VersionedValue>
                 }
                 else
                 {
-                    if(replica.getVersionedValue() != null)
-                    {
-                        if(replica.getVersionedValue().getVersion() > old.getVersion())
+
+                        if(replica.getVersionedValue().compare(old) == VectorComparison.GREATER)
                         {
                             // memory
                             super.put(replica.key, replica.getVersionedValue());
@@ -146,11 +142,9 @@ public class Cache extends StoreMap<Object,VersionedValue>
 
                         } else
                         {
-                            logger.warn("Current version "+replica.getVersionedValue().getVersion()+" replica version ="+old.getVersion());
+                            logger.warn("Current version "+replica.getVersionedValue().clocks+" replica version ="+old.clocks);
                         }
-                    } else {
-                        logger.error("not versionned "+old.getVersion());
-                    }
+
                 }
 
             } else if (replica.event.equals(StoreEvent.DELETE))

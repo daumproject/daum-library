@@ -1,5 +1,7 @@
 package org.daum.library.replica.cache;
 
+import org.daum.library.replica.cluster.Node;
+
 /**
  * Created by jed
  * User: jedartois@gmail.com
@@ -7,39 +9,48 @@ package org.daum.library.replica.cache;
  * Time: 10:38
  */
 public class VersionedValue implements java.io.Serializable, java.lang.Cloneable {
-    private static final long serialVersionUID = 1515L;
-    private long version = 0;
-    private java.lang.Object object;
-    public long getVersion() {
-        return version;
+
+    public Object value;
+    public Node origin;
+    public VectorClock clocks = new VectorClock();
+
+
+    public VersionedValue(Object value){
+        this.value = value;
+    }
+    public VersionedValue(Node node, Object value)
+    {
+        this.value = value;
+        this.origin = node;
+        clocks.incrementClock(node.getNodeID());
     }
 
-    public void setVersion(long version) {
-        this.version = version;
+    public void change(Node node, Object value){
+        this.value = value;
+        clocks.incrementClock(node.getNodeID());
     }
 
-    public void updated(){
-          version++;
+    public VersionedValue clone(){
+        VersionedValue t = new VersionedValue(value);
+        t.origin = origin.clone();
+        t.clocks = this.clocks.clone();
+        return t;
     }
 
-    public boolean compareV(Object o) {
-        if(o instanceof VersionedValue){
-            VersionedValue s = (VersionedValue)o;
-            if(s.getVersion() == this.getVersion()){
-                return true;
-            }  else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+    public Object getValue() {
+        return value;
     }
 
-    public Object getObject() {
-        return object;
+    public void setValue(Object value) {
+        this.value = value;
     }
 
-    public void setObject(Object obj) {
-        this.object = obj;
+    public String toString(){
+
+        return clocks.toString();
+    }
+
+    public VectorComparison compare(VersionedValue t){
+        return VectorClock.compare(clocks,t.clocks);
     }
 }

@@ -43,8 +43,9 @@ public class ClusterImpl implements  ICluster,Runnable{
     private String path_disk="";
     private DB db=null;
     private boolean diskPersitence =false;
+    private java.util.Random rand = new java.util.Random();
 
-    public ClusterImpl(Node current, Channel chanel,boolean diskPersitence,boolean first,String pathdisk)
+    public ClusterImpl(Node current, Channel chanel,boolean diskPersitence,String pathdisk)
     {
         alive = true;
         this.currentNode = current;
@@ -53,13 +54,6 @@ public class ClusterImpl implements  ICluster,Runnable{
         cacheManger = new CacheManager(this);
         this.diskPersitence = diskPersitence;
 
-        if(first)
-        {
-            currentNode.setSynchronized(true);
-        }else
-        {
-            currentNode.setSynchronized(false);
-        }
 
         // adding node id
         setPath_disk(pathdisk+File.separator+current.getNodeID()+File.separator);
@@ -210,7 +204,6 @@ public class ClusterImpl implements  ICluster,Runnable{
 
     public void remoteReceived(Message o)
     {
-
         cacheManger.processingMSG(o);
     }
 
@@ -221,28 +214,39 @@ public class ClusterImpl implements  ICluster,Runnable{
             public void run()
             {
 
-                while (synchronizedNodesInCluster() != true && alive == true && !Thread.currentThread().isInterrupted() )
+                while (getNodesOfCluster().isEmpty() && alive == true && !Thread.currentThread().isInterrupted() )
                 {
                     logger.debug("Waiting for discovering nodes..."+getNodesOfCluster());
                     try
                     {
-                        Thread.sleep(freqHearBeat*2);
+                        Thread.sleep(freqHearBeat*4);
                     } catch (InterruptedException e)
                     {
                         //ignore
                     }
                 }
 
+
                 Long min =Long.MAX_VALUE;
                 Node nodeReqSnapshot=null;
+                boolean sync = synchronizedNodesInCluster();
 
-                for( Node node : nodesOfCluster)
-                {
+                for( Node node : nodesOfCluster){
+
                     if(!currentNode.equals(node))
                     {
-                        if(node.getLastTickTime() < min && node.isSynchronized())
+                        if(sync)
                         {
-                            nodeReqSnapshot = node;
+                            if(node.getLastTickTime() < min && node.isSynchronized())
+                            {
+                                nodeReqSnapshot = node;
+                            }
+                        } else
+                        {
+                            if(node.getLastTickTime() < min)
+                            {
+                                nodeReqSnapshot = node;
+                            }
                         }
                     }
                 }
@@ -285,10 +289,26 @@ public class ClusterImpl implements  ICluster,Runnable{
     }
 
     @Override
-    public void setChanel(KChannelImpl kChannel) {
+    public void setChanel(KChannelImpl kChannel)
+    {
         this.chanel = kChannel;
     }
 
+
+    public void pullRevisions()
+    {
+
+        if(nodesOfCluster.size() >0){
+            int nodeid = 0 + rand.nextInt(nodesOfCluster.size() - 0);
+            // Get revision
+            Command req = new Command();
+            req.event = StoreEvent.PULL_REVISIONS;
+            req.source = currentNode;
+            req.dest = nodesOfCluster.get(nodeid);
+            chanel.write(req);
+        }
+
+    }
 
     // send heartbeat to notify other peer that the node is connected
     @Override
@@ -309,7 +329,8 @@ public class ClusterImpl implements  ICluster,Runnable{
 
             chanel.write(req);
 
-            //   logger.debug("Sending heatbeat "+ currentNode.getNodeID());
+            pullRevisions();
+
         }
         logger.debug("HeartBeat is closed");
     }

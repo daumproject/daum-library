@@ -67,8 +67,18 @@ public class Node implements INode,Serializable {
     public void setLastTickTime(long lastTickTime) {
         this.lastTickTime = lastTickTime;
     }
+
     @Override
     public String toString(){
         return "{"+nodeID+" isSynchronized="+isSynchronized()+"}";
+    }
+
+    public Node clone(){
+        Node t = new Node(getNodeID());
+        t.setSynchronized(this.isSynchronized());
+        t.setLastTickTime(this.getLastTickTime());
+        t.setNodeType(this.getNodeType());
+
+        return t;
     }
 }

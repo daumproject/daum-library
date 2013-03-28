@@ -127,6 +127,34 @@ public class CacheManager implements ICacheManger
 
                     }
 
+                }else if(o instanceof Revisions)
+                {
+
+                    final Revisions revisions = (Revisions)o;
+                    for(Revision msg: revisions.getRevisions())
+                    {
+
+                        Cache cache = getCache(msg.cache);
+
+                        if(cache.get(msg.getKey())  == null)
+                        {
+                            // request
+                            System.out.println("Request "+msg.getKey());
+
+                        } else
+                        {
+                            /*
+                            if(cache.get(msg.getKey()).getVersion() != msg.getVersionedValue().getVersion()){
+                                // request new version
+                                System.out.println("Request new Version "+msg.getKey());
+                            }
+                            */
+
+                        }
+
+                    }
+
+
                 }else  if(o instanceof Snapshot){
 
                     final Snapshot storeSnapshot = (Snapshot)o;
@@ -240,6 +268,30 @@ public class CacheManager implements ICacheManger
                             {
                                 // ignore it's not for me
                             }
+                        } else  if(command.getEvent().equals(StoreEvent.PULL_REVISIONS))
+                        {
+                            // send ids and revisons
+
+                            Revisions revisions = new Revisions();
+                            revisions.setDestNode(command.source);
+                            revisions.source = cluster.getCurrentNode();
+
+                            for(String namecache : store.keySet())
+                            {
+                                for( Object key: store.get(namecache).keySet()){
+
+                                    Revision rev = new Revision();
+                                    rev.event = StoreEvent.PULL_REVISIONS;
+                                    rev.dest = command.source;
+                                    rev.source = cluster.getCurrentNode();
+                                    rev.cache = namecache;
+                                    rev.key = key;
+                                    rev.setVersionedValue(store.get(namecache).get(key));
+                                    revisions.add(rev);
+                                }
+                            }
+                            cluster.getChannel().write(revisions);
+
                         }
                     }
                 }

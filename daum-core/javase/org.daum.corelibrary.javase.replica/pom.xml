@@ -19,6 +19,19 @@
             <artifactId>org.daum.extra.jdbm3.javase.root</artifactId>
             <version>1.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.kevoree.corelibrary.javase</groupId>
+            <artifactId>org.kevoree.library.javase.webserver.api</artifactId>
+            <version>${kevoree.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.kevoree.extra</groupId>
+            <artifactId>org.kevoree.extra.marshalling</artifactId>
+            <version>1.1</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -51,6 +64,7 @@
                     </jvmArgs>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
 

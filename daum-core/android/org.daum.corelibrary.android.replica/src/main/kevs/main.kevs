@@ -1,0 +1,73 @@
+ {
+addRepo "http://maven.kevoree.org/archiva/repository/daum/snapshots"
+addRepo "http://maven.kevoree.org/release"
+addRepo "http://repo.maven.apache.org/maven2"
+addRepo "http://maven.kevoree.org/daum/release"
+addRepo "http://repository.jetbrains.com/all"
+addRepo "http://maven.kevoree.org/archiva/repository/snapshots/"
+addRepo "http://maven.kevoree.org/snapshots"
+addRepo "http://repo.typesafe.com/typesafe/releases/"
+addRepo "http://maven.kevoree.org/daum/snapshots"
+addRepo "http://www.libvirt.org/maven2/"
+merge 'mvn:org.kevoree.corelibrary.sky/org.kevoree.library.sky.minicloud/2.0.0-SNAPSHOT'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.javaseNode/2.0.0-SNAPSHOT'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.jexxus/2.0.0-SNAPSHOT'
+addNode node1:MiniCloudNode
+updateDictionary node1{log_folder="/tmp"}
+merge 'mvn:org.daum.corelibrary.javase/org.daum.corelibrary.javase.replica/2.0.0-SNAPSHOT'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nioChannels/2.0.0-SNAPSHOT'
+addNode node0:JavaSENode
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.webserver.spray/2.0.0-SNAPSHOT'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.defaultChannels/2.0.0-SNAPSHOT'
+addNode node2:JavaSENode
+ {
+}
+
+addChild node0@node1
+addChild node2@node1
+ {
+  addComponent Replica485@node0 : Replica {}
+addChannel NioChanne982 : NioChannel {port='9001'}
+
+
+
+
+updateDictionary Replica485@node0 
+updateDictionary NioChanne982 {port='9000'}@node0,{port='9001'}@node2
+}
+
+ {
+  addComponent Replica329@node2 : Replica {}
+  addComponent SprayWebS612@node2 : SprayWebServer {port='8080',timeout='5000'}
+  addComponent ReplicaJS505@node2 : ReplicaJSON {}
+addChannel defSERVIC541 : defSERVICE {}
+addChannel NioChanne982 : NioChannel {port='9001'}
+addChannel defMSG738 : defMSG {}
+addChannel defMSG84 : defMSG {}
+
+
+
+
+updateDictionary Replica329@node2 
+updateDictionary defSERVIC541 
+updateDictionary NioChanne982 {port='9000'}@node0,{port='9001'}@node2
+updateDictionary SprayWebS612@node2 
+updateDictionary defMSG738 
+updateDictionary defMSG84 
+updateDictionary ReplicaJS505@node2 
+}
+
+addGroup group1114802016:BasicGroup
+addToGroup group1114802016 node1
+
+bind Replica329.service@node2 => defSERVIC541
+bind ReplicaJS505.service@node2 => defSERVIC541
+bind Replica329.remote@node2 => NioChanne982
+bind Replica485.remote@node0 => NioChanne982
+bind Replica485.broadcast@node0 => NioChanne982
+bind Replica329.broadcast@node2 => NioChanne982
+bind SprayWebS612.response@node2 => defMSG738
+bind ReplicaJS505.content@node2 => defMSG738
+bind SprayWebS612.handler@node2 => defMSG84
+bind ReplicaJS505.request@node2 => defMSG84
+}
