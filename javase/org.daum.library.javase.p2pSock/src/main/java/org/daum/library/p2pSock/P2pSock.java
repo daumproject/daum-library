@@ -196,29 +196,22 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
         };
     }
 
+
+
     public String getAddress(String remoteNodeName)
     {
-        String ip = KevoreePlatformHelper.getProperty(model, remoteNodeName,
-                org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP());
-        if (ip == null || ip.equals("")) {
-            ip = "";
-        }
-        return ip;
+        return KevoreePropertyHelper.$instance.getNetworkProperties(getModelService().getLastModel(), remoteNodeName, org.kevoree.framework.Constants.$instance.getKEVOREE_PLATFORM_REMOTE_NODE_IP()).get(0);
     }
 
 
-
     public int parsePortNumber (String nodeName) {
-        Channel channelOption = null;
-
-        channelOption =  getModelService().getLastModel().findByPath("hubs[" + getName() + "]", Channel.class);
-
+        Channel channelOption = getModelService().getLastModel().findByPath("hubs[" + getName() + "]", Channel.class);
         int port = 8000;
-        if (channelOption !=  null) {
-            Option<String> portOption = KevoreePropertyHelper.getProperty(channelOption, "port", true, nodeName);
-            if (portOption.isDefined()) {
+        if (channelOption!=null) {
+            String portOption = KevoreePropertyHelper.$instance.getProperty(channelOption, "port", true, nodeName);
+            if (portOption != null) {
                 try {
-                    port = Integer.parseInt(portOption.get());
+                    port = Integer.parseInt(portOption);
                 } catch (NumberFormatException e) {
                     logger.warn("Attribute \"port\" of {} is not an Integer, default value ({}) is used.", getName(), port);
                 }
@@ -228,6 +221,7 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
         }
         return port;
     }
+
 
 
     @Override
