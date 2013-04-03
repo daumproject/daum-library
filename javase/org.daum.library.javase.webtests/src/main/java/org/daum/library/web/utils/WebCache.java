@@ -2,6 +2,7 @@ package org.daum.library.web.utils;
 
 import org.kevoree.ContainerRoot;
 import org.kevoree.framework.KevoreePlatformHelper;
+import org.kevoree.framework.KevoreePropertyHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -46,8 +47,7 @@ public class WebCache {
 
     public static  String getAddress(ContainerRoot model,String remoteNodeName)
     {
-        String ip = KevoreePlatformHelper.getProperty(model, remoteNodeName,
-                org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP());
+        String ip = KevoreePropertyHelper.$instance.getNetworkProperties(model, remoteNodeName, org.kevoree.framework.Constants.$instance.getKEVOREE_PLATFORM_REMOTE_NODE_IP()).get(0);
         if (ip == null || ip.equals("")) {
             ip = "";
         }
@@ -57,6 +57,6 @@ public class WebCache {
 
     public static  String apply(ContainerRoot model,String nodename,String page)
     {
-        return   page.replace("$ip$",WebCache.getAddress(model,nodename));
+        return  page.replace("$ip$",WebCache.getAddress(model,nodename));
     }
 }

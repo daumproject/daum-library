@@ -1,6 +1,7 @@
 package org.daum.library.javase.jtouchDB;
 
 import org.apache.http.HttpResponse;
+import org.kevoree.Channel;
 import org.kevoree.ComponentInstance;
 import org.kevoree.ContainerNode;
 import org.kevoree.MBinding;
@@ -142,17 +143,16 @@ public class syncTouchDB extends AbstractChannelFragment {
             ContainerNode node = (ContainerNode) binding.getPort().eContainer().eContainer();
             ComponentInstance instance = (ComponentInstance) binding.getPort().eContainer();
 
-            Integer port = Integer.parseInt(KevoreePropertyHelper.getProperty(instance, "port_db", false, null).get());
+            Integer port = Integer.parseInt(  KevoreePropertyHelper.$instance.getProperty(instance, "port_db", true, null));
 
-            List<String> addresses = getAddresses(node.getName());
-            if (addresses.size() > 0) {
-                TouchDBInstance in = new TouchDBInstance();
-                // Maybe the behavior is not the best one (we use the first ip defined)
-                in.adr = addresses.get(0);
-                in.port = port;
-                current.add(in);
-            } else {
+            TouchDBInstance in = new TouchDBInstance();
+            in.adr = getAddress(node.getName());
+            in.port = port;
+
+            if (in.adr.length() == 0) {
                 logger.error("The " + node.getName() + "  has no IP address, it will be ignored.");
+            }   else {
+                current.add(in);
             }
 
         }
@@ -170,10 +170,31 @@ public class syncTouchDB extends AbstractChannelFragment {
         return null;
     }
 
-
-    public List<String> getAddresses(String remoteNodeName) {
-        return KevoreePropertyHelper.getNetworkProperties(getModelService().getLastModel(), remoteNodeName, org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP());
+    public String getAddress(String remoteNodeName)
+    {
+        return KevoreePropertyHelper.$instance.getNetworkProperties(getModelService().getLastModel(), remoteNodeName, org.kevoree.framework.Constants.$instance.getKEVOREE_PLATFORM_REMOTE_NODE_IP()).get(0);
     }
+
+
+    public int parsePortNumber (String nodeName) {
+        Channel channelOption = getModelService().getLastModel().findByPath("hubs[" + getName() + "]", Channel.class);
+        int port = 8000;
+        if (channelOption!=null) {
+            String portOption = KevoreePropertyHelper.$instance.getProperty(channelOption, "port", true, nodeName);
+            if (portOption != null) {
+                try {
+                    port = Integer.parseInt(portOption);
+                } catch (NumberFormatException e) {
+                    logger.warn("Attribute \"port\" of {} is not an Integer, default value ({}) is used.", getName(), port);
+                }
+            }
+        } else {
+            logger.warn("There is no channel named {}, default value ({}) is used.", getName(), port);
+        }
+        return port;
+    }
+
+
 
     private class TouchDBInstance {
         private String adr;
