@@ -83,24 +83,8 @@ public class ehcacheChannel extends AbstractChannelFragment implements Runnable 
 
 
 
-    public String getAddress(String remoteNodeName) {
-        String ip = KevoreePlatformHelper.getProperty(this.getModelService().getLastModel(), remoteNodeName,
-                org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP());
-        if (ip == null || ip.equals("")) {
-            ip = "127.0.0.1";
-        }
-        return ip;
-    }
 
 
-    public String getAddressModel(String remoteNodeName) {
-        String ip = KevoreePlatformHelper.getProperty(this.getModelService().getLastModel(), remoteNodeName,
-                org.kevoree.framework.Constants.KEVOREE_PLATFORM_REMOTE_NODE_IP());
-        if (ip == null || ip.equals("")) {
-            ip = "127.0.0.1";
-        }
-        return ip;
-    }
 
     public List<String> getAllNodes () {
         ContainerRoot model = this.getModelService().getLastModel();
