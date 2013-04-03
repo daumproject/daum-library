@@ -52,8 +52,6 @@ public class ehcacheChannel extends AbstractChannelFragment implements Runnable 
             //ignore
         }
 
-
-
     }
 
     @Update
@@ -79,11 +77,6 @@ public class ehcacheChannel extends AbstractChannelFragment implements Runnable 
 
 
     }
-
-
-
-
-
 
 
     public List<String> getAllNodes () {
