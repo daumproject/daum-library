@@ -98,7 +98,7 @@ public class ReplicaStore  implements PersistenceSessionStore {
         {
             throw new PersistenceException("The cache "+orhm.getCacheName()+" is null ");
         }
-        return cache.get(orhm.getId()).getObject();
+        return cache.get(orhm.getId()).getValue();
     }
 
     @Override
@@ -114,7 +114,7 @@ public class ReplicaStore  implements PersistenceSessionStore {
         {
             for( Object key : cache.keySet())
             {
-                result.put(key,cache.get(key).getObject());
+                result.put(key,cache.get(key).getValue());
             }       return result;
         }
         return  result;
