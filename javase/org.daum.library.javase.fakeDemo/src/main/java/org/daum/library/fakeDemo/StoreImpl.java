@@ -47,7 +47,7 @@ public class StoreImpl implements PersistenceSessionStore {
     public Object get(Orhm id) throws PersistenceException {
         Cache cache = replicatingService.getCache(id.getCacheName());
         VersionedValue data = cache.get(id.getId());
-        return data.getObject();
+        return data.getValue();
     }
 
     @Override
@@ -58,7 +58,7 @@ public class StoreImpl implements PersistenceSessionStore {
             HashMap<Object,Object> result = new HashMap<Object, Object>();
             for( Object key : cache.keySet())
             {
-                result.put(key,((VersionedValue)cache.get(key)).getObject());
+                result.put(key,((VersionedValue)cache.get(key)).getValue());
             }       return result;
         }
           return  null;
