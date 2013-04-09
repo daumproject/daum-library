@@ -14,7 +14,7 @@ import java.util.List;
 public class WebHelper {
 
     public static List<String> getAddresses(ContainerRoot model, String remoteNodeName) {
-        return KevoreePropertyHelper.$instance.getNetworkProperties(model, remoteNodeName, org.kevoree.framework.Constants.$instance.getKEVOREE_PLATFORM_REMOTE_NODE_IP());
+        return KevoreePropertyHelper.instance$.getNetworkProperties(model, remoteNodeName, org.kevoree.framework.Constants.instance$.getKEVOREE_PLATFORM_REMOTE_NODE_IP());
     }
 
     public static String apply(ContainerRoot model, String nodename, String page) {

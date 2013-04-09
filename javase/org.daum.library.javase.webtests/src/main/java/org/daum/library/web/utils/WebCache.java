@@ -47,7 +47,7 @@ public class WebCache {
 
     public static  String getAddress(ContainerRoot model,String remoteNodeName)
     {
-        String ip = KevoreePropertyHelper.$instance.getNetworkProperties(model, remoteNodeName, org.kevoree.framework.Constants.$instance.getKEVOREE_PLATFORM_REMOTE_NODE_IP()).get(0);
+        String ip = KevoreePropertyHelper.instance$.getNetworkProperties(model, remoteNodeName, org.kevoree.framework.Constants.instance$.getKEVOREE_PLATFORM_REMOTE_NODE_IP()).get(0);
         if (ip == null || ip.equals("")) {
             ip = "";
         }

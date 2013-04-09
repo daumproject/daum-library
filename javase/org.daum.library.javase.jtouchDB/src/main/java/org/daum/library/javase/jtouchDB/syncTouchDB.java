@@ -143,7 +143,7 @@ public class syncTouchDB extends AbstractChannelFragment {
             ContainerNode node = (ContainerNode) binding.getPort().eContainer().eContainer();
             ComponentInstance instance = (ComponentInstance) binding.getPort().eContainer();
 
-            Integer port = Integer.parseInt(  KevoreePropertyHelper.$instance.getProperty(instance, "port_db", true, null));
+            Integer port = Integer.parseInt(  KevoreePropertyHelper.instance$.getProperty(instance, "port_db", true, null));
 
             TouchDBInstance in = new TouchDBInstance();
             in.adr = getAddress(node.getName());
@@ -172,7 +172,7 @@ public class syncTouchDB extends AbstractChannelFragment {
 
     public String getAddress(String remoteNodeName)
     {
-        return KevoreePropertyHelper.$instance.getNetworkProperties(getModelService().getLastModel(), remoteNodeName, org.kevoree.framework.Constants.$instance.getKEVOREE_PLATFORM_REMOTE_NODE_IP()).get(0);
+        return KevoreePropertyHelper.instance$.getNetworkProperties(getModelService().getLastModel(), remoteNodeName, org.kevoree.framework.Constants.instance$.getKEVOREE_PLATFORM_REMOTE_NODE_IP()).get(0);
     }
 
 
@@ -180,7 +180,7 @@ public class syncTouchDB extends AbstractChannelFragment {
         Channel channelOption = getModelService().getLastModel().findByPath("hubs[" + getName() + "]", Channel.class);
         int port = 8000;
         if (channelOption!=null) {
-            String portOption = KevoreePropertyHelper.$instance.getProperty(channelOption, "port", true, nodeName);
+            String portOption = KevoreePropertyHelper.instance$.getProperty(channelOption, "port", true, nodeName);
             if (portOption != null) {
                 try {
                     port = Integer.parseInt(portOption);
