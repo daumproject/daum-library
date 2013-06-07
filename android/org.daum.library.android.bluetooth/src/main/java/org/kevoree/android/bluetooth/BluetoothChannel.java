@@ -15,8 +15,7 @@ import org.kevoree.framework.AbstractChannelFragment;
 import org.kevoree.framework.ChannelFragmentSender;
 import org.kevoree.framework.KevoreeChannelFragment;
 import org.kevoree.framework.message.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
 
 import java.io.*;
 import java.util.UUID;
@@ -53,7 +52,7 @@ public class BluetoothChannel extends AbstractChannelFragment implements Bluetoo
 	private static final long DEFAULT_TIMEOUT_CONNECT = 300000;
 	private static final int DEFAULT_DISCOVERABLE_TIME = 300;
 
-	private Logger logger = LoggerFactory.getLogger(BluetoothChannel.class);
+//	private Logger logger = LoggerFactory.getLogger(BluetoothChannel.class);
 	private KevoreeAndroidService uiservice;
 	private IRfcomm rfComm;
 	private String connectedDeviceName;
@@ -61,7 +60,7 @@ public class BluetoothChannel extends AbstractChannelFragment implements Bluetoo
 	private long timeoutAccept, timeoutConnect;
 	private int discoverableTime;
 	private boolean replay;
-	private ChannelClassResolver resolver = new ChannelClassResolver(this);
+	//private ChannelClassResolver resolver = new ChannelClassResolver(this);
 
 	@Start
 	public void startChannel () {
@@ -159,7 +158,8 @@ public class BluetoothChannel extends AbstractChannelFragment implements Bluetoo
 											Class c = null;
 											try {
 												if (c == null) {
-													c = resolver.resolve(objectStreamClass.getName());
+                                                    // todo fix
+												//	c = resolver.resolve(objectStreamClass.getName());
 												}
 											} catch (Exception e) {
 											}
