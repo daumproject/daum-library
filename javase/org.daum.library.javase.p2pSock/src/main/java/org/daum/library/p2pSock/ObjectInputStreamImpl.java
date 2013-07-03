@@ -1,9 +1,7 @@
 package org.daum.library.p2pSock;
 
 import org.kevoree.framework.AbstractChannelFragment;
-import org.slf4j.LoggerFactory;
-
-import org.slf4j.Logger;
+import org.kevoree.log.Log;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +16,7 @@ import java.io.ObjectStreamClass;
  * To change this template use File | Settings | File Templates.
  */
 public class ObjectInputStreamImpl extends ObjectInputStream {
-    private Logger logger = LoggerFactory.getLogger(ObjectInputStreamImpl.class);
+
     private ChannelClassResolver resolver;
 
     public ObjectInputStreamImpl (InputStream in, AbstractChannelFragment channelFragment) throws IOException {
@@ -32,21 +30,21 @@ public class ObjectInputStreamImpl extends ObjectInputStream {
         try {
             c = resolver.resolve(objectStreamClass.getName());
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            Log.error(e.getMessage(), e);
         }
         try {
             if (c == null) {
                 c = super.resolveClass(objectStreamClass);
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            Log.error(e.getMessage(), e);
         }
         try {
             if (c == null) {
                 c = Class.forName(objectStreamClass.getName());
             }
         } catch (Exception e) {
-            logger.error(e.getMessage(), e);
+            Log.error(e.getMessage(), e);
         }
 
         return c;

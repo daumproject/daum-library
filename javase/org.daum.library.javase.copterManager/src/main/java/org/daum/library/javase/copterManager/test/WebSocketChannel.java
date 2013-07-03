@@ -1,8 +1,5 @@
-package org.daum.library.javase.copterManager.ws;
+package org.daum.library.javase.copterManager.test;
 
-
-import org.daum.library.javase.copterManager.test.*;
-import org.daum.library.javase.copterManager.test.NotifyConnection;
 import org.kevoree.log.Log;
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
@@ -17,14 +14,14 @@ import java.util.Set;
  * Time: 13:15
  * To change this template use File | Settings | File Templates.
  */
-public class WebSocketChannel extends BaseWebSocketHandler implements org.daum.library.javase.copterManager.test.IWebSocketChannel {
+public class WebSocketChannel extends BaseWebSocketHandler implements IWebSocketChannel {
     private Set<WebSocketConnection> connections = new HashSet<WebSocketConnection>();
 
-    private org.daum.library.javase.copterManager.test.NotifyConnection notifyConnection = new org.daum.library.javase.copterManager.test.NotifyConnection();
+    private NotifyConnection notifyConnection = new NotifyConnection();
     @Override
     public void onOpen(WebSocketConnection connection)
     {
-        Log.debug("WebSocketConnection " + connection.toString());
+        System.out.println("WebSocketConnection " + connection.toString());
         connections.add(connection);
         notifyConnection.notifyConnection(connection);
     }
@@ -50,7 +47,7 @@ public class WebSocketChannel extends BaseWebSocketHandler implements org.daum.l
     }
 
     public void onMessage(WebSocketConnection connection, String message) {
-        Log.debug("onMessage " + message);
+   System.out.println("onMessage " + message);
         connection.send(message.toUpperCase()); // echo back message in upper case
     }
 

@@ -19,7 +19,7 @@ updateDictionary node0{}
  {
   addComponent WsServer650@node0 : WsServer {port='8092'}
   addComponent Resources407@node0 : ResourcesPage {urlpattern='/media/**'}
-  addComponent SprayWebS142@node0 : SprayWebServer {}
+  addComponent SprayWebS142@node0 : SprayWebServer {port='9500'}
   addComponent FollowMan511@node0 : FollowManager {urlpattern='/',current='jed'}
 addChannel defSERVIC618 : defSERVICE {}
 addChannel defMSG472 : defMSG {}

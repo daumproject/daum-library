@@ -8,7 +8,7 @@ import org.kevoree.framework.*;
 import org.kevoree.framework.KevoreePlatformHelper;
 import org.kevoree.framework.KevoreePropertyHelper;
 import org.kevoree.framework.message.Message;
-import org.slf4j.LoggerFactory;
+import org.kevoree.log.Log;
 
 
 import java.io.*;
@@ -36,7 +36,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class P2pSock extends AbstractChannelFragment implements ModelListener{
 
     private P2pServer server;
-    private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private Thread t_server;
     private Semaphore sender = new Semaphore(1);
     private  HashMap<String,P2pClient> cache_clients = new HashMap<String,P2pClient>();
@@ -64,7 +64,7 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
             t_server.start();
 
         } catch (Exception e) {
-            logger.error("Starting ",e);
+            Log.error("Starting ", e);
         }
 
     }
@@ -122,10 +122,10 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
 
         if (cache_clients.containsKey(host+port))
         {
-            //  logger.debug("the link exist");
+            //  Log.debug("the link exist");
             client = cache_clients.get(host+port);
         } else {
-            //   logger.debug("no link in cache");
+            //   Log.debug("no link in cache");
             client = new P2pClient(node,host, port);
             cache_clients.put(host+port, client);
         }
@@ -171,7 +171,7 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
                             client.send(message);
                         }else
                         {
-                            logger.warn("You need to specify an adress to "+remoteNodeName);
+                            Log.warn("You need to specify an adress to "+remoteNodeName);
                             if(cache.containsKey(remoteNodeName))
                             {
                                 cache.remove(remoteChannelName);
@@ -182,7 +182,7 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
                     }
 
                 } catch (Exception e) {
-                    logger.debug("Error while sending message to " + remoteNodeName + "-" + getAddress(remoteNodeName));
+                    Log.debug("Error while sending message to " + remoteNodeName + "-" + getAddress(remoteNodeName));
                     if(getDictionary().get("replay").toString().equals("true")){
                         backupOnError.enqueue(message);
                     }
@@ -213,11 +213,11 @@ public class P2pSock extends AbstractChannelFragment implements ModelListener{
                 try {
                     port = Integer.parseInt(portOption);
                 } catch (NumberFormatException e) {
-                    logger.warn("Attribute \"port\" of {} is not an Integer, default value ({}) is used.", getName(), port);
+                    Log.warn("Attribute \"port\" of {} is not an Integer, default value ({}) is used.", getName(), port);
                 }
             }
         } else {
-            logger.warn("There is no channel named {}, default value ({}) is used.", getName(), port);
+            Log.warn("There is no channel named {}, default value ({}) is used.", getName(), port);
         }
         return port;
     }

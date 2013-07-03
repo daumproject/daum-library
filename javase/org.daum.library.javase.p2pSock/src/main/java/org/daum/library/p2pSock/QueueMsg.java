@@ -1,8 +1,7 @@
 package org.daum.library.p2pSock;
 
 import org.kevoree.framework.message.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.kevoree.log.Log;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -20,7 +19,7 @@ import java.util.concurrent.Semaphore;
 public class QueueMsg  extends Thread {
 
     private boolean alive = true;
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private Integer timer;
     private BlockingQueue<Message> queue_node_dead = new LinkedBlockingQueue<Message>();
     private Integer maximum_deadqueue_size;
@@ -47,7 +46,7 @@ public class QueueMsg  extends Thread {
 
     public void enqueue (Message m) {
 
-        logger.debug("addToDeadQueue to {}", m.getDestNodeName());
+        Log.debug("addToDeadQueue to {}", m.getDestNodeName());
 
         if (queue_node_dead.size() < maximum_deadqueue_size) {
             if ("true".equals(parentChannel.getDictionary().get("replay"))) {
@@ -56,7 +55,7 @@ public class QueueMsg  extends Thread {
             }
         } else
         {
-            logger.error("The maximum number of message buffer is reached");
+            Log.error("The maximum number of message buffer is reached");
         }
     }
 
@@ -68,7 +67,7 @@ public class QueueMsg  extends Thread {
         while (alive) {
             size = queue_node_dead.size();
 
-            logger.debug("size queue {}", size);
+            Log.debug("size queue {}", size);
             if (size > 0) {
                 Message current = null;
                 for (i = 0; i < size; i++) {
@@ -79,7 +78,7 @@ public class QueueMsg  extends Thread {
                         String host = parentChannel.getAddress(current.getDestNodeName());
                         int port = parentChannel.parsePortNumber(current.getDestNodeName());
 
-                        logger.debug("Sending backup message to {}:{}", host, port);
+                        Log.debug("Sending backup message to {}:{}", host, port);
 
                         /* adding the current node */
                         if (!current.getPassedNodes().contains(parentChannel.getNodeName())) {
@@ -93,7 +92,7 @@ public class QueueMsg  extends Thread {
                     }
                 }  // for
                 if (stepFailMsgQueue.size() > 0) {
-                    logger.debug("Undo queue {}", stepFailMsgQueue.size());
+                    Log.debug("Undo queue {}", stepFailMsgQueue.size());
                     /* backup message connection refused */
                     queue_node_dead.addAll(stepFailMsgQueue);
                     stepFailMsgQueue.clear();
@@ -102,14 +101,14 @@ public class QueueMsg  extends Thread {
             } else
             {
                 try {
-                    logger.debug("acquire");
+                    Log.debug("acquire");
                     deadMessageSemaphore.acquire();
                 } catch (InterruptedException e) {
                     // ignore
                 }
             }
         }// while
-        logger.debug("The Queue pool is closed");
+        Log.debug("The Queue pool is closed");
     }
 
 }

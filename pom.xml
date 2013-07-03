@@ -25,12 +25,12 @@
 
     <repositories>
         <repository>
-            <id>kevoree-libs-release-local</id>
-            <url>http://maven.kevoree.org/release</url>
+            <id>kevoree-oss</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
         <repository>
-            <id>kevoree-snapshots</id>
-            <url>http://maven.kevoree.org/snapshots</url>
+            <id>jetbrains-release</id>
+            <url>http://repository.jetbrains.com/all</url>
         </repository>
         <repository>
             <id>kevoree-libs-release-local-daum</id>
@@ -44,13 +44,14 @@
 
     <pluginRepositories>
         <pluginRepository>
-            <id>plugin.kevoree-github</id>
-            <url>http://maven.kevoree.org/release</url>
+            <id>jetbrains-release</id>
+            <url>http://repository.jetbrains.com/all</url>
         </pluginRepository>
         <pluginRepository>
-            <id>plugin.kevoree-snapshots</id>
-            <url>http://maven.kevoree.org/snapshots</url>
+            <id>plugin.kevoree-oss</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
         </pluginRepository>
+
         <pluginRepository>
             <id>plugin.daum-github</id>
             <url>http://maven.kevoree.org/daum/release</url>

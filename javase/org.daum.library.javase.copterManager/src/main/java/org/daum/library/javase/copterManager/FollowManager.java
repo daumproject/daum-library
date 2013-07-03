@@ -15,6 +15,7 @@ import org.kevoree.extra.marshalling.RichJSONObject;
 import org.kevoree.library.javase.webserver.AbstractPage;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
 import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
+import org.kevoree.log.Log;
 import org.webbitserver.WebSocketConnection;
 
 import java.util.HashMap;
@@ -68,7 +69,7 @@ public class FollowManager extends AbstractPage  implements Observer {
             @Override
             public void modelUpdated()
             {
-                logger.debug("Request Ws Demand");
+               Log.debug("Request Ws Demand");
                 getPortByName("ws", WsHandler.class).addHandler("/followmanager",webSocketChannel);
             }
 
@@ -89,7 +90,7 @@ public class FollowManager extends AbstractPage  implements Observer {
     @Stop
     public void stop()
     {
-        logger.debug("Remove Ws Demand");
+        Log.debug("Remove Ws Demand");
         getPortByName("ws", WsHandler.class).removeHandler("/followmanager");
     }
 
@@ -167,7 +168,7 @@ public class FollowManager extends AbstractPage  implements Observer {
 
 
         } catch (Exception e) {
-            logger.error("", e);
+            Log.error("", e);
         }
     }
 }

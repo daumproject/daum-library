@@ -4,8 +4,8 @@ package org.daum.library.javase.copterManager.ws;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.kevoree.log.Log;
+
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebServer;
 import org.webbitserver.WebServers;
@@ -32,7 +32,7 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
 
     private WebServer webServer = null;
     private WebSocketChannel webSocketChannel = null;
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private HashMap<String,BaseWebSocketHandler> wspages = new HashMap<String, BaseWebSocketHandler>();
     private int port;
 
@@ -55,7 +55,7 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
 
     @Stop
     public void stopServer() {
-        logger.debug("Stoping");
+        Log.debug("Stoping");
         webServer.stop();
         webServer = null;
         webSocketChannel = null;
@@ -91,7 +91,7 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
     @Override
     public void addHandler(String name,BaseWebSocketHandler webSocketChannel){
 
-        logger.warn("Adding WS " + name);
+        Log.warn("Adding WS " + name);
         if(!wspages.containsKey(name))
         {
             wspages.put(name,webSocketChannel);
@@ -100,7 +100,7 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
 
         }else
         {
-            logger.warn("Already added "+name);
+            Log.warn("Already added "+name);
         }
 
     }
@@ -112,7 +112,7 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
     public void removeHandler(String name)
     {
         wspages.remove(name);
-        logger.warn("Removing WS " + name);
+        Log.warn("Removing WS " + name);
         stopWebSock();
         startWebSock();
     }

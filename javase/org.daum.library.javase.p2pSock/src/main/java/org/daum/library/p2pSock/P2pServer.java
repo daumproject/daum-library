@@ -8,7 +8,9 @@ package org.daum.library.p2pSock;
  * To change this template use File | Settings | File Templates.
  */
 
-import org.slf4j.LoggerFactory;
+
+
+import org.kevoree.log.Log;
 
 import java.io.*;
 import java.net.*;
@@ -23,7 +25,7 @@ public class P2pServer  implements Runnable{
     protected Thread       runningThread= null;
     protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
     private P2pSock p2pSock;
-    private org.slf4j.Logger logger = LoggerFactory.getLogger(this.getClass());
+
 
     public P2pServer(P2pSock p2pSock,int port){
         this.serverPort = port;
@@ -48,10 +50,10 @@ public class P2pServer  implements Runnable{
             } catch (IOException e) {
                 if(isStopped())
                 {
-                    logger.debug("Server Stopped ",e);
+                    Log.debug("Server Stopped ",e);
                     return;
                 }
-                logger.debug("Error accepting client connection ",e);
+                Log.debug("Error accepting client connection ", e);
 
                 if(clientSocket != null)
                     try
@@ -64,7 +66,7 @@ public class P2pServer  implements Runnable{
 
         }
         this.threadPool.shutdown();
-        logger.debug("Server Stopped ");
+        Log.debug("Server Stopped ");
     }
 
 
