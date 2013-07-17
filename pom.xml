@@ -8,10 +8,10 @@
     <name>DAUM :: Library :: Root</name>
     <version>2.0.0-SNAPSHOT</version>
 
- <properties>
+    <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scala.version>2.9.2</scala.version>
-     <kevoree.version>${project.version}</kevoree.version>
+        <kevoree.version>${project.version}</kevoree.version>
         <kevoree.exclude>com.actionbarsherlock:*,com.google.android:*,commons-*:*,org.apache.httpcomponents:*,org.khronos:*,xerces:*,xpp3:*,org.json:*,cglib:*,org.objenesis:*</kevoree.exclude>
     </properties>
 
@@ -48,10 +48,9 @@
             <url>http://repository.jetbrains.com/all</url>
         </pluginRepository>
         <pluginRepository>
-            <id>plugin.kevoree-oss</id>
+            <id>kevoree-oss.plugin</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </pluginRepository>
-
         <pluginRepository>
             <id>plugin.daum-github</id>
             <url>http://maven.kevoree.org/daum/release</url>
@@ -61,6 +60,7 @@
             <url>http://maven.kevoree.org/daum/snapshots</url>
         </pluginRepository>
     </pluginRepositories>
+
 
     <distributionManagement>
         <repository>
