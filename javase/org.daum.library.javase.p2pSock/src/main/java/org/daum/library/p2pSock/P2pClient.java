@@ -8,14 +8,14 @@ package org.daum.library.p2pSock;
  * To change this template use File | Settings | File Templates.
  */
 import org.kevoree.framework.message.Message;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.kevoree.log.Log;
+
 
 import java.io.*;
 import java.net.*;
 public class P2pClient
 {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     private Socket requestSocket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
@@ -47,7 +47,7 @@ public class P2pClient
 
         }
         catch(Exception ioException){
-            logger.debug("The node '" + remoteNodeName + "' is not available on " + adr + ":" + port);
+            Log.debug("The node '" + remoteNodeName + "' is not available on " + adr + ":" + port);
             throw new Exception(ioException);
         }
         finally{

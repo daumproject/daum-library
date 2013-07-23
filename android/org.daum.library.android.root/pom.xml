@@ -27,7 +27,7 @@
         <module>../org.daum.library.android.demos</module>
         <module>../org.daum.library.android.ehcache</module>
         <module>../org.daum.library.android.sitac</module>
-        <module>../org.daum.library.android.bluetooth</module>
+        <!--<module>../org.daum.library.android.bluetooth</module>   -->
         <module>../org.daum.library.android.moyens</module>
         <module>../org.daum.library.android.messages</module>
         <module>../org.daum.library.android.daumauth</module>

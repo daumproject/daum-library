@@ -12,9 +12,7 @@ import org.kevoree.annotation.*;
 import org.kevoree.extra.marshalling.RichJSONObject;
 import org.kevoree.framework.AbstractComponentType;
 import org.kevoree.framework.MessagePort;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import org.kevoree.log.Log;
 
 
 /**
@@ -40,7 +38,6 @@ import org.slf4j.LoggerFactory;
 public class FollowMe extends AbstractComponentType {
 
     private static final String TAG = "FollowMe";
-    private static final Logger logger = LoggerFactory.getLogger(FollowMe.class);
 
     private KevoreeAndroidService uiService;
     private LocationManager locationMgr	= null;
@@ -86,7 +83,7 @@ public class FollowMe extends AbstractComponentType {
                     }
                 }   catch (Exception e)
                 {
-                    logger.error("",e);
+                    Log.error("", e);
                 }
 
 

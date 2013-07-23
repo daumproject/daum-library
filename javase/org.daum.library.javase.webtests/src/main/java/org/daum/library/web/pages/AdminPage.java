@@ -5,6 +5,7 @@ import org.kevoree.annotation.ComponentType;
 import org.kevoree.library.javase.webserver.AbstractPage;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
 import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
+import org.kevoree.log.Log;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,7 +20,7 @@ public class AdminPage extends AbstractPage
 {
     @Override
     public KevoreeHttpResponse process(KevoreeHttpRequest kevoreeHttpRequest, KevoreeHttpResponse kevoreeHttpResponse) {
-        logger.debug("" + kevoreeHttpRequest.getResolvedParams());
+        Log.debug("" + kevoreeHttpRequest.getResolvedParams());
         String page = new String(WebCache.load("pages/admin.html"));
         kevoreeHttpResponse.setContent(WebCache.apply(getModelService().getLastModel(),getNodeName(),page));
         return kevoreeHttpResponse;

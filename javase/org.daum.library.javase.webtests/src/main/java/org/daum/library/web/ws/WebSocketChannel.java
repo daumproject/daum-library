@@ -1,5 +1,6 @@
 package org.daum.library.web.ws;
 
+import org.kevoree.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.webbitserver.BaseWebSocketHandler;
@@ -22,7 +23,7 @@ public class WebSocketChannel extends BaseWebSocketHandler implements IWebSocket
     @Override
     public void onOpen(WebSocketConnection connection)
     {
-        logger.debug("WebSocketConnection "+connection.toString());
+        Log.debug("WebSocketConnection "+connection.toString());
         connections.add(connection);
         notifyConnection.notifyConnection(connection);
     }
@@ -48,7 +49,7 @@ public class WebSocketChannel extends BaseWebSocketHandler implements IWebSocket
     }
 
     public void onMessage(WebSocketConnection connection, String message) {
-        logger.debug("onMessage "+message);
+        Log.debug("onMessage " + message);
         connection.send(message.toUpperCase()); // echo back message in upper case
     }
 

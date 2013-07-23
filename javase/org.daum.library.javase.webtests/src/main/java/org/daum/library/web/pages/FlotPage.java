@@ -9,6 +9,7 @@ import org.kevoree.api.service.core.handler.ModelListener;
 import org.kevoree.library.javase.webserver.AbstractPage;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
 import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
+import org.kevoree.log.Log;
 
 /**
  * Created with IntelliJ IDEA.
@@ -54,7 +55,7 @@ public class FlotPage extends AbstractPage
 
             @Override
             public void modelUpdated() {
-                logger.debug("Request Ws Demand");
+                Log.debug("Request Ws Demand");
                 getPortByName("ws", WsHandler.class).addHandler("/flotpage", webSocketChannel);
             }
 
@@ -102,7 +103,7 @@ public class FlotPage extends AbstractPage
                 }
             }
         } catch (Exception e) {
-            logger.warn("Grapher bad message => " + e.getMessage());
+            Log.warn("Grapher bad message => " + e.getMessage());
         }
 
     }

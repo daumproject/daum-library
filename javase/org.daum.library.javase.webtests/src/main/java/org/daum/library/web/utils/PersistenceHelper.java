@@ -1,5 +1,6 @@
 package org.daum.library.web.utils;
 
+import org.daum.common.genmodel.SitacFactory;
 import org.daum.common.model.api.Demand;
 import org.daum.library.ormH.api.IPersistenceSessionFactory;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
@@ -9,6 +10,7 @@ import org.daum.library.ormH.store.ReplicaStore;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.ReplicaService;
 import org.daum.common.genmodel.*;
+import org.kevoree.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,7 +56,7 @@ public class PersistenceHelper {
 
             } catch (PersistenceException e)
             {
-                logger.error("init : ",e);
+                Log.error("init : ", e);
             }
         }
     }

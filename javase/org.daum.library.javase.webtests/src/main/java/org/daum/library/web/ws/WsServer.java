@@ -8,6 +8,7 @@ import org.daum.library.replica.listener.ChangeListener;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
 
+import org.kevoree.log.Log;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.webbitserver.BaseWebSocketHandler;
@@ -53,7 +54,7 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
 
     @Stop
     public void stopServer() {
-        logger.debug("Stoping");
+        Log.debug("Stoping");
         webServer.stop();
         webServer = null;
         webSocketChannel = null;
@@ -64,7 +65,7 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
     @Override
     public void addHandler(String name,BaseWebSocketHandler webSocketChannel){
 
-        logger.warn("Adding WS " + name);
+        Log.warn("Adding WS " + name);
         if(!wspages.containsKey(name))
         {
             wspages.put(name,webSocketChannel);
@@ -97,7 +98,7 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
 
         }else
         {
-            logger.warn("Already added "+name);
+            Log.warn("Already added "+name);
         }
 
     }

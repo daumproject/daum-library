@@ -16,6 +16,7 @@
         <relativePath>../org.daum.corelibrary.android.root/pom.xml</relativePath>
     </parent>
 
+
     <dependencies>
         <dependency>
             <groupId>junit</groupId>

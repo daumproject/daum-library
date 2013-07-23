@@ -15,15 +15,10 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <properties>
-        <kevoree.version>${project.version}</kevoree.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <modules>
         <module>../org.daum.corelibrary.javase.replica</module>
         <module>../org.daum.corelibrary.javase.ormH</module>
-
     </modules>
 
     <dependencies>

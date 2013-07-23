@@ -40,6 +40,11 @@
             <id>daum-snapshots</id>
             <url>http://maven.kevoree.org/daum/snapshots</url>
         </repository>
+            <repository>
+                <id>kevoree-release</id>
+                <url>http://maven.kevoree.org/release</url>
+            </repository>
+
     </repositories>
 
     <pluginRepositories>

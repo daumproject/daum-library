@@ -8,12 +8,11 @@
     <version>2.0.0-SNAPSHOT</version>
 
     <parent>
-        <artifactId>org.daum.library.javase.root</artifactId>
-        <groupId>org.daum.library.javase</groupId>
+        <artifactId>org.daum.corelibrary.javase.root</artifactId>
+        <groupId>org.daum.corelibrary.javase</groupId>
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../org.daum.corelibrary.javase.root/pom.xml</relativePath>
     </parent>
-
     <dependencies>
         <dependency>
             <groupId>org.daum.extra.jdbm3.javase</groupId>

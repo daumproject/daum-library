@@ -1,6 +1,7 @@
 package org.daum.library.web.pages;
 
 import org.daum.common.genmodel.*;
+import org.daum.common.genmodel.SitacFactory;
 import org.daum.common.genmodel.impl.InterventionImpl;
 import org.daum.common.model.api.Demand;
 import org.daum.library.ormH.persistence.PersistenceConfiguration;
@@ -21,6 +22,7 @@ import org.kevoree.extra.marshalling.RichJSONObject;
 import org.kevoree.library.javase.webserver.AbstractPage;
 import org.kevoree.library.javase.webserver.KevoreeHttpRequest;
 import org.kevoree.library.javase.webserver.KevoreeHttpResponse;
+import org.kevoree.log.Log;
 import org.webbitserver.WebSocketConnection;
 
 
@@ -79,7 +81,7 @@ public class InterventionPage extends AbstractPage implements Observer {
             @Override
             public void modelUpdated()
             {
-                logger.debug("Request Ws Demand");
+                Log.debug("Request Ws Demand");
                 getPortByName("ws", WsHandler.class).addHandler("/intervention",webSocketChannel);
             }
 
@@ -145,7 +147,7 @@ public class InterventionPage extends AbstractPage implements Observer {
                         }
                     } catch (PersistenceException ex)
                     {
-                        logger.error("",ex);
+                        Log.error("",ex);
                         replicaService = null;
                     }
                     finally
@@ -157,7 +159,7 @@ public class InterventionPage extends AbstractPage implements Observer {
 
 
                 } catch (Exception e) {
-                    logger.error("", e);
+                    Log.error("", e);
                 }
             }
         });
@@ -217,7 +219,7 @@ public class InterventionPage extends AbstractPage implements Observer {
 
             } catch (PersistenceException e)
             {
-                logger.error("init : ",e);
+                Log.error("init : ",e);
             }
         }
     }
@@ -249,7 +251,7 @@ public class InterventionPage extends AbstractPage implements Observer {
                 }
             } catch (PersistenceException ex)
             {
-                logger.error("",ex);
+                Log.error("",ex);
                 replicaService = null;
             }
             finally
@@ -261,7 +263,7 @@ public class InterventionPage extends AbstractPage implements Observer {
 
 
         } catch (Exception e) {
-            logger.error("", e);
+            Log.error("", e);
         }
     }
 }
