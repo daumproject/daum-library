@@ -5,6 +5,7 @@ import org.daum.library.ormH.persistence.Orhm;
 import org.daum.library.ormH.utils.PersistenceException;
 import org.daum.library.replica.cache.Cache;
 import org.daum.library.replica.cache.ReplicaService;
+import org.daum.library.replica.cache.VersionedValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +51,7 @@ public class ReplicaStore  implements PersistenceSessionStore {
         {
             throw new PersistenceException("The cache "+orhm.getCacheName()+" is null ");
         }
-        cache.put(orhm.getId(),bean);
+        cache.put(orhm.getId(), (VersionedValue) bean);
     }
 
     @Override
@@ -69,7 +70,7 @@ public class ReplicaStore  implements PersistenceSessionStore {
         {
             throw new PersistenceException("The cache "+orhm.getCacheName()+" is null ");
         }
-        cache.put(orhm.getId(),bean);
+        cache.put(orhm.getId(), (VersionedValue) bean);
     }
 
     @Override

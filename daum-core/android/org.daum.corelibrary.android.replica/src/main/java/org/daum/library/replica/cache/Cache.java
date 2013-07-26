@@ -47,7 +47,7 @@ public class Cache extends StoreMap<Object,VersionedValue>
         this.MaxEntriesLocalHeap = max;
     }
 
-    public VersionedValue put(Object key, Object value) {
+    public VersionedValue put(Object key, VersionedValue value) {
 
         try{
             if(this.size() > MaxEntriesLocalHeap)
