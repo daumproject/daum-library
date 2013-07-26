@@ -28,13 +28,13 @@ public class StoreImpl implements PersistenceSessionStore {
     @Override
     public void save(Orhm id, Object bean) throws PersistenceException {
         Cache cache = replicatingService.getCache(id.getCacheName());
-        cache.put(id.getId(),bean);
+        cache.put(id.getId(), (VersionedValue) bean);
     }
 
     @Override
     public void update(Orhm orhm, Object bean) throws PersistenceException {
         Cache cache = replicatingService.getCache(orhm.getCacheName());
-        cache.put(orhm.getId(),bean);
+        cache.put(orhm.getId(),(VersionedValue)bean);
     }
 
     @Override
