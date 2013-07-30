@@ -11,6 +11,9 @@ import org.webbitserver.WebServer;
 import org.webbitserver.WebServers;
 
 import java.util.HashMap;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 
 /**
@@ -74,14 +77,25 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
     public void stopWebSock(){
         if(webServer != null)
         {
-            webServer.stop();
-            try
+            try {
+                webServer.stop().get(5000, TimeUnit.SECONDS);
+            } catch (InterruptedException e) {
+                Log.error("WsServer.stopWebSock", e);
+//                e.printStackTrace();
+            } catch (ExecutionException e) {
+                Log.error("WsServer.stopWebSock", e);
+//                e.printStackTrace();
+            } catch (TimeoutException e) {
+                Log.error("WsServer.stopWebSock", e);
+//                e.printStackTrace();
+            }
+            /*try
             {
                 // todo improve  hack ws
                 Thread.sleep(5000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
         // todo check is stopped
         webServer = null;
