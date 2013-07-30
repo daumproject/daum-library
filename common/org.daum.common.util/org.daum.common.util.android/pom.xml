@@ -15,11 +15,6 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <properties>
-        <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
-        <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
-    </properties>
-
     <build>
         <sourceDirectory>../org.daum.common.util.root/src/main/</sourceDirectory>
         <plugins>

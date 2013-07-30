@@ -12,7 +12,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scala.version>2.9.2</scala.version>
         <kevoree.version>${project.version}</kevoree.version>
-        <kevoree.exclude>com.actionbarsherlock:*,com.google.android:*,commons-*:*,org.apache.httpcomponents:*,org.khronos:*,xerces:*,xpp3:*,org.json:*,cglib:*,org.objenesis:*</kevoree.exclude>
+        <kevoree.exclude>
+            com.actionbarsherlock:*,com.google.android:*,commons-*:*,org.apache.httpcomponents:*,org.khronos:*,xerces:*,xpp3:*,org.json:*,cglib:*,org.objenesis:*
+        </kevoree.exclude>
+
+
+        <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
+        <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
+        <!-- uncomment the following if you have an error on aapt or dx -->
+        <!--<android.tools.aapt>${android.home}/build-tools/17.0.0/aapt</android.tools.aapt>
+        <android.tools.dx>${android.home}/build-tools/17.0.0/dx</android.tools.dx>-->
+
     </properties>
 
     <modules>
@@ -40,10 +50,10 @@
             <id>daum-snapshots</id>
             <url>http://maven.kevoree.org/daum/snapshots</url>
         </repository>
-            <repository>
-                <id>kevoree-release</id>
-                <url>http://maven.kevoree.org/release</url>
-            </repository>
+        <repository>
+            <id>kevoree-release</id>
+            <url>http://maven.kevoree.org/release</url>
+        </repository>
 
     </repositories>
 

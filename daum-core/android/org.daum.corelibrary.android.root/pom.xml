@@ -18,8 +18,6 @@
     <properties>
         <kevoree.version>${project.version}</kevoree.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
-        <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
     </properties>
 
     <modules>
@@ -64,16 +62,6 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
-            <!-- Java compiler plugin -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                </configuration>
             </plugin>
         </plugins>
     </build>

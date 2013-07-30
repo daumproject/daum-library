@@ -5,7 +5,7 @@
     <groupId>org.daum.common.gps.android</groupId>
     <artifactId>org.daum.common.gps.android.root</artifactId>
     <packaging>jar</packaging>
-    <name>Daum :: Common :: GPS :: Android </name>
+    <name>Daum :: Common :: GPS :: Android</name>
     <version>2.0.0-SNAPSHOT</version>
 
     <parent>
@@ -15,26 +15,9 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <properties>
-        <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
-        <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
-    </properties>
-
     <build>
         <sourceDirectory>../org.daum.common.gps.root/src/main/</sourceDirectory>
         <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
-
-
-
             <!-- android dex phase -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -75,7 +58,31 @@
                     </execution>
                 </executions>
             </plugin>
-
+           <!-- <plugin>
+                <groupId>com.jayway.maven.plugins.android.generation2</groupId>
+                <artifactId>android-maven-plugin</artifactId>
+                <version>3.6.0</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <dexCoreLibrary>true</dexCoreLibrary>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>generate-dex</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>dex</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>generate-dex</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>proguard</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
         </plugins>
     </build>
 
