@@ -16,13 +16,8 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <properties>
-    <kevoree.version>${project.version}</kevoree.version>
-    </properties>
-
     <modules>
         <module>../org.daum.library.arduino.sensors</module>
-      
     </modules>
 
 
@@ -60,28 +55,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <repositories>
-        <repository>
-            <id>kevoree-release</id>
-            <url>http://maven.kevoree.org/release</url>
-        </repository>
-        <repository>
-            <id>kevoree-snapshots</id>
-            <url>http://maven.kevoree.org/snapshots</url>
-        </repository>
-    </repositories>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>plugin.kevoree-github</id>
-            <url>http://maven.kevoree.org/release</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>plugin.kevoree-snapshots</id>
-            <url>http://maven.kevoree.org/snapshots</url>
-        </pluginRepository>
-    </pluginRepositories>
-
-
 </project>

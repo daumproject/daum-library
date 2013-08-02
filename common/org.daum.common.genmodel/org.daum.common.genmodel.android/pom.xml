@@ -19,39 +19,19 @@
         <dependency>
             <groupId>org.daum.common.gps.android</groupId>
             <artifactId>org.daum.common.gps.android.root</artifactId>
-            <version>${kevoree.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.daum.library.android</groupId>
-            <artifactId>org.daum.library.android.ormH</artifactId>
-            <version>${kevoree.version}</version>
+            <groupId>org.daum.corelibrary.android</groupId>
+            <artifactId>org.daum.corelibrary.android.ormH</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 
     <build>
         <sourceDirectory>../org.daum.common.genmodel.javase/src</sourceDirectory>
         <plugins>
-            <plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-
-                    </execution>
-                </executions>
-                <configuration>
-                    <jvmArgs>
-                        <jvmArg>-Xms64m</jvmArg>
-                        <jvmArg>-Xmx1024m</jvmArg>
-                    </jvmArgs>
-                </configuration>
-            </plugin>
-
             <!-- android dex phase -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

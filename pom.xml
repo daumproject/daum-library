@@ -11,7 +11,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scala.version>2.9.2</scala.version>
-        <kevoree.version>${project.version}</kevoree.version>
+        <kevoree.version>2.0.4-SNAPSHOT</kevoree.version>
+        <kevoree.corelibrary.version>2.0.0-SNAPSHOT</kevoree.corelibrary.version>
         <kevoree.exclude>
             com.actionbarsherlock:*,com.google.android:*,commons-*:*,org.apache.httpcomponents:*,org.khronos:*,xerces:*,xpp3:*,org.json:*,cglib:*,org.objenesis:*
         </kevoree.exclude>
@@ -20,8 +21,8 @@
         <android.tools.aapt>${android.home}/platform-tools/aapt</android.tools.aapt>
         <android.tools.dx>${android.home}/platform-tools/dx</android.tools.dx>
         <!-- uncomment the following if you have an error on aapt or dx -->
-        <!--<android.tools.aapt>${android.home}/build-tools/17.0.0/aapt</android.tools.aapt>
-        <android.tools.dx>${android.home}/build-tools/17.0.0/dx</android.tools.dx>-->
+        <android.tools.aapt>${android.home}/build-tools/17.0.0/aapt</android.tools.aapt>
+        <android.tools.dx>${android.home}/build-tools/17.0.0/dx</android.tools.dx>
 
     </properties>
 
@@ -43,7 +44,7 @@
             <url>http://repository.jetbrains.com/all</url>
         </repository>
         <repository>
-            <id>kevoree-libs-release-local-daum</id>
+            <id>daum-release</id>
             <url>http://maven.kevoree.org/daum/release</url>
         </repository>
         <repository>
@@ -51,10 +52,9 @@
             <url>http://maven.kevoree.org/daum/snapshots</url>
         </repository>
         <repository>
-            <id>kevoree-release</id>
+            <id>kevoree-extra</id>
             <url>http://maven.kevoree.org/release</url>
         </repository>
-
     </repositories>
 
     <pluginRepositories>
@@ -67,7 +67,7 @@
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </pluginRepository>
         <pluginRepository>
-            <id>plugin.daum-github</id>
+            <id>plugin.daum-release</id>
             <url>http://maven.kevoree.org/daum/release</url>
         </pluginRepository>
         <pluginRepository>
@@ -89,19 +89,17 @@
     </distributionManagement>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>2.3.2</version>
-                    <configuration>
-                        <source>1.6</source>
-                        <target>1.6</target>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
 
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 </project>

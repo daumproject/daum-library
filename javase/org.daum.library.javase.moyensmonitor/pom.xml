@@ -4,7 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.daum.library.javase</groupId>
     <artifactId>org.daum.library.javase.moyensmonitor</artifactId>
     <name>DAUM :: Library :: JavaSE :: MoyensMonitor</name>
     <version>2.0.0-SNAPSHOT</version>
@@ -20,19 +19,19 @@
         <dependency>
             <groupId>org.daum.common.model.javase</groupId>
             <artifactId>org.daum.common.model.javase.root</artifactId>
-            <version>${kevoree.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.daum.common.util.javase</groupId>
             <artifactId>org.daum.common.util.javase.root</artifactId>
-            <version>${kevoree.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.daum.corelibrary.javase</groupId>
             <artifactId>org.daum.corelibrary.javase.ormH</artifactId>
-            <version>${kevoree.version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

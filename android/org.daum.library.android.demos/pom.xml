@@ -21,13 +21,13 @@
         <dependency>
             <groupId>org.daum.corelibrary.javase</groupId>
             <artifactId>org.daum.corelibrary.javase.ormH</artifactId>
-            <version>${kevoree.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.daum.common.genmodel.android</groupId>
             <artifactId>org.daum.common.genmodel.android.root</artifactId>
-            <version>${kevoree.version}</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

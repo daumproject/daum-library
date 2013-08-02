@@ -15,11 +15,6 @@
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <properties>
-        <kevoree.version>${project.version}</kevoree.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
-
     <modules>
         <module>../org.daum.library.javase.demos</module>
         <module>../org.daum.library.javase.ehcache</module>

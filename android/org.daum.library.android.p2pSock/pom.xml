@@ -2,7 +2,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.daum.library.android</groupId>
     <artifactId>org.daum.library.android.p2pSock</artifactId>
     <name>DAUM :: Library :: Android :: p2p Sock</name>
     <version>2.0.0-SNAPSHOT</version>
@@ -22,8 +21,6 @@
                 <version>1.1</version>
             </dependency>
         </dependencies>   -->
-
-
     <build>
         <sourceDirectory>../../javase/org.daum.library.javase.p2pSock/src</sourceDirectory>
         <plugins>
@@ -97,9 +94,4 @@
             </plugin>
         </plugins>
     </build>
-
-
-
-
-
 </project>

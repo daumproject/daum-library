@@ -15,46 +15,11 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <build>
-         <plugins>
-            <plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>compile</goal>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <jvmArgs>
-                        <jvmArg>-Xms64m</jvmArg>
-                        <jvmArg>-Xmx1024m</jvmArg>
-                    </jvmArgs>
-                </configuration>
-            </plugin>
-             <plugin>
-                 <groupId>org.codehaus.mojo</groupId>
-                 <artifactId>gwt-maven-plugin</artifactId>
-                 <executions>
-                     <execution>
-                         <goals>
-                             <goal>resources</goal>
-                         </goals>
-                     </execution>
-                 </executions>
-             </plugin>
-
-        </plugins>
-    </build>
-
     <dependencies>
         <dependency>
             <groupId>org.daum.corelibrary.javase</groupId>
             <artifactId>org.daum.corelibrary.javase.ormH</artifactId>
-            <version>${kevoree.version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 

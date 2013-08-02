@@ -21,7 +21,7 @@
         <dependency>
             <groupId>org.daum.corelibrary.android</groupId>
             <artifactId>org.daum.corelibrary.android.replica</artifactId>
-            <version>${kevoree.version}</version>
+            <version>${project.version}</version>
             <scope>compile</scope>
         </dependency>
 

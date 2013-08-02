@@ -19,16 +19,12 @@
 
 
     <dependencies>
-
-
         <dependency>
             <groupId>org.kevoree.extra</groupId>
             <artifactId>org.kevoree.extra.marshalling</artifactId>
             <version>1.1</version>
         </dependency>
     </dependencies>
-
-
     <build>
         <plugins>
             <!-- android dex phase -->
