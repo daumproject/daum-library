@@ -3,17 +3,13 @@ package org.daum.library.javase.copterManager.ws;
 
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractComponentType;
-
 import org.kevoree.log.Log;
-
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebServer;
 import org.webbitserver.WebServers;
 
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 
 /**
@@ -48,7 +44,13 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
     public void update()
     {
         if(Integer.parseInt(getDictionary().get("port").toString()) != port){
-            webServer.stop();
+            try {
+                webServer.stop().get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            }
             webServer = null;
             port= Integer.parseInt(getDictionary().get("port").toString());
             webServer = WebServers.createWebServer(port);
@@ -59,7 +61,13 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
     @Stop
     public void stopServer() {
         Log.debug("Stoping");
-        webServer.stop();
+        try {
+            webServer.stop().get();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
         webServer = null;
         webSocketChannel = null;
     }
@@ -78,14 +86,11 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
         if(webServer != null)
         {
             try {
-                webServer.stop().get(5000, TimeUnit.SECONDS);
+                webServer.stop().get();
             } catch (InterruptedException e) {
                 Log.error("WsServer.stopWebSock", e);
 //                e.printStackTrace();
             } catch (ExecutionException e) {
-                Log.error("WsServer.stopWebSock", e);
-//                e.printStackTrace();
-            } catch (TimeoutException e) {
                 Log.error("WsServer.stopWebSock", e);
 //                e.printStackTrace();
             }

@@ -27,11 +27,10 @@ import java.util.Observer;
  * User: jed
  * Date: 08/02/13
  * Time: 11:10
- * To change this template use File | Settings | File Templates.
  */
 
 @Requires({
-        @RequiredPort(name = "ws", type = PortType.SERVICE, className = WsHandler.class, optional = false)
+        @RequiredPort(name = "ws", type = PortType.SERVICE, className = WsHandler.class, optional = false, needCheckDependency = true)
 })
 @Provides({
         @ProvidedPort(name = "followmeuser", type = PortType.MESSAGE)
