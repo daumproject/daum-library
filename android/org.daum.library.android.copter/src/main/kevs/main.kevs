@@ -8,8 +8,8 @@ merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.fakeDomo/
 merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}'
 merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.authentication/{kevoree.version}'
 
-merge 'mvn:org.daum.library.android/org.daum.library.android.daumauth/1.0.1-SNAPSHOT'
-merge 'mvn:org.daum.library.android/org.daum.library.android.replica/2.2-SNAPSHOT'
+merge 'mvn:org.daum.library.android/org.daum.library.android.daumauth/2.0.0-SNAPSHOT'
+merge 'mvn:org.daum.corelibrary.android/org.daum.corelibrary.android.replica/2.0.0-SNAPSHOT'
 
 addNode node0:AndroidNode {
     addComponent DaumAuthC361@node0 : DaumAuthComponent {}
