@@ -36,73 +36,47 @@ public class WsServer extends AbstractComponentType implements  WsHandler {
     private int port;
 
     @Start
-    public void start(){
-        port= Integer.parseInt(getDictionary().get("port").toString());
+    public void start() {
+        Log.debug("Starting {}", getName());
+        startWebSock();
     }
 
     @Update
-    public void update()
-    {
-        if(Integer.parseInt(getDictionary().get("port").toString()) != port){
-            try {
-                webServer.stop().get();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            } catch (ExecutionException e) {
-                e.printStackTrace();
-            }
-            webServer = null;
-            port= Integer.parseInt(getDictionary().get("port").toString());
-            webServer = WebServers.createWebServer(port);
+    public void update() {
+        if (Integer.parseInt(getDictionary().get("port").toString()) != port) {
+            Log.debug("updating {}", getName());
+            stopWebSock();
+            startWebSock();
         }
     }
 
 
     @Stop
     public void stopServer() {
-        Log.debug("Stoping");
-        try {
-            webServer.stop().get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        webServer = null;
-        webSocketChannel = null;
+        Log.debug("Stopping {}", getName());
+        stopWebSock();
     }
 
 
-    public void startWebSock(){
+    public void startWebSock() {
+        port = Integer.parseInt(getDictionary().get("port").toString());
         webServer = WebServers.createWebServer(port);
-        for(String key : wspages.keySet())
-        {
-            webServer.add(key,wspages.get(key));
+        for (String key : wspages.keySet()) {
+            webServer.add(key, wspages.get(key));
         }
         webServer.start();
     }
 
-    public void stopWebSock(){
-        if(webServer != null)
-        {
+    public void stopWebSock() {
+        if (webServer != null) {
             try {
                 webServer.stop().get();
             } catch (InterruptedException e) {
                 Log.error("WsServer.stopWebSock", e);
-//                e.printStackTrace();
             } catch (ExecutionException e) {
                 Log.error("WsServer.stopWebSock", e);
-//                e.printStackTrace();
             }
-            /*try
-            {
-                // todo improve  hack ws
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }*/
         }
-        // todo check is stopped
         webServer = null;
     }
 

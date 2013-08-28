@@ -1,15 +1,15 @@
 {
-merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultChannels/{kevoree.version}'
-merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.version}'
-merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.version}'
-merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.version}'
-merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.logger/{kevoree.version}'
-merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.fakeDomo/{kevoree.version}'
-merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.version}'
-merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.authentication/{kevoree.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.defaultChannels/{kevoree.corelibrary.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nanohttp/{kevoree.corelibrary.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nodeType/{kevoree.corelibrary.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.nanohttp/{kevoree.corelibrary.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.logger/{kevoree.corelibrary.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.fakeDomo/{kevoree.corelibrary.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.socketChannels/{kevoree.corelibrary.version}'
+merge 'mvn:org.kevoree.corelibrary.android/org.kevoree.library.android.authentication/{kevoree.corelibrary.version}'
 
-merge 'mvn:org.daum.library.android/org.daum.library.android.daumauth/2.0.0-SNAPSHOT'
-merge 'mvn:org.daum.corelibrary.android/org.daum.corelibrary.android.replica/2.0.0-SNAPSHOT'
+merge 'mvn:org.daum.library.android/org.daum.library.android.daumauth/{project.version}'
+merge 'mvn:org.daum.corelibrary.android/org.daum.corelibrary.android.replica/{project.version}'
 
 addNode node0:AndroidNode {
     addComponent DaumAuthC361@node0 : DaumAuthComponent {}

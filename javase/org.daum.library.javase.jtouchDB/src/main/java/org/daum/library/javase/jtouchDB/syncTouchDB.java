@@ -15,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -33,7 +32,7 @@ import java.util.concurrent.TimeUnit;
         @DictionaryAttribute(name = "password", defaultValue = "", optional = false, fragmentDependant = false),
         @DictionaryAttribute(name = "protocol", defaultValue = "http", optional = false, fragmentDependant = false, vals = {"http", "https"})
 })
-@org.kevoree.annotation.ChannelTypeFragment(theadStrategy = ThreadStrategy.SHARED_THREAD)
+@ChannelType(theadStrategy = ThreadStrategy.SHARED_THREAD)
 public class syncTouchDB extends AbstractChannelFragment {
     private Logger logger = LoggerFactory.getLogger(getClass());
     private ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();

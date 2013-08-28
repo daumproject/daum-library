@@ -3,22 +3,21 @@ addRepo "http://maven.kevoree.org/archiva/repository/daum/snapshots"
 addRepo "http://maven.kevoree.org/release"
 addRepo "http://repo.maven.apache.org/maven2"
 addRepo "http://maven.kevoree.org/daum/release"
-addRepo "http://repository.jetbrains.com/all"
 addRepo "http://maven.kevoree.org/archiva/repository/snapshots/"
 addRepo "http://maven.kevoree.org/snapshots"
 addRepo "http://repo.typesafe.com/typesafe/releases/"
 addRepo "http://maven.kevoree.org/daum/snapshots"
 addRepo "http://www.libvirt.org/maven2/"
-merge 'mvn:org.kevoree.corelibrary.sky/org.kevoree.library.sky.minicloud/2.0.0-SNAPSHOT'
-merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.javaseNode/2.0.0-SNAPSHOT'
-merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.jexxus/2.0.0-SNAPSHOT'
+merge 'mvn:org.kevoree.corelibrary.sky/org.kevoree.library.sky.minicloud/{kevoree.corelibrary.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.javaseNode/{kevoree.corelibrary.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.jexxus/{kevoree.corelibrary.version}'
 addNode node1:MiniCloudNode
 updateDictionary node1{log_folder="/tmp"}
-merge 'mvn:org.daum.corelibrary.javase/org.daum.corelibrary.javase.replica/2.0.0-SNAPSHOT'
-merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nioChannels/2.0.0-SNAPSHOT'
+merge 'mvn:org.daum.corelibrary.javase/org.daum.corelibrary.javase.replica/{project.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.nioChannels/{kevoree.corelibrary.version}'
 addNode node0:JavaSENode
-merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.webserver.spray/2.0.0-SNAPSHOT'
-merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.defaultChannels/2.0.0-SNAPSHOT'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.webserver.spray/{kevoree.corelibrary.version}'
+merge 'mvn:org.kevoree.corelibrary.javase/org.kevoree.library.javase.defaultChannels/{kevoree.corelibrary.version}'
 addNode node2:JavaSENode
  {
 }

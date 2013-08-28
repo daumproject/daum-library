@@ -1,6 +1,5 @@
 package org.daum.library.javase.copterManager.test;
 
-import org.kevoree.log.Log;
 import org.webbitserver.BaseWebSocketHandler;
 import org.webbitserver.WebSocketConnection;
 
@@ -12,9 +11,8 @@ import java.util.Set;
  * User: jed
  * Date: 22/06/12
  * Time: 13:15
- * To change this template use File | Settings | File Templates.
  */
-public class WebSocketChannel extends BaseWebSocketHandler implements IWebSocketChannel {
+public class WebSocketChannel extends BaseWebSocketHandler /*implements IWebSocketChannel*/ {
     private Set<WebSocketConnection> connections = new HashSet<WebSocketConnection>();
 
     private NotifyConnection notifyConnection = new NotifyConnection();

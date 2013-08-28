@@ -4,29 +4,26 @@ import org.kevoree.Channel;
 import org.kevoree.ContainerRoot;
 import org.kevoree.annotation.*;
 import org.kevoree.api.service.core.handler.ModelListener;
-import org.kevoree.framework.*;
-import org.kevoree.framework.KevoreePlatformHelper;
+import org.kevoree.framework.AbstractChannelFragment;
+import org.kevoree.framework.ChannelFragmentSender;
+import org.kevoree.framework.KevoreeChannelFragment;
 import org.kevoree.framework.KevoreePropertyHelper;
 import org.kevoree.framework.message.Message;
 import org.kevoree.log.Log;
 
-
-import java.io.*;
-import java.net.Socket;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.concurrent.Semaphore;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Created with IntelliJ IDEA.
  * User: jed
  * Date: 08/08/12
  * Time: 11:42
- * To change this template use File | Settings | File Templates.
  */
 
 @Library(name = "JavaSE", names = {"Android"})
-@org.kevoree.annotation.ChannelTypeFragment(theadStrategy = ThreadStrategy.SHARED_THREAD )
+@ChannelType(theadStrategy = ThreadStrategy.SHARED_THREAD )
 @DictionaryType({
         @DictionaryAttribute(name = "port", defaultValue = "", optional = true, fragmentDependant = true) ,
         @DictionaryAttribute(name = "size_queue", defaultValue = "50", optional = false),

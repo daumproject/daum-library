@@ -29,7 +29,7 @@ import java.util.UUID;
  */
 
 @Library(name = "Android")
-@ChannelTypeFragment
+@ChannelType
 @DictionaryType({
 		@DictionaryAttribute(name = "secureUUID", defaultValue = BluetoothChannel.DEFAULT_SECURE_UUID, optional = false, fragmentDependant = false),
 		@DictionaryAttribute(name = "unsecureUUID", defaultValue = BluetoothChannel.DEFAULT_UNSECURE_UUID, optional = false, fragmentDependant = false),

@@ -3,7 +3,6 @@ package org.daum.library.javase.kestrelChannels;
 
 import org.kevoree.ContainerNode;
 import org.kevoree.annotation.*;
-import org.kevoree.annotation.ChannelTypeFragment;
 import org.kevoree.framework.*;
 import org.kevoree.framework.message.Message;
 import org.slf4j.Logger;
@@ -24,7 +23,7 @@ import java.util.concurrent.Semaphore;
  */
 
 @Library(name = "JavaSE")
-@ChannelTypeFragment
+@ChannelType
 @DictionaryType({
         @DictionaryAttribute(name = "portKestrel", defaultValue = "22133", optional = false, fragmentDependant = true),
         @DictionaryAttribute(name = "queuePath", defaultValue = "/tmp/kestrel", optional = false, fragmentDependant = true),

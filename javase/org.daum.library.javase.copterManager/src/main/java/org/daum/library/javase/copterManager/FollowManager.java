@@ -74,12 +74,12 @@ public class FollowManager extends AbstractPage  implements Observer {
 
             @Override
             public void preRollback(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                //To change body of implemented methods use File | Settings | File Templates.
+
             }
 
             @Override
             public void postRollback(ContainerRoot containerRoot, ContainerRoot containerRoot1) {
-                //To change body of implemented methods use File | Settings | File Templates.
+
             }
         });
 
@@ -91,11 +91,12 @@ public class FollowManager extends AbstractPage  implements Observer {
     {
         Log.debug("Remove Ws Demand");
         getPortByName("ws", WsHandler.class).removeHandler("/followmanager");
+        super.stopPage();
     }
 
     @Update
     public void update() {
-
+        super.updatePage();
     }
 
 
@@ -161,7 +162,7 @@ public class FollowManager extends AbstractPage  implements Observer {
                 Message data = list.get(key);
                 data.event = Event.ADD;
                 RichJSONObject t = new RichJSONObject(data);
-                ((WebSocketConnection)connection).send(t.toJSON());
+                connection.send(t.toJSON());
             }
 
 

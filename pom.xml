@@ -11,8 +11,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <scala.version>2.9.2</scala.version>
-        <kevoree.version>2.0.4-SNAPSHOT</kevoree.version>
-        <kevoree.corelibrary.version>2.0.0-SNAPSHOT</kevoree.corelibrary.version>
+        <kevoree.version>2.0.11-SNAPSHOT</kevoree.version>
+        <kevoree.corelibrary.version>2.0.3-SNAPSHOT</kevoree.corelibrary.version>
         <kevoree.exclude>
             com.actionbarsherlock:*,com.google.android:*,commons-*:*,org.apache.httpcomponents:*,org.khronos:*,xerces:*,xpp3:*,org.json:*,cglib:*,org.objenesis:*
         </kevoree.exclude>
@@ -40,10 +40,6 @@
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
         <repository>
-            <id>jetbrains-release</id>
-            <url>http://repository.jetbrains.com/all</url>
-        </repository>
-        <repository>
             <id>daum-release</id>
             <url>http://maven.kevoree.org/daum/release</url>
         </repository>
@@ -58,10 +54,6 @@
     </repositories>
 
     <pluginRepositories>
-        <pluginRepository>
-            <id>jetbrains-release</id>
-            <url>http://repository.jetbrains.com/all</url>
-        </pluginRepository>
         <pluginRepository>
             <id>kevoree-oss.plugin</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>

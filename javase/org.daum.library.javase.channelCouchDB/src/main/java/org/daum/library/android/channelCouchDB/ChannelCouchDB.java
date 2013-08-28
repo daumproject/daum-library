@@ -27,7 +27,7 @@ import java.util.ArrayList;
         @DictionaryAttribute(name = "password", defaultValue = "", optional = false, fragmentDependant = false),
         @DictionaryAttribute(name = "protocol", defaultValue = "", optional = false, fragmentDependant = false,vals={"http","https"})
 })
-@org.kevoree.annotation.ChannelTypeFragment(theadStrategy = ThreadStrategy.SHARED_THREAD )
+@org.kevoree.annotation.ChannelType(theadStrategy = ThreadStrategy.SHARED_THREAD )
 public class ChannelCouchDB extends AbstractChannelFragment implements Runnable
 {
     private Thread t_current;

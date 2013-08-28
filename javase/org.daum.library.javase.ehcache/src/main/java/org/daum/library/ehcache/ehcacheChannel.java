@@ -7,14 +7,10 @@ import org.kevoree.Group;
 import org.kevoree.annotation.*;
 import org.kevoree.framework.AbstractChannelFragment;
 import org.kevoree.framework.ChannelFragmentSender;
-
-import org.kevoree.framework.KevoreePlatformHelper;
 import org.kevoree.framework.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +22,7 @@ import java.util.List;
  */
 
 @Library(name = "JavaSE", names = {"Android"})
-@ChannelTypeFragment
+@ChannelType
 @DictionaryType({
         @DictionaryAttribute(name = "cacheName", defaultValue = "kevoreeCluster", optional = false)
 })
