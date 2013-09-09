@@ -41,6 +41,11 @@
             <artifactId>org.kevoree.tools.annotation.api</artifactId>
             <version>${kevoree.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.kevoree.corelibrary.javase</groupId>
+            <artifactId>org.kevoree.library.javase.javaseNode</artifactId>
+            <version>${kevoree.corelibrary.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

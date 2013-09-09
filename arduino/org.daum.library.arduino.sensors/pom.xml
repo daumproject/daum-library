@@ -12,11 +12,4 @@
         <version>2.0.0-SNAPSHOT</version>
         <relativePath>../org.daum.library.arduino.root/pom.xml</relativePath>
     </parent>
-    <dependencies>
-        <dependency>
-            <groupId>org.kevoree.tools</groupId>
-            <artifactId>org.kevoree.tools.arduino.framework</artifactId>
-            <version>${kevoree.version}</version>
-        </dependency>
-    </dependencies>
 </project>

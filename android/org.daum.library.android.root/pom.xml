@@ -47,6 +47,11 @@
             <artifactId>org.kevoree.tools.android.framework</artifactId>
             <version>${kevoree.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.kevoree.corelibrary.android</groupId>
+            <artifactId>org.kevoree.library.android.nodeType</artifactId>
+            <version>${kevoree.corelibrary.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
